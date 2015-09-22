@@ -25,9 +25,9 @@
  * Front end of the Cap-php-library
  */
  
-	require_once 'cap.form.class.php';
-	require_once 'cap.create.class.php';
-	require_once 'cap.write.class.php';
+	require_once 'class/cap.form.class.php';
+	require_once 'class/cap.create.class.php';
+	require_once 'class/cap.write.class.php';
 
 
 	if(! empty($_POST['type']))
