@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>12.31.23.1.2.AT.123123.123123</identifier>
+	<sender>TEST DE</sender>
+	<sent>2015-09-28T12:29:03+01:00</sent>
+	<status>Test</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<info>
+		<language>en-GB</language>
+		<category>Met</category>
+		<event>TEST</event>
+		<responseType>Evacuate</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Minor</severity>
+		<certainty>Unlikely</certainty>
+		<audience>TEST DE</audience>
+		<effective>2015-09-28T12:30:11+01:00</effective>
+		<onset>2015-09-28T12:30:11+01:00</onset>
+		<expires>2015-09-28T12:30:11+01:00</expires>
+		<senderName>TEST DE</senderName>
+		<headline>TEST</headline>
+		<description>TREST</description>
+		<instruction>TEST</instruction>
+		<web>TEST DE</web>
+		<contact>TEST DE</contact>
+		<area>
+			<areaDesc>Salzburg</areaDesc>
+			<geocode>
+				<valueName>NUTS</valueName>
+				<value>AT01</value>
+			</geocode>
+		</area>
+	</info>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>TEST DE</event>
+		<responseType>Evacuate</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Minor</severity>
+		<certainty>Unlikely</certainty>
+		<audience>TEST DE</audience>
+		<effective>2015-09-28T12:30:11+01:00</effective>
+		<onset>2015-09-28T12:30:11+01:00</onset>
+		<expires>2015-09-28T12:30:11+01:00</expires>
+		<senderName>TEST DE</senderName>
+		<headline>TEST DE</headline>
+		<description>TEST DE</description>
+		<instruction>TEST DE</instruction>
+		<web>TEST DE</web>
+		<contact>TEST DE</contact>
+		<area>
+			<areaDesc>Salzburg</areaDesc>
+			<geocode>
+				<valueName>NUTS</valueName>
+				<value>AT01</value>
+			</geocode>
+		</area>
+	</info>
+</alert>
