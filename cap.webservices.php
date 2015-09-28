@@ -4,7 +4,6 @@
  *       \brief      Client to make a client call to Meteoalarm WebServices "putCap"
  */
 
-ini_set("default_socket_timeout", 60000);
 
 //error_reporting(E_ALL | E_STRICT);
 require_once 'nusoap/lib/nusoap.php';		// Include SOAP
@@ -27,10 +26,10 @@ if ($_POST[filename])
 	
 	// Call the WebService method and store its result in $result.
 	$authentication=array(
-	    'dolibarrkey'=>'5c2947c0c574e56ac11a4cf8f410d40b',
+	    'dolibarrkey'=>$dolibarrkey,
 	    'sourceapplication'=>$WS_METHOD,
-	  	'login'=> $_POST[Login],
-  	  'password'=> $_POST[Pass]);
+	  	'login'=> $login,
+  	  'password'=> $password);
  
   $tmpfile = $_POST[destination].'/'.$_POST[filename];
 	$handle = fopen($tmpfile, "r");                  // Open the temp file
