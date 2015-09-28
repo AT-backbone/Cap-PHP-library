@@ -4,7 +4,6 @@
  *       \brief      Client to make a client call to Meteoalarm WebServices "putCap"
  */
 
-
 //error_reporting(E_ALL | E_STRICT);
 require_once 'nusoap/lib/nusoap.php';		// Include SOAP
 Include 'source/conf/conf.php';
