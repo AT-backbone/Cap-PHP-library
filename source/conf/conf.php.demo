@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * Webservice conf
+ */
+
+$dolibarrkey 				= '5c2947c0c574e56ac11a4cf8f410d40b';
+$sourceapplication 	= 'putCap';
+$login 							= 'adminniklas';
+$password 					= 'ChaLar007';
+$entity 						= '';
+
+$WS_METHOD 					= 'putCap';
+
+// for option a other url as standard url
+if($_POST[url])
+{
+	$WS_DOL_URL				= $_POST[url];
+}
+else
+{
+	$ns								= 'https://meteoalarm.eu:9000/functions/webservices/';
+	$WS_DOL_URL 			= $ns.'capimport.php';
+}
+
+/*
+ * Form conf
+ */
+
+date_default_timezone_set('Europe/Vienna');
