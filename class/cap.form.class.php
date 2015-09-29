@@ -207,7 +207,7 @@
 
 								$extralang.= '<input placeholder="headline" type="text" name="headline['.$key.']">';
 
-								$extralang.= '<input placeholder="description" type="text" name="description['.$key.']">';
+								$extralang.= '<textarea placeholder="description" name="description['.$key.']"></textarea>';
 
 								$extralang.= '<input placeholder="instruction" type="text" name="instruction['.$key.']">';
 
