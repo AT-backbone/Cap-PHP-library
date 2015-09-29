@@ -360,7 +360,7 @@
 						break;
 						
 					case 'capview';
-							$out = '<textarea readonly="" id="capview"></textarea>';
+							$out = '<textarea readonly="" id="capviewtextarea"></textarea>';
 						break;
 					/*
 					 * Default
@@ -749,7 +749,7 @@
 					        data: $("#capform").serialize(), // serializes the forms elements.
 					        success: function(data)
 					        {					        	
-					        	$("#capview").val(data);
+					        	$("#capviewtextarea").val(data);
 					        }
 					       });
 					
@@ -838,10 +838,15 @@
 					
 						$out.= '<div role="main" class="ui-content">';							
 										
-							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';		
-								$out.= '<textarea readonly>';						
-									$out.= $content;
-								$out.= '</textarea>';
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
+								$out.= '<ul data-role="listview" data-divider-theme="b">';
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Cap View</h1></li>';	
+									$out.= '<li>';
+										$out.= '<textarea readonly>';						
+											$out.= $content;
+										$out.= '</textarea>';
+									$out.= '</li>';
+								$out.= '</ul>';
 							$out.= '</div>';
 
 						$out.= '</div><!-- /content -->';
