@@ -359,6 +359,9 @@
 							$out = '<input type="text" placeholder="Webservice WS_DOL_URL" name="conf[webservice][WS_DOL_URL]">';
 						break;
 						
+					case 'capview';
+							$out = '<textarea readonly="" id="capview"></textarea>';
+						break;
 					/*
 					 * Default
 					 */
@@ -484,6 +487,8 @@
 			$type['conf']['detail'][] = "webservice_WS_METHOD";
 			$type['conf']['detail'][] = "webservice_ns";
 			$type['conf']['detail'][] = "webservice_WS_DOL_URL";
+			
+			$type['capview'][] = 'capview';
 
       return $type;
 		}
@@ -501,6 +506,8 @@
 			
 			$pages['conf']  				= "Configuration";
 			//$pages['conf']['send'] 	= true;
+			
+			$pages['capview'] 		 = "Cap View";
 						
 			return $pages;
 		}
@@ -542,7 +549,8 @@
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
-										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
 									}
 									
 								$out.= '</ul>';
@@ -741,7 +749,7 @@
 					        data: $("#capform").serialize(), // serializes the forms elements.
 					        success: function(data)
 					        {					        	
-					        	$("#XmlCapTA").text(data);
+					        	$("#capview").val(data);
 					        }
 					       });
 					
@@ -793,7 +801,7 @@
 		function CapView($content, $ID)
 		{
 			
-				$out = '<head>';
+			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
 				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
 				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
@@ -808,11 +816,25 @@
 			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
 			
-					$out.= '<div data-role="page">';
+					$out.= '<div data-role="page" id="capview">';
 
-						$out.= '<div data-role="header" data-theme="b">';
-							$out.= '<h1>'.$ID.'.cap</h1>';
-						$out.= '</div><!-- /header -->';
+						$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
+  						$out.= '<!-- panel content goes here -->';
+  						$out.= '<ul data-role="listview" data-inset="true">';
+  						
+  							$Pages_arr = $this->Pages();
+								foreach($Pages_arr as $link => $Page_Name)
+								{
+									$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+								}
+								
+							$out.= '</ul>';
+						$out.= '</div>';
+						
+						$out.= '<div data-theme="b" data-role="header">';								
+							$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+							$out.= '<h1>'.$ID.'.cap</h1>';						
+						$out.= '</div>';
 					
 						$out.= '<div role="main" class="ui-content">';							
 										
