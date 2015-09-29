@@ -1,5 +1,6 @@
 <?php
 /*
+ *  Copyright (c) 2015  Guido Schratzer   <schratzerg@backbone.co.at>
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,9 +18,9 @@
  */
 
 /**
- *	\file      	cap.form.class.php
- *  \ingroup   	Form
- *	\brief      File of class with all html predefined components
+ *	\file      	/class/cap.form.class.php
+ *  \ingroup   	core
+ *	\brief      JQuery Form to Insert Data to CAP-File and create config File
  */
 
 
@@ -40,98 +41,180 @@
      */
 		function InputStandard($type, $lang="")
 		{
+			global $conf;
+			
 			switch($type)
 			{
 				case 'identifier':
-					$out = '<input placeholder="identifier" type="text" size="120" name="identifier" required>';
+					$out = '<div id="Identapend">';
+						$out.= '<label>Identifier: </label>';
+						$out.= '<div class="ui-grid-c">';
+							$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
+							if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
+							if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
+							else																		$out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" ></div>'; // YYMMDDHHMMSS
+							$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 					
 				case 'sender':
-					$out = '<input placeholder="sender" type="text" name="sender" required>';
+					$out = '<input placeholder="sender" type="text" name="sender" >';
 					break;
 					
 				case 'sent':
-					$out = '<input type="date" name="sent[date]" required><input type="time" name="sent[time]" step="1" required> + <input type="time" name="sent[UTC]" required>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+					$out = '<div id="Sentapend">';
+						$out.= '<label>Sent: </label>';
+						$out.= '<div class="ui-grid-b">';
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="sent[date]" value="'.date('Y-m-d').'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="sent[time]" step="1" value="'.date('H:i:s').'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="sent[UTC]" value="'.date('H:i', date('P')).'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 				
-				case 'status': // Actual / Test / Exercise / System / Test / Draft
-					$out = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" )); 
-					break;
-					
-				case 'msgType': // Alert / Update / Cancel / Ack / Error
-					$out = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" )); 
-					break;
-					
 				case 'references': 
 					$out = '<input placeholder="references" type="text" name="references">'; // web / identifier / sent 
 					break;
-					
-				case 'scope': 
-					$out = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ));  // Public / Restricted / Private
-					break;
 				
-				/*
-				 * Info
-				 */
+				case 'status': 
+					// Actual / Test / Exercise / System / Test / Draft
+					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), "data-native-menu=\"false\""); 
+
+				 	// Alert / Update / Cancel / Ack / Error
+					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), "data-native-menu=\"false\" id=\"msgType\""); 
+
+					// Public / Restricted / Private
+					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"");  
+
+						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
+							$out.= '<legend>Set the Typs of the Message:</legend>';							
+								$out.= $status;					
+								$out.= $msgType;							
+								$out.= $scope;
+						$out.= '</fieldset>';
+				break;
 				
 				case 'category': // Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
-					$out = $this->buildSelect("category", array( "Geo" => "Geo", "Met" => "Met", "Safety" => "Safety", "Security" => "Security", "Rescue" => "Rescue", "Fire" => "Fire", "Health" => "Health", "Env" => "Env", "Transport" => "Transport", "Infra" => "Infra", "CBRNE" => "CBRNE", "Other" => "Other" ));
-					break;
-					
-				case 'event': 
-					$out = '<input placeholder="event" type="text" name="event['.$lang.']" required>';
-					break;
+					$category = $this->buildSelect("category", array( "Geo" => "Geophysical", "Met" => "Weather", "Safety" => "Public Safety", "Security" => "Security", "Rescue" => "Rescue", "Fire" => "Fire", "Health" => "Health", "Env" => "Environmental", "Transport" => "Transportation", "Infra" => "Infrastructure", "CBRNE" => "Weapon of Mass Destructio", "Other" => "Otherwise Categorized" ), "data-native-menu=\"false\"", "Category");
+
+					// Shelter / Evacuate / Prepare / Execute / Avoid / Monitor / Assess / AllClear / None
+					$responseType = $this->buildSelect("responseType", array( "Shelter" => "Take Shelter", "Evacuate" => "Evacuate", "Prepare" => "Make Preparations", "Execute" => "Execute Pre-Planned Action", "Avoid" => "Avoid the affected Area", "Monitor" => "Monitor Conditions", "Assess" => "Evaluate Situation", "AllClear" => "Resume Normal Activities", "None" => "Take No Action" ), "data-native-menu=\"false\"", "Response Type");
+			    
+						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
+							$out.= '<legend>Set the Hazard Type:</legend>';							
+								$out.= $category;					
+								$out.= $responseType;	
+						$out.= '</fieldset>';
 				
-				case 'responseType': // Shelter / Evacuate / Prepare / Execute / Avoid / Monitor / Assess / AllClear / None
-					$out = $this->buildSelect("responseType", array( "Shelter" => "Shelter", "Evacuate" => "Evacuate", "Prepare" => "Prepare", "Execute" => "Execute", "Avoid" => "Avoid", "Monitor" => "Monitor", "Assess" => "Assess", "AllClear" => "AllClear", "None" => "None" ));
-					break;	
+				break;
 
-				case 'urgency': // Immediate / Expected / Future / Past
-					$out = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ));
-					break;	
+				case 'urgency': 
+					// Immediate / Expected / Future / Past
+					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), "data-native-menu=\"false\"", "Urgency");
 					
-				case 'severity': // Extreme / Severe / Moderate / Minor / Unknown
-					$out = $this->buildSelect("severity", array( "Extreme" => "Extreme", "Severe" => "Severe", "Moderate" => "Moderate", "Minor" => "Minor", "Unknown" => "Unknown" ));
-					break;		
+					// Extreme / Severe / Moderate / Minor / Unknown 
+					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Severity");
 
-				case 'certainty': // Observed / Likely / Possible/ Unlikely / Unknown
-					$out = $this->buildSelect("certainty", array( "Observed" => "Observed", "Likely" => "Likely", "Possible" => "Possible", "Unlikely" => "Unlikely", "Unknown" => "Unknown" ));
-					break;		
+					// Observed / Likely / Possible/ Unlikely / Unknown
+					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty");
+				
+						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
+							$out.= '<legend>Set the Priority of the Message:</legend>';							
+								$out.= $urgency;					
+								$out.= $severity;							
+								$out.= $certainty;
+						$out.= '</fieldset>';
+				
+				break;		
 
 				case 'audience': 
 					$out = '<input placeholder="audience" type="text" name="audience">';
 					break;
 					
 				case 'eventCode': 
-					$out = '<input placeholder="eventCode Valuename" type="text" name="eventCode[valueName][]"><input placeholder="eventCode Value" type="text" name="eventCode[value][]"><input type="button" onclick="plusInput(\'eventCode\')" value="+">';
+					$out = '<div id="Eventappend">';
+						$out.= '<label for="sent[date]">Event Code: </label>';
+						$out.= '<div class="ui-grid-b">';
+							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
+							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="eventCode[value][]"></div>';
+							$out.= '<div class="ui-block-c"><input type="button" onclick="plusEventCodeInput()" value="+"></div>';
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 				
-				case 'effective': 
-					$out = '<input type="date" name="effective[date]"><input type="time" name="effective[time]" step="1"> + <input type="time" name="effective[UTC]">'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+				case 'effective': 					
+					$out = '<div id="Effectiveapend">';
+						$out.= '<label>Effective: </label>';
+						$out.= '<div class="ui-grid-b">';
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="effective[date]" value="'.date('Y-m-d').'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="effective[time]" step="1" value="'.date('H:i:s').'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="effective[UTC]" value="'.date('H:i', date('P')).'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 
-				case 'onset': 
-					$out = '<input type="date" name="onset[date]"><input type="time" name="onset[time]" step="1"> + <input type="time" name="onset[UTC]">'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+				case 'onset': 					
+					$out = '<div id="Onsetapend">';
+						$out.= '<label>Onset: </label>';
+						$out.= '<div class="ui-grid-b">';
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="onset[date]" value="'.date('Y-m-d').'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="onset[time]" step="1" value="'.date('H:i:s').'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="onset[UTC]" value="'.date('H:i', date('P')).'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 					
-				case 'expieres': 
-					$out = '<input type="date" name="expieres[date]"><input type="time" name="expieres[time]" step="1"> + <input type="time" name="expieres[UTC]">'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+				case 'expieres': 					
+					$out = '<div id="Expieresapend">';
+						$out.= '<label>Expieres: </label>';
+						$out.= '<div class="ui-grid-b">';
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="expieres[date]" value=""></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="expieres[time]" step="1" value=""></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="expieres[UTC]" value=""></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 
 				case 'senderName': 
 					$out = '<input placeholder="senderName" type="text" name="senderName">'; 
 					break;
 					
-				case 'headline': 
-					$out = '<input placeholder="headline" type="text" name="headline['.$lang.']">'; 
+				case 'lang':
+					$langs_arr = $this->getlang();		
+					$lang_S = $this->buildSelect("language_select", $langs_arr, "data-native-menu=\"false\" id=\"language\"", "Language");
+					
+					$extralang = '<div data-role="controlgroup" data-type="horizontal">';
+					foreach($langs_arr as $key => $langs_val)
+					{
+						$extralang.= '<a href="#" class="ui-btn Lang_Button" role="button" id="'.$key.'_Button" style="display:none; border-right: 1px solid #dddddd;">'.$langs_val.' <span id="'.$key.'_Remove_Button" style="color:red; padding-left: 5px;">X</span><input type="hidden" name="language[]" id="'.$key.'_language_input" value=""></a>';
+					}
+					$extralang.= '</div>';
+					
+					$out = $lang_S;			
+					$out.= $extralang;		
 					break;
+					
+				case 'event': 
 
-				case 'description': 
-					$out = '<input placeholder="description" type="text" name="description['.$lang.']">';
-					break;
+					$langs_arr = $this->getlang();	
+					$extralang = "";
+					foreach($langs_arr as $key => $langs_val)
+					{
+						$extralang.= '<div class="lang_input" id="'.$key.'" style="display:none;">';
+						
+								$extralang.= '<input placeholder="event" type="text" name="event['.$key.']">';
 
-				case 'instruction': 
-					$out = '<input placeholder="instruction" type="text" name="instruction['.$lang.']">'; 
+								$extralang.= '<input placeholder="headline" type="text" name="headline['.$key.']">';
+
+								$extralang.= '<input placeholder="description" type="text" name="description['.$key.']">';
+
+								$extralang.= '<input placeholder="instruction" type="text" name="instruction['.$key.']">';
+
+						$extralang.= '</div>';
+					}
+					
+					$out = $extralang;
 					break;
 					
 				case 'web': 
@@ -143,15 +226,21 @@
 					break;
 
 				case 'parameter': 
-					$out = '<input placeholder="parameter Valuename" type="text" name="parameter[valueName][]"><input placeholder="parameter Value" type="text" name="parameter[value][]"><input type="button" onclick="plusInput(\'parameter\')" value="+">';
+					$out = '<div id="Parameterappend">';
+						$out.='<label for="sent[date]">Parameter: </label>';
+						$out.= '<div class="ui-grid-b">';
+							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
+							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="parameter[value][]"></div>';
+							$out.= '<div class="ui-block-c"><input type="button" onclick="plusParameterInput()" value="+"></div>';
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 					
 				/*
 				 * Area
-				 */
-					
+				 */					
 					case 'areaDesc': 
-						$out = '<input placeholder="areaDesc" type="text" name="areaDesc" required>';
+						$out = '<input placeholder="areaDesc" type="text" name="areaDesc">';
 						break;
 	
 					case 'polygon': 
@@ -163,9 +252,119 @@
 						break;
 						
 					case 'geocode': // ]
-						$out = '<input placeholder="geocode Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
+						$out = '<input placeholder="Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
+						
+						$out = '<div id="Geocodeappend">';
+							$out.='<label for="sent[date]">Geocode: </label>';
+							$out.= '<div class="ui-grid-b">';
+								$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
+								$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="geocode[value][]"></div>';
+								$out.= '<div class="ui-block-c"><input type="button" onclick="plusGeocodeInput()" value="+"></div>';
+								$out.= '</div>';
+						$out.= '</div>';
+						
 						break;															
 
+					/*
+					 * Conf input => [conf]
+					 */					 
+					 
+					case 'cap_save':
+						if($conf->cap->save == 1) $onoroff = 'checked=""';
+						else $onoroff = '';
+						$out = '<label for="identifier_time">Save Caps in Output folder:</label>';
+						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[cap][save]" id="cap_save" '.$onoroff.' data-theme="b">';
+						break;
+					
+					case 'cap_output':
+							$out = 'Output of the Cap: <input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
+						break;
+
+					case 'ID_ID':
+							$out = 'identifier Number: <input type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
+						break;
+					case 'WMO_OID':
+							$out = 'WMO OID: <input type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
+						break;
+						
+					case 'ISO':
+						$out = 'ISO: <input type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
+					 break;
+					 
+					case 'identifier_time':
+						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
+						else $onoroff = '';
+						$out = '<label for="identifier_time">Automatic Identifier Time:</label>';
+						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
+						break;	
+						
+					case 'lang_conf':
+						$out = '<label for="lang_conf">Usable languages:</label>';
+						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
+						foreach($conf->lang as $key => $lang_name)
+						{
+							if($conf->select->lang[$key] == false)
+							{
+								$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
+							}
+							else 
+							{
+								$out.= '<option value="'.$key.'" selected="selected">'.$lang_name.'</option>';
+							}
+						}
+
+						$out.= '</select>';
+						break;
+						
+					case 'webservice_on':
+						if($conf->webservice->on == 1) $onoroff = 'checked=""';
+						else $onoroff = '';
+						$out = '<label for="identifier_time">Webservice:</label>';
+						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
+						break;
+								
+					case 'webservice_password':
+							$out = '<input type="password" placeholder="Webservice Password" name="conf[webservice][password]">';
+						break;
+						
+					case 'webservice_securitykey':
+							$out = '<input type="text" placeholder="Webservice Security Key" name="conf[webservice][securitykey]">';
+						break;
+						
+					case 'webservice_sourceapplication':
+							$out = '<input type="text" placeholder="Webservice Sourceapplication" name="conf[webservice][sourceapplication]">';
+						break;
+						
+					case 'webservice_login':
+							$out = '<input type="text" placeholder="Webservice Login" name="conf[webservice][login]">';
+						break;
+						
+					case 'webservice_entity':
+							$out = '<input type="text" placeholder="Webservice Entity" name="conf[webservice][entity]">';
+						break;
+						
+					case 'webservice_destination':
+							$out = '<input type="url" placeholder="Webservice Destination" name="conf[webservice][destination]">';
+						break;
+						
+					case 'webservice_WS_METHOD':
+							$out = '<input type="text" placeholder="Webservice WS_METHOD" name="conf[webservice][WS_METHOD]">';
+						break;
+						
+					case 'webservice_ns':
+							$out = '<input type="text" placeholder="Webservice ns" name="conf[webservice][ns]">';
+						break;
+						
+					case 'webservice_WS_DOL_URL':
+							$out = '<input type="text" placeholder="Webservice WS_DOL_URL" name="conf[webservice][WS_DOL_URL]">';
+						break;
+						
+					/*
+					 * Default
+					 */
+					default:
+							$out = '<input type="text" placeholder="'.$type.'" name="'.$type.'">';
+						break;
 			}
 			//$out.= $this->InputStandard('sent');
 			return $out;
@@ -174,18 +373,25 @@
 		/**
      * Output Html select
      *
-     * @param   string	$name			The POST/GET name of the select
-     * @param   array		$data			the content of the select array("option value" => "option Name")
-     * @param 	int 		$empty 		if 1 then make a empty option
-     * @return	string						HTML select field
+     * @param   string	$name					The POST/GET name of the select
+     * @param   array		$data					the content of the select array("option value" => "option Name")
+     * @param   string  $option
+     * @param   string  $placeholder 
+     * @param 	int 		$empty 				if 1 then make a empty value 
+     * @return	string								HTML select field
      */
-		function buildSelect($name= "", $data = array(), $empty=0)
+		function buildSelect($name= "", $data = array(), $option = "", $placeholder = "", $empty=0)
 		{
-			$out = '<select name="'.$name.'">';
+			$out = '<select name="'.$name.'" '.$option.'>';
 			
 				if($empty == 1)
 				{
 					$out.='<option></option>';
+				}
+				
+				if($placeholder)
+				{
+					$out.= '<option value="#" data-placeholder="true">'.$placeholder.'</option>';
 				}
 			
 				foreach($data as $data_val => $data_name)
@@ -204,38 +410,15 @@
      *     
      * @return	string						Array with RFC 3066 Array
      */
-		function getlang(){
+		function getlang($config = false){
+			global $conf;
 			
-			$out['en-GB'] = 'english';
-			$out['ca'] = 'català';
-			$out['cs'] = 'ceština';
-			$out['da-DK'] = 'dansk';			
-			$out['de-DE'] = 'deutsch';			
-			$out['es-ES'] = 'español';
-			$out['et'] = 'eesti';			
-			$out['eu'] = 'euskera';
-			$out['fr-FR'] = 'français';
-			$out['gl'] = 'galego';
-			$out['hr-HR'] = 'hrvatski';
-			$out['is'] = 'íslenska';
-			$out['it-IT'] = 'italiano';
-			$out['lt'] = 'lietuviu';
-			$out['lv'] = 'latviešu';
-			$out['hu-HU'] = 'magyar';
-			$out['mt'] = 'malti';
-			$out['nl-NL'] = 'nederlands';
-			$out['no'] = 'norsk';
-			$out['pl'] = 'polski';
-			$out['pt-PT'] = 'português';
-			$out['ro'] = 'româna';
-			$out['sr'] = 'српски';
-			$out['sl'] = 'slovenšcina';
-			$out['sk'] = 'slovencina';
-			$out['fi-FI'] = 'suomi';
-			$out['sv-SE'] = 'svenska';
-			$out['el-GR'] = 'Ελληνικά';
-			$out['bg'] = 'bulgarian';
-			$out['mk'] = 'македонски';
+			$out_tmp = $conf->lang;
+
+			foreach($out_tmp as $key => $lang_name)
+			{
+				if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
+			}
 			
 			return $out;
 		}
@@ -243,49 +426,85 @@
 		/**
      * Output Type Array
      *
-     * @return	string						Array with the first CAP 1.2 entery's
+     * @return	array						Array with the first CAP 1.2 entery's
      */
-		function StaticTypes()
+		function Types()
 		{
-			$type[] = "identifier";
-      $type[] = "sender";
-      $type[] = "sent";
-      $type[] = "status";
-      $type[] = "msgType";
-      $type[] = "references";
-     	$type[] = "scope";
-      $type[] = "effective";
-      $type[] = "onset";
-      $type[] = "expieres";
+			// Alert Page		
+			$type['alert'][] = "identifier";	
+			$type['alert'][] = "status";
+			$type['alert'][] = "category";
+			$type['alert'][] = "urgency";				      
       
+      //$type['alert'][] = "references"; // will be automaticlie added by msgType Update and Cancel
+     	
+     	// Detail Page
+     	$type['alert']['detail'][] = "sent";
+     	
+      $type['alert']['detail'][] = "effective";
+      $type['alert']['detail'][] = "onset";
+      $type['alert']['detail'][] = "expieres";
+      
+			$type['alert']['detail'][] = "eventCode";
+			$type['alert']['detail'][] = "parameter";
+			
+			// Info Page	
+			$type['info'][] = "lang";
+			$type['info'][] = "event";	
+			$type['info'][] = "senderName";
+			$type['info'][] = "sender";		
+			$type['info'][] = "audience";
+			$type['info'][] = "contact";
+			$type['info'][] = "web";
+
+			// Area Page
+			$type['area'][] = "areaDesc";
+			$type['area'][] = "polygon";
+			$type['area'][] = "circle";
+			$type['area'][] = "geocode";
+
+			// conf Page	
+			$type['conf'][] = "cap_save";
+			$type['conf'][] = "cap_output";
+					
+			$type['conf'][] = "WMO_OID";
+			$type['conf'][] = "ISO";			
+			$type['conf'][] = "ID_ID";
+			$type['conf'][] = "identifier_time";
+			
+			$type['conf'][] = "lang_conf";
+			
+			$type['conf'][] = "webservice_on";
+			$type['conf']['detail'][] = "webservice_securitykey";
+			$type['conf']['detail'][] = "webservice_sourceapplication";
+			$type['conf']['detail'][] = "webservice_login";
+			$type['conf']['detail'][] = "webservice_password";
+			$type['conf']['detail'][] = "webservice_entity";
+			$type['conf']['detail'][] = "webservice_destination";
+			$type['conf']['detail'][] = "webservice_WS_METHOD";
+			$type['conf']['detail'][] = "webservice_ns";
+			$type['conf']['detail'][] = "webservice_WS_DOL_URL";
+
       return $type;
 		}
 		
-		/**
-     * Output Type Array
-     *
-     * @return	string						Array with the info CAP 1.2 entery's
-     */
-		function LangTypes()
+		function Pages()
 		{
-			$type[] = "category";
-			$type[] = "responseType";
-			$type[] = "urgency";
-			$type[] = "severity";
-			$type[] = "certainty";
-			$type[] = "audience";
-			$type[] = "eventCode";
-			$type[] = "senderName";
-			$type[] = "web";
-			$type[] = "contact";
-			$type[] = "parameter";
-			$type[] = "areaDesc";
-			$type[] = "polygon";
-			$type[] = "circle";
-			$type[] = "geocode";
-      
-      return $type;
+			$pages['alert'] 				= "Alert";
+			//$pages['alert']['next'] = true;
+			
+			$pages['info']  				= "Info";
+			//$pages['info']['next'] 	= true;
+			
+			$pages['area']  				= "Area";
+			//$pages['area']['send'] 	= true;
+			
+			$pages['conf']  				= "Configuration";
+			//$pages['conf']['send'] 	= true;
+						
+			return $pages;
 		}
+		
 				
 		/**
      * Output Html Form
@@ -294,191 +513,227 @@
      */
 		function Form()
 		{
-			$out = '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
-			$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
-			$out.= '<link rel="stylesheet" type="text/css" href="cap_form.css">';
+			$out = '<head>';
+				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
+				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
+				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 			
-			$out.= '<form method="POST" id="capform" name="capform" action="cap.php" enctype="multipart/form-data" >';
+				$out.= '<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+			
+				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
+ 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+			$out.= '</head>';
+			$out.= '<body>';
+			
+			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" >';
 			$out.= '<input type="hidden" name="action" value="create">';
 
-				$out.= '<table width="100%">';
-				
+					$Type_arr = $this->Types();
+					foreach($Type_arr as $pagename => $TypePage)
+					{
+						$out.= '<div data-role="page" id="'.$pagename.'">';
+						
+							$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
+    						$out.= '<!-- panel content goes here -->';
+    						$out.= '<ul data-role="listview" data-inset="true">';
+    						
+    							$Pages_arr = $this->Pages();
+									foreach($Pages_arr as $link => $Page_Name)
+									{
+										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+									}
 									
-					$langs_arr = $this->getlang();
-						
-					$out.= '<tr id="troflang">';
-						$out.= '<td colspan="6" id="tdoflang">';
-						
-							$langs= '<select id="langs" style="padding: 0px 0px 0px 7px;">';
-								foreach($langs_arr as $key => $langs_val){
-										$langs.= '<option value="'.$key.'">';
-											$langs.= $langs_val;
-										$langs.= '</option>';										
-								}
-							$langs.= '</select>';	
+								$out.= '</ul>';
+							$out.= '</div>';
+							
+							$out.= '<div data-theme="b" data-role="header">';								
+								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+								$out.= '<h1>'.$Pages_arr[$pagename].'</h1>';							
+							$out.= '</div>';
+							
+							
+							// Main
+							$out.= '<div class="ui-content ui-page-theme-a" data-form="ui-page-theme-a" data-theme="a" role="main">';
 								
-							$out.= $langs;			
-							$out.= '<span id="plusSpeach">+ Language </span>';
-						$out.= '</td>';
-					$out.= '</tr>';					
-					
-					$extralang = "";
-					foreach($langs_arr as $key => $langs_val)
-					{
-						$extralang.= '<tr id="'.$key.'" class="langs_text" style="display:none">';
-							$extralang.= '<td colspan="6">';
-									$extralang.= '<input placeholder="Event" type="text" name="event['.$key.']" style="width: 100%;">';
-								$extralang.= '<br>';
-									$extralang.= '<input placeholder="Header" type="text" name="headline['.$key.']" style="width: 100%;">';
-								$extralang.= '<br>';
-									$extralang.= '<textarea placeholder="Desciption" name="description['.$key.']" style="width: 100%; height: 150px;"></textarea>';
-								$extralang.= '<br>';
-									$extralang.= '<textarea placeholder="Instruction" name="instruction['.$key.']" style="width: 100%;margin-bottom: 10px;"></textarea>';
-							$extralang.= '</td>';
-						$extralang.= '</tr>';
-					}
-					
-					$out.=$extralang;
-					
-					$out.= '<tr>';
-						$out.= '<td colspan="6">';
-							$out.= '<br>';
-						$out.= '</td>';
-					$out.= '</tr>';
-			
-					$StaticType_arr = $this->StaticTypes();
-					foreach($StaticType_arr as $type)
-					{
-							$out.= '<tr id="'.$type.'DIV"><td>'.$type.': </td><td>'.$this->InputStandard($type).'</td></tr>';
-					}
-
-					$LangType_arr = $this->LangTypes();
-					foreach($LangType_arr as $type)
-					{
-								$out.= '<tr id="'.$type.'DIV"><td>'.$type.': </td><td>'.$this->InputStandard($type).'</td></tr>';
-					}
-					
-					$out.= '<tr>';
-						$out.= '<td colspan="6">';
-							$out.= '<br>';
-						$out.= '</td>';
-					$out.= '</tr>';
-					
-					$out.= '<tr>';
-						$out.= '<td colspan="2" width="50%">';
-							$out.= '<select name="output">';
-								$out.= '<option value="cap">';
-									$out.= 'Cap';
-								$out.= '</option>';
-								$out.= '<option value="xml">';
-									$out.= 'Xml';
-								$out.= '</option>';
-							$out.= '</select>';							
-							$out.= '<input type="button" onclick="updateCapXML()" name="update" value="update">';
-							$out.= '<div readonly id="XmlCap">';
-								$out.= '<textarea readonly id="XmlCapTA">'; 
-									// Dynamic content
-								$out.= '</textarea>';
+								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
+									$out.= '<ul data-role="listview" data-divider-theme="b">';
+									
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr[$pagename].'</h1></li>';
+									
+										foreach($TypePage as $key => $type)
+										{							
+											if(is_numeric($key))
+											{	
+												$out.= '<li>';
+													$out.= $this->InputStandard($type);
+												$out.= '</li>';
+											}
+										}
+									
+									$out.= '</ul>';
+								$out.= '</div>';	
+								
+								if(count ($TypePage['detail']) >= 1)
+								{
+									$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
+										$out.= '<h2>Detail</h2>';
+										$out.= '<ul data-role="listview">';
+	
+											foreach($TypePage['detail'] as $key_ex => $type_ex)
+											{		
+												$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+											}						
+															
+										$out.= '</ul>';
+									$out.= '</div>';		
+								}
+								
 							$out.= '</div>';
-						$out.= '</td>';
-
-						$out.= '<td colspan="3"  width="50%">';
-							$out.= 'View';
-							$out.= '<div id="view">';
-
+							
+							$out.= '<div data-role="footer" data-theme="b">';						
+								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr[$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr[$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr[$pagename] == 'Area') 					$out.= '<input type="submit" value="Submit">';
+								if($Pages_arr[$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
 							$out.= '</div>';
-						$out.= '</td>';
-					$out.= '</tr>';
+							
+						$out.= '</div>';
+					}
 
-				$out.= '</table>';
-				$out.= '<span style="float:right;"><input type="submit" name="Submit" value="Submit"></span>';
-				
 			$out.= '</form>';
 			
+			
+			$out.= '</body>';
 			$out.= 
 			'
 			<script>
 				$( document ).ready(function() {
-				
-    			$("#plusSpeach").click(function(){
-						$("#langs").before("<span class=\"spanlang taphide\" name=\""+$( "#langs option:selected" ).val()+"\" onclick=\"changeExLang(\'"+$( "#langs option:selected" ).val()+"\')\"><input name=\"language[]\" type=\"hidden\" value=\""+$( "#langs option:selected" ).val()+"\">"+$( "#langs option:selected" ).text()+" <span style=\"color:red;\" onclick=\"delExLang(\'"+$( "#langs option:selected" ).val()+"\')\">X</span></span>");
-						
-						if(changedExLang == 0)
-						{
-							$("#" + $( "#langs option:selected" ).val()).show();
-							
-							$( ".spanlang" ).each(function( index )
-							{
-								if(index == 0) $(this).removeClass( "taphide" ).addClass( "tapshow" );
-								else $(this).removeClass( "tapshow" ).addClass( "taphide" );
-							});
-							
-							changedExLang = 1;
-							
-						}
-						
-						$("#langs option:selected").attr("disabled", "disabled");
-						$("#langs option:not(:disabled)").first().attr("selected", "selected");
-						
-						length = $("#langs > option").length;
-						if(length == 0)
-						{
-							$("#langs").remove();
-							$("#plusSpeach").remove();
-						}
-						
-						
-					});
-					
+									
 					$( "input, select" ).change(function() {
 						updateCapXML();
 					});
 					
-				});
-				
-				var changedExLang = 0;
-				function changeExLang(lang)
-				{
-						$( ".langs_text" ).each(function( index )
-						{
-							if($(this).attr("id") != lang)
+					
+					$( "#msgType" ).change(function() {
+						if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
+						{		
+							if(typeof $("#LIreferences").html()  === "undefined")
 							{
-  							$(this).hide();	  						
-  						}
-						});
-						
-						$("#"+lang).show();	
-						
-						$( ".spanlang" ).each(function( index )
-						{
-							if( $(this).attr("name") == lang ){
-								$(this).removeClass( "taphide" ).addClass( "tapshow" );
+								$("#TypeMessage").after(\'<li id="LIreferences" class="ui-li-static ui-body-inherit ui-last-child"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="references" type="text" name="references"></div></li>\');
 							}
 							else
-							{							
-								$(this).removeClass( "tapshow" ).addClass( "taphide" );								
+							{
+								$("#LIreferences").show();
+							}
+						}
+						else
+						{
+							if(typeof $("#LIreferences").html()  !== "undefined")
+							{
+								$("#LIreferences").hide();
+							}
+						}
+					});
+					
+					$( "#language" ).change(function() {
+						
+						$( ".lang_input" ).each(function( index )
+						{
+							if($( "#language" ).val() == $(this).attr("id"))
+							{
+								$(this).show();
+							}
+							else
+							{
+								$(this).hide();
+							}					
+						});	
+						
+						$("#" + $( "#language" ).val() + "_Button").show();
+						$( "#" + $( "#language" ).val() + "_language_input" ).val($( "#language" ).val());
+						
+						$( ".Lang_Button" ).each(function( index )
+						{
+							if( $( "#language" ).val() + "_Button" == $(this).attr("id"))
+							{
+								$(this).css("box-shadow", "0px 0px 11px rgb(0, 126, 255)");
+							}
+							else
+							{
+								$(this).css("box-shadow", "");
 							}
 						});
 						
-						
-						changedExLang = 1;
-				}
-				
-				function delExLang(lang)
-				{
-					$( ".spanlang" ).each(function( index )
+					});';
+					
+					$langs_arr = $this->getlang();	
+					
+					foreach($langs_arr as $key => $langs_val)
 					{
-							if( $(this).attr("name") == lang )
-							{
-								$(\'#langs option[value="\' + lang + \'"]\').removeAttr("disabled");
-								$(this).remove();
-							}
-					});
-				}
+						
+						$out.= '
+										$( "#'.$key.'_Remove_Button" ).click(function() {
+											$(this).parent("a").hide();			
+											$(\'input[name="event['.$key.']"]\').val("");
+											$(\'input[name="headline['.$key.']"]\').val("");
+											$(\'input[name="description['.$key.']"]\').val("");
+											$(\'input[name="instruction['.$key.']"]\').val("");
+											$( "#'.$key.'_language_input" ).val("delete");
+										});
+									 ';
+					}
+					
+					foreach($langs_arr as $key => $langs_val)
+					{
+						
+						$out.= '$( "#'.$key.'_Button" ).click(function() {';
+							$out.= '
+											if($( "#'.$key.'_language_input" ).val() != "delete")
+											{
+												$( "#'.$key.'_language_input" ).val("'.$key.'");
+											}
+											else
+											{
+												$( "#'.$key.'_language_input" ).val("");
+											}
+											
+											$( ".Lang_Button" ).each(function( index )
+											{
+												if( "'.$key.'_Button" == $(this).attr("id"))
+												{
+													$(this).css("box-shadow", "0px 0px 11px rgb(0, 126, 255)");
+												}
+												else
+												{
+													$(this).css("box-shadow", "");
+												}
+											});
+											
+											$( ".lang_input" ).each(function( index )
+											{
+												if( "'.$key.'" == $(this).attr("id"))
+												{
+													$(this).show();
+												}
+												else
+												{
+													$(this).hide();
+												}					
+											});				
+							';			
+						$out.= '});';
+					}
+					
+				$out.= '
+				});
+				
 				
 				function updateCapXML()
 				{
-					var url = "cap.php?cap=1"; // the script where you handle the form input.
+					var url = "index.php?cap=1"; // the script where you handle the form input.
 					
 					$.ajax({
 					      	type: "POST",
@@ -493,28 +748,389 @@
 					return false; // avoid to execute the actual submit of the form.
 				}
 				
-				function plusInput(type_v)
+				function ajax_conf()
 				{
-					var url = "cap.php"; // the script where you handle the form input.
+					var url = "index.php?conf=1"; // the script where you handle the form input.
 					
 					$.ajax({
 					      	type: "POST",
 					        url: url,
-					        data: {type: type_v}, // serializes the forms elements.
+					        data: $("#capform").serialize(), // serializes the forms elements.
 					        success: function(data)
 					        {					        	
-					        	$("#"+type_v+"DIV").after(data);
+					        	location.reload();
 					        }
 					       });
 					
 					return false; // avoid to execute the actual submit of the form.
 				}
 				
+				function plusParameterInput()
+				{
+					$("#Parameterappend").after(\'<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="parameter[value][]"></div></div><div class="ui-block-c"></div></div>\');
+				}
 				
+				function plusEventCodeInput()
+				{
+					$("#Eventappend").after(\'<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="eventCode[value][]"></div></div><div class="ui-block-c"></div></div>\');
+				}
+				
+				function plusGeocodeInput()
+				{
+					$("#Geocodeappend").after(\'<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="geocode[value][]"></div></div><div class="ui-block-c"></div></div>\');
+				}
 				
 			</script>';
 			
 			return $out;
+		}
+		
+		/**
+		 * Function to install the interface of the Cap PHP library
+		 *
+		 * @return	string 	$out
+		 */
+		function CapView($content, $ID)
+		{
+			
+				$out = '<head>';
+				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
+				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
+				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
+			
+				$out.= '<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+			
+				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
+ 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+			$out.= '</head>';
+			$out.= '<body>';			
+				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
+			
+					$out.= '<div data-role="page">';
+
+						$out.= '<div data-role="header" data-theme="b">';
+							$out.= '<h1>'.$ID.'.cap</h1>';
+						$out.= '</div><!-- /header -->';
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';		
+								$out.= '<textarea readonly>';						
+									$out.= $content;
+								$out.= '</textarea>';
+							$out.= '</div>';
+
+						$out.= '</div><!-- /content -->';
+					
+						$out.= '<div data-role="footer" data-theme="b">';
+
+						$out.= '</div><!-- /footer -->';
+						
+					$out.= '</div><!-- /page -->';
+			
+				$out.= '</form>';			
+			$out.= '</body>';
+			
+			return $out;
+		}
+		
+		/**
+		 * Function to conect the identifier to one string
+		 *
+		 * @return	array 	$_POST
+		 */
+		function MakeIdentifier($post)
+		{
+			$temp = $post[identifier][WMO].".".$post[identifier][ISO].".".$post[identifier][time].".".$post[identifier][ID];
+			unset($post[identifier]);
+			$post[identifier] = $temp;
+			return $post;
+		}
+		
+		/**
+		 * Function to install the interface of the Cap PHP library
+		 *
+		 * @return	string 	$out
+		 */
+		function install()
+		{
+			
+				$out = '<head>';
+				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
+				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
+				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
+			
+				$out.= '<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+			
+				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
+ 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+			$out.= '</head>';
+			$out.= '<body>';			
+				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
+			
+					$out.= '<div data-role="page">';
+
+						$out.= '<div data-role="header">';
+							$out.= '<h1>Install Cap PHP Library Interface</h1>';
+						$out.= '</div><!-- /header -->';
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
+								$out.= '<ul data-role="listview" data-divider-theme="b">';
+									
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Configuration</h1></li>';
+
+									$Type_arr = $this->Types();
+									foreach($Type_arr['conf'] as $key => $type)
+									{							
+										if(is_numeric($key))
+										{	
+											$out.= '<li>';
+												$out.= $this->InputStandard($type);
+											$out.= '</li>';
+										}
+									}	
+								
+								$out.= '</ul>';								
+							$out.= '</div>';	
+							
+								if(count ($Type_arr['conf']['detail']) >= 1)
+								{
+									$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
+										$out.= '<h2>Webservice</h2>';
+										$out.= '<ul data-role="listview">';
+	
+											foreach($Type_arr['conf']['detail'] as $key_ex => $type_ex)
+											{		
+												$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+											}						
+															
+										$out.= '</ul>';
+									$out.= '</div>';		
+								}
+							
+							$out.= '<input type="submit" value="Submit" data-theme="a">';
+
+						$out.= '</div><!-- /content -->';
+					
+						$out.= '<div data-role="footer">';
+							$out.= '<h4>office@backbone.co.at</h4>';
+						$out.= '</div><!-- /footer -->';
+						
+					$out.= '</div><!-- /page -->';
+			
+				$out.= '</form>';			
+			$out.= '</body>';
+			
+			return $out;
+		}
+		
+		/**
+		 * Function to save the conf post information to the conf
+		 *
+		 * @return	null
+		 */	
+		function PostToConf($post)
+		{	
+			global $conf;
+			
+			/*
+			 * Special
+			 */
+			 
+			// set visible langs
+			$lang_arr = $post['select']['lang'];
+			unset($post['select']);
+			foreach($conf->select->lang as $lang_name => $lang_boolen)
+			{			 	 
+			 	if(in_array($lang_name, $lang_arr))
+			 	{
+			 		$conf->select->lang[$lang_name] = 1;
+			 	}
+			 	else
+			 	{
+			 		$conf->select->lang[$lang_name] = 0;
+			 	}
+		 	}
+			 
+			// specifie the automatic time set
+			if($post['identifier']['time']['on'] == "on")
+		 	{
+			 	$conf->identifier->time->on = 1;
+			}	
+			else
+			{
+			 	$conf->identifier->time->on = 0;
+			}		
+			unset($post['identifier']['time']);
+				
+			if($post['cap']['save'] == "on")
+		 	{
+			 	$conf->cap->save = 1;
+			}	
+			else
+			{
+			 	$conf->cap->save = 0;
+			}		
+			unset($post['cap']['save']);
+			/* 
+			 * Reguler
+			 */
+			if(is_array($post))
+			{
+				foreach($post as $obj_name => $obj_val)
+				{
+					
+					if(is_array($obj_val))
+					{
+						foreach($obj_val as $obj_2_name => $obj_2_val)
+						{
+						
+							if(is_array($obj_2_val))
+							{
+								foreach($obj_2_val as $obj_3_name => $obj_3_val)
+								{
+									$conf->{$obj_name}->{$obj_2_name}->{$obj_3_name} = $obj_3_val;
+								} // Level 2
+							}
+							else
+							{
+								$conf->{$obj_name}->{$obj_2_name} = $obj_2_val;
+							}
+							
+						} // Level 1
+					}
+					else
+					{
+						$conf->{$obj_name}->{$obj_1_name} = $obj_1_val;
+					}
+					
+				} // Base
+			}
+			else
+			{
+				$conf->{$obj_name} = $obj_val;
+			}
+			
+			print_r($post);
+			print_r($conf);
+		}
+	
+		/**
+		 * Function to chnge Configuration in the conf.php file
+		 *
+		 * @return	null
+		 */	
+		function WriteConf($write = true)
+		{			
+			global $conf;
+			
+			$out = "<?php"."\n";
+			$out.= "date_default_timezone_set('".$conf->timezone->set_default."');"."\n";
+			// CONF BASE
+			if(is_object($conf) || is_array($conf_arr))
+			{
+				foreach($conf as $conf_name => $conf_arr)
+				{
+					
+					// LEVEL 1
+					if(is_object($conf_arr) || is_array($conf_arr))
+					{
+						foreach($conf_arr as $conf_name_var => $conf_val)
+						{
+							
+							// LEVEL 2
+							if(is_object($conf_val) || is_array($conf_val))
+							{
+								foreach($conf_val as $conf_name_level_2_var => $conf_level_2_val)
+								{								
+									if(is_array($conf_val))
+									{
+										$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var."['".$conf_name_level_2_var."']");
+										if(!is_numeric($conf_level_2_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+										$out.= "$"."conf->".$conf_name."->".$conf_name_var."['".$conf_name_level_2_var."']".$space."= ".$string_or_number.$conf_level_2_val.$string_or_number.";"."\n";
+									}
+									elseif(is_object($conf_val))
+									{ 
+										$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var."->".$conf_name_level_2_var);
+										if(!is_numeric($conf_level_2_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+										$out.= "$"."conf->".$conf_name."->".$conf_name_var."->".$conf_name_level_2_var.$space."= ".$string_or_number.$conf_level_2_val.$string_or_number.";"."\n";
+									}
+								} // foreach conf_val								
+							} // is_array conf_val
+							else
+							{				
+								if(is_array($conf_arr))
+								{
+									$space = $this->ConfSpaces("$"."conf->".$conf_name."['".$conf_name_var."']");
+									if(!is_numeric($conf_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+									$out.= "$"."conf->".$conf_name."['".$conf_name_var."']".$space."= ".$string_or_number.$conf_val.$string_or_number.";"."\n";
+								}
+								elseif(is_object($conf_arr))
+								{
+									$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var);
+									if(!is_numeric($conf_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+									$out.= "$"."conf->".$conf_name."->".$conf_name_var.$space."= ".$string_or_number.$conf_val.$string_or_number.";"."\n";
+								}
+							} // else is_array conf_val
+							
+						} // foreach conf_arr
+					} // is_array conf_arr
+					else
+					{
+						if(is_array($conf_arr))
+						{
+							$space = $this->ConfSpaces("$"."conf['".$conf_name."']");
+							if(!is_numeric($conf_arr)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+							$out.= "$"."conf['".$conf_name."']".$space."= ".$string_or_number.$conf_arr.$string_or_number.";"."\n";
+						}
+						elseif(is_object($conf_arr))
+						{
+							$space = $this->ConfSpaces("$"."conf->".$conf_name);
+							if(!is_numeric($conf_arr)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+							$out.= "$"."conf->".$conf_name.$space."= ".$string_or_number.$conf_arr.$string_or_number.";"."\n";
+						}
+					} // else is_object conf_arr					
+					$out.= "\n";
+					
+				} // foreach conf
+			} // is_array conf
+			else
+			{
+				$write = false;
+				print 'FAIL TO READ CONF';	
+			} // else is_object conf
+					
+			$out.= "?>";
+			
+			if($write == true)
+			{
+				$conf_file = fopen("source/conf/conf.php", "w") or print("Unable to open conf!");
+				fwrite($conf_file, $out);
+				fclose($conf_file);
+			}
+			else
+			{
+				print ($out);
+			}
+		}		
+		
+		function ConfSpaces($string)
+		{
+			//$space = '                                                     '; // 55 spaces Standard
+			$space = '';
+			$i = (55 - strlen($string));
+			while( $i > 0 )
+			{ 
+				$space.= ' '; 
+				$i--;
+			}
+			return $space;
 		}
 	}
 	

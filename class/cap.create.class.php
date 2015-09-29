@@ -29,8 +29,8 @@
 	class CAP_Class{
 		var $output = "CAP"; // CAP / XML
 		var $cap = "";
-		var $destination = "CapFiles";
-
+		var $destination = "source/cap";
+		var $debug = "";
 
 		
 		// alert
@@ -138,66 +138,74 @@
 				if(count($this->language) > 0)
 				foreach($this->language as $lang)
 				{
-					$xml->tag_open('info');
-					
-						$xml->tag_simple('language', $lang);
-						$xml->tag_simple('category', $this->category);
-						$xml->tag_simple('event', $this->event[$lang]);
-						$xml->tag_simple('responseType', $this->responseType);
-						$xml->tag_simple('urgency', $this->urgency);
-						$xml->tag_simple('severity', $this->severity);
-						$xml->tag_simple('certainty', $this->certainty);
-						$xml->tag_simple('audience', $this->audience);
+					if(!empty($lang))
+					{
+						$xml->tag_open('info');
 						
-						if(count($this->eventCode) > 0)
-						foreach($this->eventCode['valueName'] as $key => $eventCode)
-						{
-							$xml->tag_open('eventCode');							
-								$xml->tag_simple('valueName', $this->eventCode['valueName'][$key]);
-								$xml->tag_simple('value', $this->eventCode['value'][$key]);							
-							$xml->tag_close('eventCode');
-						}
-						
-						// 2015-01-15T00:04:01+01:00
-						$xml->tag_simple('effective', date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC'])));
-						$xml->tag_simple('onset', date("Y-m-d\TH:i:s" , strtotime($this->onset['date']." ".$this->onset['time'] ))."+".date("H:i",strtotime($this->onset['UTC'])));
-						$xml->tag_simple('expieres', date("Y-m-d\TH:i:s" , strtotime($this->expieres['date']." ".$this->expieres['time'] ))."+".date("H:i",strtotime($this->expieres['UTC'])));
-						
-						
-						$xml->tag_simple('senderName', $this->senderName);
-						$xml->tag_simple('headline', $this->headline[$lang]);
-						$xml->tag_simple('description', $this->description[$lang]);
-						$xml->tag_simple('instruction', $this->instruction[$lang]);
-						$xml->tag_simple('web', $this->web);
-						$xml->tag_simple('contact', $this->contact);
-						
-						if(count($this->parameter) > 0)
-						foreach($this->parameter['valueName'] as $key => $parameter)
-						{
-							$xml->tag_open('parameter');						
-								$xml->tag_simple('valueName', $this->parameter['valueName'][$key]);
-								$xml->tag_simple('value', $this->parameter['value'][$key]);							
-							$xml->tag_close('parameter');						
-						} // foreach parameter
-						
-						$xml->tag_open('area');
-						
-							$xml->tag_simple('areaDesc', $this->areaDesc);
-							$xml->tag_simple('polygon', $this->polygon);
-							$xml->tag_simple('circle', $this->circle);
+							$xml->tag_simple('language', $lang);
+							$xml->tag_simple('category', $this->category);
+							$xml->tag_simple('event', $this->event[$lang]);
+							$xml->tag_simple('responseType', $this->responseType);
+							$xml->tag_simple('urgency', $this->urgency);
+							$xml->tag_simple('severity', $this->severity);
+							$xml->tag_simple('certainty', $this->certainty);
+							$xml->tag_simple('audience', $this->audience);
 							
-							if(count($this->geocode) > 0)
-							foreach($this->geocode['valueName'] as $key => $geocode)
+							if(! empty($this->eventCode['valueName'][0]))
+							foreach($this->eventCode['valueName'] as $key => $eventCode)
 							{
-								$xml->tag_open('geocode');						
-									$xml->tag_simple('valueName', $this->geocode['valueName'][$key]);
-									$xml->tag_simple('value', $this->geocode['value'][$key]);							
-								$xml->tag_close('geocode');
-							} // foreach geocode
+								$xml->tag_open('eventCode');							
+									$xml->tag_simple('valueName', $this->eventCode['valueName'][$key]);
+									$xml->tag_simple('value', $this->eventCode['value'][$key]);							
+								$xml->tag_close('eventCode');
+							}
 							
-						$xml->tag_close('area');
-											
-					$xml->tag_close('info');	
+							// 2015-01-15T00:04:01+01:00
+							//$this->debug = date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC']));
+							$xml->tag_simple('effective', date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC'])));
+							$xml->tag_simple('onset', date("Y-m-d\TH:i:s" , strtotime($this->onset['date']." ".$this->onset['time'] ))."+".date("H:i",strtotime($this->onset['UTC'])));
+							$xml->tag_simple('expires', date("Y-m-d\TH:i:s" , strtotime($this->expieres['date']." ".$this->expieres['time'] ))."+".date("H:i",strtotime($this->expieres['UTC'])));
+							
+							
+							$xml->tag_simple('senderName', $this->senderName);
+							$xml->tag_simple('headline', $this->headline[$lang]);
+							$xml->tag_simple('description', $this->description[$lang]);
+							$xml->tag_simple('instruction', $this->instruction[$lang]);
+							$xml->tag_simple('web', $this->web);
+							$xml->tag_simple('contact', $this->contact);
+							
+							if(! empty($this->parameter['valueName'][0]))
+							foreach($this->parameter['valueName'] as $key => $parameter)
+							{
+								$xml->tag_open('parameter');						
+									$xml->tag_simple('valueName', $this->parameter['valueName'][$key]);
+									$xml->tag_simple('value', $this->parameter['value'][$key]);							
+								$xml->tag_close('parameter');						
+							} // foreach parameter
+							
+							// look if area zone is used
+							if(! empty($this->areaDesc) || ! empty($this->polygon)  || ! empty($this->circle) || ! empty($this->geocode['valueName'][0]))
+							{
+								$xml->tag_open('area');
+							
+									$xml->tag_simple('areaDesc', $this->areaDesc);
+									$xml->tag_simple('polygon', $this->polygon);
+									$xml->tag_simple('circle', $this->circle);
+								
+									if(! empty($this->geocode['valueName'][0]))
+									foreach($this->geocode['valueName'] as $key => $geocode)
+									{
+										$xml->tag_open('geocode');						
+											$xml->tag_simple('valueName', $this->geocode['valueName'][$key]);
+											$xml->tag_simple('value', $this->geocode['value'][$key]);							
+										$xml->tag_close('geocode');
+									} // foreach geocode
+								
+								$xml->tag_close('area');
+							}
+												
+						$xml->tag_close('info');	
+					} // lang is not empty
 				}// Foreach info lang
 					
 			$xml->tag_close('alert');
@@ -215,6 +223,12 @@
 			$capfile = fopen($this->destination.'/'.$this->identifier.'.cap', "w") or die("Unable to open file!");
 			fwrite($capfile, $this->cap);
 			fclose($capfile);
+			
+			// convert in UTF-8
+			$data = file_get_contents($this->destination.'/'.$this->identifier.'.cap');
+			$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+			file_put_contents($this->destination.'/'.$this->identifier.'.cap', $data);
+			
 			return $this->destination.'/'.$this->identifier.'.cap';
 		}
 			
