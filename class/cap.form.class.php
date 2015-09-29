@@ -504,10 +504,10 @@
 			$pages['area']  				= "Area";
 			//$pages['area']['send'] 	= true;
 			
+			$pages['capview'] 		 = "Cap View";
+			
 			$pages['conf']  				= "Configuration";
 			//$pages['conf']['send'] 	= true;
-			
-			$pages['capview'] 		 = "Cap View";
 						
 			return $pages;
 		}
@@ -604,7 +604,8 @@
 								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
 								if($Pages_arr[$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
 								if($Pages_arr[$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Area') 					$out.= '<input type="submit" value="Submit">';
+								if($Pages_arr[$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="Submit">';
 								if($Pages_arr[$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
 							$out.= '</div>';
 							
@@ -619,6 +620,8 @@
 			'
 			<script>
 				$( document ).ready(function() {
+					
+					updateCapXML();
 									
 					$( "input, select" ).change(function() {
 						updateCapXML();
@@ -840,7 +843,7 @@
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Cap View</h1></li>';	
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Cap View of: '.$ID.'.cap</h1></li>';	
 									$out.= '<li>';
 										$out.= '<textarea readonly>';						
 											$out.= $content;
