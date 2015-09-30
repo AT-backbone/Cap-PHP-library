@@ -1,4 +1,4 @@
-# Cap-PHP Library
+# Cap-PHP Library / Cap Creator
 A common alerting protocol library for processing and producing XML-CAP's from a JQuery HTML form.
 
 It's an Open Source software (wrote in PHP language) designed for users of common alerting protocol Version 1.2 like
@@ -13,7 +13,7 @@ You can freely use, study, modify or distribute it according to it's Free Softwa
 
 ## LICENSE
 
-Dolibarr is released under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version (GPL-3+).
+The Cap-PHP Library released under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version (GPL-3+).
 
 See the [COPYING](COPYING) file for a full copy of the license.
 
