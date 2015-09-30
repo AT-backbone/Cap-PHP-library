@@ -277,18 +277,18 @@
 						break;
 					
 					case 'cap_output':
-							$out = 'Output of the Cap: <input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
+							$out = $langs->trans("LabelOutputOfTheCap").': <input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
 						break;
 
 					case 'ID_ID':
-							$out = 'identifier Number: <input type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
+							$out = $langs->trans("LabelIdentifierNumber").': <input type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
 						break;
 					case 'WMO_OID':
-							$out = 'WMO OID: <input type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
+							$out = $langs->trans("LabelWMO_OID").': <input type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
 						break;
 						
 					case 'ISO':
-						$out = 'ISO: <input type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
+						$out = $langs->trans("LabelISO").': <input type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
 					 break;
 					 
 					case 'identifier_time':
