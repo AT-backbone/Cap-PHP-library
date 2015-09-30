@@ -316,11 +316,42 @@
 						$out.= '</select>';
 						break;
 						
+					case 'lang_conf_plus':
+							$out = '<div id="LangAappend">';
+								$out.='<label for="sent[date]">Add language: </label>';
+								$out.= '<div class="ui-grid-b">';
+									$out.= '<div class="ui-block-a"><input type="text" maxsize="5" placeholder="RFC 3066" name="conf[lang][key]" id="lang_conf_plus_key"></div>';
+									$out.= '<div class="ui-block-b"><input type="text" name="conf[lang][name]" placeholder="Name" id="lang_conf_plus_name"></div>';
+									$out.= '<div class="ui-block-c" style="width: 54px;"><input type="button" onclick="plusLangInput()" value="+" data-theme="b"></div>';
+									$out.= '</div>';
+							$out.= '</div>';
+						break;
+						
+					case 'lang_conf_remove':
+							$out = '<div id="LangRappend">';
+								$out.='<label for="sent[date]">Remove language: </label>';
+								$out.= '<div class="ui-grid-a">';
+									$out.= '<div class="ui-block-a">';
+										$out.= '<select id="lang_remove" data-native-menu="false" data-iconpos="left">';
+										foreach($conf->lang as $key => $lang_name)
+										{
+											$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
+										}		
+										$out.= '</select>';
+									$out.= '</div>';
+									$out.= '<div class="ui-block-b" style="width: 54px;">';
+										$out.= '<input type="button" onclick="minusLangInput()" value="-" id="lang_remove_input_button" data-theme="b">';
+										$out.= '<input type="hidden" id="lang_remove_input" value="remove">';
+									$out.= '</div>';
+								$out.= '</div>';
+							$out.= '</div>';
+						break;
+						
 					case 'webservice_on':
-						if($conf->webservice->on == 1) $onoroff = 'checked=""';
-						else $onoroff = '';
-						$out = '<label for="identifier_time">Webservice:</label>';
-						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
+							if($conf->webservice->on == 1) $onoroff = 'checked=""';
+							else $onoroff = '';
+							$out = '<label for="identifier_time">Webservice:</label>';
+							$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
 						break;
 								
 					case 'webservice_password':
@@ -475,6 +506,8 @@
 			$type['conf'][] = "ID_ID";
 			$type['conf'][] = "identifier_time";
 			
+			$type['conf'][] = "lang_conf_plus";
+			$type['conf'][] = "lang_conf_remove";
 			$type['conf'][] = "lang_conf";
 			
 			$type['conf'][] = "webservice_on";
@@ -776,6 +809,46 @@
 					return false; // avoid to execute the actual submit of the form.
 				}
 				
+				function plusLangInput()
+				{
+					var url = "index.php?conf=1"; // the script where you handle the form input.
+					
+					key  = $("#lang_conf_plus_key").val();
+					$("#lang_conf_plus_name").attr("name", "conf[lang][" + key + "]");
+					
+					$.ajax({
+					      	type: "POST",
+					        url: url,
+					        data: $("#capform").serialize(), // serializes the forms elements.
+					        success: function(data)
+					        {					        	
+					        	location.reload();
+					        }
+					       });
+					
+					return false; // avoid to execute the actual submit of the form.
+				}
+				
+				function minusLangInput()
+				{
+					var url = "index.php?conf=1"; // the script where you handle the form input.
+					
+					key  = $("#lang_remove").val();
+					$("#lang_remove_input").attr("name", "conf[lang][remove][" + key + "]");
+					
+					$.ajax({
+					      	type: "POST",
+					        url: url,
+					        data: $("#capform").serialize(), // serializes the forms elements.
+					        success: function(data)
+					        {					        	
+					        	location.reload();
+					        }
+					       });
+					
+					return false; // avoid to execute the actual submit of the form.
+				}
+				
 				function plusParameterInput()
 				{
 					$("#Parameterappend").after(\'<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="parameter[value][]"></div></div><div class="ui-block-c"></div></div>\');
@@ -972,6 +1045,28 @@
 			/*
 			 * Special
 			 */
+		 	
+			 // set langs
+			$lang_arr = $post['lang'];
+			unset($post['lang']);
+			foreach($lang_arr as $lang_key => $lang_name)
+			{			 	 
+			 	if($lang_key != "key" && $lang_name != "name" && $lang_key != "remove")
+			 	{
+			 		$conf->lang[$lang_key] = $lang_name;
+		 		}
+		 	}
+ 	
+ 				// conf[lang][remove][en-GB]:remove -> conf[lang][remove][remove]:en-GB
+			$rmv_lang_arr = array_flip($lang_arr['remove']);
+			unset($post['lang']['remove']);
+			foreach($conf->lang as $lang_key => $lang_name)
+			{			 	 
+			 	if(in_array($lang_key, $rmv_lang_arr))
+			 	{
+			 		unset($conf->lang[$lang_key]);
+			 	}
+		 	}
 			 
 			// set visible langs
 			$lang_arr = $post['select']['lang'];
