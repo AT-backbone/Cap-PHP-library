@@ -577,8 +577,10 @@
 						
 							$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
     						$out.= '<!-- panel content goes here -->';
-    						$out.= '<ul data-role="listview" data-inset="true">';
-    						
+    						$out.= '<ul data-role="listview">';
+    							
+    							$out.= '<li style="height: 91px;"><h1>Cap Creator</h1><br><span style="font-size: 10px;">Cap v1.2</span></li>';
+    							
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
