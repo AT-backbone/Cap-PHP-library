@@ -540,7 +540,7 @@
 			$pages['area']  				= $langs->trans("TitleArea");
 			//$pages['area']['send'] 	= true;
 			
-			$pages['capview'] 		 = $langs->trans("TitleCapView");
+			$pages['capview'] 		 	= $langs->trans("TitleCapView");
 			
 			$pages['conf']  				= $langs->trans("TitleConfig");
 			//$pages['conf']['send'] 	= true; 
