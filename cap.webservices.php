@@ -4,7 +4,7 @@
  *       \brief      Client to make a client call to Meteoalarm WebServices "putCap"
  */
 
-require_once 'nusoap/lib/nusoap.php';		// Include SOAP
+require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 Include 'source/conf/conf.php';
 
 $filename = $_POST[filename];
