@@ -41,13 +41,13 @@
      */
 		function InputStandard($type, $lang="")
 		{
-			global $conf;
+			global $conf, $langs;
 			
 			switch($type)
 			{
 				case 'identifier':
 					$out = '<div id="Identapend">';
-						$out.= '<label>Identifier: </label>';
+						$out.= '<label>'.$langs->trans("LabelIdentifier").': </label>';
 						$out.= '<div class="ui-grid-c">';
 							$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
 							if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
@@ -64,7 +64,7 @@
 					
 				case 'sent':
 					$out = '<div id="Sentapend">';
-						$out.= '<label>Sent: </label>';
+						$out.= '<label>'.$langs->trans("LabelSent").': </label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="sent[date]" value="'.date('Y-m-d').'"></div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="sent[time]" step="1" value="'.date('H:i:s').'"></div>';
@@ -134,7 +134,7 @@
 					
 				case 'eventCode': 
 					$out = '<div id="Eventappend">';
-						$out.= '<label for="sent[date]">Event Code: </label>';
+						$out.= '<label for="sent[date]">'.$langs->trans("LabelEventCode").': </label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
 							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="eventCode[value][]"></div>';
@@ -145,7 +145,7 @@
 				
 				case 'effective': 					
 					$out = '<div id="Effectiveapend">';
-						$out.= '<label>Effective: </label>';
+						$out.= '<label>'.$langs->trans("LabelEffective").': </label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="effective[date]" value="'.date('Y-m-d').'"></div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="effective[time]" step="1" value="'.date('H:i:s').'"></div>';
@@ -156,7 +156,7 @@
 
 				case 'onset': 					
 					$out = '<div id="Onsetapend">';
-						$out.= '<label>Onset: </label>';
+						$out.= '<label>'.$langs->trans("LabelOnset").': </label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="onset[date]" value="'.date('Y-m-d').'"></div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="onset[time]" step="1" value="'.date('H:i:s').'"></div>';
@@ -167,7 +167,7 @@
 					
 				case 'expieres': 					
 					$out = '<div id="Expieresapend">';
-						$out.= '<label>Expieres: </label>';
+						$out.= '<label>'.$langs->trans("LabelExpires").': </label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="expieres[date]" value=""></div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="expieres[time]" step="1" value=""></div>';

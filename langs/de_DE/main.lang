@@ -4,3 +4,10 @@ SeparatorThousand=.
 Lang=Deutsch
 Download=Download
 viaSoap=Oder mit SOAP Webservice uploaden nach
+LabelIdentifier=Identifier
+LabelSent=Sendezeit (sent)
+LabelEffective=Effective (effective)
+LabelEventCode=Event Code (eventCode)
+LabelEventCodeDesc=content of “valueName” is a user-assigned string designating the domain of the code, and the content of “value” is a string (which may represent a number) denoting the value itself (e.g., valueName ="SAME" and value="CEM").
+LabelOnset=OnSet Time (onset)
+LabelExpires=Expires Time (expires)
