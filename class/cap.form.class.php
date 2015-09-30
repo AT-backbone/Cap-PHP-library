@@ -510,7 +510,7 @@
 			$type['conf'][] = "lang_conf_remove";
 			$type['conf'][] = "lang_conf";
 			
-			/* TO DO
+			/* TO DO */
 			$type['conf'][] = "webservice_on";
 			$type['conf']['detail'][] = "webservice_securitykey";
 			$type['conf']['detail'][] = "webservice_sourceapplication";
@@ -521,7 +521,7 @@
 			$type['conf']['detail'][] = "webservice_WS_METHOD";
 			$type['conf']['detail'][] = "webservice_ns";
 			$type['conf']['detail'][] = "webservice_WS_DOL_URL";
-			*/
+			
 			
 			$type['capview'][] = 'capview';
 
@@ -532,16 +532,16 @@
 		{
 			global $langs;
 			$pages['alert'] 				= $langs->trans("TitleAlert");
-			$pages['alert']['next'] = 'info';
+			//$pages['alert']['next'] = 'info';
 			
 			$pages['info']  				= $langs->trans("TitleInfo");
-			$pages['info']['next'] 	= 'area';
+			//$pages['info']['next'] 	= 'area';
 			
 			$pages['area']  				= $langs->trans("TitleArea");
-			$pages['area']['next'] 	= 'capview';
+			//$pages['area']['next'] 	= 'capview';
 			
 			$pages['capview'] 		 	= $langs->trans("TitleCapView");
-			$pages['conf']['send'] 	= true; 
+			//$pages['conf']['send'] 	= true; 
 			
 			$pages['conf']  				= $langs->trans("TitleConfig");
 			
@@ -572,7 +572,7 @@
 			$out.= '</head>';
 			$out.= '<body>';
 			
-			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" >';
+			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 			$out.= '<input type="hidden" name="action" value="create">';
 
 					$Type_arr = $this->Types();
@@ -654,7 +654,7 @@
 								if($Pages_arr[$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
 								if($Pages_arr[$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
 								if($Pages_arr[$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'">';
+								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
 								if($Pages_arr[$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
 							$out.= '</div>';
 							
@@ -892,7 +892,7 @@
 		 */
 		function CapView($content, $ID)
 		{
-			global $conf;
+			global $conf, $langs;
 			
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
@@ -911,18 +911,30 @@
 			
 					$out.= '<div data-role="page" id="capview">';
 
-						$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
-  						$out.= '<!-- panel content goes here -->';
-  						$out.= '<ul data-role="listview" data-inset="true">';
-  						
-  							$Pages_arr = $this->Pages();
-								foreach($Pages_arr as $link => $Page_Name)
-								{
-									$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
-								}
-								
-							$out.= '</ul>';
-						$out.= '</div>';
+							$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
+    						$out.= '<!-- panel content goes here -->';
+    						$out.= '<ul data-role="listview">';
+    							
+    							$out.= '<li style="height: 91px;">';
+    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<h1>';
+    									$out.= 'Cap Creator';
+    								$out.= '</h1>';
+    								$out.= '<br>';
+    								$out.= '<span style="font-size: 10px;">';
+    									$out.= 'Cap v1.2';
+    								$out.= '</span>';
+    							$out.= '</li>';
+    							
+    							$Pages_arr = $this->Pages();
+									foreach($Pages_arr as $link => $Page_Name)
+									{
+										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="index.php#'.$link.'" data-ajax="false">'.$Page_Name.'</a></li>';
+										else 										$out.= '<li><a href="index.php#'.$link.'" data-ajax="false">'.$Page_Name.'</a></li>';
+									}
+									
+								$out.= '</ul>';
+							$out.= '</div>';
 						
 						$out.= '<div data-theme="b" data-role="header">';								
 							$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
@@ -933,8 +945,13 @@
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
+									
 									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'.cap</h1></li>';	
+									
 									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'.cap" download data-ajax="false">Download '.$ID.'.cap</a></li>';
+									
+									if($conf->webservice->on == 1) $out.= '<li><a href="#webservice"><h1>'.$langs->trans("sendviaSoap").'</h1></a></li>';
+									
 									$out.= '<li>';
 										$out.= '<textarea readonly>';						
 											$out.= $content;
@@ -1121,6 +1138,16 @@
 			 	$conf->cap->save = 0;
 			}		
 			unset($post['cap']['save']);
+			
+			if($post['webservice']['on'] == "on")
+		 	{
+			 	$conf->webservice->on = 1;
+			}	
+			else
+			{
+			 	$conf->webservice->on = 0;
+			}		
+			unset($post['webservice']['on']);
 			/* 
 			 * Reguler
 			 */

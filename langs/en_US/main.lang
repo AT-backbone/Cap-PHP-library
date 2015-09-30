@@ -3,12 +3,14 @@ SeparatorDecimal=.
 SeparatorThousand=Space
 Lang=English
 Download=Download
+Submit=Submit
 viaSoap=Or upload via SOAP to
+sendviaSoap=upload via SOAP
 LabelIdentifier=Identifier
 LabelSent=Sent Time (sent)
 LabelEffective=Effective Time (effective)
 LabelEventCode=Event Code (eventCode)
-LabelEventCodeDesc=content of ìvalueNameî is a user-assigned string designating the domain of the code, and the content of ìvalueî is a string (which may represent a number) denoting the value itself (e.g., valueName ="SAME" and value="CEM").
+LabelEventCodeDesc=content of ‚ÄúvalueName‚Äù is a user-assigned string designating the domain of the code, and the content of ‚Äúvalue‚Äù is a string (which may represent a number) denoting the value itself (e.g., valueName ="SAME" and value="CEM").
 LabelOnset=OnSet Time (onset)
 LabelExpires=Expires Time (expires)
 LabelOutputOfTheCap=Output Of The Cap
@@ -30,3 +32,4 @@ TitleInfo=Info
 TitleArea=Area
 TitleCapView=Cap View
 TitleConfig=Configuration
+TitelWebservice=Webservice

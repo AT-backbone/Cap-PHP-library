@@ -10,7 +10,7 @@ $conf->cap->output                                     = 'source/cap';
 $conf->identifier->WMO_OID                             = '2.49.0.20.0';
 $conf->identifier->ISO                                 = 'AT';
 $conf->identifier->time->on                            = 1;
-$conf->identifier->ID_ID                               = 21;
+$conf->identifier->ID_ID                               = 24;
 
 $conf->lang['en-GB']                                   = 'english';
 $conf->lang['ca']                                      = 'català';
