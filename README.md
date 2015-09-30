@@ -3,9 +3,11 @@ A common alerting protocol library for processing and producing XML-CAP's from a
 
 It's an Open Source software (wrote in PHP language) designed for users of common alerting protocol Version 1.2 like
 
-software developer
+ software developer
 
-hazard authorities for any warnings
+ hazard authorities for any warnings
+
+ or for CAP - Starter
 
 You can use it as a standalone application or as a web application to be able to access it from the Internet or a LAN.
 
