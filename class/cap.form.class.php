@@ -88,7 +88,7 @@
 					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"");  
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
-							$out.= '<legend>Set the Typs of the Message:</legend>';							
+							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").':</legend>';							
 								$out.= $status;					
 								$out.= $msgType;							
 								$out.= $scope;
@@ -102,7 +102,7 @@
 					$responseType = $this->buildSelect("responseType", array( "Shelter" => "Take Shelter", "Evacuate" => "Evacuate", "Prepare" => "Make Preparations", "Execute" => "Execute Pre-Planned Action", "Avoid" => "Avoid the affected Area", "Monitor" => "Monitor Conditions", "Assess" => "Evaluate Situation", "AllClear" => "Resume Normal Activities", "None" => "Take No Action" ), "data-native-menu=\"false\"", "Response Type");
 			    
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-							$out.= '<legend>Set the Hazard Type:</legend>';							
+							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").':</legend>';							
 								$out.= $category;					
 								$out.= $responseType;	
 						$out.= '</fieldset>';
@@ -120,7 +120,7 @@
 					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty");
 				
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-							$out.= '<legend>Set the Priority of the Message:</legend>';							
+							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").':</legend>';							
 								$out.= $urgency;					
 								$out.= $severity;							
 								$out.= $certainty;
@@ -255,7 +255,7 @@
 						$out = '<input placeholder="Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
 						
 						$out = '<div id="Geocodeappend">';
-							$out.='<label for="sent[date]">Geocode: </label>';
+							$out.='<label for="sent[date]">'.$langs->trans("LabelGeocode").': </label>';
 							$out.= '<div class="ui-grid-b">';
 								$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
 								$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="geocode[value][]"></div>';
@@ -272,7 +272,7 @@
 					case 'cap_save':
 						if($conf->cap->save == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
-						$out = '<label for="identifier_time">Save Caps in Output folder:</label>';
+						$out = '<label for="identifier_time">'.$langs->trans("LabelSaveCapsInOutputFolder").':</label>';
 						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[cap][save]" id="cap_save" '.$onoroff.' data-theme="b">';
 						break;
 					
@@ -294,12 +294,12 @@
 					case 'identifier_time':
 						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
-						$out = '<label for="identifier_time">Automatic Identifier Time:</label>';
+						$out = '<label for="identifier_time">'.$langs->trans("LabelAutomaticIdentifierTime").':</label>';
 						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
 						break;	
 						
 					case 'lang_conf':
-						$out = '<label for="lang_conf">Usable languages:</label>';
+						$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
 						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
 						foreach($conf->lang as $key => $lang_name)
 						{
@@ -318,7 +318,7 @@
 						
 					case 'lang_conf_plus':
 							$out = '<div id="LangAappend">';
-								$out.='<label for="sent[date]">Add language: </label>';
+								$out.='<label for="sent[date]">'.$langs->trans("LabelAddLanguage").': </label>';
 								$out.= '<div class="ui-grid-b">';
 									$out.= '<div class="ui-block-a"><input type="text" maxsize="5" placeholder="RFC 3066" name="conf[lang][key]" id="lang_conf_plus_key"></div>';
 									$out.= '<div class="ui-block-b"><input type="text" name="conf[lang][name]" placeholder="Name" id="lang_conf_plus_name"></div>';
@@ -329,7 +329,7 @@
 						
 					case 'lang_conf_remove':
 							$out = '<div id="LangRappend">';
-								$out.='<label for="sent[date]">Remove language: </label>';
+								$out.='<label for="sent[date]">'.$langs->trans("LabelRemoveLanguage").': </label>';
 								$out.= '<div class="ui-grid-a">';
 									$out.= '<div class="ui-block-a">';
 										$out.= '<select id="lang_remove" data-native-menu="false" data-iconpos="left">';
@@ -651,7 +651,7 @@
 								if($Pages_arr[$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
 								if($Pages_arr[$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
 								if($Pages_arr[$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="Submit">';
+								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'>';
 								if($Pages_arr[$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
 							$out.= '</div>';
 							
@@ -930,7 +930,7 @@
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Cap View of: '.$ID.'.cap</h1></li>';	
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'.cap</h1></li>';	
 									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'.cap" download data-ajax="false">Download '.$ID.'.cap</a></li>';
 									$out.= '<li>';
 										$out.= '<textarea readonly>';						

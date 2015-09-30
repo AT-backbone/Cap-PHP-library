@@ -11,3 +11,17 @@ LabelEventCode=Event Code (eventCode)
 LabelEventCodeDesc=content of “valueName” is a user-assigned string designating the domain of the code, and the content of “value” is a string (which may represent a number) denoting the value itself (e.g., valueName ="SAME" and value="CEM").
 LabelOnset=OnSet Time (onset)
 LabelExpires=Expires Time (expires)
+LabelOutputOfTheCap=Output Of The Cap
+LabelIdentifierNumber=LabelIdentifier Number
+LabelWMO_OID=WMO OID
+LabelISO=ISO
+LabelSetTheTypesOfTheMessage=Set the types of messages
+LabelSetTheHazardType=Set the hazard type
+LabelSetThePriorityOfTheMessage=Set the Priority of the Message
+LabelGeocode=Geocode
+LabelCapViewOf=Cap View of
+LabelSaveCapsInOutputFolder=Save Caps in Output Folder
+LabelRemoveLanguage=Remove Language
+LabelAddLanguage=Add Language
+LabelUsableLanguages=Usable Languages
+LabelAutomaticIdentifierTime=Automatic Identifier Time
