@@ -532,18 +532,19 @@
 		{
 			global $langs;
 			$pages['alert'] 				= $langs->trans("TitleAlert");
-			//$pages['alert']['next'] = true;
+			$pages['alert']['next'] = 'info';
 			
 			$pages['info']  				= $langs->trans("TitleInfo");
-			//$pages['info']['next'] 	= true;
+			$pages['info']['next'] 	= 'area';
 			
 			$pages['area']  				= $langs->trans("TitleArea");
-			//$pages['area']['send'] 	= true;
+			$pages['area']['next'] 	= 'capview';
 			
 			$pages['capview'] 		 	= $langs->trans("TitleCapView");
+			$pages['conf']['send'] 	= true; 
 			
 			$pages['conf']  				= $langs->trans("TitleConfig");
-			//$pages['conf']['send'] 	= true; 
+			
 						
 			return $pages;
 		}
