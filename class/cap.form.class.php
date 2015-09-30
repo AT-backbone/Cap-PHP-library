@@ -510,6 +510,7 @@
 			$type['conf'][] = "lang_conf_remove";
 			$type['conf'][] = "lang_conf";
 			
+			/* TO DO
 			$type['conf'][] = "webservice_on";
 			$type['conf']['detail'][] = "webservice_securitykey";
 			$type['conf']['detail'][] = "webservice_sourceapplication";
@@ -520,6 +521,7 @@
 			$type['conf']['detail'][] = "webservice_WS_METHOD";
 			$type['conf']['detail'][] = "webservice_ns";
 			$type['conf']['detail'][] = "webservice_WS_DOL_URL";
+			*/
 			
 			$type['capview'][] = 'capview';
 
@@ -579,7 +581,16 @@
     						$out.= '<!-- panel content goes here -->';
     						$out.= '<ul data-role="listview">';
     							
-    							$out.= '<li style="height: 91px;"><h1>Cap Creator</h1><br><span style="font-size: 10px;">Cap v1.2</span></li>';
+    							$out.= '<li style="height: 91px;">';
+    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<h1>';
+    									$out.= 'Cap Creator';
+    								$out.= '</h1>';
+    								$out.= '<br>';
+    								$out.= '<span style="font-size: 10px;">';
+    									$out.= 'Cap v1.2';
+    								$out.= '</span>';
+    							$out.= '</li>';
     							
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
@@ -878,6 +889,7 @@
 		 */
 		function CapView($content, $ID)
 		{
+			global $conf;
 			
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
@@ -919,6 +931,7 @@
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
 									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Cap View of: '.$ID.'.cap</h1></li>';	
+									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'.cap" download data-ajax="false">Download '.$ID.'.cap</a></li>';
 									$out.= '<li>';
 										$out.= '<textarea readonly>';						
 											$out.= $content;
