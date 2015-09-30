@@ -530,19 +530,20 @@
 		
 		function Pages()
 		{
-			$pages['alert'] 				= "Alert";
+			global $langs;
+			$pages['alert'] 				= $langs->trans("TitleAlert");
 			//$pages['alert']['next'] = true;
 			
-			$pages['info']  				= "Info";
+			$pages['info']  				= $langs->trans("TitleInfo");
 			//$pages['info']['next'] 	= true;
 			
-			$pages['area']  				= "Area";
+			$pages['area']  				= $langs->trans("TitleArea");
 			//$pages['area']['send'] 	= true;
 			
-			$pages['capview'] 		 = "Cap View";
+			$pages['capview'] 		 = $langs->trans("TitleCapView");
 			
-			$pages['conf']  				= "Configuration";
-			//$pages['conf']['send'] 	= true;
+			$pages['conf']  				= $langs->trans("TitleConfig");
+			//$pages['conf']['send'] 	= true; 
 						
 			return $pages;
 		}
