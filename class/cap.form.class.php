@@ -555,12 +555,12 @@
 		{
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
-				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
-				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 			
-				$out.= '<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css" />';
-				$out.= '<script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
 			
 				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
  				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
@@ -879,12 +879,12 @@
 			
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
-				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
-				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 			
-				$out.= '<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css" />';
-				$out.= '<script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
 			
 				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
  				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
@@ -962,12 +962,12 @@
 			
 				$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
-				$out.= '<script type="text/javascript" src="jquery/jquery.min.js"></script>';
-				$out.= '<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 			
-				$out.= '<link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.4.5.min.css" />';
-				$out.= '<script src="jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
 			
 				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
  				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
