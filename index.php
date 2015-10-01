@@ -46,8 +46,12 @@
 	}
 	elseif(empty($_POST['action']) && $_POST['send'] != 1)
 	{
+		// Build Cap Creator form
+		
 			$form = new CAP_Form();
+
 			print $form->Form();
+			
 	}
 	elseif($_POST['action'] == "create" && $_GET['conf'] != 1)
 	{

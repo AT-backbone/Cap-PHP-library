@@ -355,39 +355,39 @@
 						break;
 								
 					case 'webservice_password':
-							$out = '<input type="password" placeholder="Webservice Password" name="conf[webservice][password]">';
+							$out = '<input type="password" placeholder="Webservice Password" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
 						break;
 						
 					case 'webservice_securitykey':
-							$out = '<input type="text" placeholder="Webservice Security Key" name="conf[webservice][securitykey]">';
+							$out = '<input type="text" placeholder="Webservice Security Key" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
 						break;
 						
 					case 'webservice_sourceapplication':
-							$out = '<input type="text" placeholder="Webservice Sourceapplication" name="conf[webservice][sourceapplication]">';
+							$out = '<input type="text" placeholder="Webservice Sourceapplication" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
 						break;
 						
 					case 'webservice_login':
-							$out = '<input type="text" placeholder="Webservice Login" name="conf[webservice][login]">';
+							$out = '<input type="text" placeholder="Webservice Login" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
 						break;
 						
 					case 'webservice_entity':
-							$out = '<input type="text" placeholder="Webservice Entity" name="conf[webservice][entity]">';
+							$out = '<input type="text" placeholder="Webservice Entity" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
 						break;
 						
 					case 'webservice_destination':
-							$out = '<input type="url" placeholder="Webservice Destination" name="conf[webservice][destination]">';
+							$out = '<input type="url" placeholder="Webservice Destination" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
 						break;
 						
 					case 'webservice_WS_METHOD':
-							$out = '<input type="text" placeholder="Webservice WS_METHOD" name="conf[webservice][WS_METHOD]">';
+							$out = '<input type="text" placeholder="Webservice WS_METHOD" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
 						break;
 						
 					case 'webservice_ns':
-							$out = '<input type="text" placeholder="Webservice ns" name="conf[webservice][ns]">';
+							$out = '<input type="text" placeholder="Webservice ns" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
 						break;
 						
 					case 'webservice_WS_DOL_URL':
-							$out = '<input type="text" placeholder="Webservice WS_DOL_URL" name="conf[webservice][WS_DOL_URL]">';
+							$out = '<input type="text" placeholder="Webservice WS_DOL_URL" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
 						
 					case 'capview';
@@ -437,6 +437,38 @@
 			
 			$out.= '</select>';
 			return $out;
+		}
+	
+		/**
+     * encrypt and decrypt function for passwords
+     *     
+     * @return	string
+     */
+		function encrypt_decrypt($action, $string, $key) 
+		{
+			global $conf;
+			
+			$output = false;
+		
+			$encrypt_method = "AES-256-CBC";
+			$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
+			$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+		
+			// hash
+			$key = hash('sha256', $secret_key);
+			
+			// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+			$iv = substr(hash('sha256', $secret_iv), 0, 16);
+		
+			if( $action == 1 ) {
+				$output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+				$output = base64_encode($output);
+			}
+			else if( $action == 2 ){
+				$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+			}
+		
+			return $output;
 		}
 		
 		/**
@@ -995,6 +1027,18 @@
 			 	$conf->webservice->on = 0;
 			}		
 			unset($post['webservice']['on']);
+			
+			// crypt pass
+			if($conf->webservice->password == $post['webservice']['password']) 
+			{
+				
+			}
+			else
+			{
+				$conf->webservice->password = $this->encrypt_decrypt(1, $post['webservice']['password']);
+				unset($post['webservice']['password']);
+			}
+			
 			/* 
 			 * Reguler
 			 */
