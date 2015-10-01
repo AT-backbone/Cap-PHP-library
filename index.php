@@ -44,7 +44,7 @@
 		$cap = new CAP_Form();			
 		print $cap->install();
 	}
-	elseif(empty($_POST['action']) && $_POST['send'] != 1)
+	elseif(empty($_POST['action']) && $_GET['webservice'] != 1)
 	{
 		// Build Cap Creator form
 		
@@ -78,10 +78,12 @@
 			print $form->CapView($cap->cap, $_POST[identifier]); // Cap Preview +
 		}
 	}
-	elseif($_POST['send'] == 1)
+	elseif($_GET['webservice'] == 1)
 	{
 		// start webservices
-		include ('cap.webservices.php');
+			$form = new CAP_Form();
+
+			print $form->Webservice($_POST[filename]);
 	}
 	elseif($_GET['conf'] == "1")
 	{

@@ -350,44 +350,44 @@
 					case 'webservice_on':
 							if($conf->webservice->on == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
-							$out = '<label for="identifier_time">Webservice:</label>';
+							$out = '<label for="identifier_time">'.$langs->trans("Webservice").':</label>';
 							$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
 						break;
 								
 					case 'webservice_password':
-							$out = '<input type="password" placeholder="Webservice Password" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+							$out = $langs->trans("webservice_password").':<input type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
 						break;
 						
 					case 'webservice_securitykey':
-							$out = '<input type="text" placeholder="Webservice Security Key" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
+							$out = $langs->trans("webservice_securitykey").':<input type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
 						break;
 						
 					case 'webservice_sourceapplication':
-							$out = '<input type="text" placeholder="Webservice Sourceapplication" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
+							$out = $langs->trans("webservice_sourceapplication").':<input type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
 						break;
 						
 					case 'webservice_login':
-							$out = '<input type="text" placeholder="Webservice Login" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+							$out = $langs->trans("webservice_login").':<input type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
 						break;
 						
 					case 'webservice_entity':
-							$out = '<input type="text" placeholder="Webservice Entity" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
+							$out = $langs->trans("webservice_entity").':<input type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
 						break;
 						
 					case 'webservice_destination':
-							$out = '<input type="url" placeholder="Webservice Destination" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
+							$out = $langs->trans("webservice_destination").':<input type="text" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
 						break;
 						
 					case 'webservice_WS_METHOD':
-							$out = '<input type="text" placeholder="Webservice WS_METHOD" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
+							$out = $langs->trans("webservice_WS_METHOD").':<input type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
 						break;
 						
 					case 'webservice_ns':
-							$out = '<input type="text" placeholder="Webservice ns" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
+							$out = $langs->trans("webservice_ns").':<input type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
 						break;
 						
 					case 'webservice_WS_DOL_URL':
-							$out = '<input type="text" placeholder="Webservice WS_DOL_URL" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
+							$out = $langs->trans("webservice_WS_DOL_URL").':<input type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
 						
 					case 'capview';
@@ -797,33 +797,10 @@
 			$out = $this->Header_llx();
 			
 			$out.= '<body>';			
-				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
-			
+				$out.= '<form method="POST" id="capform" name="capform" action="index.php?webservice=1" enctype="multipart/form-data" data-ajax="false">';
+					$out.= '<input type="hidden" name="filename" value="'.$ID.'">';
 					$out.= '<div data-role="page" id="capview">';
-
-							$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
-    						$out.= '<!-- panel content goes here -->';
-    						$out.= '<ul data-role="listview">';
-    							
-    							$out.= '<li style="height: 91px;">';
-    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
-    								$out.= '<h1>';
-    									$out.= 'Cap Creator';
-    								$out.= '</h1>';
-    								$out.= '<br>';
-    								$out.= '<span style="font-size: 10px;">';
-    									$out.= 'Cap v1.2';
-    								$out.= '</span>';
-    							$out.= '</li>';
-    							
-    							$Pages_arr = $this->Pages();
-									$Page_Name = $Pages_arr['alert'];									
-									if($link == $pagename) 	$out.= '<li data-theme="b"><a href="index.php" data-ajax="false">'.$Page_Name.'</a></li>';
-									else 										$out.= '<li><a href="index.php" data-ajax="false">'.$Page_Name.'</a></li>';
-									
-								$out.= '</ul>';
-							$out.= '</div>';
-						
+					
 						$out.= '<div data-theme="b" data-role="header">';								
 							//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 							$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
@@ -839,7 +816,7 @@
 									
 									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'.cap" download data-ajax="false">Download '.$ID.'.cap</a></li>';
 									
-									if($conf->webservice->on == 1) $out.= '<li><a href="#webservice"><h1>'.$langs->trans("sendviaSoap").'</h1></a></li>';
+									if($conf->webservice->on == 1) $out.= '<li><input type="submit" value="<h1>'.$langs->trans("sendviaSoap").'</h1>" data-ajax="false"></li>';
 									
 									$out.= '<li>';
 										$out.= '<textarea readonly>';						
@@ -859,6 +836,65 @@
 			
 				$out.= '</form>';			
 			$out.= '</body>';
+			
+			return $out;
+		}
+		
+		function Webservice($ID)
+		{
+			global $conf, $langs, $out;
+			
+			$out = $this->Header_llx();
+			
+			$out.= '<body>';			
+				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
+					/**
+					 *
+					 *  WEBSERVICE
+					 *
+					 */
+					 if($conf->webservice->on == 1)
+					 {
+					 	
+					 	$out.= '<div data-role="page" id="capview">';
+							
+							// HEADER
+							$out.= '<div data-theme="b" data-role="header">';								
+								//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+								$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
+								$out.= '<h1>'.$ID.'.cap</h1>';						
+							$out.= '</div>';
+						
+							// MAIN
+							$out.= '<div role="main" class="ui-content">';							
+											
+								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
+									
+									// decryp password
+									$conf->webservice->password = $this->encrypt_decrypt(2, $conf->webservice->password);
+									
+									include("cap.webservices.php");
+									
+									$conf->webservice->password = $this->encrypt_decrypt(1, $conf->webservice->password);
+									
+								$out.= '</div>';
+	
+							$out.= '</div><!-- /content -->';
+						
+							// FOOTER
+							$out.= '<div data-role="footer" data-theme="b">';
+	
+							$out.= '</div><!-- /footer -->';
+							
+						 $out.= '</div><!-- /page -->';
+					 }
+					/**
+					 *
+					 *  WEBSERVICE
+					 *
+					 */
+					$out.= '</form>';			
+				$out.= '</body>';
 			
 			return $out;
 		}

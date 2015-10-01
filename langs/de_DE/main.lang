@@ -33,3 +33,14 @@ TitleArea=Area
 TitleCapView=Cap View
 TitleConfig=Configuration
 TitelWebservice=Webservice
+
+Webservice=Webservice
+webservice_password=Webservice Password (wird kryptet angezeigt)
+webservice_securitykey=Webservice Sicherheitsschlüssel
+webservice_sourceapplication=Webservice Basis Application
+webservice_login=Webservice Login
+webservice_entity=Webservice Entity
+webservice_destination=Webservice Ziel
+webservice_WS_METHOD=Webservice METHODE
+webservice_ns=Webservice NS
+webservice_WS_DOL_URL=Webservice URL
