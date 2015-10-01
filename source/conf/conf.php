@@ -75,7 +75,6 @@ $conf->select->lang['bg']                              = 0;
 $conf->select->lang['mk']                              = 0;
 
 $conf->webservice->on                                  = 0;
-$conf->webservice->security_key	                       = '';
 $conf->webservice->sourceapplication                   = '';
 $conf->webservice->login                               = '';
 $conf->webservice->password                            = '';
