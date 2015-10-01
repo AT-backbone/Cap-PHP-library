@@ -71,11 +71,7 @@
 			$conf->identifier->ID_ID++;
 			$form->WriteConf();
 			
-			// show the path to the file as link
-			//print $langs->trans("Download").': <a href="'.$path.'" download>'.$cap->identifier.'.cap</a>';
-			//print '<p>'.$langs->trans("viaSoap").':<br>';
-			//include ('cap.webservices.php');
-			print $form->CapView($cap->cap, $_POST[identifier]);
+			print $form->CapView($cap->cap, $_POST[identifier]); // Cap Preview +
 		}
 	}
 	elseif($_POST['send'] == 1)

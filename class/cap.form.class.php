@@ -549,6 +549,31 @@
 			return $pages;
 		}
 		
+	  /**
+     * Output Html Head
+     *
+     * @return	string						HTML Head
+     */
+		function Header_llx()
+		{			
+			$out = '<head>';
+				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
+				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
+				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
+				
+				$out.= '<link rel="icon" type="image/png" href="source/conf/logo.jpg">';
+			
+				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
+				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+			
+				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
+ 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+			$out.= '</head>';
+			
+			return $out;
+		}
+		
 				
 		/**
      * Output Html Form
@@ -558,18 +583,9 @@
 		function Form()
 		{
 			global $langs;
-			$out = '<head>';
-				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
-				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
-				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
-				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 			
-				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
-				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
+			$out = $this->Header_llx();
 			
-				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
- 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
-			$out.= '</head>';
 			$out.= '<body>';
 			
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
@@ -894,18 +910,8 @@
 		{
 			global $conf, $langs;
 			
-			$out = '<head>';
-				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
-				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
-				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
-				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
+			$out = $this->Header_llx();
 			
-				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
-				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
-			
-				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
- 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
-			$out.= '</head>';
 			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
 			
@@ -927,17 +933,16 @@
     							$out.= '</li>';
     							
     							$Pages_arr = $this->Pages();
-									foreach($Pages_arr as $link => $Page_Name)
-									{
-										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="index.php#'.$link.'" data-ajax="false">'.$Page_Name.'</a></li>';
-										else 										$out.= '<li><a href="index.php#'.$link.'" data-ajax="false">'.$Page_Name.'</a></li>';
-									}
+									$Page_Name = $Pages_arr['alert'];									
+									if($link == $pagename) 	$out.= '<li data-theme="b"><a href="index.php" data-ajax="false">'.$Page_Name.'</a></li>';
+									else 										$out.= '<li><a href="index.php" data-ajax="false">'.$Page_Name.'</a></li>';
 									
 								$out.= '</ul>';
 							$out.= '</div>';
 						
 						$out.= '<div data-theme="b" data-role="header">';								
-							$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+							//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+							$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
 							$out.= '<h1>'.$ID.'.cap</h1>';						
 						$out.= '</div>';
 					
@@ -995,18 +1000,8 @@
 		function install()
 		{
 			
-				$out = '<head>';
-				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
-				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
-				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
-				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
+			$out = $this->Header_llx();
 			
-				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
-				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
-			
-				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
- 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
-			$out.= '</head>';
 			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
 			
