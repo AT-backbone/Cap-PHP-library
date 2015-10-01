@@ -563,6 +563,8 @@
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 				
 				$out.= '<link rel="icon" type="image/png" href="source/conf/logo.jpg">';
+				
+				$out.= '<script type="text/javascript" src="js/form.js"></script>';
 			
 				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
 				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
@@ -806,7 +808,7 @@
 				$out.= '
 				});
 				
-				
+				/*
 				function updateCapXML()
 				{
 					var url = "index.php?cap=1"; // the script where you handle the form input.
@@ -895,7 +897,7 @@
 				{
 					$("#Geocodeappend").after(\'<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="geocode[value][]"></div></div><div class="ui-block-c"></div></div>\');
 				}
-				
+				*/
 			</script>';
 			
 			return $out;
