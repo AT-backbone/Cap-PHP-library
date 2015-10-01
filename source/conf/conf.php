@@ -7,10 +7,12 @@ $conf->user->lang                                      = 'de_DE';
 $conf->cap->save                                       = 1;
 $conf->cap->output                                     = 'source/cap';
 
+$conf->conf->output                                    = 'source/conf';
+
 $conf->identifier->WMO_OID                             = '2.49.0.20.0';
 $conf->identifier->ISO                                 = 'AT';
 $conf->identifier->time->on                            = 1;
-$conf->identifier->ID_ID                               = 24;
+$conf->identifier->ID_ID                               = 91;
 
 $conf->lang['en-GB']                                   = 'english';
 $conf->lang['ca']                                      = 'català';
@@ -42,6 +44,7 @@ $conf->lang['sv-SE']                                   = 'svenska';
 $conf->lang['el-GR']                                   = 'Ελληνικά';
 $conf->lang['bg']                                      = 'bulgarian';
 $conf->lang['mk']                                      = 'македонски';
+$conf->lang['name']                                    = '';
 
 $conf->select->lang['en-GB']                           = 1;
 $conf->select->lang['ca']                              = 0;
@@ -74,11 +77,11 @@ $conf->select->lang['el-GR']                           = 0;
 $conf->select->lang['bg']                              = 0;
 $conf->select->lang['mk']                              = 0;
 
-$conf->webservice->on                                  = 0;
+$conf->webservice->on                                  = 1;
 $conf->webservice->sourceapplication                   = '';
 $conf->webservice->login                               = '';
 $conf->webservice->password                            = '';
-$conf->webservice->entity                              = '';
+$conf->webservice->entity                              = 1;
 $conf->webservice->destination                         = '';
 $conf->webservice->WS_METHOD                           = '';
 $conf->webservice->ns                                  = '';

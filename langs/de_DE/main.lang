@@ -14,6 +14,7 @@ LabelEventCodeDesc=content of “valueName” is a user-assigned string designat
 LabelOnset=OnSet Time (onset)
 LabelExpires=Expires Time (expires)
 LabelOutputOfTheCap=Output Of The Cap
+LabelOutputOfTheConf=Output Of The Configuration file
 LabelIdentifierNumber=Identifier Number
 LabelWMO_OID=WMO OID
 LabelISO=ISO

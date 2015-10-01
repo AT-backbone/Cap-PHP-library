@@ -251,6 +251,10 @@
 						$out = '<input placeholder="circle" type="text" name="circle">';
 						break;
 						
+					case 'map':
+							$out = '<div id="map" style="height: 480px;"></div>';
+						break;
+						
 					case 'geocode': // ]
 						$out = '<input placeholder="Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
 						
@@ -279,6 +283,11 @@
 					case 'cap_output':
 							$out = $langs->trans("LabelOutputOfTheCap").': <input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
 						break;
+					
+					case 'conf_output':
+							$out = $langs->trans("LabelOutputOfTheConf").': <input type="text" placeholder="Cap Output" name="conf[conf][output]" value="'.$conf->conf->output.'">';
+						break;	
+						
 
 					case 'ID_ID':
 							$out = $langs->trans("LabelIdentifierNumber").': <input type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
@@ -527,11 +536,14 @@
 			$type['area'][] = "areaDesc";
 			$type['area'][] = "polygon";
 			$type['area'][] = "circle";
+			$type['area'][] = "map";
 			$type['area'][] = "geocode";
 
 			// conf Page	
 			$type['conf'][] = "cap_save";
 			$type['conf'][] = "cap_output";
+			
+			$type['conf'][] = "conf_output";
 					
 			$type['conf'][] = "WMO_OID";
 			$type['conf'][] = "ISO";			
@@ -603,6 +615,10 @@
 			
 				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
  				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+ 				
+ 				// OpenStreetMap
+				$out.= '<script src="includes/jquery/jquery.geo.min.js"></script>';
+
 			$out.= '</head>';
 			
 			return $out;
@@ -630,7 +646,7 @@
 					{
 						$out.= '<div data-role="page" id="'.$pagename.'">';
 						
-							$out.= '<div data-role="panel" data-display="overlay" id="'.$pagename.'_panel">';
+							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
     						$out.= '<!-- panel content goes here -->';
     						$out.= '<ul data-role="listview">';
     							
@@ -718,6 +734,11 @@
 			$out.= 
 			'
 			<script>
+					$("#map").geomap();
+					$("#map").geomap({
+					  center: [ -71.037598, 42.363281 ],
+					  zoom: 10
+					});
 				';
 					
 					$langs_arr = $this->getlang();	
@@ -992,6 +1013,15 @@
 		{	
 			global $conf;
 			
+			if(! is_dir($post['cap']['output']))
+			{
+				mkdir($post['cap']['output'], 0774);				
+			}
+			
+			if(! is_dir($post['conf']['output']))
+			{
+				mkdir($post['conf']['output'], 0774);
+			}
 			/*
 			 * Special
 			 */

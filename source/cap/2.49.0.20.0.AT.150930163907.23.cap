@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
-	<identifier>2.49.0.20.0.AT.150930163907.23</identifier>
-	<sent>2015-09-30T16:39:07+01:00</sent>
-	<status>Actual</status>
-	<msgType>Alert</msgType>
-	<scope>Public</scope>
-</alert>

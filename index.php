@@ -24,6 +24,37 @@
 /**
  * Front end of the Cap-php-library
  */
+ 
+ /*
+ 	function FindFile($path, $file)
+ 	{
+		print '<br>'.$path;
+ 		print '<pre>';
+ 			print_r(scandir($path));
+ 			print_r(glob($path.$file));
+ 		print '</pre>';
+ 		
+ 		if(!file_exists($path.'/'.$file))
+ 		{
+	 		foreach(scandir($path) as $dir)
+			{
+				if($dir != "." && $dir != ".." && is_dir($path.'/'.$dir))
+				{
+					$found = FindFile($path.$dir.'/', $file);
+				}				
+			}
+			
+			return $found;
+		}
+		else
+		{
+			return (glob($path.$file));
+		}
+ 	}
+	print_r(FindFile("./", "conf.php"));
+	exit;
+	
+	*/
 	
 	require_once 'class/cap.form.class.php';
 	require_once 'class/cap.create.class.php';
