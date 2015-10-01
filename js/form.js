@@ -1,3 +1,65 @@
+			$( document ).ready(function() 
+			{
+				
+				updateCapXML();
+								
+				$( "input, select" ).change(function() {
+					updateCapXML();
+				});
+				
+				
+				$( "#msgType" ).change(function() {
+					if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
+					{		
+						if(typeof $("#LIreferences").html()  === "undefined")
+						{
+							$("#TypeMessage").after('<li id="LIreferences" class="ui-li-static ui-body-inherit ui-last-child"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="references" type="text" name="references"></div></li>');
+						}
+						else
+						{
+							$("#LIreferences").show();
+						}
+					}
+					else
+					{
+						if(typeof $("#LIreferences").html()  !== "undefined")
+						{
+							$("#LIreferences").hide();
+						}
+					}
+				});
+				
+				$( "#language" ).change(function() {
+					
+					$( ".lang_input" ).each(function( index )
+					{
+						if($( "#language" ).val() == $(this).attr("id"))
+						{
+							$(this).show();
+						}
+						else
+						{
+							$(this).hide();
+						}					
+					});	
+					
+					$("#" + $( "#language" ).val() + "_Button").show();
+					$( "#" + $( "#language" ).val() + "_language_input" ).val($( "#language" ).val());
+					
+					$( ".Lang_Button" ).each(function( index )
+					{
+						if( $( "#language" ).val() + "_Button" == $(this).attr("id"))
+						{
+							$(this).css("box-shadow", "0px 0px 11px rgb(0, 126, 255)");
+						}
+						else
+						{
+							$(this).css("box-shadow", "");
+						}
+					});
+					
+				});
+			});
 				function updateCapXML()
 				{
 					var url = "index.php?cap=1"; // the script where you handle the form input.
