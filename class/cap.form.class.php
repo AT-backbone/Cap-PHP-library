@@ -618,6 +618,8 @@
  				
  				// OpenStreetMap
 				$out.= '<script src="includes/jquery/jquery.geo.min.js"></script>';
+				
+				$out.= '<title>Cap Creator</title>';
 
 			$out.= '</head>';
 			
