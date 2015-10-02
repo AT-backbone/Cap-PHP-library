@@ -1,6 +1,6 @@
 			$( document ).ready(function() 
 			{
-				
+
 				updateCapXML();
 								
 				$( "input, select" ).change(function() {

@@ -70,3 +70,10 @@ textarea{
 	background-color: #FFF;
 	cursor: pointer;
 }
+
+.mapinfo{
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  width: 130px;
+}

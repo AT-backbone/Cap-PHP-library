@@ -240,19 +240,29 @@
 				 * Area
 				 */					
 					case 'areaDesc': 
-						$out = '<input placeholder="areaDesc" type="text" name="areaDesc">';
+						$out = '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc">';
 						break;
 	
 					case 'polygon': 
-						$out = '<input placeholder="polygon" type="text" name="polygon">';
+						$out = '<input placeholder="polygon" type="text" name="polygon" id="polygon">';
 						break;
 	
 					case 'circle': 
-						$out = '<input placeholder="circle" type="text" name="circle">';
+						$out = '<input placeholder="circle" type="text" name="circle" id="circle">';
 						break;
 						
 					case 'map':
-							$out = '<div id="map" style="height: 480px;"></div>';
+							$out = '<div id="map" style="height: 480px;" class="map"></div>';
+							$out.= '<div id="mapinfo" class="mapinfo">';								
+								$out.='<ul data-role="listview">';
+									$out.='<li>';
+										$out.='<a href="#"><h1>TEST</h1></a>';
+									$out.='</li>';
+									$out.='<li>';
+										$out.='<label for="dragCircle">Circle:</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="off">Off</option><option value="on">On</option></select>';
+									$out.='</li>';
+								$out.='</ul>';
+							$out.= '</div>';
 						break;
 						
 					case 'geocode': // ]
@@ -609,6 +619,7 @@
 				$out.= '<link rel="icon" type="image/png" href="source/conf/logo.jpg">';
 				
 				$out.= '<script type="text/javascript" src="js/form.js"></script>';
+				$out.= '<script type="text/javascript" src="js/map.js"></script>';
 			
 				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
 				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
@@ -735,12 +746,7 @@
 			$out.= '</body>';
 			$out.= 
 			'
-			<script>
-					$("#map").geomap();
-					$("#map").geomap({
-					  center: [ -71.037598, 42.363281 ],
-					  zoom: 10
-					});
+			<script>					
 				';
 					
 					$langs_arr = $this->getlang();	
