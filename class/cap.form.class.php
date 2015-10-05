@@ -32,6 +32,67 @@
 
 	class CAP_Form{
 		
+		/**
+     * initialize Class with Data
+     *
+     * @param   string	$post			Array with Type/Tag of CAP 1.2
+     * @return	None
+     */
+		function __construct($post = "")
+		{
+			if(is_array($post))
+			{
+				$this->output 			= $post['output'];
+				$this->identifier 	= $post['identifier'];
+				$this->sender				= $post['sender'];
+				$this->sent					= $post['sent'];
+				$this->status				= $post['status'];
+				$this->msgType			= $post['msgType'];
+				$this->references		= $post['references'];
+				$this->scope				= $post['scope'];
+				
+				$this->language			= $post['info'][0]['language'];
+				$this->category			= $post['info'][0]['category'];
+				$this->event				= $post['info'][0]['event'];
+				$this->responseType	= $post['info'][0]['responseType'][0];
+				$this->urgency			= $post['info'][0]['urgency'];
+				$this->severity			= $post['info'][0]['severity'];
+				$this->certainty		= $post['info'][0]['certainty'];
+				$this->audience			= $post['info'][0]['audience'];
+				$this->eventCode		= $post['info'][0]['eventCode'];
+				$this->effective		= $post['info'][0]['effective'];
+				$this->onset				= $post['info'][0]['onset'];
+				$this->expires			= $post['info'][0]['expires'];
+				$this->senderName		= $post['info'][0]['senderName'];
+				$this->headline			= $post['info'][0]['headline'];
+				$this->description	= $post['info'][0]['description'];
+				$this->instruction	= $post['info'][0]['instruction'];
+				$this->web					= $post['info'][0]['web'];
+				$this->contact			= $post['info'][0]['contact'];
+				$this->parameter		= $post['info'][0]['parameter'];
+
+				$this->areaDesc			= $post['info'][0]['area'][0]['areaDesc'];
+				$this->polygon			= $post['info'][0]['area'][0]['polygon'];
+				$this->circle				= $post['info'][0]['area'][0]['circle'];
+				$this->geocode			= $post['info'][0]['area'][0]['geocode'];
+
+				$this->cap 					= $post;
+			}
+		}
+		
+		/*
+		 * Function to Debug cap.create.class.php
+		 *
+		 * @return array 	$this 	All content of the Class
+		 */	
+		function Debug()
+		{
+			print '<pre>';
+				print_r($this);
+			print '</pre>';			
+			exit;
+		}
+		
     /**
      * Output input field for CAP 1.2 value's
      *
@@ -43,8 +104,34 @@
 		{
 			global $conf, $langs;
 			
+			$st['date'] = date('Y-m-d');
+			$st['time'] = date('H:i:s');
+			$st['zone'] = date('H:i', date('P'));
+
+			
 			switch($type)
 			{
+				case 'CapButton':
+					// TODO SELECT FOR TEMPLATE HERE
+					$out = '</li></ul></div>'; // exit li
+					$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
+					$out.= '<div data-role="listview" class="ui-grid-a" style="height: 200px;margin: 0px 0px 0px 0px;">';
+						$out.= '<div class="ui-block-a" style="padding-right: 7.5px;">';							
+							$out.= '<a href="#alert" style="text-decoration: none;"><div class="ui-btn ui-input-btn ui-btn-b ui-corner-all ui-shadow" style="height: 85px;padding-top: 85px;">';
+								$out.=  $langs->trans("NewCap");
+							$out.= '</div></a>';
+						$out.= '</div>';
+						$out.= '<div class="ui-block-b" style="padding-left: 7.5px;">';
+							$out.= '<a href="index.php?read=1" style="text-decoration: none;"><div class="ui-btn ui-input-btn ui-btn-b ui-corner-all ui-shadow" style="height: 85px;padding-top: 85px;">';
+								$out.=  $langs->trans("ReadCap");
+							$out.= '</div></a>';
+						$out.= '</div>';
+					$out.= '</div>';
+					$out.= '<ul data-role="listview" style="margin-top: 7.5px;"><li>'; // enter li
+						$out.= '<a href="#conf" >'.$langs->trans("TitleConfig").'</a>';
+					$out.= '</li><li>';
+					break;
+					
 				case 'identifier':
 					$out = '<div id="Identapend">';
 						$out.= '<label>'.$langs->trans("LabelIdentifier").': </label>';
@@ -59,33 +146,34 @@
 					break;
 					
 				case 'sender':
-					$out = '<input placeholder="sender" type="text" name="sender" >';
+					$out = '<input placeholder="sender" type="text" name="sender" value="'.$this->sender.'">';
 					break;
 					
 				case 'sent':
+					$st = $this->make_cap_time($this->sent);
 					$out = '<div id="Sentapend">';
 						$out.= '<label>'.$langs->trans("LabelSent").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="sent[date]" value="'.date('Y-m-d').'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="sent[time]" step="1" value="'.date('H:i:s').'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="sent[UTC]" value="'.date('H:i', date('P')).'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="sent[date]" value="'.$st['date'].'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="sent[time]" step="1" value="'.$st['time'].'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="sent[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 				
 				case 'references': 
-					$out = '<input placeholder="references" type="text" name="references">'; // web / identifier / sent 
+					$out = '<input placeholder="references" type="text" name="references" value="'.$this->references.'">'; // web / identifier / sent 
 					break;
 				
 				case 'status': 
 					// Actual / Test / Exercise / System / Test / Draft
-					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), "data-native-menu=\"false\""); 
+					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), "data-native-menu=\"false\"", "", $this->status); 
 
 				 	// Alert / Update / Cancel / Ack / Error
-					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), "data-native-menu=\"false\" id=\"msgType\""); 
+					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), "data-native-menu=\"false\" id=\"msgType\"", "", $this->msgType); 
 
 					// Public / Restricted / Private
-					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"");  
+					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"", "", $this->scope);  
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").':</legend>';							
@@ -96,10 +184,10 @@
 				break;
 				
 				case 'category': // Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
-					$category = $this->buildSelect("category", array( "Geo" => "Geophysical", "Met" => "Weather", "Safety" => "Public Safety", "Security" => "Security", "Rescue" => "Rescue", "Fire" => "Fire", "Health" => "Health", "Env" => "Environmental", "Transport" => "Transportation", "Infra" => "Infrastructure", "CBRNE" => "Weapon of Mass Destructio", "Other" => "Otherwise Categorized" ), "data-native-menu=\"false\"", "Category");
+					$category = $this->buildSelect("category", array( "Geo" => "Geophysical", "Met" => "Weather", "Safety" => "Public Safety", "Security" => "Security", "Rescue" => "Rescue", "Fire" => "Fire", "Health" => "Health", "Env" => "Environmental", "Transport" => "Transportation", "Infra" => "Infrastructure", "CBRNE" => "Weapon of Mass Destructio", "Other" => "Otherwise Categorized" ), "data-native-menu=\"false\"", "Category", $this->category);
 
 					// Shelter / Evacuate / Prepare / Execute / Avoid / Monitor / Assess / AllClear / None
-					$responseType = $this->buildSelect("responseType", array( "Shelter" => "Take Shelter", "Evacuate" => "Evacuate", "Prepare" => "Make Preparations", "Execute" => "Execute Pre-Planned Action", "Avoid" => "Avoid the affected Area", "Monitor" => "Monitor Conditions", "Assess" => "Evaluate Situation", "AllClear" => "Resume Normal Activities", "None" => "Take No Action" ), "data-native-menu=\"false\"", "Response Type");
+					$responseType = $this->buildSelect("responseType", array( "Shelter" => "Take Shelter", "Evacuate" => "Evacuate", "Prepare" => "Make Preparations", "Execute" => "Execute Pre-Planned Action", "Avoid" => "Avoid the affected Area", "Monitor" => "Monitor Conditions", "Assess" => "Evaluate Situation", "AllClear" => "Resume Normal Activities", "None" => "Take No Action" ), "data-native-menu=\"false\"", "Response Type", $this->responseType);
 			    
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").':</legend>';							
@@ -111,13 +199,13 @@
 
 				case 'urgency': 
 					// Immediate / Expected / Future / Past
-					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), "data-native-menu=\"false\"", "Urgency");
+					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), "data-native-menu=\"false\"", "Urgency", $this->urgency);
 					
 					// Extreme / Severe / Moderate / Minor / Unknown 
-					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Severity");
+					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Severity", $this->severity);
 
 					// Observed / Likely / Possible/ Unlikely / Unknown
-					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty");
+					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty", $this->certainty);
 				
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").':</legend>';							
@@ -129,7 +217,7 @@
 				break;		
 
 				case 'audience': 
-					$out = '<input placeholder="audience" type="text" name="audience">';
+					$out = '<input placeholder="audience" type="text" name="audience" value="'.$this->audience.'">';
 					break;
 					
 				case 'eventCode': 
@@ -144,40 +232,47 @@
 					break;
 				
 				case 'effective': 					
+					$st = $this->make_cap_time($this->effective);
 					$out = '<div id="Effectiveapend">';
 						$out.= '<label>'.$langs->trans("LabelEffective").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="effective[date]" value="'.date('Y-m-d').'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="effective[time]" step="1" value="'.date('H:i:s').'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="effective[UTC]" value="'.date('H:i', date('P')).'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="effective[date]" value="'.$st['date'].'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="effective[time]" step="1" value="'.$st['time'].'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="effective[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 
 				case 'onset': 					
+					$st = $this->make_cap_time($this->onset);
 					$out = '<div id="Onsetapend">';
 						$out.= '<label>'.$langs->trans("LabelOnset").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="onset[date]" value="'.date('Y-m-d').'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="onset[time]" step="1" value="'.date('H:i:s').'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="onset[UTC]" value="'.date('H:i', date('P')).'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="onset[date]" value="'.$st['date'].'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="onset[time]" step="1" value="'.$st['time'].'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="onset[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 					
-				case 'expieres': 					
+				case 'expires': 					
+					$st = $this->make_cap_time($this->expires);
 					$out = '<div id="Expieresapend">';
 						$out.= '<label>'.$langs->trans("LabelExpires").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="expieres[date]" value=""></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="expieres[time]" step="1" value=""></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="expieres[UTC]" value=""></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="expieres[date]" value="'.$st['date'].'"></div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="expieres[time]" step="1" value="'.$st['time'].'"></div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="expieres[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 
 				case 'senderName': 
-					$out = '<input placeholder="senderName" type="text" name="senderName">'; 
+					$out = '<input placeholder="senderName" type="text" name="senderName" value="'.$this->senderName.'">'; 
+					break;
+					
+				case 'info':
+					$out = 'TEST';
 					break;
 					
 				case 'lang':
@@ -218,11 +313,11 @@
 					break;
 					
 				case 'web': 
-					$out = '<input placeholder="web" type="text" name="web">'; 
+					$out = '<input placeholder="web" type="text" name="web" value="'.$this->web.'">'; 
 					break;
 					
 				case 'contact': 
-					$out = '<input placeholder="contact" type="text" name="contact">'; 
+					$out = '<input placeholder="contact" type="text" name="contact" value="'.$this->contact.'">'; 
 					break;
 
 				case 'parameter': 
@@ -240,15 +335,15 @@
 				 * Area
 				 */					
 					case 'areaDesc': 
-						$out = '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc">';
+						$out = '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc.'">';
 						break;
 	
 					case 'polygon': 
-						$out = '<input placeholder="polygon" type="text" name="polygon" id="polygon">';
+						$out = '<input placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon.'">';
 						break;
 	
 					case 'circle': 
-						$out = '<input placeholder="circle" type="text" name="circle" id="circle">';
+						$out = '<input placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle.'">';
 						break;
 						
 					case 'map':
@@ -433,7 +528,7 @@
      * @param 	int 		$empty 				if 1 then make a empty value 
      * @return	string								HTML select field
      */
-		function buildSelect($name= "", $data = array(), $option = "", $placeholder = "", $empty=0)
+		function buildSelect($name= "", $data = array(), $option = "", $placeholder = "", $selected="", $empty=0)
 		{
 			$out = '<select name="'.$name.'" '.$option.'>';
 			
@@ -449,13 +544,31 @@
 			
 				foreach($data as $data_val => $data_name)
 				{
-					$out.= '<option value="'.$data_val.'">';
+					if($selected == $data_val)
+					{
+						$out.= '<option value="'.$data_val.'" selected>';
+					}
+					else
+					{
+						$out.= '<option value="'.$data_val.'">';
+					}
 					$out.= $data_name;
 					$out.= '</option>';
 				}
 			
 			$out.= '</select>';
 			return $out;
+		}
+		
+		function make_cap_time($time)
+		{
+			$time_arr = explode("T", $time);
+			$ctime['date'] = $time_arr[0];
+			$time_arr_time = explode("+", $time_arr[1]);
+			$ctime['time'] = $time_arr_time[0];
+			$ctime['zone'] = $time_arr_time[1];
+			
+			return $ctime;
 		}
 	
 		/**
@@ -515,6 +628,8 @@
      */
 		function Types()
 		{
+			$type['main'][] = "CapButton";
+			
 			// Alert Page		
 			$type['alert'][] = "identifier";	
 			$type['alert'][] = "status";
@@ -528,12 +643,13 @@
      	
       $type['alert']['detail'][] = "effective";
       $type['alert']['detail'][] = "onset";
-      $type['alert']['detail'][] = "expieres";
+      $type['alert']['detail'][] = "expires";
       
 			$type['alert']['detail'][] = "eventCode";
 			$type['alert']['detail'][] = "parameter";
 			
 			// Info Page	
+			//$type['info'][] = "info";
 			$type['info'][] = "lang";
 			$type['info'][] = "event";	
 			$type['info'][] = "senderName";
@@ -585,6 +701,8 @@
 		function Pages()
 		{
 			global $langs;
+			$pages['main'] 					= $langs->trans("TitleMain");
+			
 			$pages['alert'] 				= $langs->trans("TitleAlert");
 			//$pages['alert']['next'] = 'info';
 			
@@ -1245,6 +1363,8 @@
 			
 			if($write == true)
 			{
+				fopen("source/conf/conf.php", "r")
+				chown("source/conf/conf.php", "apache");
 				$conf_file = fopen("source/conf/conf.php", "w") or print("Unable to open conf!");
 				fwrite($conf_file, $out);
 				fclose($conf_file);

@@ -24,42 +24,13 @@
 /**
  * Front end of the Cap-php-library
  */
- 
- /*
- 	function FindFile($path, $file)
- 	{
-		print '<br>'.$path;
- 		print '<pre>';
- 			print_r(scandir($path));
- 			print_r(glob($path.$file));
- 		print '</pre>';
- 		
- 		if(!file_exists($path.'/'.$file))
- 		{
-	 		foreach(scandir($path) as $dir)
-			{
-				if($dir != "." && $dir != ".." && is_dir($path.'/'.$dir))
-				{
-					$found = FindFile($path.$dir.'/', $file);
-				}				
-			}
-			
-			return $found;
-		}
-		else
-		{
-			return (glob($path.$file));
-		}
- 	}
-	print_r(FindFile("./", "conf.php"));
-	exit;
-	
-	*/
 	
 	require_once 'class/cap.form.class.php';
-	require_once 'class/cap.create.class.php';
-	require_once 'class/cap.write.class.php';
+	require_once 'lib/cap.create.class.php';
+	require_once 'lib/cap.write.class.php';
 	require_once 'class/translate.class.php';
+	
+	chown($path, $user_name);
 	
 	if(file_exists('source/conf/conf.php'))
 	{
@@ -74,6 +45,20 @@
 	{
 		$cap = new CAP_Form();			
 		print $cap->install();
+	}
+	elseif($_GET['read'] == 1)
+	{
+		require_once 'lib/cap.read.class.php';
+		
+		$location = "source/cap/2.49.0.20.0.AT.151005121527.91.cap";
+		$alert = new alert($location);
+		$cap = $alert->output();
+		//die(print_r($cap));
+		print_r($cap);
+		
+			$form = new CAP_Form($cap);
+			//print $form->Debug();
+			print $form->Form();
 	}
 	elseif(empty($_POST['action']) && $_GET['webservice'] != 1)
 	{

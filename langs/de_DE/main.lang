@@ -28,6 +28,7 @@ LabelRemoveLanguage=entferne Sprache
 LabelAddLanguage=Sprache anfügen
 LabelUsableLanguages=Usable Languages
 LabelAutomaticIdentifierTime=Automatic Identifier Time
+TitleMain=Hauptseite
 TitleAlert=Alert
 TitleInfo=Info
 TitleArea=Area
@@ -45,3 +46,6 @@ webservice_destination=Webservice Ziel
 webservice_WS_METHOD=Webservice METHODE
 webservice_ns=Webservice NS
 webservice_WS_DOL_URL=Webservice URL
+
+NewCap=Neues Cap File
+ReadCap=Cap File auslesen
