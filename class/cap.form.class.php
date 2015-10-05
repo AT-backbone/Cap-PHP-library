@@ -256,10 +256,10 @@
 							$out.= '<div id="mapinfo" class="mapinfo">';								
 								$out.='<ul data-role="listview">';
 									$out.='<li>';
-										$out.='<a href="#"><h1>TEST</h1></a>';
+										$out.='<label for="dragCircle">Polygon:</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
 									$out.='</li>';
 									$out.='<li>';
-										$out.='<label for="dragCircle">Circle:</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="off">Off</option><option value="on">On</option></select>';
+										$out.='<label for="dragCircle">Circle:</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
 									$out.='</li>';
 								$out.='</ul>';
 							$out.= '</div>';
