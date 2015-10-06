@@ -208,7 +208,7 @@
 					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty", $this->certainty);
 				
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").':</legend>';							
+							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").': '.$this->tooltip($type, $langs->trans("InfoSetThePriorityOfTheMessage")).'</legend>';							
 								$out.= $urgency;					
 								$out.= $severity;							
 								$out.= $certainty;
