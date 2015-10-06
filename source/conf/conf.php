@@ -86,6 +86,6 @@ $conf->webservice->destination                         = 'source/cap';
 $conf->webservice->WS_METHOD                           = 'putCap';
 $conf->webservice->ns                                  = 'http://www.meteoalarm.eu:8080/functions/webservices/';
 $conf->webservice->WS_DOL_URL                          = 'http://www.meteoalarm.eu:8080/functions/webservices/capimport.php';
-$conf->webservice->securitykey                         = '5c2947c0c574e56ac11a4cf8f410d40b';
+$conf->webservice->securitykey                         = '5c5947f0c574e16ac11b4cf83410d406';
 
 ?>
