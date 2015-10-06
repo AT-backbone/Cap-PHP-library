@@ -526,11 +526,11 @@
 		 * @return string 								HTML select field
 		 */
 		 
-		 function tooltip($name, $info)
+		 function tooltip($name, $info, $alttext='ToolboxInfo')
 		 {
-		 		$out.= '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$name.'">'.$name.'</a>';
-		 		$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:350px;">';
-					$out.= $info;
+		 		$out.= '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$alttext.'">'.$name.'</a>';
+		 		$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:100%;">';
+				$out.= $info;
 				$out.= '</div>';
 			
 			return $out;
