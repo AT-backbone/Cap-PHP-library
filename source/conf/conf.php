@@ -78,14 +78,14 @@ $conf->select->lang['bg']                              = 0;
 $conf->select->lang['mk']                              = 0;
 
 $conf->webservice->on                                  = 1;
-$conf->webservice->sourceapplication                   = '';
-$conf->webservice->login                               = '';
-$conf->webservice->password                            = '';
+$conf->webservice->sourceapplication                   = 'putCap';
+$conf->webservice->login                               = 'googletest';
+$conf->webservice->password                            = 'SHlvRkt6bGRESENKRXQ4eEg0Qmd0UT09';
 $conf->webservice->entity                              = 1;
-$conf->webservice->destination                         = '';
-$conf->webservice->WS_METHOD                           = '';
-$conf->webservice->ns                                  = '';
-$conf->webservice->WS_DOL_URL                          = '';
-$conf->webservice->securitykey                         = '';
+$conf->webservice->destination                         = 'source/cap';
+$conf->webservice->WS_METHOD                           = 'putCap';
+$conf->webservice->ns                                  = 'http://www.meteoalarm.eu:8080/functions/webservices/';
+$conf->webservice->WS_DOL_URL                          = 'http://www.meteoalarm.eu:8080/functions/webservices/capimport.php';
+$conf->webservice->securitykey                         = '5c2947c0c574e56ac11a4cf8f410d40b';
 
 ?>

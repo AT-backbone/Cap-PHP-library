@@ -49,3 +49,5 @@ webservice_WS_DOL_URL=Webservice URL
 
 NewCap=New Cap File
 ReadCap=Read Cap File
+
+InfoIdentifier=InfoIdentifier

@@ -122,7 +122,7 @@
 							$out.= '</div></a>';
 						$out.= '</div>';
 						$out.= '<div class="ui-block-b" style="padding-left: 7.5px;">';
-							$out.= '<a href="index.php?read=1" style="text-decoration: none;"><div class="ui-btn ui-input-btn ui-btn-b ui-corner-all ui-shadow" style="height: 85px;padding-top: 85px;">';
+							$out.= '<a href="index.php?read=1#alert" data-ajax="false" style="text-decoration: none;"><div class="ui-btn ui-input-btn ui-btn-b ui-corner-all ui-shadow" style="height: 85px;padding-top: 85px;">';
 								$out.=  $langs->trans("ReadCap");
 							$out.= '</div></a>';
 						$out.= '</div>';
@@ -143,6 +143,7 @@
 							$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
 						$out.= '</div>';
 					$out.= '</div>';
+					$out.= $this->tooltip($type, $langs->trans("InfoIdentifier"));
 					break;
 					
 				case 'sender':
@@ -519,6 +520,24 @@
 		}
 		
 		/**
+		 * Output HTML Info field
+		 *
+		 * @param string $name 						The name in the info field
+		 * @param string $info 						The info in the info field
+		 * @return string 								HTML select field
+		 */
+		 
+		 function tooltip($name, $info)
+		 {
+		 		$out.= '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$name.'">'.$name.'</a>';
+		 		$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:350px;">';
+					$out.= $info;
+				$out.= '</div>';
+			
+			return $out;
+		 }
+		
+		/**
      * Output Html select
      *
      * @param   string	$name					The POST/GET name of the select
@@ -694,6 +713,8 @@
 			
 			
 			$type['capview'][] = 'capview';
+			
+			$type['read'][] = 'readcap';
 
       return $type;
 		}
@@ -1363,8 +1384,6 @@
 			
 			if($write == true)
 			{
-				fopen("source/conf/conf.php", "r")
-				chown("source/conf/conf.php", "apache");
 				$conf_file = fopen("source/conf/conf.php", "w") or print("Unable to open conf!");
 				fwrite($conf_file, $out);
 				fclose($conf_file);
