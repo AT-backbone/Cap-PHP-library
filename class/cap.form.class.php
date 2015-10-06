@@ -134,7 +134,7 @@
 					
 				case 'identifier':
 					$out = '<div id="Identapend">';
-						$out.= '<label>'.$langs->trans("LabelIdentifier").': </label>';
+						$out.= '<label>'.$langs->trans("LabelIdentifier").': '.$this->tooltip($type, $langs->trans("InfoIdentifier")).'</label>';
 						$out.= '<div class="ui-grid-c">';
 							$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
 							if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
@@ -142,8 +142,7 @@
 							else																		$out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" ></div>'; // YYMMDDHHMMSS
 							$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
 						$out.= '</div>';
-					$out.= '</div>';
-					$out.= $this->tooltip($type, $langs->trans("InfoIdentifier"));
+					$out.= '</div>';					
 					break;
 					
 				case 'sender':
@@ -153,7 +152,7 @@
 				case 'sent':
 					$st = $this->make_cap_time($this->sent);
 					$out = '<div id="Sentapend">';
-						$out.= '<label>'.$langs->trans("LabelSent").': </label>';
+						$out.= '<label>'.$langs->trans("LabelSent").': '.$this->tooltip($type, $langs->trans("InfoSent")).'</label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="sent[date]" value="'.$st['date'].'"></div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="sent[time]" step="1" value="'.$st['time'].'"></div>';
@@ -177,7 +176,7 @@
 					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"", "", $this->scope);  
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
-							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").':</legend>';							
+							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").': '.$this->tooltip($type, $langs->trans("InfoSetTheTypesOfTheMessage")).'</legend>';							
 								$out.= $status;					
 								$out.= $msgType;							
 								$out.= $scope;
@@ -191,7 +190,7 @@
 					$responseType = $this->buildSelect("responseType", array( "Shelter" => "Take Shelter", "Evacuate" => "Evacuate", "Prepare" => "Make Preparations", "Execute" => "Execute Pre-Planned Action", "Avoid" => "Avoid the affected Area", "Monitor" => "Monitor Conditions", "Assess" => "Evaluate Situation", "AllClear" => "Resume Normal Activities", "None" => "Take No Action" ), "data-native-menu=\"false\"", "Response Type", $this->responseType);
 			    
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").':</legend>';							
+							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").': '.$this->tooltip($type, $langs->trans("InfoSetTheHazardType")).'</legend>';							
 								$out.= $category;					
 								$out.= $responseType;	
 						$out.= '</fieldset>';

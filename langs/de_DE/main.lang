@@ -51,3 +51,6 @@ NewCap=Neues Cap File
 ReadCap=Cap File auslesen
 
 InfoIdentifier=InfoIdentifier
+InfoSent=InfoSent
+InfoSetTheTypesOfTheMessage=InfoSetTheTypesOfTheMessage
+InfoSetTheHazardType=InfoSetTheHazardType
