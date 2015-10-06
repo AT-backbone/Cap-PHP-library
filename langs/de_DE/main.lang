@@ -50,8 +50,8 @@ webservice_WS_DOL_URL=Webservice URL
 NewCap=Neues Cap File
 ReadCap=Cap File auslesen
 
-InfoIdentifier=InfoIdentifier
-InfoSent=InfoSent
-InfoSetTheTypesOfTheMessage=InfoSetTheTypesOfTheMessage
-InfoSetTheHazardType=InfoSetTheHazardType
-InfoSetThePriorityOfTheMessage=InfoSetThePriorityOfTheMessage
+LabelIdentifierDesc=Der CAP-Identifier besteht aus der OID der WMO dem ISO Code der Uhrzeit und einer beliebigen Nummer.
+LabelSentDesc=Zeit an der die Cap Datei Gesendet wurde.
+LabelSetTheTypesOfTheMessageDesc=InfoSetTheTypesOfTheMessage
+LabelSetTheHazardTypeDesc=InfoSetTheHazardType
+LabelSetThePriorityOfTheMessageDesc=“urgency”: Future <br>“severity”: Minor <br>
