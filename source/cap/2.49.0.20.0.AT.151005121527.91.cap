@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>2.49.0.20.0.AT.151005121527.91</identifier>
+	<sender>ICH</sender>
+	<sent>2015-10-05T12:15:27+01:00</sent>
+	<status>Test</status>
+	<msgType>Alert</msgType>
+	<scope>Private</scope>
+	<info>
+		<language>en-GB</language>
+		<category>Met</category>
+		<event>TEST Englisch</event>
+		<responseType>Evacuate</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Minor</severity>
+		<certainty>Unlikely</certainty>
+		<audience>ICH</audience>
+		<effective>2015-10-05T12:15:27+01:00</effective>
+		<onset>2015-10-05T12:15:27+01:00</onset>
+		<expires>2015-10-05T00:00:00+01:00</expires>
+		<senderName>ICH</senderName>
+		<headline>TEST Englisch</headline>
+		<description>TEST Englisch</description>
+		<instruction>TEST Englisch</instruction>
+		<web>ICH.at</web>
+		<contact>ICH</contact>
+		<area>
+			<areaDesc>Midel Europe</areaDesc>
+			<circle>-1.213911813132997,43.13916420240789 16.688180922528844,54.814928036868565</circle>
+		</area>
+	</info>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>TEST Deutsch</event>
+		<responseType>Evacuate</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Minor</severity>
+		<certainty>Unlikely</certainty>
+		<audience>ICH</audience>
+		<effective>2015-10-05T12:15:27+01:00</effective>
+		<onset>2015-10-05T12:15:27+01:00</onset>
+		<expires>2015-10-05T00:00:00+01:00</expires>
+		<senderName>ICH</senderName>
+		<headline>TEST Deutsch</headline>
+		<description>TEST Deutsch</description>
+		<instruction>TEST Deutsch</instruction>
+		<web>ICH.at</web>
+		<contact>ICH</contact>
+		<area>
+			<areaDesc>Midel Europe</areaDesc>
+			<circle>-1.213911813132997,43.13916420240789 16.688180922528844,54.814928036868565</circle>
+		</area>
+	</info>
+</alert>

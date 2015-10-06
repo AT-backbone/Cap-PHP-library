@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>2.49.0.20.0.AT.151002172344.91</identifier>
+	<sender>guido@schratzer.at</sender>
+	<sent>2015-10-02T17:23:44+01:00</sent>
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>Thunderstorm</event>
+		<responseType>Monitor</responseType>
+		<urgency>Future</urgency>
+		<severity>Minor</severity>
+		<certainty>Possible</certainty>
+		<effective>2015-10-02T17:23:44+01:00</effective>
+		<onset>2015-10-02T17:23:44+01:00</onset>
+		<expires>2015-10-03T00:00:00+01:00</expires>
+		<senderName>ZAMG</senderName>
+		<headline>keine Thunderstorm</headline>
+		<description>keine besonderen Ereignisse</description>
+		<web>http://www.backbone.co.at</web>
+		<contact>Guido Schratzer</contact>
+		<area>
+			<areaDesc>Salzburg</areaDesc>
+			<circle>13.189086570290243,47.52337049487391 13.189086570290243,47.52337049487391</circle>
+		</area>
+	</info>
+</alert>
