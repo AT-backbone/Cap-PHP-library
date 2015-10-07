@@ -1,5 +1,6 @@
 <?php
 date_default_timezone_set('Europe/Vienna');
+$conf = new stdClass();
 $conf->timezone->set_default                           = 'Europe/Vienna';
 
 $conf->user->lang                                      = 'de_DE';
