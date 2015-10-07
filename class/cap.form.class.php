@@ -504,8 +504,24 @@
 							$out = $langs->trans("webservice_WS_DOL_URL").':<input type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
 						
-					case 'capview';
+					case 'capview':
 							$out = '<textarea readonly="" id="capviewtextarea"></textarea>';
+						break;
+						
+					case 'caplist':
+						$out = '</form><form method="POST" id="capform2" name="capform2" action="index.php?read=1" enctype="multipart/form-data" data-ajax="false">';
+						$out.= '<fieldset data-role="controlgroup">';
+								foreach(scandir($conf->cap->output) as $num => $capfilename)
+								{
+									if($num > 1)
+									{
+										$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
+										$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label>';
+									}
+								}			
+						$out.= '</fieldset>';
+						$out.= '<input type="submit" value="<h1>'.$langs->trans("Read").'</h1>" data-ajax="false">';
+						$out.= '</form><form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 						break;
 					/*
 					 * Default
@@ -720,7 +736,7 @@
 			
 			$type['capview'][] = 'capview';
 			
-			$type['read'][] = 'readcap';
+			$type['read'][] = 'caplist';
 
       return $type;
 		}
@@ -740,6 +756,9 @@
 			//$pages['area']['next'] 	= 'capview';
 			
 			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
+			//$pages['conf']['send'] 	= true; 
+			
+			$pages['#read'] 		 		= $langs->trans("TitleCapList");
 			//$pages['conf']['send'] 	= true; 
 			
 			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");

@@ -90,11 +90,16 @@
 	{
 		require_once 'lib/cap.read.class.php';
 		
-		$location = "source/cap/2.49.0.20.0.AT.151005121527.91.cap";
+		$location = "source/cap/".$_POST['location'];
 		$alert = new alert($location);
 		$cap = $alert->output();
 		//die(print_r($cap));
-		print_r($cap);
+		//print_r($cap);
+		if(! empty($cap['msg_format']))
+		{
+			print $cap['msg_format'];
+			exit;
+		}
 		
 			$form = new CAP_Form($cap);
 			//print $form->Debug();
