@@ -735,6 +735,8 @@
 			$pages['capview'] 		 	= $langs->trans("TitleCapView");
 			//$pages['conf']['send'] 	= true; 
 			
+			$pages['capconv']       = $langs->trans("TitleCapConv")
+			
 			$pages['conf']  				= $langs->trans("TitleConfig");
 			
 						
@@ -991,6 +993,94 @@
 										$out.= '</textarea>';
 									$out.= '</li>';
 								$out.= '</ul>';
+							$out.= '</div>';
+
+						$out.= '</div><!-- /content -->';
+					
+						$out.= '<div data-role="footer" data-theme="b">';
+
+						$out.= '</div><!-- /footer -->';
+						
+					$out.= '</div><!-- /page -->';
+			
+				$out.= '</form>';			
+			$out.= '</body>';
+			
+			return $out;
+		}
+		
+		function ListCap()
+		{
+			global $conf, $langs;
+			
+			$out = $this->Header_llx();
+			
+			$out.= '<body>';			
+				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
+					$out.= '<div data-role="page" id="capview">';
+					
+							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
+    						$out.= '<!-- panel content goes here -->';
+    						$out.= '<ul data-role="listview">';
+    							
+    							$out.= '<li style="height: 91px;">';
+    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<h1>';
+    									$out.= 'Cap Creator';
+    								$out.= '</h1>';
+    								$out.= '<br>';
+    								$out.= '<span style="font-size: 10px;">';
+    									$out.= 'Cap v1.2';
+    								$out.= '</span>';
+    							$out.= '</li>';
+    							
+    							$Pages_arr = $this->Pages();
+									foreach($Pages_arr as $link => $Page_Name)
+									{
+										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+									}
+									
+								$out.= '</ul>';
+							$out.= '</div>';
+							
+							$out.= '<div data-theme="b" data-role="header">';								
+								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+								$out.= '<h1>Cap Converter</h1>';							
+							$out.= '</div>';
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
+			
+								$converter = $conf->converter;
+								
+								$input = $this->buildSelect("inputconverter", $converter, "data-native-menu=\"false\"", "", "standard");
+								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard"); 
+								
+									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
+										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip($type, $langs->trans("InfoSelectInputandOutputCap")).'</legend>';							
+											$out.= $input;					
+											$out.= $output;							
+									$out.= '</fieldset>';
+									
+									
+									$out.= '<input type="file" name="uploadfile" id="uploadfile">';
+									// or								
+									$out.= '<fieldset data-role="controlgroup">';
+										$out.= '<legend>'.$langs->trans("SelectCaps").':</legend>';
+											foreach(scandir($conf->cap->output) as $num => $capfilename)
+											{
+												if($num > 1)
+												{
+													$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
+													$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label>';
+												}
+											}			
+									$out.= '</fieldset>';
+									
+									$out.= '<input type="submit" value="<h1>'.$langs->trans("Convert").'</h1>" data-ajax="false">';
+									
 							$out.= '</div>';
 
 						$out.= '</div><!-- /content -->';

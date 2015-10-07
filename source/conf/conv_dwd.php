@@ -20,25 +20,25 @@
 	$conv->conv->hazard->type->tag->name													= "eventCode"; 
 	$conv->conv->hazard->type->tag->val														= "GROUP";
 	
-		$conv->eventCode->GROUP['thunderstorm'] 										= "THUNDERSTORM";
-		$conv->eventCode->GROUP['wind'] 														= "WIND";
-		$conv->eventCode->GROUP['rain'] 														= "RAIN";
-		$conv->eventCode->GROUP['hail'] 														= "HAIL";
-		$conv->eventCode->GROUP['snow']															= "SNOWFALL";
-		$conv->eventCode->GROUP['ice']															= "SNOWDRIFT";
-		$conv->eventCode->GROUP['fog'] 															= "FOG";
-		$conv->eventCode->GROUP['frost']														= "FROST";
-		$conv->eventCode->GROUP['glaze'] 														= "GLAZE";
-		$conv->eventCode->GROUP['thaw']															= "THAW";
-		$conv->eventCode->GROUP['lake']															= "LAKE";
-		$conv->eventCode->GROUP['heat'] 														= "HEAT";		
+		$conv->GROUP['THUNDERSTORM'] 																= "thunderstorm";
+		$conv->GROUP['WIND'] 																				= "wind";
+		$conv->GROUP['RAIN'] 																				= "rain";
+		$conv->GROUP['HAIL'] 																				= "hail";
+		$conv->GROUP['SNOWFALL']																		= "snow";
+		$conv->GROUP['SNOWDRIFT']																		= "ice";
+		$conv->GROUP['FOG'] 																				= "fog";
+		$conv->GROUP['FROST']																				= "frost";
+		$conv->GROUP['GLAZE'] 																			= "glaze";
+		$conv->GROUP['THAW']																				= "thaw";
+		$conv->GROUP['LAKE']																				= "lake";
+		$conv->GROUP['HEAT'] 																				= "heat";		
 		
 		// standard filler
-		$conv->eventCode->GROUP['cold']															= "FROST";
-		$conv->eventCode->GROUP['coastal']													= "";
-		$conv->eventCode->GROUP['flooding']													= "";
-		$conv->eventCode->GROUP['rain-flood']												= "";
-		$conv->eventCode->GROUP['avalanches']												= "";
+		$conv->GROUP['cold']																				= "FROST";
+		$conv->GROUP['coastal']																			= "";
+		$conv->GROUP['flooding']																		= "";
+		$conv->GROUP['rain-flood']																	= "";
+		$conv->GROUP['avalanches']																	= "";
 
 	
 	$conv->eventCode[]																						= "AREA_COLOR";
@@ -46,39 +46,41 @@
 	$conv->conv->hazard->level->tag->name													= "eventCode"; 
 	$conv->conv->hazard->level->tag->val													= "AREA_COLOR";
 					
-		// posible hazard level
-		$conv->parameter->awareness_level[0] 												= "100, 180, 255"; 	// Hellblau = Grün Keine
-		$conv->parameter->awareness_level[1] 												= "255, 128, 128"; 	// Rosa Vorabinformation
-		$conv->parameter->awareness_level[2] 												= "255, 255, 0"; 		// Gelb Wetterwarnung
-		$conv->parameter->awareness_level[3] 												= "255, 255, 0"; 		// Gelb Wetterwarnung
-		$conv->parameter->awareness_level[4] 												= "255, 153, 0";   	// Orange Markantes Wetter
-		$conv->parameter->awareness_level[5] 												= "255, 153, 0";   	// Orange Markantes Wetter
-		$conv->parameter->awareness_level[6] 												= "255, 0, 0";     	// Rot Unwetterwarnung
-		$conv->parameter->awareness_level[7] 												= "255, 0, 0";     	// Rot Unwetterwarnung
-		$conv->parameter->awareness_level[8] 												= "175, 0, 100";  	// Violett Extreme Wetterwarnung		
-		$conv->parameter->awareness_level[9] 												= "175, 0, 100";  	// Violett Extreme Wetterwarnung		
+		// posible hazard level 																					// rgb(204, 153, 255)
+		$conv->AREA_COLOR["100 180 255"] 														= 0; 	// Hellblau = Grün Keine
+		$conv->AREA_COLOR["204 153 255"] 														= 1; 	// Rosa Vorabinformation
+		$conv->AREA_COLOR["255 128 128"] 														= 1; 	// Rosa Vorabinformation
+		$conv->AREA_COLOR["255 255 0"] 															= 2;	// Gelb Wetterwarnung
+		$conv->AREA_COLOR["255 255 0"] 															= 3;	// Gelb Wetterwarnung
+		$conv->AREA_COLOR["255 153 0"] 															= 4; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 153 0"] 															= 5; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 0 0"] 																= 6; 	// Rot Unwetterwarnung
+		$conv->AREA_COLOR["255 0 0"] 																= 7; 	// Rot Unwetterwarnung
+		$conv->AREA_COLOR["175 0 100"] 															= 8;	// Violett Extreme Wetterwarnung		
+		$conv->AREA_COLOR["175 0 100"] 															= 9;	// Violett Extreme Wetterwarnung	
 	
 	
 	$conv->area->geocode[] 																				= "WARNCELLID";
 	$conv->area->geocode[] 																				= "STATE";
 	
 	// set convert to eventCode:AREA_COLOR
-	$conv->conv->hazard->level->tag->name													= "geocode"; 
-	$conv->conv->hazard->level->tag->val													= "STATE";
+	$conv->conv->geocode->tag->name																= "geocode"; 
+	$conv->conv->geocode->tag->val																= "STATE";
 	
-	$conv->geocode->nuts['DE1'] = "BW";
-	$conv->geocode->nuts['DE2'] = "BY";
-	$conv->geocode->nuts['DE3'] = "BE";
-	$conv->geocode->nuts['DE4'] = "BB";
-	$conv->geocode->nuts['DE5'] = "HB";
-	$conv->geocode->nuts['DE6'] = "HH";
-	$conv->geocode->nuts['DE7'] = "HE";
-	$conv->geocode->nuts['DE8'] = "MV";
-	$conv->geocode->nuts['DE9'] = "NI";
-	$conv->geocode->nuts['DEA'] = "NW";
-	$conv->geocode->nuts['DEB'] = "RP";
-	$conv->geocode->nuts['DEC'] = "SL";
-	$conv->geocode->nuts['DED'] = "SN";
-	$conv->geocode->nuts['DEE'] = "ST";
-	$conv->geocode->nuts['DEF'] = "SH";
-	$conv->geocode->nuts['DEG'] = "TH";
+	$conv->STATE['BW'] 																						= "DE1";
+	$conv->STATE['BY'] 																						= "DE2";
+	$conv->STATE['BE'] 																						= "DE3";
+	$conv->STATE['BL'] 																						= "DE3";
+	$conv->STATE['BB'] 																						= "DE4";
+	$conv->STATE['HB'] 																						= "DE5";
+	$conv->STATE['HH'] 																						= "DE6";
+	$conv->STATE['HE'] 																						= "DE7";
+	$conv->STATE['MV'] 																						= "DE8";
+	$conv->STATE['NI'] 																						= "DE9";
+	$conv->STATE['NW'] 																						= "DEA";
+	$conv->STATE['RP'] 																						= "DEB";
+	$conv->STATE['SL'] 																						= "DEC";
+	$conv->STATE['SN'] 																						= "DED";
+	$conv->STATE['ST'] 																						= "DEE";
+	$conv->STATE['SH'] 																						= "DEF";
+	$conv->STATE['TH'] 																						= "DEG";

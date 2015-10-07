@@ -28,6 +28,7 @@
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
+	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
 	
 	chown($path, $user_name);
@@ -45,6 +46,42 @@
 	{
 		$cap = new CAP_Form();			
 		print $cap->install();
+	}
+	elseif($_GET['conv'] == 1)
+	{
+		/*
+			$tmpfile = $_FILES["uploadfile"]["tmp_name"];   // temp filename
+   		$filename = $_FILES["uploadfile"]["name"];      // Original filename
+
+  		$handle = fopen($tmpfile, "r");                  // Open the temp file
+   		$contents = fread($handle, filesize($tmpfile));  // Read the temp file
+   		fclose($handle);                                 // Close the temp file
+		*/
+		if(! empty($_POST['location']) || ! empty($_FILES["uploadfile"]["name"]))
+		{
+			require_once 'lib/cap.read.class.php';
+			// Get TEST Cap
+			if(! empty($_FILES["uploadfile"]["name"]))
+			{
+				$location = $_FILES["uploadfile"]["tmp_name"];
+			}
+			else
+			{
+				$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			}
+			
+			$alert = new alert($location);
+			$cap = $alert->output();
+			
+			// Convert
+			$converter = new Convert_CAP_Class();		
+			print $converter->convert($cap, $_POST['inputconverter'], $_POST['outputconverter']);
+		}
+		else
+		{
+			$form = new CAP_Form();
+			print $form->ListCap();
+		}
 	}
 	elseif($_GET['read'] == 1)
 	{

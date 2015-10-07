@@ -7,7 +7,9 @@ $conf->user->lang                                      = 'de_DE';
 $conf->cap->save                                       = 1;
 $conf->cap->output                                     = 'source/cap';
 
-$conf->conf->output                                    = 'source/conf';
+$conf->converter['standard'] 													 = 'Standard Cap';
+$conf->converter['dwd'] 															 = 'DWD';
+$conf->converter['meteoalarm'] 												 = 'Meteoalarm';
 
 $conf->identifier->WMO_OID                             = '2.49.0.20.0';
 $conf->identifier->ISO                                 = 'AT';
