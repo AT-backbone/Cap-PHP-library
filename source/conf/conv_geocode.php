@@ -2143,4 +2143,4 @@ $standard->geocode->nuts['UKN02'] 				="Outer Belfast";
 $standard->geocode->nuts['UKN03'] 				="East of Northern Ireland";
 $standard->geocode->nuts['UKN04'] 				="North of Northern Ireland";
 $standard->geocode->nuts['UKN05'] 				="West and South of Northern Ireland";
-$standard->geocode->nuts['UKZZZ'] 				="Extra-Regio NUTS 3  $standard->geocode->nuts[''] 		";
+$standard->geocode->nuts['UKZZZ'] 				="Extra-Regio NUTS 3";

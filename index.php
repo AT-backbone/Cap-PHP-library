@@ -28,6 +28,7 @@
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
+	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
 	
 	chown($path, $user_name);
@@ -45,6 +46,28 @@
 	{
 		$cap = new CAP_Form();			
 		print $cap->install();
+	}
+	elseif($_GET['conv'] == 1)
+	{
+		
+		if(! empty($_POST['location']) || ! empty($_GET['location']))
+		{
+			require_once 'lib/cap.read.class.php';
+			// Get TEST Cap
+			$location = "source/cap/Z_CAP_C_EDZW_20150722094400_PVW_161.xml";
+			$alert = new alert($location);
+			$cap = $alert->output();
+			
+			// Convert
+			$converter = new Convert_CAP_Class();		
+			print $converter->convert($cap, "dwd", "meteoalarm");
+		}
+		else
+		{
+			$form = new CAP_Form();
+			//print $form->Debug();
+			print $form->ListCap();
+		}
 	}
 	elseif($_GET['read'] == 1)
 	{

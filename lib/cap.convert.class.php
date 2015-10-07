@@ -26,7 +26,7 @@
 	
 	require_once 'cap.write.class.php'; // for the XML / CAP view
 
-	class CAP_Class{
+	class Convert_CAP_Class{
 		var $output = "CAP"; // CAP / XML
 		var $cap = "";
 		var $destination = "source/cap";
@@ -113,6 +113,104 @@
 				$this->circle				= $post['circle'];
 				$this->geocode			= $post['geocode'];
 
+			}
+		}
+		
+		/**
+     * Converts Caps to standard and then to output
+     *
+     * @param 	string    path of the input  convert file
+     * @param 	string    path of the output convert file
+     * @param 	Array			the cap     
+     * @return	array 		convertet cap or error
+     */
+		function convert($cap, $input, $output = "standard")
+		{
+			if(file_exists('./source/conf/conv_'.$input.'.php'))
+			{
+				if(file_exists('./source/conf/conv_'.$output.'.php'))
+				{
+					// Get geocodes
+					include './source/conf/conv_geocode.php';
+					$geocode = $standard;
+					unset($standard);
+					
+					// Get input style
+					include './source/conf/conv_'.$input.'.php';
+					$input = $conv;
+					unset($conv);
+					
+					if($output != "standard")
+					{
+						// Get standard if not included
+						include './source/conf/conv_standard.php';
+						$standard = $conv;
+						unset($conv);
+						
+						// Get output style
+						include './source/conf/conv_'.$output.'.php';
+						$output = $conv;
+						unset($conv);
+					}
+					else
+					{
+						// Get output style and standard
+						include './source/conf/conv_'.$output.'.php';
+						$output = $conv;
+						$standard = $conv;
+						unset($conv);
+					}
+					
+					if(!empty($input->conv->hazard->type->tag->name))
+					{
+						foreach($cap['info'][0][$input->conv->hazard->type->tag->name] as $val_arr)
+						{
+							if( $val_arr['valueName'] ==  $input->conv->hazard->type->tag->val )
+							{
+								$ConvCap['type'] =  $input->{$input->conv->hazard->type->tag->val}[$val_arr['value']];
+							}
+						}						
+					}
+					
+					if(!empty($input->conv->hazard->level->tag->name))
+					{
+						foreach($cap['info'][0][$input->conv->hazard->level->tag->name] as $val_arr)
+						{
+							if( $val_arr['valueName'] ==  $input->conv->hazard->level->tag->val )
+							{
+								$ConvCap['level'] =  $input->{$input->conv->hazard->level->tag->val}[$val_arr['value']];
+							}							
+						}				
+					}
+					
+					if(!empty($input->conv->geocode->tag->name))
+					{
+						foreach($cap['info'][0]['area'] as $key => $tmp)
+						{
+							foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
+							{
+								if( $val_arr['valueName'] ==  $input->conv->geocode->tag->val )
+								{
+									$ConvCap['geocode'][] =  $input->{$input->conv->geocode->tag->val}[$val_arr['value']];
+								}				
+							}
+						}
+						
+						$ConvCap['geocode'] = array_unique($ConvCap['geocode']);
+					}
+									
+					print '<pre>';
+					print_r($ConvCap);
+					print_r($input);
+					print_r($output);
+					print_r($cap);
+					print '<pre>';
+					exit;
+				}
+			}
+			else
+			{
+				return -1;
 			}
 		}
 		
