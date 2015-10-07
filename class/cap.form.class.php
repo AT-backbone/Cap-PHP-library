@@ -662,7 +662,7 @@
      */
 		function Types()
 		{
-			$type['main'][] = "CapButton";
+			//$type['main'][] = "CapButton";
 			
 			// Alert Page		
 			$type['alert'][] = "identifier";	
@@ -744,7 +744,7 @@
 		function Pages()
 		{
 			global $langs;
-			$pages['#main'] 					= $langs->trans("TitleMain");
+			//$pages['#main'] 					= $langs->trans("TitleMain");
 			
 			$pages['#alert'] 					= $langs->trans("TitleAlert");
 			//$pages['alert']['next'] = 'info';
@@ -858,7 +858,7 @@
 							
 							$out.= '<div data-theme="b" data-role="header">';								
 								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-								$out.= '<h1>'.$Pages_arr[$pagename].'</h1>';							
+								$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';							
 							$out.= '</div>';
 							
 							
@@ -868,7 +868,7 @@
 								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 									$out.= '<ul data-role="listview" data-divider-theme="b">';
 									
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr[$pagename].'</h1></li>';
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr['#'.$pagename].'</h1></li>';
 									
 										foreach($TypePage as $key => $type)
 										{							
