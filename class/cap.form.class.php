@@ -721,23 +721,24 @@
 		function Pages()
 		{
 			global $langs;
-			$pages['main'] 					= $langs->trans("TitleMain");
+			$pages['#main'] 					= $langs->trans("TitleMain");
 			
-			$pages['alert'] 				= $langs->trans("TitleAlert");
+			$pages['#alert'] 					= $langs->trans("TitleAlert");
 			//$pages['alert']['next'] = 'info';
 			
-			$pages['info']  				= $langs->trans("TitleInfo");
+			$pages['#info']  					= $langs->trans("TitleInfo");
 			//$pages['info']['next'] 	= 'area';
 			
-			$pages['area']  				= $langs->trans("TitleArea");
+			$pages['#area']  					= $langs->trans("TitleArea");
 			//$pages['area']['next'] 	= 'capview';
 			
-			$pages['capview'] 		 	= $langs->trans("TitleCapView");
+			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
 			//$pages['conf']['send'] 	= true; 
 			
-			$pages['capconv']       = $langs->trans("TitleCapConv")
+			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");
+			$pages['noajax'][]				= '?conv=1#capconv';
 			
-			$pages['conf']  				= $langs->trans("TitleConfig");
+			$pages['#conf']  					= $langs->trans("TitleConfig");
 			
 						
 			return $pages;
@@ -817,8 +818,13 @@
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
-										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
-										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
+										if($link != 'noajax')
+										{
+											if($link == '#'.$pagename) 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+											else 										$out.= '<li><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+										}
+										unset($data);
 									}
 									
 								$out.= '</ul>';
@@ -1037,8 +1043,13 @@
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
-										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
-										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										if(!in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"'; // turn all links to ajax off (when not jquery can not link to the other pages)
+										if($link != 'noajax')
+										{
+											if($link == '?conv=1#capconv') 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+											else 														$out.= '<li><a href="'.$_SERVER[PHP_SELF].$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+										}
+										unset($data);
 									}
 									
 								$out.= '</ul>';
@@ -1053,7 +1064,23 @@
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 			
-								$converter = $conf->converter;
+								// get all convert files
+								$converter_tmp = scandir('source/conf/');								
+								foreach($converter_tmp as $num => $filename)
+								{
+									if(substr($filename, 0, 5) != "conv_") 
+									{
+										unset($converter_tmp[$num]);
+									}
+									elseif($filename == "conv_geocode.php") 
+									{
+										unset($converter_tmp[$num]);
+									}
+									else
+									{
+										$converter[substr($filename, 5, -4)] = substr($filename, 5, -4);
+									}
+								}
 								
 								$input = $this->buildSelect("inputconverter", $converter, "data-native-menu=\"false\"", "", "standard");
 								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard"); 

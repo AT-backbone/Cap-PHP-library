@@ -52,11 +52,11 @@
 		$conv->AREA_COLOR["255 128 128"] 														= 1; 	// Rosa Vorabinformation
 		$conv->AREA_COLOR["255 255 0"] 															= 2;	// Gelb Wetterwarnung
 		$conv->AREA_COLOR["255 255 0"] 															= 3;	// Gelb Wetterwarnung
-		$conv->AREA_COLOR["255 153 0"] 															= 4; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 255 0"] 															= 4;	// Gelb Wetterwarnung
 		$conv->AREA_COLOR["255 153 0"] 															= 5; 	// Orange Markantes Wetter
-		$conv->AREA_COLOR["255 0 0"] 																= 6; 	// Rot Unwetterwarnung
-		$conv->AREA_COLOR["255 0 0"] 																= 7; 	// Rot Unwetterwarnung
-		$conv->AREA_COLOR["175 0 100"] 															= 8;	// Violett Extreme Wetterwarnung		
+		$conv->AREA_COLOR["255 153 0"] 															= 6; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 153 0"] 															= 7; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 0 0"] 																= 8; 	// Rot Unwetterwarnung
 		$conv->AREA_COLOR["175 0 100"] 															= 9;	// Violett Extreme Wetterwarnung	
 	
 	

@@ -130,6 +130,10 @@
 			{
 				if(file_exists('./source/conf/conv_'.$output.'.php'))
 				{
+					/**
+					 * Include Cap converter files
+					 */
+					 
 					// Get geocodes
 					include './source/conf/conv_geocode.php';
 					$geocode = $standard;
@@ -161,6 +165,10 @@
 						unset($conv);
 					}
 					
+					/**
+					 * Input Cap -> Standard
+					 */ 
+					 
 					if(!empty($input->conv->hazard->type->tag->name))
 					{
 						foreach($cap['info'][0][$input->conv->hazard->type->tag->name] as $val_arr)
@@ -185,25 +193,138 @@
 					
 					if(!empty($input->conv->geocode->tag->name))
 					{
-						foreach($cap['info'][0]['area'] as $key => $tmp)
+						if(is_array($input->conv->geocode->tag->val))
 						{
-							foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
+							foreach($input->conv->geocode->tag->val as $geocodeval)
 							{
-								if( $val_arr['valueName'] ==  $input->conv->geocode->tag->val )
+								if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
 								{
-									$ConvCap['geocode'][] =  $input->{$input->conv->geocode->tag->val}[$val_arr['value']];
-								}				
+									foreach($cap['info'][0]['area'] as $key => $tmp)
+									{
+										foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
+										{
+											if( $val_arr['valueName'] ==  $geocodeval )
+											{
+												$ConvCap['geocode'][$val_arr['value']] =  $geocode->geocode->nuts[$val_arr['value']]; // geocode->nuts['NL32']
+											}
+										}
+									}
+								}
+								else
+								{
+									foreach($cap['info'][0]['area'] as $key => $tmp)
+									{
+										foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
+										{
+											if( $val_arr['valueName'] ==  $geocodeval )
+											{
+												$ConvCap['geocode'][$input->{$geocodeval}[$val_arr['value']]] =  $input->{$geocodeval}[$val_arr['value']];
+											}
+										}
+									}
+								}
 							}
 						}
-						
+						else
+						{
+							foreach($cap['info'][0]['area'] as $key => $tmp)
+							{
+								foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
+								{
+									if( $val_arr['valueName'] ==  $input->conv->geocode->tag->val )
+									{
+										$ConvCap['geocode'][$input->{$input->conv->geocode->tag->val}[$val_arr['value']]] =  $input->{$input->conv->geocode->tag->val}[$val_arr['value']];
+									}				
+								}
+							}
+						}
 						$ConvCap['geocode'] = array_unique($ConvCap['geocode']);
 					}
-									
+					
+					/**
+					 * Standard -> Output Cap
+					 */ 
+			 
+					if(!empty($output->conv->hazard->type->tag->name))
+					{
+						$output_to_flip = $output->{$output->conv->hazard->type->tag->val};
+						$output_val = array_flip($output_to_flip);
+						$ToConvCap[$output->conv->hazard->type->tag->name][$output->conv->hazard->type->tag->val] =  $output_val[$ConvCap['type']];										
+					}
+					
+					if(!empty($output->conv->hazard->level->tag->name))
+					{
+						$output_to_flip = $output->{$output->conv->hazard->level->tag->val};
+						$output_val = array_flip($output_to_flip);
+						$ToConvCap[$output->conv->hazard->level->tag->name][$output->conv->hazard->level->tag->val] =  $output_val[$ConvCap['level']];			
+					}
+					
+					
+					if(!empty($output->conv->geocode->tag->name))
+					{
+						if(is_array($output->conv->geocode->tag->val))
+						{
+							foreach($output->conv->geocode->tag->val as $geocodeval)
+							{
+								if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
+								{
+									foreach($ConvCap['geocode'] as $key => $geo_code_val)
+									{
+										if(strlen($key) == 3) // NUTS NUTS1
+										{
+											$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
+										}
+										elseif(strlen($key) == 4)
+										{
+											$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
+										}
+										elseif(strlen($key) == 5)
+										{
+											$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
+										}
+									}													
+								}
+							}
+						}
+						else
+						{
+							$geocodeval = $output->conv->geocode->tag->val;
+							if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
+							{
+								foreach($ConvCap['geocode'] as $key => $geo_code_val)
+								{									
+									if(strlen($key) == 3) // NUTS NUTS1
+									{
+										$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
+									}
+									elseif(strlen($key) == 4)
+									{
+										$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
+									}
+									elseif(strlen($key) == 5)
+									{
+										$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
+									}
+								}							
+							}
+							else
+							{
+								$output_to_flip = $output->{$output->conv->geocode->tag->val};
+								$output_val = array_flip($output_to_flip);
+								foreach($ConvCap['geocode'] as $key => $geo_code_val)
+								{
+									$ToConvCap[$output->conv->geocode->tag->name][$output->conv->geocode->tag->val] =  $output_val[$key];		
+								}
+							}
+						}
+					}
+					
+							
 					print '<pre>';
+					print '<br>'.$input->name.':<br>';
 					print_r($ConvCap);
-					print_r($input);
-					print_r($output);
-					print_r($cap);
+					print '<br>'.$output->name.':<br>';
+					print_r($ToConvCap);
 					print '<pre>';
 					exit;
 				}
