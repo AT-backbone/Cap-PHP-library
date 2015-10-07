@@ -242,7 +242,7 @@
 					}
 					
 					/**
-					 * Standard -> Output Cap
+					 * Standard -> Output Cap 
 					 */ 
 			 
 					if(!empty($output->conv->hazard->type->tag->name))
