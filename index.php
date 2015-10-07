@@ -50,11 +50,11 @@
 	elseif($_GET['conv'] == 1)
 	{
 		
-		if(! empty($_POST['location']) || ! empty($_GET['location']))
+		if(! empty($_GET['location']))
 		{
 			require_once 'lib/cap.read.class.php';
 			// Get TEST Cap
-			$location = "source/cap/Z_CAP_C_EDZW_20150722094400_PVW_161.xml";
+			$location = $conf->cap->output.'/'.urldecode($_GET['location']);s
 			$alert = new alert($location);
 			$cap = $alert->output();
 			

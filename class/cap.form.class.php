@@ -1007,6 +1007,69 @@
 			return $out;
 		}
 		
+		function ListCap()
+		{
+			global $conf, $langs;
+			
+			$out = $this->Header_llx();
+			
+			$out.= '<body>';			
+				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
+					$out.= '<input type="hidden" name="filename" value="'.$ID.'">';
+					$out.= '<div data-role="page" id="capview">';
+					
+						$out.= '<div data-theme="b" data-role="header">';								
+							//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+							$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
+							$out.= '<h1>'.$ID.'.cap</h1>';						
+						$out.= '</div>';
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
+			
+								$converter = $conf->converter;
+								print_r($conf->converter);
+								
+								$input = $this->buildSelect("inputconverter", $converter, "", "", "standard");
+								$output = $this->buildSelect("outputconverter", $converter, "", "", "standard"); 
+								
+									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
+										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip($type, $langs->trans("InfoSelectInputandOutputCap")).'</legend>';							
+											$out.= $input;					
+											$out.= $output;							
+									$out.= '</fieldset>';
+								
+									$out.= '<fieldset data-role="controlgroup">';
+										$out.= '<legend>Caps:</legend>';
+											foreach(scandir($conf->cap->output) as $num => $capfilename)
+											{
+												if($num > 1)
+												{
+													$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
+													$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label>';
+												}
+											}			
+									$out.= '</fieldset>';
+									
+									$out.= '<input type="submit" value="<h1>'.$langs->trans("Convert").'</h1>" data-ajax="false">';
+									
+							$out.= '</div>';
+
+						$out.= '</div><!-- /content -->';
+					
+						$out.= '<div data-role="footer" data-theme="b">';
+
+						$out.= '</div><!-- /footer -->';
+						
+					$out.= '</div><!-- /page -->';
+			
+				$out.= '</form>';			
+			$out.= '</body>';
+			
+			print $out;
+		}
+		
 		function Webservice($ID)
 		{
 			global $conf, $langs, $out;
