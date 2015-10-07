@@ -57,11 +57,19 @@
    		$contents = fread($handle, filesize($tmpfile));  // Read the temp file
    		fclose($handle);                                 // Close the temp file
 		*/
-		if(! empty($_POST['location']))
+		if(! empty($_POST['location']) || ! empty($_FILES["uploadfile"]["name"]))
 		{
 			require_once 'lib/cap.read.class.php';
 			// Get TEST Cap
-			$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			if(! empty($_FILES["uploadfile"]["name"]))
+			{
+				$location = $_FILES["uploadfile"]["tmp_name"];
+			}
+			else
+			{
+				$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			}
+			
 			$alert = new alert($location);
 			$cap = $alert->output();
 			

@@ -735,6 +735,8 @@
 			$pages['capview'] 		 	= $langs->trans("TitleCapView");
 			//$pages['conf']['send'] 	= true; 
 			
+			$pages['capconv']       = $langs->trans("TitleCapConv")
+			
 			$pages['conf']  				= $langs->trans("TitleConfig");
 			
 						
@@ -1015,14 +1017,37 @@
 			
 			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
-					$out.= '<input type="hidden" name="filename" value="'.$ID.'">';
 					$out.= '<div data-role="page" id="capview">';
 					
-						$out.= '<div data-theme="b" data-role="header">';								
-							//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-							$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
-							$out.= '<h1>'.$ID.'.cap</h1>';						
-						$out.= '</div>';
+							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
+    						$out.= '<!-- panel content goes here -->';
+    						$out.= '<ul data-role="listview">';
+    							
+    							$out.= '<li style="height: 91px;">';
+    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<h1>';
+    									$out.= 'Cap Creator';
+    								$out.= '</h1>';
+    								$out.= '<br>';
+    								$out.= '<span style="font-size: 10px;">';
+    									$out.= 'Cap v1.2';
+    								$out.= '</span>';
+    							$out.= '</li>';
+    							
+    							$Pages_arr = $this->Pages();
+									foreach($Pages_arr as $link => $Page_Name)
+									{
+										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+									}
+									
+								$out.= '</ul>';
+							$out.= '</div>';
+							
+							$out.= '<div data-theme="b" data-role="header">';								
+								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+								$out.= '<h1>Cap Converter</h1>';							
+							$out.= '</div>';
 					
 						$out.= '<div role="main" class="ui-content">';							
 										
