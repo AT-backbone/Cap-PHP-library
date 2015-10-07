@@ -93,6 +93,13 @@
 		$conv->using['msgType']																= 1;
 		$conv->using['references']														= 1;
 		$conv->using['scope']																	= 1;
+		
+		$conv->using['source']																= 0;		
+		$conv->using['restriction']														= 0;
+		$conv->using['addresses']															= 0;
+		$conv->using['code']																	= 0;
+		$conv->using['note']																	= 0;
+		$conv->using['incidents']															= 0;
        									
 		$conv->using['language']															= 1;
 		$conv->using['category']															= 1;

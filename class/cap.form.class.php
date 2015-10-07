@@ -666,6 +666,13 @@
 			$type['alert']['detail'][] = "eventCode";
 			$type['alert']['detail'][] = "parameter";
 			
+			$type['alert']['detail'][] = "source";
+			$type['alert']['detail'][] = "restriction";
+			$type['alert']['detail'][] = "addresses";
+			$type['alert']['detail'][] = "code";
+			$type['alert']['detail'][] = "note";
+			$type['alert']['detail'][] = "incidents";
+			
 			// Info Page	
 			//$type['info'][] = "info";
 			$type['info'][] = "lang";
@@ -876,11 +883,11 @@
 							
 							$out.= '<div data-role="footer" data-theme="b">';						
 								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
-								if($Pages_arr[$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
+								if($Pages_arr['#'.$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr['#'.$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr['#'.$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr['#'.$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
+								if($Pages_arr['#'.$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
 							$out.= '</div>';
 							
 						$out.= '</div>';

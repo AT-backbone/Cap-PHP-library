@@ -145,6 +145,13 @@
 					$this->references		= $cap['references'];
 					$this->scope				= $cap['scope'];
 					
+					$this->source					= $cap['source'];
+					$this->restriction		= $cap['restriction'];
+					$this->addresses			= $cap['addresses'];
+					$this->code						= $cap['code'];
+					$this->note						= $cap['note'];
+					$this->incidents			= $cap['incidents'];
+					
 					$this->language			= $cap['info'][0]['language'];
 					$this->category			= $cap['info'][0]['category'];
 					$this->event				= $cap['info'][0]['event'];
@@ -394,10 +401,10 @@
 					{
 						if($bool == 0) unset($this->{$tag});	
 					}
-				
+					
 					$convcap = new CAP_Class($this, true);					
 					$convcap->buildCap();
-					if($conf->cap->save == 1)	$path = $convcap->createFile();
+					$path = $convcap->createFile();
 					
 					return $convcap->cap;	
 				}
