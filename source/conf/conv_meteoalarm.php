@@ -66,3 +66,37 @@
 		$conv->conv->geocode->tag->val[]											= "NUTS3";
 
 		$conv->conv->geocode->tag->val[]											= "EMMA_ID";
+					
+		// meteoalarm using
+		$conv->using['identifier'] 														= 1;
+		$conv->using['sender']																= 1;
+		$conv->using['sent']																	= 1;
+		$conv->using['status']																= 1;
+		$conv->using['msgType']																= 1;
+		$conv->using['references']														= 1;
+		$conv->using['scope']																	= 1;
+       									
+		$conv->using['language']															= 1;
+		$conv->using['category']															= 1;
+		$conv->using['event']																	= 1;
+		$conv->using['responseType']													= 1;
+		$conv->using['urgency']																= 1;
+		$conv->using['severity']															= 1;
+		$conv->using['certainty']															= 1;
+		$conv->using['audience']															= 1;
+		$conv->using['eventCode']															= 0;
+		$conv->using['effective']															= 1;
+		$conv->using['onset']																	= 1;
+		$conv->using['expires']																= 1;
+		$conv->using['senderName']														= 1;
+		$conv->using['headline']															= 1;
+		$conv->using['description']														= 1;
+		$conv->using['instruction']														= 1;
+		$conv->using['web']																		= 1;
+		$conv->using['contact']																= 0;
+		$conv->using['parameter']															= 1;
+    									
+		$conv->using['areaDesc']															= 1;
+		$conv->using['polygon']																= 0;
+		$conv->using['circle']																= 0;
+		$conv->using['geocode']																= 1;
