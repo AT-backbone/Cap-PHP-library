@@ -56,3 +56,5 @@ LabelSetTheTypesOfTheMessageDesc=InfoSetTheTypesOfTheMessage
 LabelSetTheHazardTypeDesc=InfoSetTheHazardType
 LabelSetThePriorityOfTheMessageDesc=Mit den Elementen “urgency”, “severity” und “certainty” wird die Priortät von einer Warnung und den erforderlichen Massnahmen bestimmt.<br><br>“urgency”:<br>Massnahmen ..<br> - “Immediate” - .. sofort ..<br> - “Expected” ..in der nächsten Stunde ..<br> - “Future” - .. in naher Zukunft ..<br> - “Past” - .. nicht mehr<br>  .. einleiten<br><br>“severity”:<br>-“Extreme” - ausserordentliche ..<br>-“Severe” - erhebliche ..<br>-“Moderate” - mögliche ..<br>-“Minor” – minimale ..<br> .. .. Bedrohung für Leben oder Eigentum<br> Nicht “Unknown” wählen!<br><br>“certainty”:<br> “Observed” – ganz sicher<br>“Likely” - wahrscheinlich (p > ~50%)<br>“Possible” - möglich (p <= ~50%)<br>“Unlikely” - unwahrscheinlich (p ~ 0) <br> Nicht “Unknown” wählen!
 ToolboxInfo=mehr Informationen
+
+Convert=Convert
