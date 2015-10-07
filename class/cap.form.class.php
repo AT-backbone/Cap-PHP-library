@@ -1029,19 +1029,21 @@
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 			
 								$converter = $conf->converter;
-								print_r($conf->converter);
 								
-								$input = $this->buildSelect("inputconverter", $converter, "", "", "standard");
-								$output = $this->buildSelect("outputconverter", $converter, "", "", "standard"); 
+								$input = $this->buildSelect("inputconverter", $converter, "data-native-menu=\"false\"", "", "standard");
+								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard"); 
 								
 									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
 										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip($type, $langs->trans("InfoSelectInputandOutputCap")).'</legend>';							
 											$out.= $input;					
 											$out.= $output;							
 									$out.= '</fieldset>';
-								
+									
+									
+									$out.= '<input type="file" name="uploadfile" id="uploadfile">';
+									// or								
 									$out.= '<fieldset data-role="controlgroup">';
-										$out.= '<legend>Caps:</legend>';
+										$out.= '<legend>'.$langs->trans("SelectCaps").':</legend>';
 											foreach(scandir($conf->cap->output) as $num => $capfilename)
 											{
 												if($num > 1)
@@ -1067,7 +1069,7 @@
 				$out.= '</form>';			
 			$out.= '</body>';
 			
-			print $out;
+			return $out;
 		}
 		
 		function Webservice($ID)
