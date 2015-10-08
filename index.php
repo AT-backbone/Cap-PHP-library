@@ -81,7 +81,7 @@
 	{
 		require_once 'lib/cap.read.class.php';
 		
-		$location = "source/cap/".$_POST['location'];
+		$location = $conf->cap->output.'/'.$_POST['location'];
 		$alert = new alert($location);
 		$cap = $alert->output();
 

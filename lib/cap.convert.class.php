@@ -418,7 +418,7 @@
 			 */
 			$convcap = new CAP_Class($this, true);					
 			$convcap->buildCap();
-			$convcap->destination = $cap_output_path.'/converter';
+			$convcap->destination = $cap_output_path;
 			$path = $convcap->createFile();
 			
 			return $convcap->cap;	
