@@ -182,7 +182,7 @@
 					 */
 					 
 					// Get geocodes
-					include './convert/conv_geocode.php';
+					include './convert/area_nuts.conf.php';
 					$geocode = $standard;
 					unset($standard);
 					
@@ -194,7 +194,7 @@
 					if($output != "standard")
 					{
 						// Get standard if not included
-						include './convert/conv_standard.php';
+						include './convert/std_meteorology.php';
 						$standard = $conv;
 						unset($conv);
 						

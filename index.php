@@ -119,6 +119,7 @@
 		{
 			// Used to build the cap and save it at $cap->destination
 			$cap->buildCap();
+			$cap->destination = $conf->cap->output;
 			if($conf->cap->save == 1)	$path = $cap->createFile();
 			
 			$conf->identifier->ID_ID++;

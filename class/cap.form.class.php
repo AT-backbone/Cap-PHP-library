@@ -831,7 +831,7 @@
     						$out.= '<ul data-role="listview">';
     							
     							$out.= '<li style="height: 91px;">';
-    								$out.= '<img src="conf.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
     								$out.= '<h1>';
     									$out.= 'Cap Creator';
     								$out.= '</h1>';
@@ -1089,7 +1089,44 @@
 						$out.= '<div role="main" class="ui-content">';							
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
-			
+								
+								// get all convert files
+								$std_tmp = scandir('convert/');								
+								foreach($std_tmp as $num => $filename)
+								{
+									if(substr($filename, 0, 4) != "std_") 
+									{
+										unset($std_tmp[$num]);
+									}
+									else
+									{
+										$std_converter[substr($filename, 4, -9)] = substr($filename, 4, -9);
+									}
+								}
+								
+								$area_tmp = scandir('convert/');								
+								foreach($area_tmp as $num => $filename)
+								{
+									if(substr($filename, 0, 5) != "area_") 
+									{
+										unset($area_tmp[$num]);
+									}
+									else
+									{
+										$area_converter[substr($filename, 5, -9)] = substr($filename, 5, -9);
+									}
+								}
+
+								
+								$std = $this->buildSelect("stdconverter", $std_converter, "data-native-menu=\"false\"", "", "standard");
+								$area = $this->buildSelect("areaconverter", $area_converter, "data-native-menu=\"false\"", "", "standard"); 
+								
+									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
+										$out.= '<legend>'.$langs->trans("SelectStdAreaCap").': '.$this->tooltip($type, $langs->trans("InfoSelectStdAreaCap")).'</legend>';							
+											$out.= $std;					
+											$out.= $area;							
+									$out.= '</fieldset>';
+								
 								// get all convert files
 								$converter_tmp = scandir('convert/');								
 								foreach($converter_tmp as $num => $filename)
@@ -1098,13 +1135,9 @@
 									{
 										unset($converter_tmp[$num]);
 									}
-									elseif($filename == "conv_geocode.php") 
-									{
-										unset($converter_tmp[$num]);
-									}
 									else
 									{
-										$converter[substr($filename, 5, -4)] = substr($filename, 5, -4);
+										$converter[substr($filename, 5, -9)] = substr($filename, 5, -9);
 									}
 								}
 								
