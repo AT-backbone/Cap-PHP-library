@@ -321,7 +321,7 @@
      */
 		function createFile()
 		{
-			$capfile = fopen($this->destination.'/'.$this->identifier.'.cap', "w") or die("Unable to open file!");
+			$capfile = fopen($this->destination.'/'.$this->identifier.'.cap', "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.'.cap');
 			fwrite($capfile, $this->cap);
 			fclose($capfile);
 			

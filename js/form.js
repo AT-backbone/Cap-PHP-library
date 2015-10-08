@@ -1,6 +1,10 @@
 			$( document ).ready(function() 
 			{
-
+				// Inital ClockPicker Addon
+				$('.clockpicker').clockpicker().find('input').change(function(){
+					console.log(this.value);
+				});
+				
 				updateCapXML();
 								
 				$( "input, select" ).change(function() {

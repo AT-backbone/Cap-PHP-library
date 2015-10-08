@@ -150,13 +150,24 @@
 					break;
 					
 				case 'sent':
-					$st = $this->make_cap_time($this->sent);
+					if($this->sent) $st = $this->make_cap_time($this->sent);
 					$out = '<div id="Sentapend">';
 						$out.= '<label>'.$langs->trans("LabelSent").': '.$this->tooltip($type, $langs->trans("LabelSentDesc")).'</label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="sent[date]" value="'.$st['date'].'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="sent[time]" step="1" value="'.$st['time'].'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="sent[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;">';
+								$out.= '<input type="date" name="sent[date]" value="'.$st['date'].'">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;">';
+								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+									$out.= '<input  type="time" name="sent[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+										$out.= '<span class="glyphicon glyphicon-time"></span>';
+									$out.= '</span>';
+								$out.= '</div>';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;">';
+								$out.= '<input type="time" name="sent[UTC]" value="'.$st['zone'].'">';
+							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
@@ -231,38 +242,80 @@
 					$out.= '</div>';
 					break;
 				
+				case 'effective-Clock':
+						$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+							$out.= '<input type="time" class="form-control" value="09:30" step="2">';
+							$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+								$out.= '<span class="glyphicon glyphicon-time"></span>';
+							$out.= '</span>';
+						$out.= '</div>';
+					break;
+				
 				case 'effective': 					
-					$st = $this->make_cap_time($this->effective);
+					if($this->effective) $st = $this->make_cap_time($this->effective);
 					$out = '<div id="Effectiveapend">';
 						$out.= '<label>'.$langs->trans("LabelEffective").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="effective[date]" value="'.$st['date'].'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="effective[time]" step="1" value="'.$st['time'].'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="effective[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;">';
+								$out.= '<input type="date" name="effective[date]" value="'.$st['date'].'">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;">';
+								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+									$out.= '<input  type="time" name="effective[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+										$out.= '<span class="glyphicon glyphicon-time"></span>';
+									$out.= '</span>';
+								$out.= '</div>';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;">';
+								$out.= '<input type="time" name="effective[UTC]" value="'.$st['zone'].'">';
+							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 
 				case 'onset': 					
-					$st = $this->make_cap_time($this->onset);
+					if($this->onset) $st = $this->make_cap_time($this->onset);
 					$out = '<div id="Onsetapend">';
 						$out.= '<label>'.$langs->trans("LabelOnset").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="onset[date]" value="'.$st['date'].'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="onset[time]" step="1" value="'.$st['time'].'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="onset[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;">';
+								$out.= '<input type="date" name="onset[date]" value="'.$st['date'].'">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;">';
+								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+									$out.= '<input  type="time" name="onset[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+										$out.= '<span class="glyphicon glyphicon-time"></span>';
+									$out.= '</span>';
+								$out.= '</div>';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;">';
+								$out.= '<input type="time" name="onset[UTC]" value="'.$st['zone'].'">';
+							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 					
 				case 'expires': 					
-					$st = $this->make_cap_time($this->expires);
+					if($this->expires) $st = $this->make_cap_time($this->expires);
 					$out = '<div id="Expieresapend">';
 						$out.= '<label>'.$langs->trans("LabelExpires").': </label>';
 						$out.= '<div class="ui-grid-b">';
-							$out.= '<div class="ui-block-a" style="width: 155px;"><input type="date" name="expieres[date]" value="'.$st['date'].'"></div>';
-							$out.= '<div class="ui-block-b" style="width: 155px;"><input type="time" name="expieres[time]" step="1" value="'.$st['time'].'"></div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;"><input type="time" name="expieres[UTC]" value="'.$st['zone'].'"></div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
+							$out.= '<div class="ui-block-a" style="width: 155px;">';
+								$out.= '<input type="date" name="expires[date]" value="'.$st['date'].'">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-b" style="width: 155px;">';
+								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+									$out.= '<input  type="time" name="expires[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+										$out.= '<span class="glyphicon glyphicon-time"></span>';
+									$out.= '</span>';
+								$out.= '</div>';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-c" style="width: 155px;">';
+								$out.= '<input type="time" name="expires[UTC]" value="'.$st['zone'].'">';
+							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
@@ -527,7 +580,11 @@
 					 * Default
 					 */
 					default:
-							$out = '<input type="text" placeholder="'.$type.'" name="'.$type.'">';
+							
+							$out = '<div>';
+								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Label".$type)).'</label>';
+								$out.= '<input type="text" placeholder="'.$type.'" name="'.$type.'">';
+							$out.= '</div>';
 						break;
 			}
 			//$out.= $this->InputStandard('sent');
@@ -675,6 +732,8 @@
      	// Detail Page
      	$type['alert']['detail'][] = "sent";
      	
+     	$type['alert']['detail'][] = "effective-Clock";
+     	
       $type['alert']['detail'][] = "effective";
       $type['alert']['detail'][] = "onset";
       $type['alert']['detail'][] = "expires";
@@ -796,6 +855,10 @@
  				
  				// OpenStreetMap
 				$out.= '<script src="includes/jquery/jquery.geo.min.js"></script>';
+				
+				// Clockpicker Addon
+				$out.= '<link rel="stylesheet" type="text/css" href="includes/plugin/jquery-clockpicker.min.css">';
+				$out.= '<script type="text/javascript" src="includes/plugin/jquery-clockpicker.min.js"></script>';
 				
 				$out.= '<title>Cap Creator</title>';
 

@@ -119,157 +119,145 @@
 		/**
      * Converts Caps to standard and then to output
      *
+     * @param 	Array			the cap     
    	 * @param 	string    path of the Standrad  convert file
      * @param 	string    path of the Area convert file
      * @param 	string    path of the input  convert file
      * @param 	string    path of the output convert file
-     * @param 	Array			the cap     
+     * @param 	string    path to the ouput from the cap     
      * @return	array 		convertet cap or error
      */
-		function convert($cap, $std_c, $area_c, $input, $output)
+		function convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)
 		{
 			require_once 'lib/cap.create.class.php';
 			
-			if(file_exists('./convert/conv_'.$input.'.conf.php'))
+			if(!file_exists('./convert/std_'.$std_c.'.conf.php'))
 			{
-				if(file_exists('./convert/conv_'.$output.'.conf.php'))
+				return 'Coud not found: ./convert/std_'.$std_c.'.conf.php';
+			}
+			if(!file_exists('./convert/area_'.$area_c.'.conf.php'))
+			{
+				return 'Coud not found: ./convert/std_'.$area_c.'.conf.php';
+			}			
+			if(!file_exists('./convert/conv_'.$input.'.conf.php'))
+			{
+				return 'Coud not found: ./convert/std_'.$input.'.conf.php';
+			}
+			if(!file_exists('./convert/conv_'.$output.'.conf.php'))
+			{
+				return 'Coud not found: ./convert/std_'.$output.'.conf.php';
+			}
+			
+			/**
+			 * Write Cap in $this
+			 */
+			
+			$this->output 			= $cap['output'];
+			$this->identifier 	= $cap['identifier'];
+			$this->sender				= $cap['sender'];
+			$this->sent					= $cap['sent'];
+			$this->status				= $cap['status'];
+			$this->msgType			= $cap['msgType'];
+			$this->references		= $cap['references'];
+			$this->scope				= $cap['scope'];
+			
+			$this->source					= $cap['source'];
+			$this->restriction		= $cap['restriction'];
+			$this->addresses			= $cap['addresses'];
+			$this->code						= $cap['code'];
+			$this->note						= $cap['note'];
+			$this->incidents			= $cap['incidents'];
+			
+			$this->language			= $cap['info'][0]['language'];
+			$this->category			= $cap['info'][0]['category'];
+			$this->event				= $cap['info'][0]['event'];
+			$this->responseType	= $cap['info'][0]['responseType'][0];
+			$this->urgency			= $cap['info'][0]['urgency'];
+			$this->severity			= $cap['info'][0]['severity'];
+			$this->certainty		= $cap['info'][0]['certainty'];
+			$this->audience			= $cap['info'][0]['audience'];
+			$this->eventCode		= $cap['info'][0]['eventCode'];
+			$this->effective		= $cap['info'][0]['effective'];
+			$this->onset				= $cap['info'][0]['onset'];
+			$this->expires			= $cap['info'][0]['expires'];
+			$this->senderName		= $cap['info'][0]['senderName'];
+			$this->headline			= $cap['info'][0]['headline'];
+			$this->description	= $cap['info'][0]['description'];
+			$this->instruction	= $cap['info'][0]['instruction'];
+			$this->web					= $cap['info'][0]['web'];
+			$this->contact			= $cap['info'][0]['contact'];
+			$this->parameter		= $cap['info'][0]['parameter'];
+
+			$this->areaDesc			= $cap['info'][0]['area'][0]['areaDesc'];
+			$this->polygon			= $cap['info'][0]['area'][0]['polygon'];
+			$this->circle				= $cap['info'][0]['area'][0]['circle'];
+			$this->geocode			= $cap['info'][0]['area'][0]['geocode'];
+			
+			/**
+			 * Include Cap converter files
+			 */
+			 
+			// Get geocodes
+			include './convert/area_'.$area_c.'.conf.php';
+			$geocode = $standard;
+			unset($standard);
+			
+			// Get input style
+			include './convert/conv_'.$input.'.conf.php';
+			$input = $conv;
+			unset($conv);
+			
+			// Get standard if not included
+			include './convert/std_'.$std_c.'.conf.php';
+			$standard = $conv;
+			unset($conv);
+			
+			// Get output style
+			include './convert/conv_'.$output.'.conf.php';
+			$output = $conv;
+			unset($conv);
+
+			/**
+			 * Input Cap -> Standard
+			 */ 
+			 
+			if(!empty($input->conv->hazard->type->tag->name))
+			{
+				foreach($cap['info'][0][$input->conv->hazard->type->tag->name] as $val_arr)
 				{
-					/**
-					 * Write Cap in $this
-					 */
-					
-					$this->output 			= $cap['output'];
-					$this->identifier 	= $cap['identifier'];
-					$this->sender				= $cap['sender'];
-					$this->sent					= $cap['sent'];
-					$this->status				= $cap['status'];
-					$this->msgType			= $cap['msgType'];
-					$this->references		= $cap['references'];
-					$this->scope				= $cap['scope'];
-					
-					$this->source					= $cap['source'];
-					$this->restriction		= $cap['restriction'];
-					$this->addresses			= $cap['addresses'];
-					$this->code						= $cap['code'];
-					$this->note						= $cap['note'];
-					$this->incidents			= $cap['incidents'];
-					
-					$this->language			= $cap['info'][0]['language'];
-					$this->category			= $cap['info'][0]['category'];
-					$this->event				= $cap['info'][0]['event'];
-					$this->responseType	= $cap['info'][0]['responseType'][0];
-					$this->urgency			= $cap['info'][0]['urgency'];
-					$this->severity			= $cap['info'][0]['severity'];
-					$this->certainty		= $cap['info'][0]['certainty'];
-					$this->audience			= $cap['info'][0]['audience'];
-					$this->eventCode		= $cap['info'][0]['eventCode'];
-					$this->effective		= $cap['info'][0]['effective'];
-					$this->onset				= $cap['info'][0]['onset'];
-					$this->expires			= $cap['info'][0]['expires'];
-					$this->senderName		= $cap['info'][0]['senderName'];
-					$this->headline			= $cap['info'][0]['headline'];
-					$this->description	= $cap['info'][0]['description'];
-					$this->instruction	= $cap['info'][0]['instruction'];
-					$this->web					= $cap['info'][0]['web'];
-					$this->contact			= $cap['info'][0]['contact'];
-					$this->parameter		= $cap['info'][0]['parameter'];
-	
-					$this->areaDesc			= $cap['info'][0]['area'][0]['areaDesc'];
-					$this->polygon			= $cap['info'][0]['area'][0]['polygon'];
-					$this->circle				= $cap['info'][0]['area'][0]['circle'];
-					$this->geocode			= $cap['info'][0]['area'][0]['geocode'];
-					
-					/**
-					 * Include Cap converter files
-					 */
-					 
-					// Get geocodes
-					include './convert/area_nuts.conf.php';
-					$geocode = $standard;
-					unset($standard);
-					
-					// Get input style
-					include './convert/conv_'.$input.'.php';
-					$input = $conv;
-					unset($conv);
-					
-					if($output != "standard")
+					if( $val_arr['valueName'] ==  $input->conv->hazard->type->tag->val )
 					{
-						// Get standard if not included
-						include './convert/std_meteorology.php';
-						$standard = $conv;
-						unset($conv);
-						
-						// Get output style
-						include './convert/conv_'.$output.'.php';
-						$output = $conv;
-						unset($conv);
+						$ConvCap['type'] =  $input->{$input->conv->hazard->type->tag->val}[$val_arr['value']];
 					}
-					else
+				}						
+			}
+			
+			if(!empty($input->conv->hazard->level->tag->name))
+			{
+				foreach($cap['info'][0][$input->conv->hazard->level->tag->name] as $val_arr)
+				{
+					if( $val_arr['valueName'] ==  $input->conv->hazard->level->tag->val )
 					{
-						// Get output style and standard
-						include './convert/conv_'.$output.'.php';
-						$output = $conv;
-						$standard = $conv;
-						unset($conv);
-					}
-					
-					/**
-					 * Input Cap -> Standard
-					 */ 
-					 
-					if(!empty($input->conv->hazard->type->tag->name))
+						$ConvCap['level'] =  $input->{$input->conv->hazard->level->tag->val}[$val_arr['value']];
+					}							
+				}				
+			}
+			
+			if(!empty($input->conv->geocode->tag->name))
+			{
+				if(is_array($input->conv->geocode->tag->val))
+				{
+					foreach($input->conv->geocode->tag->val as $geocodeval)
 					{
-						foreach($cap['info'][0][$input->conv->hazard->type->tag->name] as $val_arr)
+						if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
 						{
-							if( $val_arr['valueName'] ==  $input->conv->hazard->type->tag->val )
+							foreach($cap['info'][0]['area'] as $key => $tmp)
 							{
-								$ConvCap['type'] =  $input->{$input->conv->hazard->type->tag->val}[$val_arr['value']];
-							}
-						}						
-					}
-					
-					if(!empty($input->conv->hazard->level->tag->name))
-					{
-						foreach($cap['info'][0][$input->conv->hazard->level->tag->name] as $val_arr)
-						{
-							if( $val_arr['valueName'] ==  $input->conv->hazard->level->tag->val )
-							{
-								$ConvCap['level'] =  $input->{$input->conv->hazard->level->tag->val}[$val_arr['value']];
-							}							
-						}				
-					}
-					
-					if(!empty($input->conv->geocode->tag->name))
-					{
-						if(is_array($input->conv->geocode->tag->val))
-						{
-							foreach($input->conv->geocode->tag->val as $geocodeval)
-							{
-								if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
+								foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
 								{
-									foreach($cap['info'][0]['area'] as $key => $tmp)
+									if( $val_arr['valueName'] ==  $geocodeval )
 									{
-										foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
-										{
-											if( $val_arr['valueName'] ==  $geocodeval )
-											{
-												$ConvCap['geocode'][$val_arr['value']] =  $geocode->geocode->nuts[$val_arr['value']]; // geocode->nuts['NL32']
-											}
-										}
-									}
-								}
-								else
-								{
-									foreach($cap['info'][0]['area'] as $key => $tmp)
-									{
-										foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
-										{
-											if( $val_arr['valueName'] ==  $geocodeval )
-											{
-												$ConvCap['geocode'][$input->{$geocodeval}[$val_arr['value']]] =  $input->{$geocodeval}[$val_arr['value']];
-											}
-										}
+										$ConvCap['geocode'][$val_arr['value']] =  $geocode->geocode->nuts[$val_arr['value']]; // geocode->nuts['NL32']
 									}
 								}
 							}
@@ -280,141 +268,155 @@
 							{
 								foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
 								{
-									if( $val_arr['valueName'] ==  $input->conv->geocode->tag->val )
+									if( $val_arr['valueName'] ==  $geocodeval )
 									{
-										$ConvCap['geocode'][$input->{$input->conv->geocode->tag->val}[$val_arr['value']]] =  $input->{$input->conv->geocode->tag->val}[$val_arr['value']];
-									}				
+										$ConvCap['geocode'][$input->{$geocodeval}[$val_arr['value']]] =  $input->{$geocodeval}[$val_arr['value']];
+									}
 								}
 							}
 						}
-						$ConvCap['geocode'] = array_unique($ConvCap['geocode']);
 					}
-					
-					/**
-					 * Standard -> Output Cap 
-					 */ 
-			 
-					if(!empty($output->conv->hazard->type->tag->name))
+				}
+				else
+				{
+					foreach($cap['info'][0]['area'] as $key => $tmp)
 					{
-						$output_to_flip = $output->{$output->conv->hazard->type->tag->val};
-						$output_val = array_flip($output_to_flip);
-						$ToConvCap[$output->conv->hazard->type->tag->name][$output->conv->hazard->type->tag->val] =  $output_val[$ConvCap['type']];										
-					}
-					
-					if(!empty($output->conv->hazard->level->tag->name))
-					{
-						$output_to_flip = $output->{$output->conv->hazard->level->tag->val};
-						$output_val = array_flip($output_to_flip);
-						$ToConvCap[$output->conv->hazard->level->tag->name][$output->conv->hazard->level->tag->val] =  $output_val[$ConvCap['level']];			
-					}
-					
-					
-					if(!empty($output->conv->geocode->tag->name))
-					{
-						if(is_array($output->conv->geocode->tag->val))
+						foreach($cap['info'][0]['area'][$key][$input->conv->geocode->tag->name] as $val_arr)
 						{
-							foreach($output->conv->geocode->tag->val as $geocodeval)
+							if( $val_arr['valueName'] ==  $input->conv->geocode->tag->val )
 							{
-								if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
+								$ConvCap['geocode'][$input->{$input->conv->geocode->tag->val}[$val_arr['value']]] =  $input->{$input->conv->geocode->tag->val}[$val_arr['value']];
+							}				
+						}
+					}
+				}
+				$ConvCap['geocode'] = array_unique($ConvCap['geocode']);
+			}
+			
+			/**
+			 * Standard -> Output Cap 
+			 */ 
+	 
+			if(!empty($output->conv->hazard->type->tag->name))
+			{
+				$output_to_flip = $output->{$output->conv->hazard->type->tag->val};
+				$output_val = array_flip($output_to_flip);
+				$ToConvCap[$output->conv->hazard->type->tag->name][$output->conv->hazard->type->tag->val] =  $output_val[$ConvCap['type']];										
+			}
+			
+			if(!empty($output->conv->hazard->level->tag->name))
+			{
+				$output_to_flip = $output->{$output->conv->hazard->level->tag->val};
+				$output_val = array_flip($output_to_flip);
+				$ToConvCap[$output->conv->hazard->level->tag->name][$output->conv->hazard->level->tag->val] =  $output_val[$ConvCap['level']];			
+			}
+			
+			
+			if(!empty($output->conv->geocode->tag->name))
+			{
+				if(is_array($output->conv->geocode->tag->val))
+				{
+					foreach($output->conv->geocode->tag->val as $geocodeval)
+					{
+						if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
+						{
+							foreach($ConvCap['geocode'] as $key => $geo_code_val)
+							{
+								if(strlen($key) == 3) // NUTS NUTS1
 								{
-									foreach($ConvCap['geocode'] as $key => $geo_code_val)
-									{
-										if(strlen($key) == 3) // NUTS NUTS1
-										{
-											$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
-										}
-										elseif(strlen($key) == 4)
-										{
-											$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
-										}
-										elseif(strlen($key) == 5)
-										{
-											$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
-										}
-									}													
+									$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
 								}
-							}
-						}
-						else
-						{
-							$geocodeval = $output->conv->geocode->tag->val;
-							if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
-							{
-								foreach($ConvCap['geocode'] as $key => $geo_code_val)
-								{									
-									if(strlen($key) == 3) // NUTS NUTS1
-									{
-										$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
-									}
-									elseif(strlen($key) == 4)
-									{
-										$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
-									}
-									elseif(strlen($key) == 5)
-									{
-										$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
-									}
-								}							
-							}
-							else
-							{
-								$output_to_flip = $output->{$output->conv->geocode->tag->val};
-								$output_val = array_flip($output_to_flip);
-								foreach($ConvCap['geocode'] as $key => $geo_code_val)
+								elseif(strlen($key) == 4)
 								{
-									$ToConvCap[$output->conv->geocode->tag->name][$output->conv->geocode->tag->val] =  $output_val[$key];		
+									$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
 								}
-							}
+								elseif(strlen($key) == 5)
+								{
+									$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
+								}
+							}													
 						}
 					}
-					
-					unset($this->eventCode);
-					unset($this->parameter);
-					unset($this->geocode);
-					unset($this->area);
-
-					$tmp = $this->language;
-					unset($this->language);
-					$this->language[] = $tmp;
-
-					foreach($ToConvCap as $key => $arr)
+				}
+				else
+				{
+					$geocodeval = $output->conv->geocode->tag->val;
+					if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
 					{
-						$i=0;
-						foreach($ToConvCap[$key] as $key2 => $arr2)
+						foreach($ConvCap['geocode'] as $key => $geo_code_val)
+						{									
+							if(strlen($key) == 3) // NUTS NUTS1
+							{
+								$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
+							}
+							elseif(strlen($key) == 4)
+							{
+								$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
+							}
+							elseif(strlen($key) == 5)
+							{
+								$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
+							}
+						}							
+					}
+					else
+					{
+						$output_to_flip = $output->{$output->conv->geocode->tag->val};
+						$output_val = array_flip($output_to_flip);
+						foreach($ConvCap['geocode'] as $key => $geo_code_val)
 						{
-							if($key == "eventCode" || $key == "parameter")
-							{
-								$this->{$key}["valueName"][] = $key2;
-								$this->{$key}["value"][]		 = $arr2;
-							}
-							elseif($key == "geocode")
-							{
-								$this->{$key}["valueName"][] = $key2;
-								$this->{$key}["value"][]		 = $arr2;
-							}
-							else
-							{
-								$this->{$key}[$key2] = $ToConvCap[$key][$key2];
-							}
+							$ToConvCap[$output->conv->geocode->tag->name][$output->conv->geocode->tag->val] =  $output_val[$key];		
 						}
 					}
-					
-					foreach($output->using as $tag => $bool)
-					{
-						if($bool == 0) unset($this->{$tag});	
-					}
-					
-					$convcap = new CAP_Class($this, true);					
-					$convcap->buildCap();
-					$path = $convcap->createFile();
-					
-					return $convcap->cap;	
 				}
 			}
-			else
+			
+			unset($this->eventCode);
+			unset($this->parameter);
+			unset($this->geocode);
+			unset($this->area);
+
+			$tmp = $this->language;
+			unset($this->language);
+			$this->language[] = $tmp;
+
+			foreach($ToConvCap as $key => $arr)
 			{
-				return -1;
+				$i=0;
+				foreach($ToConvCap[$key] as $key2 => $arr2)
+				{
+					if($key == "eventCode" || $key == "parameter")
+					{
+						$this->{$key}["valueName"][] = $key2;
+						$this->{$key}["value"][]		 = $arr2;
+					}
+					elseif($key == "geocode")
+					{
+						$this->{$key}["valueName"][] = $key2;
+						$this->{$key}["value"][]		 = $arr2;
+					}
+					else
+					{
+						$this->{$key}[$key2] = $ToConvCap[$key][$key2];
+					}
+				}
 			}
+			
+			foreach($output->using as $tag => $bool)
+			{
+				if($bool == 0) unset($this->{$tag});	
+			}
+			
+			/**
+			 * Create Convert Cap File
+			 *
+			 */
+			$convcap = new CAP_Class($this, true);					
+			$convcap->buildCap();
+			$convcap->destination = $cap_output_path;
+			$path = $convcap->createFile();
+			
+			return $convcap->cap;	
 		}
 			
 		/*
