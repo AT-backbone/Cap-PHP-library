@@ -69,7 +69,7 @@
 			$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $conf->cap->output);
 			
 			$form = new CAP_Form();
-			print $form->CapView($capconvertet, 'converter/'.$cap[identifier]); // Cap Preview +
+			print $form->CapView($capconvertet, $cap[identifier]); // Cap Preview +
 		}
 		else
 		{
