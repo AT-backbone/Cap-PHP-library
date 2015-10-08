@@ -76,5 +76,5 @@ Labelcode=code
 Infocode=Info code
 Labelnote=Note
 Infonote=Info Note
-Labelincidents=
-Infoincidents=Info Source
+Labelincidents=incidents
+Infoincidents=Info incidents
