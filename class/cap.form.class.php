@@ -732,8 +732,6 @@
      	// Detail Page
      	$type['alert']['detail'][] = "sent";
      	
-     	$type['alert']['detail'][] = "effective-Clock";
-     	
       $type['alert']['detail'][] = "effective";
       $type['alert']['detail'][] = "onset";
       $type['alert']['detail'][] = "expires";
