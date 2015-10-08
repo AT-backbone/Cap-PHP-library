@@ -38,7 +38,7 @@
 	$conv->polygon			 																		= "";
 	$conv->circle				 																		= "";
 
-	// posible hazard types
+	// possible hazard types
 	$conv->hazard->type[]																		= "thunderstorm";
 	$conv->hazard->type[]																		= "wind";
 	$conv->hazard->type[]																		= "rain";
@@ -57,7 +57,7 @@
 	$conv->hazard->type[]																		= "rain-flood";
 	$conv->hazard->type[]																		= "avalanches";
 	
-	// posible hazard level
+	// possible hazard level
 	$conv->hazard->level[] 																	= 0;
 	$conv->hazard->level[] 																	= 1;
 	$conv->hazard->level[] 																	= 2;
