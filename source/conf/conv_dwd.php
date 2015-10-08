@@ -52,11 +52,11 @@
 		$conv->AREA_COLOR["255 128 128"] 														= 1; 	// Rosa Vorabinformation
 		$conv->AREA_COLOR["255 255 0"] 															= 2;	// Gelb Wetterwarnung
 		$conv->AREA_COLOR["255 255 0"] 															= 3;	// Gelb Wetterwarnung
-		$conv->AREA_COLOR["255 153 0"] 															= 4; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 255 0"] 															= 4;	// Gelb Wetterwarnung
 		$conv->AREA_COLOR["255 153 0"] 															= 5; 	// Orange Markantes Wetter
-		$conv->AREA_COLOR["255 0 0"] 																= 6; 	// Rot Unwetterwarnung
-		$conv->AREA_COLOR["255 0 0"] 																= 7; 	// Rot Unwetterwarnung
-		$conv->AREA_COLOR["175 0 100"] 															= 8;	// Violett Extreme Wetterwarnung		
+		$conv->AREA_COLOR["255 153 0"] 															= 6; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 153 0"] 															= 7; 	// Orange Markantes Wetter
+		$conv->AREA_COLOR["255 0 0"] 																= 8; 	// Rot Unwetterwarnung
 		$conv->AREA_COLOR["175 0 100"] 															= 9;	// Violett Extreme Wetterwarnung	
 	
 	
@@ -84,3 +84,44 @@
 	$conv->STATE['ST'] 																						= "DEE";
 	$conv->STATE['SH'] 																						= "DEF";
 	$conv->STATE['TH'] 																						= "DEG";
+	
+		// DWD using
+		$conv->using['identifier'] 														= 1;
+		$conv->using['sender']																= 1;
+		$conv->using['sent']																	= 1;
+		$conv->using['status']																= 1;
+		$conv->using['msgType']																= 1;
+		$conv->using['references']														= 1;
+		$conv->using['scope']																	= 1;
+		
+		$conv->using['source']																= 0;		
+		$conv->using['restriction']														= 0;
+		$conv->using['addresses']															= 0;
+		$conv->using['code']																	= 0;
+		$conv->using['note']																	= 0;
+		$conv->using['incidents']															= 0;
+       									
+		$conv->using['language']															= 1;
+		$conv->using['category']															= 1;
+		$conv->using['event']																	= 1;
+		$conv->using['responseType']													= 1;
+		$conv->using['urgency']																= 1;
+		$conv->using['severity']															= 1;
+		$conv->using['certainty']															= 1;
+		$conv->using['audience']															= 1;
+		$conv->using['eventCode']															= 1;
+		$conv->using['effective']															= 1;
+		$conv->using['onset']																	= 1;
+		$conv->using['expires']																= 1;
+		$conv->using['senderName']														= 1;
+		$conv->using['headline']															= 1;
+		$conv->using['description']														= 1;
+		$conv->using['instruction']														= 1;
+		$conv->using['web']																		= 1;
+		$conv->using['contact']																= 1;
+		$conv->using['parameter']															= 0;
+    									
+		$conv->using['areaDesc']															= 1;
+		$conv->using['polygon']																= 1;
+		$conv->using['circle']																= 0;
+		$conv->using['geocode']																= 1;
