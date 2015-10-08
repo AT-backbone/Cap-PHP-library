@@ -65,3 +65,16 @@ Read=Read
 TitleCapList=Cap List
 SelectStdAreaCap=Select the Standard and Area Translation
 InfoSelectStdAreaCap=Select the Standard Cap Translation and Area Cap Translation
+
+Labelsource=Source
+Infosource=Info Source
+Labelrestriction=restriction
+Inforestriction=Info restriction
+Labeladdresses=addresses
+Infoaddresses=Info addresses
+Labelcode=code
+Infocode=Info code
+Labelnote=Note
+Infonote=Info Note
+Labelincidents=
+Infoincidents=Info Source

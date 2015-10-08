@@ -582,7 +582,7 @@
 					default:
 							
 							$out = '<div>';
-								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Label".$type)).'</label>';
+								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Info".$type)).'</label>';
 								$out.= '<input type="text" placeholder="'.$type.'" name="'.$type.'">';
 							$out.= '</div>';
 						break;
