@@ -371,6 +371,11 @@
 				}
 			}
 			
+			foreach($output->std as $tagName => $val)
+			{
+				$this->{$tagName} =	$val;
+			}
+			
 			unset($this->eventCode);
 			unset($this->parameter);
 			unset($this->geocode);
@@ -413,7 +418,7 @@
 			 */
 			$convcap = new CAP_Class($this, true);					
 			$convcap->buildCap();
-			$convcap->destination = $cap_output_path;
+			$convcap->destination = $cap_output_path.'/converter';
 			$path = $convcap->createFile();
 			
 			return $convcap->cap;	

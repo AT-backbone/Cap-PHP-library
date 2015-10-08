@@ -1277,7 +1277,7 @@
 									// decryp password
 									$conf->webservice->password = $this->encrypt_decrypt(2, $conf->webservice->password);
 									
-									include("cap.webservices.php");
+									include("lib/cap.webservices.php");
 									
 									$conf->webservice->password = $this->encrypt_decrypt(1, $conf->webservice->password);
 									

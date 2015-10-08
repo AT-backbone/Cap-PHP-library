@@ -9,7 +9,7 @@
 	$conv->name 																						= "meteoalarm";
 	
 	// Diffrents to a standard Cap or importent value's
-	$conv->category 																				= "met";
+	$conv->std->category 																		= "met";
 	
 	$conv->responseType 																		= "none";
 	

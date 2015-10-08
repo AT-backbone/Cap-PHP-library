@@ -9,7 +9,7 @@
 	$conv->name 																									= "dwd";
 	
 	// Diffrents to a standard Cap or importent value's
-	$conv->category 																							= "met";
+	$conv->std->category 																							= "met";
 	
 	$conv->eventCode[]																						= "PROFILE_VERSION";
 	$conv->eventCode[]																						= "LICENSE";
