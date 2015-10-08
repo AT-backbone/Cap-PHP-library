@@ -64,3 +64,5 @@ InfoSelectInputandOutputCap=Select the Input Cap Translation and Output Cap Tran
 SelectCaps=or select Caps
 Read=Read
 TitleCapList=Cap List
+SelectStdAreaCap=Select the Standard and Area Translation
+InfoSelectStdAreaCap=Select the Standard Cap Translation and Area Cap Translation

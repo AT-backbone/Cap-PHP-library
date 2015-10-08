@@ -119,18 +119,20 @@
 		/**
      * Converts Caps to standard and then to output
      *
+   	 * @param 	string    path of the Standrad  convert file
+     * @param 	string    path of the Area convert file
      * @param 	string    path of the input  convert file
      * @param 	string    path of the output convert file
      * @param 	Array			the cap     
      * @return	array 		convertet cap or error
      */
-		function convert($cap, $input, $output = "standard")
+		function convert($cap, $std_c, $area_c, $input, $output)
 		{
 			require_once 'lib/cap.create.class.php';
 			
-			if(file_exists('./convert/conv_'.$input.'.php'))
+			if(file_exists('./convert/conv_'.$input.'.conf.php'))
 			{
-				if(file_exists('./convert/conv_'.$output.'.php'))
+				if(file_exists('./convert/conv_'.$output.'.conf.php'))
 				{
 					/**
 					 * Write Cap in $this
