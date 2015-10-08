@@ -1,15 +1,12 @@
 <?php
 date_default_timezone_set('Europe/Vienna');
+$conf = new stdClass();
 $conf->timezone->set_default                           = 'Europe/Vienna';
 
 $conf->user->lang                                      = 'de_DE';
 
 $conf->cap->save                                       = 1;
 $conf->cap->output                                     = 'source/cap';
-
-$conf->converter['standard'] 													 = 'Standard Cap';
-$conf->converter['dwd'] 															 = 'DWD';
-$conf->converter['meteoalarm'] 												 = 'Meteoalarm';
 
 $conf->identifier->WMO_OID                             = '2.49.0.20.0';
 $conf->identifier->ISO                                 = 'AT';

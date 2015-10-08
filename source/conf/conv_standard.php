@@ -37,7 +37,6 @@
 	$conv->areaDesc			 																		= "";
 	$conv->polygon			 																		= "";
 	$conv->circle				 																		= "";
-	
 
 	// posible hazard types
 	$conv->hazard->type[]																		= "thunderstorm";

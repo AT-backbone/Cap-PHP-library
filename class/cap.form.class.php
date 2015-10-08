@@ -504,8 +504,24 @@
 							$out = $langs->trans("webservice_WS_DOL_URL").':<input type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
 						
-					case 'capview';
+					case 'capview':
 							$out = '<textarea readonly="" id="capviewtextarea"></textarea>';
+						break;
+						
+					case 'caplist':
+						$out = '</form><form method="POST" id="capform2" name="capform2" action="index.php?read=1" enctype="multipart/form-data" data-ajax="false">';
+						$out.= '<fieldset data-role="controlgroup">';
+								foreach(scandir($conf->cap->output) as $num => $capfilename)
+								{
+									if($num > 1)
+									{
+										$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
+										$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label>';
+									}
+								}			
+						$out.= '</fieldset>';
+						$out.= '<input type="submit" value="<h1>'.$langs->trans("Read").'</h1>" data-ajax="false">';
+						$out.= '</form><form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 						break;
 					/*
 					 * Default
@@ -646,7 +662,7 @@
      */
 		function Types()
 		{
-			$type['main'][] = "CapButton";
+			//$type['main'][] = "CapButton";
 			
 			// Alert Page		
 			$type['alert'][] = "identifier";	
@@ -665,6 +681,13 @@
       
 			$type['alert']['detail'][] = "eventCode";
 			$type['alert']['detail'][] = "parameter";
+			
+			$type['alert']['detail'][] = "source";
+			$type['alert']['detail'][] = "restriction";
+			$type['alert']['detail'][] = "addresses";
+			$type['alert']['detail'][] = "code";
+			$type['alert']['detail'][] = "note";
+			$type['alert']['detail'][] = "incidents";
 			
 			// Info Page	
 			//$type['info'][] = "info";
@@ -713,7 +736,7 @@
 			
 			$type['capview'][] = 'capview';
 			
-			$type['read'][] = 'readcap';
+			$type['read'][] = 'caplist';
 
       return $type;
 		}
@@ -721,23 +744,27 @@
 		function Pages()
 		{
 			global $langs;
-			$pages['main'] 					= $langs->trans("TitleMain");
+			//$pages['#main'] 					= $langs->trans("TitleMain");
 			
-			$pages['alert'] 				= $langs->trans("TitleAlert");
+			$pages['#alert'] 					= $langs->trans("TitleAlert");
 			//$pages['alert']['next'] = 'info';
 			
-			$pages['info']  				= $langs->trans("TitleInfo");
+			$pages['#info']  					= $langs->trans("TitleInfo");
 			//$pages['info']['next'] 	= 'area';
 			
-			$pages['area']  				= $langs->trans("TitleArea");
+			$pages['#area']  					= $langs->trans("TitleArea");
 			//$pages['area']['next'] 	= 'capview';
 			
-			$pages['capview'] 		 	= $langs->trans("TitleCapView");
+			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
 			//$pages['conf']['send'] 	= true; 
 			
-			$pages['capconv']       = $langs->trans("TitleCapConv")
+			$pages['#read'] 		 		= $langs->trans("TitleCapList");
+			//$pages['conf']['send'] 	= true; 
 			
-			$pages['conf']  				= $langs->trans("TitleConfig");
+			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");
+			$pages['noajax'][]				= '?conv=1#capconv';
+			
+			$pages['#conf']  					= $langs->trans("TitleConfig");
 			
 						
 			return $pages;
@@ -817,8 +844,13 @@
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
-										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
-										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
+										if($link != 'noajax')
+										{
+											if($link == '#'.$pagename) 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+											else 										$out.= '<li><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+										}
+										unset($data);
 									}
 									
 								$out.= '</ul>';
@@ -826,7 +858,7 @@
 							
 							$out.= '<div data-theme="b" data-role="header">';								
 								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-								$out.= '<h1>'.$Pages_arr[$pagename].'</h1>';							
+								$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';							
 							$out.= '</div>';
 							
 							
@@ -836,7 +868,7 @@
 								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 									$out.= '<ul data-role="listview" data-divider-theme="b">';
 									
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr[$pagename].'</h1></li>';
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr['#'.$pagename].'</h1></li>';
 									
 										foreach($TypePage as $key => $type)
 										{							
@@ -870,11 +902,11 @@
 							
 							$out.= '<div data-role="footer" data-theme="b">';						
 								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr[$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
-								if($Pages_arr[$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
+								if($Pages_arr['#'.$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr['#'.$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr['#'.$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
+								if($Pages_arr['#'.$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
+								if($Pages_arr['#'.$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
 							$out.= '</div>';
 							
 						$out.= '</div>';
@@ -1037,8 +1069,13 @@
     							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
-										if($link == $pagename) 	$out.= '<li data-theme="b"><a href="#'.$link.'">'.$Page_Name.'</a></li>';
-										else 										$out.= '<li><a href="#'.$link.'">'.$Page_Name.'</a></li>';
+										if(!in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"'; // turn all links to ajax off (when not jquery can not link to the other pages)
+										if($link != 'noajax')
+										{
+											if($link == '?conv=1#capconv') 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+											else 														$out.= '<li><a href="'.$_SERVER[PHP_SELF].$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+										}
+										unset($data);
 									}
 									
 								$out.= '</ul>';
@@ -1053,7 +1090,23 @@
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 			
-								$converter = $conf->converter;
+								// get all convert files
+								$converter_tmp = scandir('source/conf/');								
+								foreach($converter_tmp as $num => $filename)
+								{
+									if(substr($filename, 0, 5) != "conv_") 
+									{
+										unset($converter_tmp[$num]);
+									}
+									elseif($filename == "conv_geocode.php") 
+									{
+										unset($converter_tmp[$num]);
+									}
+									else
+									{
+										$converter[substr($filename, 5, -4)] = substr($filename, 5, -4);
+									}
+								}
 								
 								$input = $this->buildSelect("inputconverter", $converter, "data-native-menu=\"false\"", "", "standard");
 								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard"); 

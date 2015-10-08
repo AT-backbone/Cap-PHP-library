@@ -76,9 +76,9 @@
      * @param   string	$post			Array with Type/Tag of CAP 1.2
      * @return	None
      */
-		function __construct($post = "")
+		function __construct($post = "", $class = false)
 		{
-			if(is_array($post))
+			if(is_array($post) && $class == false)
 			{
 				$this->output 			= $post['output'];
 				$this->identifier 	= $post['identifier'];
@@ -88,6 +88,14 @@
 				$this->msgType			= $post['msgType'];
 				$this->references		= $post['references'];
 				$this->scope				= $post['scope'];
+				
+				$this->source					= $post['source'];
+				$this->restriction		= $post['restriction'];
+				$this->addresses			= $post['addresses'];
+				$this->code						= $post['code'];
+				$this->note						= $post['note'];
+				$this->incidents			= $post['incidents'];
+				
 				$this->language			= $post['language'];
 				$this->category			= $post['category'];
 				$this->event				= $post['event'];
@@ -114,6 +122,49 @@
 				$this->geocode			= $post['geocode'];
 
 			}
+			elseif($class == true)
+			{
+				$this->useingaclass = true;
+				$this->output 			= $post->output;
+				$this->identifier 		= $post->identifier;
+				$this->sender			= $post->sender;
+				$this->sent				= $post->sent;
+				$this->status			= $post->status;
+				$this->msgType			= $post->msgType;
+				$this->references		= $post->references;
+				$this->scope			= $post->scope;
+				
+				$this->source					= $post->source;
+				$this->restriction		= $post->restriction;
+				$this->addresses			= $post->addresses;
+				$this->code						= $post->code;
+				$this->note						= $post->note;
+				$this->incidents			= $post->incidents;
+				
+				$this->language			= $post->language;
+				$this->category			= $post->category;
+				$this->event			= $post->event;
+				$this->responseType		= $post->responseType;
+				$this->urgency			= $post->urgency;
+				$this->severity			= $post->severity;
+				$this->certainty		= $post->certainty;
+				$this->audience			= $post->audience;
+				$this->eventCode		= $post->eventCode;
+				$this->effective		= $post->effective;
+				$this->onset			= $post->onset;
+				$this->expires			= $post->expires;
+				$this->senderName		= $post->senderName;
+				$this->headline			= $post->headline;
+				$this->description		= $post->description;
+				$this->instruction		= $post->instruction;
+				$this->web				= $post->web;
+				$this->contact			= $post->contact;
+				$this->parameter		= $post->parameter;
+				$this->areaDesc			= $post->areaDesc;
+				$this->polygon			= $post->polygon;
+				$this->circle			= $post->circle;
+				$this->geocode			= $post->geocode;
+			}
 		}
 		
 		/**
@@ -129,11 +180,27 @@
 					
 				$xml->tag_simple('identifier', $this->identifier);
 				$xml->tag_simple('sender', $this->sender);
-				$xml->tag_simple('sent', date("Y-m-d\TH:i:s" , strtotime($this->sent['date']." ".$this->sent['time'] ))."+".date("H:i",strtotime($this->sent['UTC'])));
+				
+				if($this->useingaclass == false)
+				{
+					$xml->tag_simple('sent', date("Y-m-d\TH:i:s" , strtotime($this->sent['date']." ".$this->sent['time'] ))."+".date("H:i",strtotime($this->sent['UTC'])));
+				}
+				else
+				{
+					$xml->tag_simple('sent', $this->sent);
+				}
+				
 				$xml->tag_simple('status', $this->status);
 				$xml->tag_simple('msgType', $this->msgType);
 				$xml->tag_simple('references', $this->references);
 				$xml->tag_simple('scope', $this->scope);
+				
+				$xml->tag_simple('source', $this->source);
+				$xml->tag_simple('restriction', $this->restriction);
+				$xml->tag_simple('addresses', $this->addresses);
+				$xml->tag_simple('code', $this->code);
+				$xml->tag_simple('note', $this->note);
+				$xml->tag_simple('incidents', $this->incidents);
 				
 				if(count($this->language) > 0)
 				foreach($this->language as $lang)
@@ -142,9 +209,24 @@
 					{
 						$xml->tag_open('info');
 						
-							$xml->tag_simple('language', $lang);
+							if($this->useingaclass == false)
+							{	
+								$xml->tag_simple('language', $lang);
+							}	
+							else
+							{
+								$xml->tag_simple('language', $this->language);
+							}
+								
 							$xml->tag_simple('category', $this->category);
-							$xml->tag_simple('event', $this->event[$lang]);
+							if($this->useingaclass == false)
+							{								
+								$xml->tag_simple('event', $this->event[$lang]);
+							}
+							else
+							{
+								$xml->tag_simple('event', $this->event);
+							}
 							$xml->tag_simple('responseType', $this->responseType);
 							$xml->tag_simple('urgency', $this->urgency);
 							$xml->tag_simple('severity', $this->severity);
@@ -160,17 +242,36 @@
 								$xml->tag_close('eventCode');
 							}
 							
-							// 2015-01-15T00:04:01+01:00
-							//$this->debug = date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC']));
-							$xml->tag_simple('effective', date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC'])));
-							$xml->tag_simple('onset', date("Y-m-d\TH:i:s" , strtotime($this->onset['date']." ".$this->onset['time'] ))."+".date("H:i",strtotime($this->onset['UTC'])));
-							$xml->tag_simple('expires', date("Y-m-d\TH:i:s" , strtotime($this->expires['date']." ".$this->expires['time'] ))."+".date("H:i",strtotime($this->expires['UTC'])));
-							
+							if($this->useingaclass == false)
+							{
+								// 2015-01-15T00:04:01+01:00
+								//$this->debug = date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC']));
+								$xml->tag_simple('effective', date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC'])));
+								$xml->tag_simple('onset', date("Y-m-d\TH:i:s" , strtotime($this->onset['date']." ".$this->onset['time'] ))."+".date("H:i",strtotime($this->onset['UTC'])));
+								$xml->tag_simple('expires', date("Y-m-d\TH:i:s" , strtotime($this->expires['date']." ".$this->expires['time'] ))."+".date("H:i",strtotime($this->expires['UTC'])));
+							}
+							else
+							{
+								$xml->tag_simple('effective', $this->effective);
+								$xml->tag_simple('onset', $this->onset);
+								$xml->tag_simple('expires', $this->expires);
+							}
 							
 							$xml->tag_simple('senderName', $this->senderName);
-							$xml->tag_simple('headline', $this->headline[$lang]);
-							$xml->tag_simple('description', $this->description[$lang]);
-							$xml->tag_simple('instruction', $this->instruction[$lang]);
+							
+							if($this->useingaclass == false)
+							{
+								$xml->tag_simple('headline', $this->headline[$lang]);
+								$xml->tag_simple('description', $this->description[$lang]);
+								$xml->tag_simple('instruction', $this->instruction[$lang]);
+							}
+							else
+							{
+								$xml->tag_simple('headline', $this->headline);
+								$xml->tag_simple('description', $this->description);
+								$xml->tag_simple('instruction', $this->instruction);
+							}
+							
 							$xml->tag_simple('web', $this->web);
 							$xml->tag_simple('contact', $this->contact);
 							

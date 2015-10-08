@@ -24,14 +24,12 @@
 /**
  * Front end of the Cap-php-library
  */
-	
+	ini_set('error_reporting', E_STRICT);
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
-	
-	chown($path, $user_name);
 	
 	if(file_exists('source/conf/conf.php'))
 	{
@@ -49,14 +47,6 @@
 	}
 	elseif($_GET['conv'] == 1)
 	{
-		/*
-			$tmpfile = $_FILES["uploadfile"]["tmp_name"];   // temp filename
-   		$filename = $_FILES["uploadfile"]["name"];      // Original filename
-
-  		$handle = fopen($tmpfile, "r");                  // Open the temp file
-   		$contents = fread($handle, filesize($tmpfile));  // Read the temp file
-   		fclose($handle);                                 // Close the temp file
-		*/
 		if(! empty($_POST['location']) || ! empty($_FILES["uploadfile"]["name"]))
 		{
 			require_once 'lib/cap.read.class.php';
@@ -75,7 +65,10 @@
 			
 			// Convert
 			$converter = new Convert_CAP_Class();		
-			print $converter->convert($cap, $_POST['inputconverter'], $_POST['outputconverter']);
+			$capconvertet = $converter->convert($cap, $_POST['inputconverter'], $_POST['outputconverter']);
+			
+			$form = new CAP_Form();
+			print $form->CapView($capconvertet, $cap[identifier]); // Cap Preview +
 		}
 		else
 		{
@@ -87,14 +80,18 @@
 	{
 		require_once 'lib/cap.read.class.php';
 		
-		$location = "source/cap/2.49.0.20.0.AT.151005121527.91.cap";
+		$location = "source/cap/".$_POST['location'];
 		$alert = new alert($location);
 		$cap = $alert->output();
-		//die(print_r($cap));
-		print_r($cap);
+
+		if(! empty($cap['msg_format']))
+		{
+			print $cap['msg_format'];
+			exit;
+		}
 		
 			$form = new CAP_Form($cap);
-			//print $form->Debug();
+
 			print $form->Form();
 	}
 	elseif(empty($_POST['action']) && $_GET['webservice'] != 1)
@@ -104,7 +101,6 @@
 			$form = new CAP_Form();
 
 			print $form->Form();
-			
 	}
 	elseif($_POST['action'] == "create" && $_GET['conf'] != 1)
 	{
