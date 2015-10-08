@@ -31,16 +31,16 @@
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
 	
-	if(file_exists('source/conf/conf.php'))
+	if(file_exists('conf/conf.php'))
 	{
-		include 'source/conf/conf.php';
+		include 'conf/conf.php';
 	
 		$langs = new Translate();		
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 	}
 	
-	if(!file_exists('source/conf/conf.php'))
+	if(!file_exists('conf/conf.php'))
 	{
 		$cap = new CAP_Form();			
 		print $cap->install();

@@ -128,9 +128,9 @@
 		{
 			require_once 'lib/cap.create.class.php';
 			
-			if(file_exists('./source/conf/conv_'.$input.'.php'))
+			if(file_exists('./convert/conv_'.$input.'.php'))
 			{
-				if(file_exists('./source/conf/conv_'.$output.'.php'))
+				if(file_exists('./convert/conv_'.$output.'.php'))
 				{
 					/**
 					 * Write Cap in $this
@@ -182,31 +182,31 @@
 					 */
 					 
 					// Get geocodes
-					include './source/conf/conv_geocode.php';
+					include './convert/conv_geocode.php';
 					$geocode = $standard;
 					unset($standard);
 					
 					// Get input style
-					include './source/conf/conv_'.$input.'.php';
+					include './convert/conv_'.$input.'.php';
 					$input = $conv;
 					unset($conv);
 					
 					if($output != "standard")
 					{
 						// Get standard if not included
-						include './source/conf/conv_standard.php';
+						include './convert/conv_standard.php';
 						$standard = $conv;
 						unset($conv);
 						
 						// Get output style
-						include './source/conf/conv_'.$output.'.php';
+						include './convert/conv_'.$output.'.php';
 						$output = $conv;
 						unset($conv);
 					}
 					else
 					{
 						// Get output style and standard
-						include './source/conf/conv_'.$output.'.php';
+						include './convert/conv_'.$output.'.php';
 						$output = $conv;
 						$standard = $conv;
 						unset($conv);

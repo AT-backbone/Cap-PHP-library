@@ -783,7 +783,7 @@
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 				
-				$out.= '<link rel="icon" type="image/png" href="source/conf/logo.jpg">';
+				$out.= '<link rel="icon" type="image/png" href="conf/logo.jpg">';
 				
 				$out.= '<script type="text/javascript" src="js/form.js"></script>';
 				$out.= '<script type="text/javascript" src="js/map.js"></script>';
@@ -831,7 +831,7 @@
     						$out.= '<ul data-role="listview">';
     							
     							$out.= '<li style="height: 91px;">';
-    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<img src="conf.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
     								$out.= '<h1>';
     									$out.= 'Cap Creator';
     								$out.= '</h1>';
@@ -1056,7 +1056,7 @@
     						$out.= '<ul data-role="listview">';
     							
     							$out.= '<li style="height: 91px;">';
-    								$out.= '<img src="source/conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
     								$out.= '<h1>';
     									$out.= 'Cap Creator';
     								$out.= '</h1>';
@@ -1091,7 +1091,7 @@
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 			
 								// get all convert files
-								$converter_tmp = scandir('source/conf/');								
+								$converter_tmp = scandir('convert/');								
 								foreach($converter_tmp as $num => $filename)
 								{
 									if(substr($filename, 0, 5) != "conv_") 
@@ -1526,7 +1526,7 @@
 			
 			if($write == true)
 			{
-				$conf_file = fopen("source/conf/conf.php", "w") or print("Unable to open conf!");
+				$conf_file = fopen("conf/conf.php", "w") or print("Unable to open conf!");
 				fwrite($conf_file, $out);
 				fclose($conf_file);
 			}
