@@ -50,11 +50,12 @@ webservice_WS_DOL_URL=Webservice URL
 NewCap=New Cap File
 ReadCap=Read Cap File
 
-InfoIdentifier=InfoIdentifier
-InfoSent=InfoSent
-InfoSetTheTypesOfTheMessage=InfoSetTheTypesOfTheMessage
-InfoSetTheHazardType=InfoSetTheHazardType
-InfoSetThePriorityOfTheMessage=InfoSetThePriorityOfTheMessage
+LabelIdentifierDesc=Der CAP-Identifier besteht aus der OID der WMO dem ISO Code der Uhrzeit und einer beliebigen Nummer.
+LabelSentDesc=Zeit an der die Cap Datei Gesendet wurde.
+LabelSetTheTypesOfTheMessageDesc=“status”:<br>  “Actual” - bestimmt für alle Empfänger<br>“Exercise” - nur für manche Empfänger, Übungszweck sollte in “note” stehen<br>  “System” -  Nachrichten zur Unterstützung von Alert Networks<br>  “Test” - Technische Tests des Cap Files<br>  “Draft” – A Vorläufige Vorlage oder Entwurf<br><br>“MsgType”:<br>  “Alert” - Erste Warnung<br>  “Update” - Update ersetzt frühere Nachricht identifiziert in “references”<br>  “Cancel” - Abbruch früherer Warnung(en) identifiziert in “references”<br>“Ack” - Bestätigt den Empfang und Annahme von Warnung(en) identifiziert in “references”<br>  “Error” - Ablehnung von über “references” identifizierten Warnung(en); Erklärung sollte in “note” stehen<br><br>“scope”:<br>  “Public” - For general dissemination to unrestricted audiences<br>“Restricted” - For dissemination only to users with a known operational requirement (see <restriction>, below)<br>“Private” - For dissemination only to specified addresses (see <addresses>, below)
+LabelSetTheHazardTypeDesc=“category”:<br> “Geo” - Geophysical (inc. landslide) ...<br> “Met” - Meteorological (inc. flood) ...<br> “Safety” - General emergency and public safety ...<br> “Security” - Law enforcement, military, homeland ...<br> “Rescue” - Rescue and recovery ...<br> “Fire” - Fire suppression and rescue ...<br> “Health” - Medical and public health ...<br> “Env” - Pollution and other environmental ...<br> “Transport” - Public and private transportation ...<br> “Infra” - Utility, telecommunication, ...<br> “CBRNE” – Chemical, Biological, Radiological, Nuclear ...<br> “Other” - Other events<br><br>“responseType”:<br> “Shelter” – Zuflucht an Ort oder ...<br> “Evacuate” – Evakuieren, ...<br> “Prepare” – Mache Vorbereitungen ...<br> “Execute” – Ausführen der vorgeplanten Aktivitäten ... <br> “Avoid” – Vermeiden des betreffenden Geschehnis ...<br> “Monitor” – Beobachten lt. Informationsquelle ...<br>    ... wie unter “instruction” beschrieben.<br><br> “Assess” – Beurteilen Sie die Informationen dieser Nachricht. (Dieser Wert sollte in öffentliche Warnung nicht verwendet werden.)<br> “AllClear” – das Ereignis erfordert keine Massnahme mehr <br> “None” – Keine Maßnahme empfohlen
+LabelSetThePriorityOfTheMessageDesc=Mit den Elementen “urgency”, “severity” und “certainty” wird die Priortät von einer Warnung und den erforderlichen Massnahmen bestimmt.<br><br>“urgency”:<br>Massnahmen ..<br> - “Immediate” - .. sofort ..<br> - “Expected” ..in der nächsten Stunde ..<br> - “Future” - .. in naher Zukunft ..<br> - “Past” - .. nicht mehr<br>  .. einleiten<br><br>“severity”:<br>-“Extreme” - ausserordentliche ..<br>-“Severe” - erhebliche ..<br>-“Moderate” - mögliche ..<br>-“Minor” – minimale ..<br> .. .. Bedrohung für Leben oder Eigentum<br> Nicht “Unknown” wählen!<br><br>“certainty”:<br> “Observed” – ganz sicher<br>“Likely” - wahrscheinlich (p > ~50%)<br>“Possible” - möglich (p <= ~50%)<br>“Unlikely” - unwahrscheinlich (p ~ 0) <br> Nicht “Unknown” wählen!
+ToolboxInfo=mehr Informationen
 
 TitleCapConv=Cap Converter
 Convert=Convert
@@ -67,14 +68,14 @@ SelectStdAreaCap=Select the Standard and Area Translation
 InfoSelectStdAreaCap=Select the Standard Cap Translation and Area Cap Translation
 
 Labelsource=Source
-Infosource=Info Source
+Infosource=(OPTIONAL)<br>The particular source of this alert; e.g., an operator or a specific device.
 Labelrestriction=restriction
-Inforestriction=Info restriction
+Inforestriction=(CONDITIONAL)<br>Used when “scope” value is "Restricted".
 Labeladdresses=addresses
-Infoaddresses=Info addresses
+Infoaddresses=(CONDITIONAL)<br>(1) Required when “scope” is “Private”, optional when “scope” is “Public” or “Restricted”.<br>(2)   Each recipient SHALL be identified by an identifier or an address.<br>(3)   Multiple space-delimited addresses MAY be included.  Addresses including whitespace MUST be enclosed in double-quotes.
 Labelcode=code
-Infocode=Info code
-Labelnote=Note
-Infonote=Info Note
+Infocode=(OPTIONAL)<br>(1) Any user-defined flag or special code used to flag the alert message for special handling.<br>(2) Multiple instances MAY occur.
+Labelnote=Note 
+Infonote=(OPTIONAL) <br>The message note is primarily intended for use with “status” “Exercise” and “msgType” “Error”.
 Labelincidents=incidents
-Infoincidents=Info incidents
+Infoincidents=(OPTIONAL) <br>(1) Used to collate multiple messages referring to different aspects of the same incident.<br>(2) If multiple incident identifiers are referenced, they SHALL be separated by whitespace.  Incident names including whitespace SHALL be surrounded by double-quotes.
