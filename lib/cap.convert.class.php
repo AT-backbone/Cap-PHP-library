@@ -119,13 +119,13 @@
 		/**
      * Converts Caps to standard and then to output
      *
-     * @param 	Array			the cap     
-   	 * @param 	string    path of the Standrad  convert file
-     * @param 	string    path of the Area convert file
-     * @param 	string    path of the input  convert file
-     * @param 	string    path of the output convert file
-     * @param 	string    path to the ouput from the cap     
-     * @return	array 		convertet cap or error
+     * @param 	Array			$cap 							the cap content    
+   	 * @param 	string    $std_c						path of the Standrad  convert file
+     * @param 	string    $area_c 					path of the Area convert file
+     * @param 	string    $input						path of the input  convert file
+     * @param 	string    $output						path of the output convert file
+     * @param 	string    $cap_output_path 	path to the ouput from the cap     
+     * @return	array 											convertet cap or error
      */
 		function convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)
 		{
@@ -133,19 +133,19 @@
 			
 			if(!file_exists('./convert/std_'.$std_c.'.conf.php'))
 			{
-				return 'Coud not found: ./convert/std_'.$std_c.'.conf.php';
+				return 'Could not found: ./convert/std_'.$std_c.'.conf.php';
 			}
 			if(!file_exists('./convert/area_'.$area_c.'.conf.php'))
 			{
-				return 'Coud not found: ./convert/std_'.$area_c.'.conf.php';
+				return 'Could not found: ./convert/std_'.$area_c.'.conf.php';
 			}			
 			if(!file_exists('./convert/conv_'.$input.'.conf.php'))
 			{
-				return 'Coud not found: ./convert/std_'.$input.'.conf.php';
+				return 'Could not found: ./convert/std_'.$input.'.conf.php';
 			}
 			if(!file_exists('./convert/conv_'.$output.'.conf.php'))
 			{
-				return 'Coud not found: ./convert/std_'.$output.'.conf.php';
+				return 'Could not found: ./convert/std_'.$output.'.conf.php';
 			}
 			
 			/**
