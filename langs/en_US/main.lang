@@ -34,8 +34,7 @@ TitleInfo=Info
 TitleArea=Area
 TitleCapView=Cap View
 TitleConfig=Configuration
-TitelWebservice=Webservice
-
+TitelWebservice=Webservices
 Webservice=Webservice
 webservice_password=Webservice Password (displayd crypted)
 webservice_securitykey=Webservice Security Key
@@ -46,17 +45,14 @@ webservice_destination=Webservice Destination
 webservice_WS_METHOD=Webservice METHOD
 webservice_ns=Webservice NS
 webservice_WS_DOL_URL=Webservice URL
-
 NewCap=New Cap File
 ReadCap=Read Cap File
-
-LabelIdentifierDesc=Der CAP-Identifier besteht aus der OID der WMO dem ISO Code der Uhrzeit und einer beliebigen Nummer.
-LabelSentDesc=Zeit an der die Cap Datei Gesendet wurde.
-LabelSetTheTypesOfTheMessageDesc=“status”:<br>  “Actual” - bestimmt für alle Empfänger<br>“Exercise” - nur für manche Empfänger, Übungszweck sollte in “note” stehen<br>  “System” -  Nachrichten zur Unterstützung von Alert Networks<br>  “Test” - Technische Tests des Cap Files<br>  “Draft” – A Vorläufige Vorlage oder Entwurf<br><br>“MsgType”:<br>  “Alert” - Erste Warnung<br>  “Update” - Update ersetzt frühere Nachricht identifiziert in “references”<br>  “Cancel” - Abbruch früherer Warnung(en) identifiziert in “references”<br>“Ack” - Bestätigt den Empfang und Annahme von Warnung(en) identifiziert in “references”<br>  “Error” - Ablehnung von über “references” identifizierten Warnung(en); Erklärung sollte in “note” stehen<br><br>“scope”:<br>  “Public” - For general dissemination to unrestricted audiences<br>“Restricted” - For dissemination only to users with a known operational requirement (see <restriction>, below)<br>“Private” - For dissemination only to specified addresses (see <addresses>, below)
+LabelIdentifierDesc=The CAP identifier consists of the OID of WMO, the ISO code, the time and an arbitrary number.
+LabelSentDesc=Time at which the CAP file has been sent.
+LabelSetTheTypesOfTheMessageDesc=“status”:<br>  “Actual” - intended for all recipients<br>“Exercise” - nur für manche Empfänger, Übungszweck sollte in “note” stehen<br>  “System” -  Nachrichten zur Unterstützung von Alert Networks<br>  “Test” - Technische Tests des Cap Files<br>  “Draft” – A Vorläufige Vorlage oder Entwurf<br><br>“MsgType”:<br>  “Alert” - Erste Warnung<br>  “Update” - Update ersetzt frühere Nachricht identifiziert in “references”<br>  “Cancel” - Abbruch früherer Warnung(en) identifiziert in “references”<br>“Ack” - Bestätigt den Empfang und Annahme von Warnung(en) identifiziert in “references”<br>  “Error” - Ablehnung von über “references” identifizierten Warnung(en); Erklärung sollte in “note” stehen<br><br>“scope”:<br>  “Public” - For general dissemination to unrestricted audiences<br>“Restricted” - For dissemination only to users with a known operational requirement (see <restriction>, below)<br>“Private” - For dissemination only to specified addresses (see <addresses>, below)
 LabelSetTheHazardTypeDesc=“category”:<br> “Geo” - Geophysical (inc. landslide) ...<br> “Met” - Meteorological (inc. flood) ...<br> “Safety” - General emergency and public safety ...<br> “Security” - Law enforcement, military, homeland ...<br> “Rescue” - Rescue and recovery ...<br> “Fire” - Fire suppression and rescue ...<br> “Health” - Medical and public health ...<br> “Env” - Pollution and other environmental ...<br> “Transport” - Public and private transportation ...<br> “Infra” - Utility, telecommunication, ...<br> “CBRNE” – Chemical, Biological, Radiological, Nuclear ...<br> “Other” - Other events<br><br>“responseType”:<br> “Shelter” – Zuflucht an Ort oder ...<br> “Evacuate” – Evakuieren, ...<br> “Prepare” – Mache Vorbereitungen ...<br> “Execute” – Ausführen der vorgeplanten Aktivitäten ... <br> “Avoid” – Vermeiden des betreffenden Geschehnis ...<br> “Monitor” – Beobachten lt. Informationsquelle ...<br>    ... wie unter “instruction” beschrieben.<br><br> “Assess” – Beurteilen Sie die Informationen dieser Nachricht. (Dieser Wert sollte in öffentliche Warnung nicht verwendet werden.)<br> “AllClear” – das Ereignis erfordert keine Massnahme mehr <br> “None” – Keine Maßnahme empfohlen
 LabelSetThePriorityOfTheMessageDesc=Mit den Elementen “urgency”, “severity” und “certainty” wird die Priortät von einer Warnung und den erforderlichen Massnahmen bestimmt.<br><br>“urgency”:<br>Massnahmen ..<br> - “Immediate” - .. sofort ..<br> - “Expected” ..in der nächsten Stunde ..<br> - “Future” - .. in naher Zukunft ..<br> - “Past” - .. nicht mehr<br>  .. einleiten<br><br>“severity”:<br>-“Extreme” - ausserordentliche ..<br>-“Severe” - erhebliche ..<br>-“Moderate” - mögliche ..<br>-“Minor” – minimale ..<br> .. .. Bedrohung für Leben oder Eigentum<br> Nicht “Unknown” wählen!<br><br>“certainty”:<br> “Observed” – ganz sicher<br>“Likely” - wahrscheinlich (p > ~50%)<br>“Possible” - möglich (p <= ~50%)<br>“Unlikely” - unwahrscheinlich (p ~ 0) <br> Nicht “Unknown” wählen!
-ToolboxInfo=mehr Informationen
-
+ToolboxInfo=more informations
 TitleCapConv=Cap Converter
 Convert=Convert
 SelectInputandOutputCap=Select the Input and Output Cap Translation
@@ -66,7 +62,6 @@ Read=Read
 TitleCapList=Cap List
 SelectStdAreaCap=Select the Standard and Area Translation
 InfoSelectStdAreaCap=Select the Standard Cap Translation and Area Cap Translation
-
 Labelsource=Source
 Infosource=(OPTIONAL)<br>The particular source of this alert; e.g., an operator or a specific device.
 Labelrestriction=restriction
