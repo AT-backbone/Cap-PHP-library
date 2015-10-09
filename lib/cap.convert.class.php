@@ -1,5 +1,6 @@
 <?php
 /*
+ *  Copyright (c) 2015  Guido Schratzer   <guido.schratzer@backbone.co.at>
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,7 +18,7 @@
  */
 
 /**
- *	\file      	cap.create.class.php
+ *	\file      	cap.convert.class.php
  *  \ingroup   	build
  *	\brief      File of class with CAP 1.2 builder
  *	\standards  from http://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html
@@ -54,7 +55,7 @@
 			var $eventCode 		= array();	// <eventCode>  <valueName>valueName</valueName>  <value>value</value></eventCode>
 			var $effective 		= array();	// The effective time 																														/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T10:05:02+01:00
 			var $onset 				= array();	// The expected time of the beginning of the subject event of the alert message  	/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T10:05:02+01:00
-			var $expires 		= array();	// The expiry time of the information of the alert message 												/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T15:00:13+01:00
+			var $expires 			= array();	// The expiry time of the information of the alert message 												/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T15:00:13+01:00
 			var $senderName 	= array();	// The text naming the originator of the alert message  (The human-readable name of the agency or authority issuing this alert.) -> ZAMG Österreich
 			var $headline 		= array();	// The text headline of the alert message 
 			var $description 	= array();	// The text describing the subject event of the alert message 
