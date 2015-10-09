@@ -121,11 +121,11 @@
      * Converts Caps to standard and then to output
      *
      * @param 	Array			$cap 							the cap content    
-   	 * @param 	string    $std_c						path of the Standrad  convert file
-     * @param 	string    $area_c 					path of the Area convert file
-     * @param 	string    $input						path of the input  convert file
-     * @param 	string    $output						path of the output convert file
-     * @param 	string    $cap_output_path 	path to the ouput from the cap     
+   	 * @param 	string    $std_c						Standard Converter Filename
+     * @param 	string    $area_c 					Area converter filename
+     * @param 	string    $input						input Converter file
+     * @param 	string    $output						Output Converter file
+     * @param 	string    $cap_output_path 	Dirname for output file
      * @return	array 											convertet cap or error
      */
 		function convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)

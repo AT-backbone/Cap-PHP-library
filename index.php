@@ -1,5 +1,6 @@
 <?php 
 /*
+ *  Copyright (c) 2015  Guido Schratzer   <guido.schratzer@backbone.co.at>
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -65,7 +66,6 @@
 			
 			// Convert
 			$converter = new Convert_CAP_Class();		
-
 			$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $conf->cap->output);
 			
 			$form = new CAP_Form();
