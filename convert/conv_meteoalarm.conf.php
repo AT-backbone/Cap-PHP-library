@@ -86,7 +86,7 @@
 		$conv->translate['7; coastalevent'][]						= "coastal";
 		$conv->translate['8; forest-fire'][]						= "forest fire";
 		$conv->translate['9; avalanches'][]							= "avalanches";
-		$conv->translate['10; Rain'][]									= "raid";
+		$conv->translate['10; Rain'][]									= "rain";
 		$conv->translate['12; flooding'][]							= "flooding";
 		$conv->translate['13; rain-flood'][]						= "rain-flood";
 

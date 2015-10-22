@@ -37,6 +37,7 @@
 		include 'conf/conf.php';
 	
 		$langs = new Translate();		
+		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 	}
@@ -118,7 +119,7 @@
 		}
 		else
 		{
-			$location = $conf->cap->output.'/'.$_POST['location'];
+			$location = $conf->cap->output.'/'.urldecode($_POST['location']);
 		}
 		
 		$alert = new alert($location);

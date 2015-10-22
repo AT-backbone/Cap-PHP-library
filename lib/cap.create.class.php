@@ -398,29 +398,27 @@
 							$xml->tag_close('parameter');						
 						} // foreach parameter
 						
-						// look if area zone is used
-						if(! empty($this->areaDesc) || ! empty($this->polygon)  || ! empty($this->circle) || ! empty($this->geocode['valueName'][0]))
+						
+						foreach($info['area'] as $key => $area)
 						{
-							foreach($info['area'] as $key => $area)
-							{
-								$xml->tag_open('area');
+							$xml->tag_open('area');
+								//die(print_r($area));
+								$xml->tag_simple('areaDesc', $area['areaDesc']);
+								$xml->tag_simple('polygon', $area['polygon']);
+								$xml->tag_simple('circle', $area['circle']);
 							
-									$xml->tag_simple('areaDesc', $area['areaDesc']);
-									$xml->tag_simple('polygon', $area['polygon']);
-									$xml->tag_simple('circle', $area['circle']);
-								
-									if(! empty($area['geocode'][0]['valueName']))
-									foreach($area['geocode'] as $key => $geocode)
-									{
-										$xml->tag_open('geocode');						
-											$xml->tag_simple('valueName', $geocode['valueName']);
-											$xml->tag_simple('value', $geocode['value']);							
-										$xml->tag_close('geocode');
-									} // foreach geocode
-								
-								$xml->tag_close('area');
-							}
+								if(! empty($area['geocode'][0]['valueName']))
+								foreach($area['geocode'] as $key => $geocode)
+								{
+									$xml->tag_open('geocode');						
+										$xml->tag_simple('valueName', $geocode['valueName']);
+										$xml->tag_simple('value', $geocode['value']);							
+									$xml->tag_close('geocode');
+								} // foreach geocode
+							
+							$xml->tag_close('area');
 						}
+						
 												
 					$xml->tag_close('info');	
 				}// Foreach info lang
@@ -437,12 +435,13 @@
      */
 		function createFile()
 		{
-			$capfile = fopen($this->destination.'/'.$this->identifier.'.cap', "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.'.cap');
+			if(substr($this->identifier,-5,5) == '.cap') $end_type = ""; else $end_type = ".cap";
+			$capfile = fopen($this->destination.'/'.$this->identifier.$end_type, "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.$end_type);
 			fwrite($capfile, $this->cap);
 			fclose($capfile);
 			
 			// convert in UTF-8
-			$data = file_get_contents($this->destination.'/'.$this->identifier.'.cap');
+			$data = file_get_contents($this->destination.'/'.$this->identifier.$end_type);
 			
 			if (preg_match('!!u', $string))
 			{
@@ -453,9 +452,9 @@
 			   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 			}
 			
-			file_put_contents($this->destination.'/'.$this->identifier.'.cap', $data);
+			file_put_contents($this->destination.'/'.$this->identifier.$end_type, $data);
 			
-			return $this->destination.'/'.$this->identifier.'.cap';
+			return $this->destination.'/'.$this->identifier.$end_type;
 		}
 			
 		/*
