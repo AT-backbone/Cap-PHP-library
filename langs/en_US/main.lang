@@ -109,6 +109,7 @@ Labelarea=area
 Labelpolygon=polygon
 Labelcircle=circle
 LabelareaDesc=LabelareaDesc
+LabelareaDescDesc=LabelareaDescDesc
 LabelpolygonDesc=LabelpolygonDesc
 LabelcircleDesc=LabelcircleDesc
 LabelGeocodeDesc=LabelGeocodeDesc
