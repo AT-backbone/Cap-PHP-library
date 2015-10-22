@@ -444,17 +444,17 @@
 				 * Area
 				 */					
 					case 'areaDesc': 
-						$out = '<legend>'.$langs->trans("LabelareaDesc").': '.$this->tooltip($type, $langs->trans("LabelareaDescDesc")).'</legend>';	
+						$out = '<legend>'.$langs->trans("LabelareaDesc").': '.$this->tooltip($type.'tool', $langs->trans("LabelareaDescDesc")).'</legend>';
 						$out.= '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc[0].'">';
 						break;
 	
 					case 'polygon': 
-						$out = '<legend>'.$langs->trans("Labelpolygon").': '.$this->tooltip($type, $langs->trans("LabelpolygonDesc")).'</legend>';	
+						$out = '<legend>'.$langs->trans("Labelpolygon").': '.$this->tooltip($type.'tool', $langs->trans("LabelpolygonDesc")).'</legend>';	
 						$out.= '<input placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon[0][0].'">';
 						break;
 	
 					case 'circle': 
-						$out = '<legend>'.$langs->trans("Labelcircle").': '.$this->tooltip($type, $langs->trans("LabelcircleDesc")).'</legend>';	
+						$out = '<legend>'.$langs->trans("Labelcircle").': '.$this->tooltip($type.'tool', $langs->trans("LabelcircleDesc")).'</legend>';	
 						$out.= '<input placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle[0][0].'">';
 						break;
 						
