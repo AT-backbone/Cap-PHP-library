@@ -25,7 +25,7 @@
 /**
  * Front end of the Cap-php-library
  */
-	ini_set('error_reporting', E_STRICT);
+
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
@@ -69,7 +69,7 @@
 			$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $conf->cap->output);
 			
 			$form = new CAP_Form();
-			print $form->CapView($capconvertet, $cap[identifier]); // Cap Preview +
+			print $form->CapView($capconvertet, $cap[identifier].'.conv'); // Cap Preview +
 		}
 		else
 		{
@@ -80,11 +80,50 @@
 	elseif($_GET['read'] == 1)
 	{
 		require_once 'lib/cap.read.class.php';
+		if(! empty($_POST['upload']))
+		{
+			if(! empty($_FILES["uploadfile"]["name"]))
+			{
+				// Get TEST Cap
+				if(! empty($_FILES["uploadfile"]["name"]))
+				{
+					$location = $_FILES["uploadfile"]["tmp_name"];
+				}
+			}
+			
+			$alert = new alert($location);
+			$cap = $alert->output();
+			
+			$cap_m = new CAP_Class($_POST);
+			$cap_m->buildCap_from_read($cap);
+			
+			$cap_m->identifier = $_FILES["uploadfile"]["name"];
+			$cap_m->destination = $conf->cap->output;
+			$path = $cap_m->createFile();
+			
+			header('Location: '.$_SERVER['PHP_SELF'].'#read');
+		}
 		
-		$location = $conf->cap->output.'/'.$_POST['location'];
+		if(! empty($_FILES["uploadfile"]["name"]))
+		{
+			// Get TEST Cap
+			if(! empty($_FILES["uploadfile"]["name"]))
+			{
+				$location = $_FILES["uploadfile"]["tmp_name"];
+			}
+			else
+			{
+				$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			}
+		}
+		else
+		{
+			$location = $conf->cap->output.'/'.$_POST['location'];
+		}
+		
 		$alert = new alert($location);
 		$cap = $alert->output();
-
+		//die(print_r($cap)); // DEBUG
 		if(! empty($cap['msg_format']))
 		{
 			print $cap['msg_format'];
@@ -98,6 +137,11 @@
 	elseif(empty($_POST['action']) && $_GET['webservice'] != 1)
 	{
 		// Build Cap Creator form
+		if(! empty($_GET['delete']))
+		{			
+			unlink($conf->cap->output.'/'.$_GET['delete']);		
+			header('Location: '.$_SERVER['PHP_SELF'].'#read');
+		}
 		
 			$form = new CAP_Form();
 
@@ -143,5 +187,4 @@
 		$form->WriteConf();
 		return true;
 	}
-	
 ?>

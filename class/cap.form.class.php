@@ -35,47 +35,54 @@
 		/**
      * initialize Class with Data
      *
-     * @param   string	$post			Array with Type/Tag of CAP 1.2
+     * @param   string	$post			Array with Type/Tag of CAP 1.1
      * @return	None
      */
 		function __construct($post = "")
 		{
 			if(is_array($post))
 			{
-				$this->output 			= $post['output'];
-				$this->identifier 	= $post['identifier'];
-				$this->sender				= $post['sender'];
-				$this->sent					= $post['sent'];
-				$this->status				= $post['status'];
-				$this->msgType			= $post['msgType'];
-				$this->references		= $post['references'];
-				$this->scope				= $post['scope'];
+				$this->output[] 			= $post['output'];
+				$this->identifier[] 	= $post['identifier'];
+				$this->sender[]				= $post['sender'];
+				$this->sent[]					= $post['sent'];
+				$this->status[]				= $post['status'];
+				$this->msgType[]			= $post['msgType'];
+				$this->references[]		= $post['references'];
+				$this->scope[]				= $post['scope'];
 				
-				$this->language			= $post['info'][0]['language'];
-				$this->category			= $post['info'][0]['category'];
-				$this->event				= $post['info'][0]['event'];
-				$this->responseType	= $post['info'][0]['responseType'][0];
-				$this->urgency			= $post['info'][0]['urgency'];
-				$this->severity			= $post['info'][0]['severity'];
-				$this->certainty		= $post['info'][0]['certainty'];
-				$this->audience			= $post['info'][0]['audience'];
-				$this->eventCode		= $post['info'][0]['eventCode'];
-				$this->effective		= $post['info'][0]['effective'];
-				$this->onset				= $post['info'][0]['onset'];
-				$this->expires			= $post['info'][0]['expires'];
-				$this->senderName		= $post['info'][0]['senderName'];
-				$this->headline			= $post['info'][0]['headline'];
-				$this->description	= $post['info'][0]['description'];
-				$this->instruction	= $post['info'][0]['instruction'];
-				$this->web					= $post['info'][0]['web'];
-				$this->contact			= $post['info'][0]['contact'];
-				$this->parameter		= $post['info'][0]['parameter'];
-
-				$this->areaDesc			= $post['info'][0]['area'][0]['areaDesc'];
-				$this->polygon			= $post['info'][0]['area'][0]['polygon'];
-				$this->circle				= $post['info'][0]['area'][0]['circle'];
-				$this->geocode			= $post['info'][0]['area'][0]['geocode'];
-
+				foreach($post['info'] as $key => $info)
+				{
+					
+					$this->language[]			= $info['language'];
+					$this->category[]			= $info['category'];
+					$this->event[]				= $info['event'];
+					$this->responseType[]	= $info['responseType'];
+					$this->urgency[]			= $info['urgency'];
+					$this->severity[]			= $info['severity'];
+					$this->certainty[]		= $info['certainty'];
+					$this->audience[]			= $info['audience'];
+					$this->eventCode[]		= $info['eventCode'];
+					$this->effective[]		= $info['effective'];
+					$this->onset[]				= $info['onset'];
+					$this->expires[]			= $info['expires'];
+					$this->senderName[]		= $info['senderName'];
+					$this->headline[]			= $info['headline'];
+					$this->description[]	= $info['description'];
+					$this->instruction[]	= $info['instruction'];
+					$this->web[]					= $info['web'];
+					$this->contact[]			= $info['contact'];
+					$this->parameter[]		= $info['parameter'];
+					
+					foreach($info['area'] as $key2 => $area)
+					{					
+						$this->areaDesc[]			= $area['areaDesc'];
+						$this->polygon[]			= $area['polygon'];
+						$this->circle[]				= $area['circle'];
+						$this->geocode[]			= $area['geocode'];
+					}
+				}
+				
 				$this->cap 					= $post;
 			}
 		}
@@ -94,9 +101,9 @@
 		}
 		
     /**
-     * Output input field for CAP 1.2 value's
+     * Output input field for CAP 1.1 value's
      *
-     * @param   string	$type			Type/Tag of CAP 1.2
+     * @param   string	$type			Type/Tag of CAP 1.1
      * @param   string	$lang			the language (in RFC 3066)
      * @return	string						HTML edit field
      */
@@ -135,22 +142,30 @@
 				case 'identifier':
 					$out = '<div id="Identapend">';
 						$out.= '<label>'.$langs->trans("LabelIdentifier").': '.$this->tooltip($type, $langs->trans("LabelIdentifierDesc")).'</label>';
-						$out.= '<div class="ui-grid-c">';
-							$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
-							if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
-							if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
-							else																		$out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" ></div>'; // YYMMDDHHMMSS
-							$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
-						$out.= '</div>';
+						if(!is_array($this->identifier))
+						{
+							$out.= '<div class="ui-grid-c">';
+								$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
+								if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
+								if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
+								else																		$out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" ></div>'; // YYMMDDHHMMSS
+								$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
+							$out.= '</div>';
+						}
+						else
+						{
+							$out.= '<input placeholder="" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'">';
+						}
 					$out.= '</div>';					
 					break;
 					
 				case 'sender':
-					$out = '<input placeholder="sender" type="text" name="sender" value="'.$this->sender.'">';
+					$out = '<legend>'.$langs->trans("Labelsender").': '.$this->tooltip($type, $langs->trans("LabelsenderDesc")).'</legend>';	
+					$out.= '<input placeholder="sender" type="text" name="sender" value="'.$this->sender[0].'">';
 					break;
 					
 				case 'sent':
-					if($this->sent) $st = $this->make_cap_time($this->sent);
+					if($this->sent[0]) $st = $this->make_cap_time($this->sent[0]);
 					$out = '<div id="Sentapend">';
 						$out.= '<label>'.$langs->trans("LabelSent").': '.$this->tooltip($type, $langs->trans("LabelSentDesc")).'</label>';
 						$out.= '<div class="ui-grid-b">';
@@ -173,18 +188,19 @@
 					break;
 				
 				case 'references': 
-					$out = '<input placeholder="references" type="text" name="references" value="'.$this->references.'">'; // web / identifier / sent 
+					$out = '<legend>'.$langs->trans("Labelreferences").': '.$this->tooltip($type, $langs->trans("LabelreferencesDesc")).'</legend>';	
+					$out.= '<input placeholder="references" type="text" name="references" value="'.$this->references[0].'">'; // web / identifier / sent 
 					break;
 				
 				case 'status': 
 					// Actual / Test / Exercise / System / Test / Draft
-					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), "data-native-menu=\"false\"", "", $this->status); 
+					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), "data-native-menu=\"false\"", "Status", $this->status[0]); 
 
 				 	// Alert / Update / Cancel / Ack / Error
-					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), "data-native-menu=\"false\" id=\"msgType\"", "", $this->msgType); 
+					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), "data-native-menu=\"false\" id=\"msgType\"", "MsgType", $this->msgType[0]); 
 
 					// Public / Restricted / Private
-					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"", "", $this->scope);  
+					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"", "Scope", $this->scope[0]);  
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetTheTypesOfTheMessageDesc")).'</legend>';							
@@ -195,11 +211,11 @@
 				break;
 				
 				case 'category': // Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
-					$category = $this->buildSelect("category", array( "Geo" => "Geophysical", "Met" => "Weather", "Safety" => "Public Safety", "Security" => "Security", "Rescue" => "Rescue", "Fire" => "Fire", "Health" => "Health", "Env" => "Environmental", "Transport" => "Transportation", "Infra" => "Infrastructure", "CBRNE" => "Weapon of Mass Destructio", "Other" => "Otherwise Categorized" ), "data-native-menu=\"false\"", "Category", $this->category);
+					$category = $this->buildSelect("category", array( "Geo" => $langs->trans("Geo"), "Met" => $langs->trans("Met"), "Safety" => $langs->trans("Safety"), "Security" => $langs->trans("Security"), "Rescue" => $langs->trans("Rescue"), "Fire" => $langs->trans("Fire"), "Health" => $langs->trans("Health"), "Env" => $langs->trans("Env"), "Transport" => $langs->trans("Transport"), "Infra" => $langs->trans("Infra"), "CBRNE" => $langs->trans("CBRNE"), "Other" => $langs->trans("Other") ), "data-native-menu=\"false\"", "Category", $this->category[0]);
 
 					// Shelter / Evacuate / Prepare / Execute / Avoid / Monitor / Assess / AllClear / None
-					$responseType = $this->buildSelect("responseType", array( "Shelter" => "Take Shelter", "Evacuate" => "Evacuate", "Prepare" => "Make Preparations", "Execute" => "Execute Pre-Planned Action", "Avoid" => "Avoid the affected Area", "Monitor" => "Monitor Conditions", "Assess" => "Evaluate Situation", "AllClear" => "Resume Normal Activities", "None" => "Take No Action" ), "data-native-menu=\"false\"", "Response Type", $this->responseType);
-			    
+					$responseType = $this->buildSelect("responseType", array( "Shelter" => $langs->trans("Shelter"), "Evacuate" => $langs->trans("Evacuate"), "Prepare" => $langs->trans("Prepare"), "Execute" => $langs->trans("Execute"), "Avoid" => $langs->trans("Avoid"), "Monitor" => $langs->trans("Monitor"), "Assess" => $langs->trans("Assess"), "AllClear" => $langs->trans("AllClear"), "None" => $langs->trans("None") ), "data-native-menu=\"false\"", "Response Type", $this->responseType[0][0]);
+
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").': '.$this->tooltip($type, $langs->trans("LabelSetTheHazardTypeDesc")).'</legend>';							
 								$out.= $category;					
@@ -210,13 +226,13 @@
 
 				case 'urgency': 
 					// Immediate / Expected / Future / Past
-					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), "data-native-menu=\"false\"", "Urgency", $this->urgency);
+					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), "data-native-menu=\"false\"", "Urgency", $this->urgency[0]);
 					
 					// Extreme / Severe / Moderate / Minor / Unknown 
-					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Severity", $this->severity);
+					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Severity", $this->severity[0]);
 
 					// Observed / Likely / Possible/ Unlikely / Unknown
-					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty", $this->certainty);
+					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty", $this->certainty[0]);
 				
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetThePriorityOfTheMessageDesc")).'</legend>';							
@@ -228,13 +244,21 @@
 				break;		
 
 				case 'audience': 
-					$out = '<input placeholder="audience" type="text" name="audience" value="'.$this->audience.'">';
+					$out = '<legend>'.$langs->trans("Labelaudience").': '.$this->tooltip($type, $langs->trans("LabelaudienceDesc")).'</legend>';	
+					$out.= '<input placeholder="audience" type="text" name="audience" value="'.$this->audience[0].'">';
 					break;
 					
 				case 'eventCode': 
 					$out = '<div id="Eventappend">';
 						$out.= '<label for="sent[date]">'.$langs->trans("LabelEventCode").': </label>';
 						$out.= '<div class="ui-grid-b">';
+							foreach($this->eventCode[0] as $key => $eventCode)
+							{
+								$out.= '<div class="ui-grid-b">';
+									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]" value="'.$eventCode['valueName'].'"></div>';
+									$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
+								$out.= '</div>';
+							}	
 							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
 							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="eventCode[value][]"></div>';
 							$out.= '<div class="ui-block-c"><input type="button" onclick="plusEventCodeInput()" value="+"></div>';
@@ -252,7 +276,7 @@
 					break;
 				
 				case 'effective': 					
-					if($this->effective) $st = $this->make_cap_time($this->effective);
+					if($this->effective[0]) $st = $this->make_cap_time($this->effective[0]);
 					$out = '<div id="Effectiveapend">';
 						$out.= '<label>'.$langs->trans("LabelEffective").': </label>';
 						$out.= '<div class="ui-grid-b">';
@@ -275,7 +299,7 @@
 					break;
 
 				case 'onset': 					
-					if($this->onset) $st = $this->make_cap_time($this->onset);
+					if($this->onset[0]) $st = $this->make_cap_time($this->onset[0]);
 					$out = '<div id="Onsetapend">';
 						$out.= '<label>'.$langs->trans("LabelOnset").': </label>';
 						$out.= '<div class="ui-grid-b">';
@@ -298,7 +322,7 @@
 					break;
 					
 				case 'expires': 					
-					if($this->expires) $st = $this->make_cap_time($this->expires);
+					if($this->expires[0]) $st = $this->make_cap_time($this->expires[0]);
 					$out = '<div id="Expieresapend">';
 						$out.= '<label>'.$langs->trans("LabelExpires").': </label>';
 						$out.= '<div class="ui-grid-b">';
@@ -321,7 +345,8 @@
 					break;
 
 				case 'senderName': 
-					$out = '<input placeholder="senderName" type="text" name="senderName" value="'.$this->senderName.'">'; 
+					$out = '<legend>'.$langs->trans("LabelsenderName").': '.$this->tooltip($type, $langs->trans("LabelsenderNameDesc")).'</legend>';	
+					$out.= '<input placeholder="senderName" type="text" name="senderName" value="'.$this->senderName[0].'">'; 
 					break;
 					
 				case 'info':
@@ -329,13 +354,26 @@
 					break;
 					
 				case 'lang':
-					$langs_arr = $this->getlang();		
+					$langs_arr = $this->getlang();	
+						
+					foreach($langs_arr as $key_l => $val_l)
+					{
+						if(in_array($key,$this->language)) unset($langs_arr[$key]);
+					}
+					
 					$lang_S = $this->buildSelect("language_select", $langs_arr, "data-native-menu=\"false\" id=\"language\"", "Language");
 					
 					$extralang = '<div data-role="controlgroup" data-type="horizontal">';
+					
+					$styleD[true] = "";
+					$styleD[false] = "display:none;";
+					//if(is_array($this->language)) die(print_r($this->language)); // Array ( [0] => en-GB [1] => de-DE ) 1
+					
 					foreach($langs_arr as $key => $langs_val)
 					{
-						$extralang.= '<a href="#" class="ui-btn Lang_Button" role="button" id="'.$key.'_Button" style="display:none; border-right: 1px solid #dddddd;">'.$langs_val.' <span id="'.$key.'_Remove_Button" style="color:red; padding-left: 5px;">X</span><input type="hidden" name="language[]" id="'.$key.'_language_input" value=""></a>';
+						if(in_array($key,$this->language)) $display = true; else $display = false;
+						$extralang.= '<a href="#" class="ui-btn Lang_Button" role="button" id="'.$key.'_Button" style="'.$styleD[$display].' border-right: 1px solid #dddddd;">'.$langs_val.' <span id="'.$key.'_Remove_Button" style="color:red; padding-left: 5px;">X</span><input type="hidden" name="language[]" id="'.$key.'_language_input" value=""></a>';
+						if($display == true) $extralang.= '<input type="hidden" value="'.$key.'" name="language[]">';
 					}
 					$extralang.= '</div>';
 					
@@ -347,36 +385,54 @@
 
 					$langs_arr = $this->getlang();	
 					$extralang = "";
+					$styleD[true] = "";
+					$styleD[false] = "display:none;";
+					$i = 0;
+					
 					foreach($langs_arr as $key => $langs_val)
 					{
-						$extralang.= '<div class="lang_input" id="'.$key.'" style="display:none;">';
 						
-								$extralang.= '<input placeholder="event" type="text" name="event['.$key.']">';
+						if(in_array($key,$this->language) && $i < 1) $display = true; else $display = false;
+						
+						$extralang.= '<div class="lang_input" id="'.$key.'" style="'.$styleD[$display].'">';
+						
+								$extralang.= '<input placeholder="event" type="text" name="event['.$key.']" value="'.$this->event[$i].'">';
 
-								$extralang.= '<input placeholder="headline" type="text" name="headline['.$key.']">';
+								$extralang.= '<input placeholder="headline" type="text" name="headline['.$key.']" value="'.$this->headline[$i].'">';
 
-								$extralang.= '<textarea placeholder="description" name="description['.$key.']"></textarea>';
+								$extralang.= '<textarea placeholder="description" name="description['.$key.']">'.$this->description[$i].'</textarea>';
 
-								$extralang.= '<input placeholder="instruction" type="text" name="instruction['.$key.']">';
+								$extralang.= '<input placeholder="instruction" type="text" name="instruction['.$key.']" value="'.$this->instruction[$i].'">';
 
 						$extralang.= '</div>';
+						
+						$i++;
 					}
 					
 					$out = $extralang;
 					break;
 					
 				case 'web': 
-					$out = '<input placeholder="web" type="text" name="web" value="'.$this->web.'">'; 
+					$out = '<legend>'.$langs->trans("Labelweb").': '.$this->tooltip($type, $langs->trans("LabelwebDesc")).'</legend>';	
+					$out.= '<input placeholder="web" type="text" name="web" value="'.$this->web[0].'">'; 
 					break;
 					
 				case 'contact': 
-					$out = '<input placeholder="contact" type="text" name="contact" value="'.$this->contact.'">'; 
+					$out = '<legend>'.$langs->trans("Labelcontact").': '.$this->tooltip($type, $langs->trans("LabelcontactDesc")).'</legend>';	
+					$out.= '<input placeholder="contact" type="text" name="contact" value="'.$this->contact[0].'">'; 
 					break;
 
 				case 'parameter': 
 					$out = '<div id="Parameterappend">';
 						$out.='<label for="sent[date]">Parameter: </label>';
 						$out.= '<div class="ui-grid-b">';
+							foreach($this->parameter[0] as $key => $parameter)
+							{
+								$out.= '<div class="ui-grid-b">';
+									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
+									$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
+								$out.= '</div>';
+							}	
 							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
 							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="parameter[value][]"></div>';
 							$out.= '<div class="ui-block-c"><input type="button" onclick="plusParameterInput()" value="+"></div>';
@@ -388,15 +444,18 @@
 				 * Area
 				 */					
 					case 'areaDesc': 
-						$out = '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc.'">';
+						$out = '<legend>'.$langs->trans("LabelareaDesc").': '.$this->tooltip($type, $langs->trans("LabelareaDescDesc")).'</legend>';	
+						$out.= '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc[0].'">';
 						break;
 	
 					case 'polygon': 
-						$out = '<input placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon.'">';
+						$out = '<legend>'.$langs->trans("Labelpolygon").': '.$this->tooltip($type, $langs->trans("LabelpolygonDesc")).'</legend>';	
+						$out.= '<input placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon[0][0].'">';
 						break;
 	
 					case 'circle': 
-						$out = '<input placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle.'">';
+						$out = '<legend>'.$langs->trans("Labelcircle").': '.$this->tooltip($type, $langs->trans("LabelcircleDesc")).'</legend>';	
+						$out.= '<input placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle[0][0].'">';
 						break;
 						
 					case 'map':
@@ -413,16 +472,26 @@
 							$out.= '</div>';
 						break;
 						
-					case 'geocode': // ]
-						$out = '<input placeholder="Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
+					case 'geocode':
 						
+						$out = '<input placeholder="Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
+	
+
+
 						$out = '<div id="Geocodeappend">';
-							$out.='<label for="sent[date]">'.$langs->trans("LabelGeocode").': </label>';
+							$out.= '<legend>'.$langs->trans("LabelGeocode").': '.$this->tooltip($type, $langs->trans("LabelGeocodeDesc")).'</legend>';	
+							foreach($this->geocode[0] as $key => $geocode)
+							{
+								$out.= '<div class="ui-grid-b">';
+									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]" value="'.$geocode['valueName'].'"></div>';
+									$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="geocode[value][]" value="'.$geocode['value'].'"></div>';
+								$out.= '</div>';
+							}	
 							$out.= '<div class="ui-grid-b">';
 								$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
 								$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="geocode[value][]"></div>';
 								$out.= '<div class="ui-block-c"><input type="button" onclick="plusGeocodeInput()" value="+"></div>';
-								$out.= '</div>';
+							$out.= '</div>';							
 						$out.= '</div>';
 						
 						break;															
@@ -558,20 +627,31 @@
 						break;
 						
 					case 'capview':
-							$out = '<textarea readonly="" id="capviewtextarea"></textarea>';
+							$out = '<textarea id="capviewtextarea"></textarea>';
 						break;
 						
 					case 'caplist':
 						$out = '</form><form method="POST" id="capform2" name="capform2" action="index.php?read=1" enctype="multipart/form-data" data-ajax="false">';
+						$out.= '<input type="file" name="uploadfile" id="uploadfile"><input type="submit" value="'.$langs->trans('Upload').'" name="upload" data-ajax="false">';
 						$out.= '<fieldset data-role="controlgroup">';
+						
 								foreach(scandir($conf->cap->output) as $num => $capfilename)
 								{
 									if($num > 1)
 									{
-										$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
-										$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label>';
+										$out.= '<div class="ui-grid-a">';
+											$out.= '<div class="ui-block-a" style="width:90%"><input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
+											$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label></div>';
+											$out.= '<div class="ui-block-b" style="width:10%"><a href="#cap_file_'.$num.'_delete" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini"><span style="color:#ff0000">X</span></a></div>';
+										$out.= '</div>';
+										
+										$out.= '<div data-role="popup" id="cap_file_'.$num.'_delete" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">';
+											$out.= '<h3>Delete File?</h3>';
+											$out.= '<a href="index.php?delete='.urlencode($capfilename).'" data-ajax="false" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Delete</a>';
+											$out.= '<a href="#" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Cancel</a>';
+										$out.= '</div>';
 									}
-								}			
+								}
 						$out.= '</fieldset>';
 						$out.= '<input type="submit" value="<h1>'.$langs->trans("Read").'</h1>" data-ajax="false">';
 						$out.= '</form><form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
@@ -702,6 +782,14 @@
 		function getlang($config = false){
 			global $conf;
 			
+			if(is_array($this->language))
+			{
+				foreach($this->language as $key => $lang_name)
+				{
+					$out[$lang_name] = $lang_name;
+				}
+			}
+
 			$out_tmp = $conf->lang;
 
 			foreach($out_tmp as $key => $lang_name)
@@ -715,7 +803,7 @@
 		/**
      * Output Type Array
      *
-     * @return	array						Array with the first CAP 1.2 entery's
+     * @return	array						Array with the first CAP 1.1 entery's
      */
 		function Types()
 		{
@@ -898,7 +986,7 @@
     								$out.= '</h1>';
     								$out.= '<br>';
     								$out.= '<span style="font-size: 10px;">';
-    									$out.= 'Cap v1.2';
+    									$out.= 'Cap v1.1';
     								$out.= '</span>';
     							$out.= '</li>';
     							
@@ -963,11 +1051,17 @@
 							
 							$out.= '<div data-role="footer" data-theme="b">';						
 								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr['#'.$pagename] == 'Alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr['#'.$pagename] == 'Info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr['#'.$pagename] == 'Area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
-								if($Pages_arr['#'.$pagename] == 'Cap View') 			$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
-								if($Pages_arr['#'.$pagename] == 'Configuration') 	$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
+								if($pagename == 'alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
+								if($pagename == 'info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
+								if($pagename == 'area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
+								if($pagename == 'capview') 				$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
+								if($pagename == 'conf') 					$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
+								
+									if($pagename == 'conf') $out.= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';
+
+									if($pagename == 'conf') $out.= 'Saved!';
+									if($pagename == 'conf') $out.= '</div>';
+							
 							$out.= '</div>';
 							
 						$out.= '</div>';
@@ -1123,7 +1217,7 @@
     								$out.= '</h1>';
     								$out.= '<br>';
     								$out.= '<span style="font-size: 10px;">';
-    									$out.= 'Cap v1.2';
+    									$out.= 'Cap v1.1';
     								$out.= '</span>';
     							$out.= '</li>';
     							
@@ -1310,9 +1404,18 @@
 		 */
 		function MakeIdentifier($post)
 		{
-			$temp = $post[identifier][WMO].".".$post[identifier][ISO].".".$post[identifier][time].".".$post[identifier][ID];
-			unset($post[identifier]);
-			$post[identifier] = $temp;
+			if(!empty($post[identifier][WMO]) && ! empty($post[identifier][ISO]) && ! empty($post[identifier][time])) 
+			{
+				$temp = $post[identifier][WMO].".".$post[identifier][ISO].".".$post[identifier][time].".".$post[identifier][ID];
+				unset($post[identifier]);
+				$post[identifier] = $temp;
+			}
+			else
+			{
+				$temp = $post[identifier][ID];
+				unset($post[identifier]);
+				$post[identifier] = $temp;
+			}
 			return $post;
 		}
 		

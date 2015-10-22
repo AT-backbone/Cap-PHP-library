@@ -351,6 +351,7 @@ class Translate
 
 			return $str;
 		}
+		return $key;
 		
 	}
 

@@ -12,7 +12,7 @@ $filename = $_POST[filename];
 if($_POST['import']==1) $import = true; else $import = false;
 // if($_POST['debug']==1) $debug = true; else $debug = false;
 $debug = true;
-if($import == "") $import = false;
+if($import == "") $import = true;
 
 if ($_POST[filename])
 {

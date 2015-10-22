@@ -60,7 +60,14 @@
 					}else
 						$r[$key] = $val;
 			}
-			if($error['cnt_format'] > 0) return $error; else return $r;
+			//if($error['cnt_format'] > 0) 
+			//{
+				//return $error; 
+			//}
+			//else 
+			//{
+				return $r;
+			//}
 		}
 		
 		/**

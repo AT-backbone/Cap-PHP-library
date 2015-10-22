@@ -5,123 +5,117 @@
 	 * DWD 06.10.15
 	 ************************************************************************************************************************************
 	 */
-	$conv->on 																										= 1;
-	$conv->name 																									= "dwd";
+	 	 
+	//-------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	// Diffrents to a standard Cap or importent value's
-	$conv->std->category 																							= "met";
+	//$conv->info['tag'][]														= "eventCode";
+	//$conv->info['ValueName'][]											= "-1";	
 	
-	$conv->eventCode[]																						= "PROFILE_VERSION";
-	$conv->eventCode[]																						= "LICENSE";
-	$conv->eventCode[]																						= "II";	
-	
-	$conv->eventCode[]																						= "GROUP";
-	// set convert to eventCode:GROUP
-	$conv->conv->hazard->type->tag->name													= "eventCode"; 
-	$conv->conv->hazard->type->tag->val														= "GROUP";
-	
-		$conv->GROUP['THUNDERSTORM'] 																= "thunderstorm";
-		$conv->GROUP['WIND'] 																				= "wind";
-		$conv->GROUP['RAIN'] 																				= "rain";
-		$conv->GROUP['HAIL'] 																				= "hail";
-		$conv->GROUP['SNOWFALL']																		= "snow";
-		$conv->GROUP['SNOWDRIFT']																		= "ice";
-		$conv->GROUP['FOG'] 																				= "fog";
-		$conv->GROUP['FROST']																				= "frost";
-		$conv->GROUP['GLAZE'] 																			= "glaze";
-		$conv->GROUP['THAW']																				= "thaw";
-		$conv->GROUP['LAKE']																				= "lake";
-		$conv->GROUP['HEAT'] 																				= "heat";		
-		
-		// standard filler
-		$conv->GROUP['cold']																				= "FROST";
-		$conv->GROUP['coastal']																			= "";
-		$conv->GROUP['flooding']																		= "";
-		$conv->GROUP['rain-flood']																	= "";
-		$conv->GROUP['avalanches']																	= "";
+	$conv->info['tag'][]														= "eventCode";
+	$conv->info['ValueName'][]											= "AREA_COLOR";	
+	                                          			
+	$conv->info['tag'][]														= "eventCode";
+	$conv->info['ValueName'][]											= "GROUP";	
+                                            	
+	$conv->info['tag'][]														= "geocode";
+	$conv->info['ValueName'][]											= "STATE";	
 
+	//$conv->info['tag'][]														= "contact";
+	//$conv->info['ValueName'][]											= "-1";	
 	
-	$conv->eventCode[]																						= "AREA_COLOR";
-	// set convert to eventCode:AREA_COLOR
-	$conv->conv->hazard->level->tag->name													= "eventCode"; 
-	$conv->conv->hazard->level->tag->val													= "AREA_COLOR";
-					
-		// posible hazard level 																					// rgb(204, 153, 255)
-		$conv->AREA_COLOR["100 180 255"] 														= 0; 	// Hellblau = Gr�n Keine
-		$conv->AREA_COLOR["204 153 255"] 														= 1; 	// Rosa Vorabinformation
-		$conv->AREA_COLOR["255 128 128"] 														= 1; 	// Rosa Vorabinformation
-		$conv->AREA_COLOR["255 255 0"] 															= 2;	// Gelb Wetterwarnung
-		$conv->AREA_COLOR["255 255 0"] 															= 3;	// Gelb Wetterwarnung
-		$conv->AREA_COLOR["255 255 0"] 															= 4;	// Gelb Wetterwarnung
-		$conv->AREA_COLOR["255 153 0"] 															= 5; 	// Orange Markantes Wetter
-		$conv->AREA_COLOR["255 153 0"] 															= 6; 	// Orange Markantes Wetter
-		$conv->AREA_COLOR["255 153 0"] 															= 7; 	// Orange Markantes Wetter
-		$conv->AREA_COLOR["255 0 0"] 																= 8; 	// Rot Unwetterwarnung
-		$conv->AREA_COLOR["175 0 100"] 															= 9;	// Violett Extreme Wetterwarnung	
+	//$conv->info['tag'][]														= "event";
+	//$conv->info['ValueName'][]											= "-1";									
+
+	//-------------------------------------------------------------------------------------------------------------------------------------------------                          	
+
+	// alert block                                        	  	
+	$conv->structure['tag'][]												= "identifier";
+	$conv->structure['tag'][]												= "sender";
+	$conv->structure['tag'][]												= "sent";
+	$conv->structure['tag'][]												= "status";
+	$conv->structure['tag'][]												= "msgType";
+	$conv->structure['tag'][]												= "scope";
 	
-	
-	$conv->area->geocode[] 																				= "WARNCELLID";
-	$conv->area->geocode[] 																				= "STATE";
-	
-	// set convert to eventCode:AREA_COLOR
-	$conv->conv->geocode->tag->name																= "geocode"; 
-	$conv->conv->geocode->tag->val																= "STATE";
-	
-	$conv->STATE['BW'] 																						= "DE1";
-	$conv->STATE['BY'] 																						= "DE2";
-	$conv->STATE['BE'] 																						= "DE3";
-	$conv->STATE['BL'] 																						= "DE3";
-	$conv->STATE['BB'] 																						= "DE4";
-	$conv->STATE['HB'] 																						= "DE5";
-	$conv->STATE['HH'] 																						= "DE6";
-	$conv->STATE['HE'] 																						= "DE7";
-	$conv->STATE['MV'] 																						= "DE8";
-	$conv->STATE['NI'] 																						= "DE9";
-	$conv->STATE['NW'] 																						= "DEA";
-	$conv->STATE['RP'] 																						= "DEB";
-	$conv->STATE['SL'] 																						= "DEC";
-	$conv->STATE['SN'] 																						= "DED";
-	$conv->STATE['ST'] 																						= "DEE";
-	$conv->STATE['SH'] 																						= "DEF";
-	$conv->STATE['TH'] 																						= "DEG";
-	
-		// DWD using
-		$conv->using['identifier'] 														= 1;
-		$conv->using['sender']																= 1;
-		$conv->using['sent']																	= 1;
-		$conv->using['status']																= 1;
-		$conv->using['msgType']																= 1;
-		$conv->using['references']														= 1;
-		$conv->using['scope']																	= 1;
+		// info block
+		$conv->structure['tag']['info'][]							= "language";
+		$conv->structure['tag']['info'][]							= "category";
+		$conv->structure['tag']['info'][]							= "event";
+		$conv->structure['tag']['info'][]							= "responseType";
+		$conv->structure['tag']['info'][]							= "eventCode";
+		$conv->structure['tag']['info'][]							= "urgency";
+		$conv->structure['tag']['info'][]							= "severity";
+		$conv->structure['tag']['info'][]							= "certainty";
+		$conv->structure['tag']['info'][]							= "effective";
+		$conv->structure['tag']['info'][]							= "onset";
+		$conv->structure['tag']['info'][]							= "expires";
+		$conv->structure['tag']['info'][]							= "senderName";
+		$conv->structure['tag']['info'][]							= "headline";
+		$conv->structure['tag']['info'][]							= "description";
+		$conv->structure['tag']['info'][]							= "instruction";		
+		$conv->structure['tag']['info'][]							= "web";
+		$conv->structure['tag']['info'][]							= "contact";
 		
-		$conv->using['source']																= 0;		
-		$conv->using['restriction']														= 0;
-		$conv->using['addresses']															= 0;
-		$conv->using['code']																	= 0;
-		$conv->using['note']																	= 0;
-		$conv->using['incidents']															= 0;
-       									
-		$conv->using['language']															= 1;
-		$conv->using['category']															= 1;
-		$conv->using['event']																	= 1;
-		$conv->using['responseType']													= 1;
-		$conv->using['urgency']																= 1;
-		$conv->using['severity']															= 1;
-		$conv->using['certainty']															= 1;
-		$conv->using['audience']															= 1;
-		$conv->using['eventCode']															= 1;
-		$conv->using['effective']															= 1;
-		$conv->using['onset']																	= 1;
-		$conv->using['expires']																= 1;
-		$conv->using['senderName']														= 1;
-		$conv->using['headline']															= 1;
-		$conv->using['description']														= 1;
-		$conv->using['instruction']														= 1;
-		$conv->using['web']																		= 1;
-		$conv->using['contact']																= 1;
-		$conv->using['parameter']															= 0;
-    									
-		$conv->using['areaDesc']															= 1;
-		$conv->using['polygon']																= 1;
-		$conv->using['circle']																= 0;
-		$conv->using['geocode']																= 1;
+		// area block
+			$conv->structure['tag']['info']['area'][]		= "areaDesc";
+			$conv->structure['tag']['info']['area'][]		= "polygon";
+			$conv->structure['tag']['info']['area'][]		= "geocode";
+			$conv->structure['tag']['info']['area'][]		= "altitude";
+			$conv->structure['tag']['info']['area'][]		= "ceiling";
+
+	//-------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//$conv->move['contact'][]												= "coninfo";
+	
+	//$conv->copy['event'][]													= "copy_paste_event";
+	
+	//$conv->move['eventCode'][]											= "moveinfo";
+	
+	$conv->move['STATE'][]													= "area_code";
+
+		$conv->translate['BL'][] 												= "BERLIN";		
+		$conv->translate['BW'][]												=	"BADEN-WÜRTTEMBERG";
+		$conv->translate['BY'][]												=	"BAYERN";
+		$conv->translate['BE'][]												=	"BERLIN";
+		$conv->translate['BB'][]												=	"BRANDENBURG";
+		$conv->translate['HB'][]												=	"BREMEN";
+		$conv->translate['HH'][]												=	"HAMBURG";
+		$conv->translate['HE'][]												=	"HESSEN";
+		$conv->translate['MV'][]												=	"MECKLENBURG-VORPOMMERN";
+		$conv->translate['NI'][]												=	"NIEDERSACHSEN";
+		$conv->translate['NW'][]												=	"NORDRHEIN-WESTFALEN";
+		$conv->translate['RP'][]												=	"RHEINLAND-PFALZ";
+		$conv->translate['SL'][]												=	"SAARLAND";
+		$conv->translate['SN'][]												=	"SACHSEN";
+		$conv->translate['ST'][]												=	"SACHSEN-ANHALT";
+		$conv->translate['SH'][]												=	"SCHLESWIG-HOLSTEIN";
+		$conv->translate['TH'][]												=	"THÜRINGEN";
+	
+	$conv->move['AREA_COLOR'][]											= "hazard_level"; // lösche den source AREA_COLOR oder überschreibe den destinaion AREA_COLOR
+	
+		$conv->translate["100 180 255"][] 						= 'Minor'; 	// Hellblau = Grün Keine
+		$conv->translate["204 153 255"][] 						= 'Minor'; 	// Rosa Vorabinformation
+		
+		$conv->translate["255 255 0"][] 							= 'Moderate';	// Gelb Wetterwarnung
+		
+		$conv->translate["255 153 0"][] 							= 'Severe'; 	// Orange Markantes Wetter
+		
+		$conv->translate["255 0 0"][] 								= 'Extreme'; 	// Rot Unwetterwarnung
+		$conv->translate["175 0 100"][] 							= 'Extreme';	// Violett Extreme Wetterwarnung	
+
+                                            	  	
+	$conv->move['GROUP'][]													= "hazard_type"; // lösche den source awareness_level oder überschreibe den destinaion awareness_level
+		$conv->translate['THUNDERSTORM'][] 						= "thunderstorm";
+		$conv->translate['WIND'][] 										= "wind";
+		$conv->translate['RAIN'][] 										= "rain";
+		$conv->translate['HAIL'][] 										= "hail";
+		$conv->translate['SNOWFALL'][]								= "snow";
+		$conv->translate['SNOWDRIFT'][]								= "ice";
+		$conv->translate['FOG'][] 										= "fog";
+		$conv->translate['FROST'][]										= "frost";
+		$conv->translate['GLAZE'][] 									= "glaze";
+		$conv->translate['THAW'][]										= "thaw";
+		$conv->translate['LAKE'][]										= "lake";
+		$conv->translate['HEAT'][] 										= "heat";		
+		$conv->translate['FROST'][]										= "cold";
+
+	 //-------------------------------------------------------------------------------------------------------------------------------------------------

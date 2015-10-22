@@ -90,8 +90,8 @@
 					        url: url,
 					        data: $("#capform").serialize(), // serializes the forms elements.
 					        success: function(data)
-					        {					        	
-					        	location.reload();
+					        {					        
+										$( "#Saved_conf" ).popup( "open" );
 					        }
 					       });
 					
