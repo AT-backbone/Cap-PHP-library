@@ -1,4 +1,4 @@
-# Cap-PHP- language file - Source file is en_US - main
+﻿# Cap-PHP- language file - Source file is en_US - main
 SeparatorDecimal=,
 SeparatorThousand=.
 Lang=Deutsch
@@ -101,14 +101,15 @@ Labelaudience=audience
 Labelcontact=contact
 Labelweb=web
 LabelsenderNameDesc=(OPTIONAL)<br>Ein von Menschen lesbarer Name der Agentur oder Behörde, die Warnung erstellt hat.
-LabelsenderDesc=(ERFORDERLICH)<br>\n(1) Gibt den Verfasser dieser Warnung an. Dieser Name muss global Eindeutig sein; kann beispielsweise auf dem Namen einer Internet-Domain basieren.<br>\n(2) es dürfen keine Leerzeichen, Komma und andere in XML unerlaubte Zeichen wie   "<" oder "&" verwendet werden.
-LabelaudienceDesc=(OPTIONAL)<br>\nEine von Menschen lesbare Angabe der Zielgruppe
-LabelcontactDesc=(OPTIONAL)<br>\nEin für Menschen lesbarer Text eines Kontakts\nfür die Nachverfolgung und die Bestätigung der Warnmeldung 
+LabelsenderDesc=(ERFORDERLICH)<br> (1) Gibt den Verfasser dieser Warnung an. Dieser Name muss global Eindeutig sein; kann beispielsweise auf dem Namen einer Internet-Domain basieren.<br> (2) es dürfen keine Leerzeichen, Komma und andere in XML unerlaubte Zeichen wie   "<" oder "&" verwendet werden.
+LabelaudienceDesc=(OPTIONAL)<br>Eine von Menschen lesbare Angabe der Zielgruppe
+LabelcontactDesc=(OPTIONAL)<br>Ein für Menschen lesbarer Text eines Kontakts für die Nachverfolgung und die Bestätigung der Warnmeldung 
 LabelwebDesc=(OPTIONAL)<br>Eine absolute URL für eine HTML-Seite oder andere Text-Ressource mit zusätzlichen Informationen zu dieser Warnung.
-LabelareaDesc=area
+Labelarea=area
 Labelpolygon=Polygon
 Labelcircle=Kreis (circle)
-LabelareaDescDesc=(ERFORDERLICH)<br>\nEine für Menschen lesbare Beschreibung des gesamten gewarnten Gebietes
-LabelpolygonDesc=Sobald diese Funktion aktiviert ist können Sie über das Verbinden mehrerer Punkte auf der Karte eine Fläche erzeugen
+LabelareaDesc=Gebietsbeschreibung
+LabelareaDescDesc=(ERFORDERLICH)<br>Eine für Menschen lesbare Beschreibung des gesamten gewarnten Gebietes
+LabelpolygonDesc=(OPTIONAL) <br>(1) Code Wert: Der geografische Polygon sind durch ein Leerzeichen getrennte Liste von in [WGS 84] dargestellten Koordinatenpaaren.<br> (2) Es müssen mindestens 4 Koordinatenpaare vorhanden sein und die ersten und letzten Koordinatepaare müssen gleich sein. <br>(3) Innerhalb eines <area> Blocks können mehrere Instanzen auftreten.<br><br>Sobald diese Funktion aktiviert ist können Sie über das Verbinden mehrerer Punkte auf der Karte eine Fläche erzeugen
 LabelcircleDesc=Sobald diese Funktion aktiviert ist können Sie auf der Karte einen Kreis erzeugen
-LabelGeocodeDesc=Valuename: zB. EMMAID, NUTS1, NUTS2, NUTS3<br>\nValue: zB. AT22
+LabelGeocodeDesc=Valuename: beispielsweise: "EMMAID", "NUTS1", "NUTS2", "NUTS3" etc. <br> Value: beispielsweise:  "AT22"
