@@ -24,5 +24,20 @@ Copyright (C) 2015 Guido Schratzer <guido.schratzer@backbone.co.at>
 Copyright (C) 2015 Niklas Spanring <n.spanring@backbone.co.at>
 
 
+Recomended Requirements:
 
+Hardware:
+	CPU:			Quad Core Intel Xeon CPU X5650 2.67GHz
+	Memory:			4GB
+	disk space:		4.0kB
 
+Software:
+	PHP Version: 	5.3.3
+	OS: 			Linux
+	Apache: 		2.0 Handler
+
+	SimpleXML:		enabled
+	Soap Client:	enabled
+	Soap Server:	enabled
+
+	rights:			write and read (rwxrwxr--) in group apache
