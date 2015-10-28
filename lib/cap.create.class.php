@@ -443,7 +443,7 @@
 			// convert in UTF-8
 			$data = file_get_contents($this->destination.'/'.$this->identifier.$end_type);
 			
-			if (preg_match('!!u', $string))
+			if (preg_match('!!u', $data))
 			{
 			   // this is utf-8
 			}

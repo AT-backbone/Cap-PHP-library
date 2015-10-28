@@ -18,10 +18,7 @@
 	$conv->info['ValueName'][]											= "awareness_type";	
 	
 	$conv->info['tag'][]														= "geocode";
-	$conv->info['ValueName'][]											= "NUTS1";	
-	
-	$conv->info['tag'][]														= "geocode";
-	$conv->info['ValueName'][]											= "NUTS2";
+	$conv->info['ValueName'][]											= "NUTS2";		
 	
 	//$conv->info['tag'][]														= "web";
 	//$conv->info['ValueName'][]											= "-1";
@@ -62,7 +59,6 @@
 			$conv->structure['tag']['info']['area'][]		= "geocode";
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------
-	$conv->move['NUTS1'][]													= "area_code";
 	$conv->move['NUTS2'][]													= "area_code";
 	
 	//$conv->move['web'][]														= "coninfo";
