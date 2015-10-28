@@ -836,7 +836,16 @@
 			
 			// convert in UTF-8
 			$data = file_get_contents($this->destination.'/'.$cap['identifier'].'.conv.cap');
-			$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+			
+			if (preg_match('!!u', $data))
+			{
+			   // this is utf-8
+			}
+			else 
+			{
+			   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+			}
+			
 			file_put_contents($this->destination.'/'.$cap['identifier'].'.conv.cap', $data);
 			
 			return $this->destination.'/'.$cap['identifier'].'.conv.cap';

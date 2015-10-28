@@ -212,9 +212,8 @@
 				
 				case 'category': // Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
 					$category = $this->buildSelect("category", array( "Geo" => $langs->trans("Geo"), "Met" => $langs->trans("Met"), "Safety" => $langs->trans("Safety"), "Security" => $langs->trans("Security"), "Rescue" => $langs->trans("Rescue"), "Fire" => $langs->trans("Fire"), "Health" => $langs->trans("Health"), "Env" => $langs->trans("Env"), "Transport" => $langs->trans("Transport"), "Infra" => $langs->trans("Infra"), "CBRNE" => $langs->trans("CBRNE"), "Other" => $langs->trans("Other") ), "data-native-menu=\"false\"", "Category", $this->category[0]);
-
 					// Shelter / Evacuate / Prepare / Execute / Avoid / Monitor / Assess / AllClear / None
-					$responseType = $this->buildSelect("responseType", array( "Shelter" => $langs->trans("Shelter"), "Evacuate" => $langs->trans("Evacuate"), "Prepare" => $langs->trans("Prepare"), "Execute" => $langs->trans("Execute"), "Avoid" => $langs->trans("Avoid"), "Monitor" => $langs->trans("Monitor"), "Assess" => $langs->trans("Assess"), "AllClear" => $langs->trans("AllClear"), "None" => $langs->trans("None") ), "data-native-menu=\"false\"", "Response Type", $this->responseType[0][0]);
+					$responseType = $this->buildSelect("responseType", array( "Shelter" => $langs->trans("Shelter"), "Evacuate" => $langs->trans("Evacuate"), "Prepare" => $langs->trans("Prepare"), "Execute" => $langs->trans("Execute"), "Avoid" => $langs->trans("Avoid"), "Monitor" => $langs->trans("Monitor"), "Assess" => $langs->trans("Assess"), "AllClear" => $langs->trans("AllClear"), "None" => $langs->trans("None") ), "data-native-menu=\"false\"", "Response Type", ($this->responseType[0][0]));
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").': '.$this->tooltip($type, $langs->trans("LabelSetTheHazardTypeDesc")).'</legend>';							

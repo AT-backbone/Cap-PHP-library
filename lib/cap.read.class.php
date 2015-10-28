@@ -359,6 +359,8 @@
 						return true;
 					break;
 					default:
+						$this->responseType[$this->responseTypeIndex] = 'None';
+						$this->responseTypeIndex++;
 						return false;
 					break;
 				}

@@ -8,24 +8,37 @@
 	 	 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//$conv->info['tag'][]														= "eventCode";
-	//$conv->info['ValueName'][]											= "-1";	
+	//eventCode
 	
 	$conv->info['tag'][]														= "eventCode";
 	$conv->info['ValueName'][]											= "AREA_COLOR";	
 	                                          			
 	$conv->info['tag'][]														= "eventCode";
 	$conv->info['ValueName'][]											= "GROUP";	
-                                            	
+
+	$conv->info['tag'][]														= "eventCode";
+	$conv->info['ValueName'][]											= "PROFILE_VERSION";	
+	
+	$conv->info['tag'][]														= "eventCode";
+	$conv->info['ValueName'][]											= "LICENSE";
+										
+	$conv->info['tag'][]														= "eventCode";
+	$conv->info['ValueName'][]											= "II";	
+	
+	// geocode
+	
 	$conv->info['tag'][]														= "geocode";
 	$conv->info['ValueName'][]											= "STATE";	
-
-	//$conv->info['tag'][]														= "contact";
-	//$conv->info['ValueName'][]											= "-1";	
 	
-	//$conv->info['tag'][]														= "event";
-	//$conv->info['ValueName'][]											= "-1";									
+	$conv->info['tag'][]														= "geocode";
+	$conv->info['ValueName'][]											= "WARNCELLID";	
 
+	$conv->info['tag'][]														= "geocode";
+	$conv->info['ValueName'][]											= "SIGN";	
+	
+	$conv->info['tag'][]														= "geocode";
+	$conv->info['ValueName'][]											= "ALTITUDE";	
+	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------                          	
 
 	// alert block                                        	  	
@@ -64,14 +77,18 @@
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//$conv->move['contact'][]												= "coninfo";
 	
-	//$conv->copy['event'][]													= "copy_paste_event";
+	// do not move's
+	$conv->move['PROFILE_VERSION'][]								= "donotmove1";
+	$conv->move['LICENSE'][]												= "donotmove2";
+	$conv->move['II'][]															= "donotmove3";
 	
-	//$conv->move['eventCode'][]											= "moveinfo";
+	$conv->move['WARNCELLID'][]											= "donotmove4";	
+	$conv->move['SIGN'][]														= "donotmove5";	
+	$conv->move['ALTITUDE'][]												= "donotmove6";	
 	
 	$conv->move['STATE'][]													= "area_code";
-
+	
 		$conv->translate['BL'][] 												= "BERLIN";		
 		$conv->translate['BW'][]												=	"BADEN-WÜRTTEMBERG";
 		$conv->translate['BY'][]												=	"BAYERN";
@@ -92,7 +109,7 @@
 	
 	$conv->move['AREA_COLOR'][]											= "hazard_level"; // lösche den source AREA_COLOR oder überschreibe den destinaion AREA_COLOR
 	
-		$conv->translate["100 180 255"][] 						= 'Minor'; 	// Hellblau = Grün Keine
+		$conv->translate["255 128 128"][] 						= 'Minor'; 	// Hellblau = Grün Keine
 		$conv->translate["204 153 255"][] 						= 'Minor'; 	// Rosa Vorabinformation
 		
 		$conv->translate["255 255 0"][] 							= 'Moderate';	// Gelb Wetterwarnung
@@ -104,6 +121,7 @@
 
                                             	  	
 	$conv->move['GROUP'][]													= "hazard_type"; // lösche den source awareness_level oder überschreibe den destinaion awareness_level
+	
 		$conv->translate['THUNDERSTORM'][] 						= "thunderstorm";
 		$conv->translate['WIND'][] 										= "wind";
 		$conv->translate['RAIN'][] 										= "rain";
