@@ -4,6 +4,6 @@
 *.pui
 *.demosource/conf/*.0
 conf/*.demo
-conf/conf.php
+
 *.cap
 .xml
