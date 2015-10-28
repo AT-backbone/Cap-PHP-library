@@ -250,7 +250,7 @@
 					
 				case 'eventCode': 
 					$out = '<div id="Eventappend">';
-						$out.= '<label for="sent[date]">'.$langs->trans("LabelEventCode").': </label>';
+						$out.= '<legend>'.$langs->trans("LabelEventCode").': '.$this->tooltip($type, $langs->trans("LabelEventCodeDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							foreach($this->eventCode[0] as $key => $eventCode)
 							{
@@ -278,7 +278,7 @@
 				case 'effective': 					
 					if($this->effective[0]) $st = $this->make_cap_time($this->effective[0]);
 					$out = '<div id="Effectiveapend">';
-						$out.= '<label>'.$langs->trans("LabelEffective").': </label>';
+						$out.= '<legend>'.$langs->trans("LabelEffective").': '.$this->tooltip($type, $langs->trans("LabelEffectiveDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
 								$out.= '<input type="date" name="effective[date]" value="'.$st['date'].'">';
@@ -301,7 +301,7 @@
 				case 'onset': 					
 					if($this->onset[0]) $st = $this->make_cap_time($this->onset[0]);
 					$out = '<div id="Onsetapend">';
-						$out.= '<label>'.$langs->trans("LabelOnset").': </label>';
+						$out.= '<legend>'.$langs->trans("LabelOnset").': '.$this->tooltip($type, $langs->trans("LabelOnsetDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
 								$out.= '<input type="date" name="onset[date]" value="'.$st['date'].'">';
@@ -324,7 +324,7 @@
 				case 'expires': 					
 					if($this->expires[0]) $st = $this->make_cap_time($this->expires[0]);
 					$out = '<div id="Expieresapend">';
-						$out.= '<label>'.$langs->trans("LabelExpires").': </label>';
+						$out.= '<legend>'.$langs->trans("LabelExpires").': '.$this->tooltip($type, $langs->trans("LabelExpiresDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
 								$out.= '<input type="date" name="expires[date]" value="'.$st['date'].'">';
@@ -361,7 +361,7 @@
 						if(in_array($key,$this->language)) unset($langs_arr[$key]);
 					}
 					
-					$lang_S = $this->buildSelect("language_select", $langs_arr, "data-native-menu=\"false\" id=\"language\"", "Language");
+					$lang_S = $this->buildSelect("language_select", $langs_arr, "data-native-menu=\"false\" id=\"language\"", $langs->trans("LabelLanguage"));
 					
 					$extralang = '<div data-role="controlgroup" data-type="horizontal">';
 					
@@ -424,7 +424,7 @@
 
 				case 'parameter': 
 					$out = '<div id="Parameterappend">';
-						$out.='<label for="sent[date]">Parameter: </label>';
+						$out.= '<legend>'.$langs->trans("LabelParameter").': '.$this->tooltip($type, $langs->trans("LabelParameterDesc")).'</legend>';	
 						$out.= '<div class="ui-grid-b">';
 							foreach($this->parameter[0] as $key => $parameter)
 							{
@@ -463,10 +463,10 @@
 							$out.= '<div id="mapinfo" class="mapinfo">';								
 								$out.='<ul data-role="listview">';
 									$out.='<li>';
-										$out.='<label for="dragCircle">Polygon:</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
+										$out.='<label for="dragCircle">'.$langs->trans("Labelpolygon").':</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
 									$out.='</li>';
 									$out.='<li>';
-										$out.='<label for="dragCircle">Circle:</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
+										$out.='<label for="dragCircle">'.$langs->trans("Labelcircle").':</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
 									$out.='</li>';
 								$out.='</ul>';
 							$out.= '</div>';
@@ -508,7 +508,8 @@
 						break;
 					
 					case 'cap_output':
-							$out = $langs->trans("LabelOutputOfTheCap").': <input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
+							$out = '<legend>'.$langs->trans("Labelcap_output").': '.$this->tooltip($type.'tool', $langs->trans("Labelcap_outputDesc")).'</legend>';
+							$out.= '<input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
 						break;
 					
 					case 'conf_output':
@@ -520,7 +521,8 @@
 							$out = $langs->trans("LabelIdentifierNumber").': <input type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
 						break;
 					case 'WMO_OID':
-							$out = $langs->trans("LabelWMO_OID").': <input type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
+							$out = '<legend>'.$langs->trans("LabelWMO_OID").': '.$this->tooltip($type.'tool', $langs->trans("LabelWMO_OIDDesc")).'</legend>';
+							$out.= '<input type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
 						break;
 						
 					case 'ISO':
@@ -530,7 +532,8 @@
 					case 'identifier_time':
 						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
-						$out = '<label for="identifier_time">'.$langs->trans("LabelAutomaticIdentifierTime").':</label>';
+						$out = '<legend>'.$langs->trans("LabelAutomaticIdentifierTime").': '.$this->tooltip($type.'tool', $langs->trans("LabelAutomaticIdentifierTimeDesc")).'</legend>';
+						//$out = '<label for="identifier_time">'.$langs->trans("LabelAutomaticIdentifierTime").':</label>';
 						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
 						break;	
 						
@@ -552,9 +555,28 @@
 						$out.= '</select>';
 						break;
 						
+					case 'lang_conf_use':
+							$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
+							$out.= '<select name="conf[user][lang]" id="lang_conf_use" data-native-menu="false" data-iconpos="left">';
+							foreach($conf->trans as $key => $lang_name)
+							{
+								if($conf->user->lang != $key)
+								{
+									$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
+								}
+								else 
+								{
+									$out.= '<option value="'.$key.'" selected="selected">'.$lang_name.'</option>';
+								}
+							}
+	
+							$out.= '</select>';
+						break;
+						
 					case 'lang_conf_plus':
 							$out = '<div id="LangAappend">';
-								$out.='<label for="sent[date]">'.$langs->trans("LabelAddLanguage").': </label>';
+								//$out.='<label for="sent[date]">'.$langs->trans("LabelAddLanguage").': </label>';
+								$out.= '<legend>'.$langs->trans("Labellang_conf_plus").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_plusDesc")).'</legend>';
 								$out.= '<div class="ui-grid-b">';
 									$out.= '<div class="ui-block-a"><input type="text" maxsize="5" placeholder="RFC 3066" name="conf[lang][key]" id="lang_conf_plus_key"></div>';
 									$out.= '<div class="ui-block-b"><input type="text" name="conf[lang][name]" placeholder="Name" id="lang_conf_plus_name"></div>';
@@ -565,7 +587,8 @@
 						
 					case 'lang_conf_remove':
 							$out = '<div id="LangRappend">';
-								$out.='<label for="sent[date]">'.$langs->trans("LabelRemoveLanguage").': </label>';
+								//$out.='<label for="sent[date]">'.$langs->trans("LabelRemoveLanguage").': </label>';
+								$out.= '<legend>'.$langs->trans("Labellang_conf_remove").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_removeDesc")).'</legend>';
 								$out.= '<div class="ui-grid-a">';
 									$out.= '<div class="ui-block-a">';
 										$out.= '<select id="lang_remove" data-native-menu="false" data-iconpos="left">';
@@ -591,39 +614,42 @@
 						break;
 								
 					case 'webservice_password':
-							$out = $langs->trans("webservice_password").':<input type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+							$out = $langs->trans("Labelwebservice_password").':<input type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
 						break;
 						
 					case 'webservice_securitykey':
-							$out = $langs->trans("webservice_securitykey").':<input type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
+							$out = $langs->trans("Labelwebservice_securitykey").':<input type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
 						break;
 						
 					case 'webservice_sourceapplication':
-							$out = $langs->trans("webservice_sourceapplication").':<input type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
+							$out = $langs->trans("Labelwebservice_sourceapplication").':<input type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
 						break;
 						
 					case 'webservice_login':
-							$out = $langs->trans("webservice_login").':<input type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+							$out = $langs->trans("Labelwebservice_login").':<input type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
 						break;
 						
 					case 'webservice_entity':
-							$out = $langs->trans("webservice_entity").':<input type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
+							$out = $langs->trans("Labelwebservice_entity").':<input type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
 						break;
 						
-					case 'webservice_destination':
-							$out = $langs->trans("webservice_destination").':<input type="text" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
-						break;
+					//case 'webservice_destination':
+					//		$out.= '<legend>'.$langs->trans("Labelwebservice_destination").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_destinationDesc")).'</legend>';
+					//		$out.= '<input type="text" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
+					//	break;
 						
 					case 'webservice_WS_METHOD':
 							$out = $langs->trans("webservice_WS_METHOD").':<input type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
 						break;
 						
 					case 'webservice_ns':
-							$out = $langs->trans("webservice_ns").':<input type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_ns").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_nsDesc")).'</legend>';
+							$out.= '<input type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
 						break;
 						
 					case 'webservice_WS_DOL_URL':
-							$out = $langs->trans("webservice_WS_DOL_URL").':<input type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_WS_DOL_URL").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_WS_DOL_URLDesc")).'</legend>';
+							$out.= '<input type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
 						
 					case 'capview':
@@ -632,7 +658,7 @@
 						
 					case 'caplist':
 						$out = '</form><form method="POST" id="capform2" name="capform2" action="index.php?read=1" enctype="multipart/form-data" data-ajax="false">';
-						$out.= '<input type="file" name="uploadfile" id="uploadfile"><input type="submit" value="'.$langs->trans('Upload').'" name="upload" data-ajax="false">';
+						$out.= '<input type="file" name="uploadfile" id="uploadfile"><input type="submit" value="'.$langs->trans('LabelUpload').'" name="upload" data-ajax="false">';
 						$out.= '<fieldset data-role="controlgroup">';
 						
 								foreach(scandir($conf->cap->output) as $num => $capfilename)
@@ -855,13 +881,14 @@
 			$type['conf'][] = "cap_save";
 			$type['conf'][] = "cap_output";
 			
-			$type['conf'][] = "conf_output";
+			// $type['conf'][] = "conf_output";
 					
 			$type['conf'][] = "WMO_OID";
 			$type['conf'][] = "ISO";			
 			$type['conf'][] = "ID_ID";
 			$type['conf'][] = "identifier_time";
 			
+			$type['conf'][] = "lang_conf_use";
 			$type['conf'][] = "lang_conf_plus";
 			$type['conf'][] = "lang_conf_remove";
 			$type['conf'][] = "lang_conf";
@@ -873,7 +900,7 @@
 			$type['conf']['detail'][] = "webservice_login";
 			$type['conf']['detail'][] = "webservice_password";
 			$type['conf']['detail'][] = "webservice_entity";
-			$type['conf']['detail'][] = "webservice_destination";
+			//$type['conf']['detail'][] = "webservice_destination";
 			$type['conf']['detail'][] = "webservice_WS_METHOD";
 			$type['conf']['detail'][] = "webservice_ns";
 			$type['conf']['detail'][] = "webservice_WS_DOL_URL";
@@ -1051,15 +1078,15 @@
 							
 							$out.= '<div data-role="footer" data-theme="b">';						
 								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($pagename == 'alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($pagename == 'info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>Next</h1></a></li></ul>';
-								if($pagename == 'area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>Next</h1></a></li></ul>';
+								if($pagename == 'alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
+								if($pagename == 'info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
+								if($pagename == 'area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
 								if($pagename == 'capview') 				$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
-								if($pagename == 'conf') 					$out.= '<input class="ui-btn" type="button" value="Save" onclick="ajax_conf()">';
+								if($pagename == 'conf') 					$out.= '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
 								
 									if($pagename == 'conf') $out.= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';
 
-									if($pagename == 'conf') $out.= 'Saved!';
+									if($pagename == 'conf') $out.= $langs->trans('Saved!');
 									if($pagename == 'conf') $out.= '</div>';
 							
 							$out.= '</div>';
@@ -1277,7 +1304,7 @@
 								$area = $this->buildSelect("areaconverter", $area_converter, "data-native-menu=\"false\"", "", "standard"); 
 								
 									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
-										$out.= '<legend>'.$langs->trans("SelectStdAreaCap").': '.$this->tooltip($type, $langs->trans("InfoSelectStdAreaCap")).'</legend>';							
+										$out.= '<legend>'.$langs->trans("SelectStdAreaCap").': '.$this->tooltip('SelectStdAreaCaptool', $langs->trans("InfoSelectStdAreaCap")).'</legend>';							
 											$out.= $std;					
 											$out.= $area;							
 									$out.= '</fieldset>';
@@ -1300,7 +1327,7 @@
 								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard"); 
 								
 									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
-										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip($type, $langs->trans("InfoSelectInputandOutputCap")).'</legend>';							
+										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip('SelectInputandOutputCaptool', $langs->trans("InfoSelectInputandOutputCap")).'</legend>';							
 											$out.= $input;					
 											$out.= $output;							
 									$out.= '</fieldset>';
