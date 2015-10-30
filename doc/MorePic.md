@@ -1,3 +1,5 @@
+* [back to Doc-Text](readme.md)
+
 #Simple Date and Time Functions (Jquery)
 
 ![Clock](img/clock.PNG?raw=true "Clock")
