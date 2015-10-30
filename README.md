@@ -13,6 +13,8 @@ You can use it as a standalone application or as a web application to be able to
 
 You can freely use, study, modify or distribute it according to it's Free Software licence.
 
+[doc/](more Detail Information)
+
 ## LICENSE
 
 The Cap-PHP Library released under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version (GPL-3+).
@@ -24,20 +26,3 @@ Copyright (C) 2015 Guido Schratzer <guido.schratzer@backbone.co.at>
 Copyright (C) 2015 Niklas Spanring <n.spanring@backbone.co.at>
 
 
-Recomended Requirements:
-
-Hardware:
-
-	disk space:		2GB
-
-Software:
-
-	PHP Version: 	5.3.3
-	OS: 			Linux
-	Apache: 		2.0 Handler
-
-	SimpleXML:		enabled
-	Soap Client:	enabled
-	Soap Server:	enabled
-
-	rights:			write and read (rwxrwxr--) in group apache
