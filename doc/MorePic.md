@@ -1,1 +1,1 @@
-![Clock](img/clock.png?raw=true "Clock")
+![Clock](img/clock.PNG?raw=true "Clock")
