@@ -28,8 +28,6 @@ Recomended Requirements:
 
 Hardware:
 
-	CPU:			Quad Core Intel Xeon CPU X5650 2.67GHz
-	Memory:			4GB
 	disk space:		4.0kB
 
 Software:
