@@ -7,6 +7,9 @@ Die dazu entwickelten Formulare können mit jedem Browser - auch auf jedem Smart
 
 ![Alert](img/alerten.png?raw=true "Alert")
 
+
+[more Pictures](MorePic)
+
 Die CAP-PHP-Library kann entweder auf einem Apache Webserver(*) oder auf einem lokalen Computer mittels LAMP oder WAMP installiert und betrieben werden.
 Durch die Open-Source Lizensierung können die beinhalteten Funktionen nach belieben in eigene Applikationen eingebunden und weiterentwickelt werden.
  
