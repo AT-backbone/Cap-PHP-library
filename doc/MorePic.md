@@ -1,4 +1,4 @@
-* [back to Doc-Text](README.md)
+[*back to Doc-Text*](README.md)
 
 #Simple Date and Time Functions (Jquery)
 
