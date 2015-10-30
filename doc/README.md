@@ -54,7 +54,7 @@ Die verarbeiteten Dateien werden in das Verzeichnis Input.Finished oder bei eine
 Die Warnung wird in Form von einer News-Anzeige angezeigt
  
 Wann Sie jetzt Interesse habe können sie die Anwendung gerne in unserer Demoumgebung ausprobieren.
-http://portal-demo.backbone.co.at
+https://dolibarr-demo.companyweb.at/public/webservices/cap1.1/
  
 Falls Sie die Anwendung installieren wollen oder Sie sich für die Sourcen interessieren können Sie unter folgenden Link https://github.com/AT-backbone/Cap-PHP-library von GitHub die Sourcen herunter laden.
  
