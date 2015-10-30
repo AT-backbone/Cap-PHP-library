@@ -25,4 +25,18 @@ Copyright (C) 2015 Guido Schratzer <guido.schratzer@backbone.co.at>
 
 Copyright (C) 2015 Niklas Spanring <n.spanring@backbone.co.at>
 
+## used Third Party Software
 
+The user interface is written using PHP. Dynamic interaction is written in [Javascript](http://en.wikipedia.org/wiki/JavaScript) using the [jQuery Mobile](http://jquerymobile.com/) framework.
+ 
+**NuSOAP - Web Services Toolkit for PHP**
+NuSOAP is a set of PHP classes - no PHP extensions required - that allow developers to create and consume web services based on SOAP 1.1, WSDL 1.1 and HTTP 1.0/1.1.
+*http://sourceforge.net/projects/nusoap/*
+
+**jQuery Mobile** 
+JQuery Mobile is a HTML5 based user interface system designed to make responsive web sites and apps that are accessible in the vast majority of devices
+*http://jquerymobile.com/*
+
+**OpenStreetMap**
+An openly licensed map of the world being created by volunteers using local knowledge, GPS tracks and donated sources.
+*https://www.openstreetmap.org/*
