@@ -13,7 +13,7 @@ You can use it as a standalone application or as a web application to be able to
 
 You can freely use, study, modify or distribute it according to it's Free Software licence.
 
-[doc/](more Detail Information)
+[more Detail Information](doc/)
 
 ## LICENSE
 
