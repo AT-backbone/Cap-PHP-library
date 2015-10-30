@@ -28,7 +28,7 @@ Recomended Requirements:
 
 Hardware:
 
-	disk space:		4.0kB
+	disk space:		2GB
 
 Software:
 
