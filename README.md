@@ -1,7 +1,7 @@
 # Cap-PHP Library / Cap Creator
 A common alerting protocol library for processing and producing XML-CAP's from a JQuery HTML form.
 
-It's an Open Source software (written in PHP) designed for users of common alerting protocol Version 1.2 like
+It's an Open Source software (written in PHP) designed for users of the OASIS common alerting protocol like
 * software developers, 
 * hazard authorities for any warnings
 * CAP - Starters
