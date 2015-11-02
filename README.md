@@ -12,7 +12,7 @@ You can freely use, study, modify or distribute it according to it's Software li
 
 [more Detail Information](doc/)
 
-## utilized Third Party Software
+## Utilized Third Party Software
 
 The user interface is written using PHP. Dynamic interaction is written in [Javascript](http://en.wikipedia.org/wiki/JavaScript) using the [jQuery Mobile](http://jquerymobile.com/) framework.
  
@@ -31,7 +31,7 @@ JQuery Mobile is a HTML5 based user interface system designed to make responsive
 An openly licensed map of the world being created by volunteers using local knowledge, GPS tracks and donated sources.
 <br>*https://www.openstreetmap.org/*
 
-## LICENSE
+## License
 
 The Cap-PHP Library released under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version (GPL-3+).
 
