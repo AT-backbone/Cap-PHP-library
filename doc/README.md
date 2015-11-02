@@ -24,11 +24,11 @@ Integration of the Meteoalarm webservice. This function makes it fairly easy to 
 3. Forms were refined for more usability
 Matching values were grouped together.
 
-Added an error- and debug-log
+4. Added an error- and debug-log
 
-5.Online-help was created
+5. Online-help was created
 
-6 Translations
+6. Translations
 the following languages are available: english, german, espanol, french
 
 #Outlook on Version 1.2
