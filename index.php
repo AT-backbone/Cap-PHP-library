@@ -23,7 +23,7 @@
  */
  
 /**
- * Front end of the Cap-php-library
+ * Front end of the Cap-php-library TEST
  */
 
 	require_once 'class/cap.form.class.php';
