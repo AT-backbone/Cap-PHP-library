@@ -2,8 +2,9 @@
 A common alerting protocol library for processing and producing XML-CAP's from a JQuery HTML form.
 
 It's an Open Source software (written in PHP) designed for users of common alerting protocol Version 1.2 like
-
-software developer, hazard authorities for any warnings or for CAP - Starter
+* software developers, 
+* hazard authorities for any warnings
+* CAP - Starters
 
 You can use it as a standalone application or as a web application accessible via the Internet or via LAN.
 
@@ -21,7 +22,7 @@ Copyright (C) 2015 Guido Schratzer <guido.schratzer@backbone.co.at>
 
 Copyright (C) 2015 Niklas Spanring <n.spanring@backbone.co.at>
 
-## used Third Party Software
+## utilized Third Party Software
 
 The user interface is written using PHP. Dynamic interaction is written in [Javascript](http://en.wikipedia.org/wiki/JavaScript) using the [jQuery Mobile](http://jquerymobile.com/) framework.
  
