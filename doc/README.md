@@ -14,32 +14,32 @@ The Library is open-source therefore you may freely alter it or include function
 
 #Features in Version 1.1
 
-1. Converting between different CAP formats
+1. **Converting between different CAP formats**
 <br>You can include convert-files which enable you to alter tags and values (like Eventcode / Parameter/ Areas) to your choosen style.
 <br>For instance: change value "hazard-type" to "kind of alert" or  "geocode" to "areacode" or "Deutschland" to "Germany"
 
-2. The export via SOAP-webservice was refined
+2. **The export via SOAP-webservice was refined**
 <br>Integration of the Meteoalarm webservice. This function makes it fairly easy to send a CAP to another webservice too.
 
-3. Forms were refined for more usability
+3. **Forms were refined for more usability**
 <br>Matching values were grouped together.
 
-4. Added an error- and debug-log
+4. **Added an error- and debug-log**
 
-5. Online-help was created
+5. **Online-help was created**
 
-6. Translations
+6. **Translations**
 <br>the following languages are available: english, german, espanol, french
 
 #Outlook on Version 1.2
 
-**1. GeoAdminTool for multiple Warnings**
+1. **GeoAdminTool for multiple Warnings**
 <br>A form for multiple Warnings. With one click you can create multiple CAPs and an atom-feed.
 
-**2. Automatic converting**
+2. **Automatic converting**
 <br>Automatic conversion of CAPs added to an input folder.
 
-**3. Display of CAPs as a news-report**
+3. **Display of CAPs as a news-report**
 
 If we spiked your interest you may test the application on our test-server:
 <br>https://dolibarr-demo.companyweb.at/public/webservices/cap1.1/
