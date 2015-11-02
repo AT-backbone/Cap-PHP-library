@@ -15,21 +15,21 @@ The Library is open-source therefore you may freely alter it or include function
 #Features in Version 1.1
 
 1. Converting between different CAP formats
-You can include convert-files which enable you to alter tags and values (like Eventcode / Parameter/ Areas) to your choosen style.
+<br>You can include convert-files which enable you to alter tags and values (like Eventcode / Parameter/ Areas) to your choosen style.
 <br>For instance: change value "hazard-type" to "kind of alert" or  "geocode" to "areacode" or "Deutschland" to "Germany"
 
 2. The export via SOAP-webservice was refined
-Integration of the Meteoalarm webservice. This function makes it fairly easy to send a CAP to another webservice too.
+<br>Integration of the Meteoalarm webservice. This function makes it fairly easy to send a CAP to another webservice too.
 
 3. Forms were refined for more usability
-Matching values were grouped together.
+<br>Matching values were grouped together.
 
 4. Added an error- and debug-log
 
 5. Online-help was created
 
 6. Translations
-the following languages are available: english, german, espanol, french
+<br>the following languages are available: english, german, espanol, french
 
 #Outlook on Version 1.2
 
