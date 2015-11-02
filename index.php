@@ -188,4 +188,8 @@
 		$form->WriteConf();
 		return true;
 	}
+	elseif($_GET['ftp'])
+	{
+		print 'TEST';
+	}
 ?>
