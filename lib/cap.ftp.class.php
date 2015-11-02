@@ -40,6 +40,25 @@
 			
 		}
 		
-		
+		function cap_ftp_login($ftp_server, $ftp_user, $ftp_pass)
+		{
+			global $conf, $lang;
+			$ftp_server = "ftp-outgoing2.dwd.de"; // /gds/specials/alerts/cap/GER/status/
+			$ftp_user = "gds18541";
+			$ftp_pass = "olvfEVIY";
+			
+			// Verbindung aufbauen
+			$conn_id = ftp_connect($ftp_server) or die("Couldn't connect to ".$ftp_server);
+			
+			// Anmeldung versuchen
+			if (@ftp_login($conn_id, $ftp_user, $ftp_pass)) {
+			    echo "Angemeldet als ".$ftp_user."@".$ftp_server."\n";
+			} else {
+			    echo "Anmeldung als ".$ftp_user." nicht möglich\n";
+			}
+			
+			// Verbindung schließen
+			ftp_close($conn_id);
+		}
 	}
 ?>

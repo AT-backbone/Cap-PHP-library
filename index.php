@@ -30,6 +30,7 @@
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
+	require_once 'lib/cap.ftp.class.php';
 	require_once 'class/translate.class.php';
 	
 	if(file_exists('conf/conf.php'))
@@ -135,7 +136,7 @@
 
 			print $form->Form();
 	}
-	elseif(empty($_POST['action']) && $_GET['webservice'] != 1)
+	elseif(empty($_POST['action']) && $_GET['webservice'] != 1 && empty($_GET['ftp']))
 	{
 		// Build Cap Creator form
 		if(! empty($_GET['delete']))
@@ -190,6 +191,15 @@
 	}
 	elseif($_GET['ftp'])
 	{
-		print 'TEST';
+		print '<p>FTP: </p>';
+
+		$ftp_server = "ftp-outgoing2.dwd.de"; // /gds/specials/alerts/cap/GER/status/
+		$ftp_user = "gds18541";
+		$ftp_pass = "olvfEVIY";
+
+		$ftp = new FTP_CAP_CLASS();
+		
+		$ftp->cap_ftp_login($ftp_server, $ftp_user, $ftp_pass);
+
 	}
 ?>
