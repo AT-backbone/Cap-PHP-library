@@ -7,3 +7,4 @@ conf/*.demo
 
 *.cap
 .xml
+ftp_tmp/*.zip

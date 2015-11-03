@@ -189,17 +189,46 @@
 		$form->WriteConf();
 		return true;
 	}
-	elseif($_GET['ftp'])
+	elseif($_GET['ftp'] == 1)
 	{
-		print '<p>FTP: </p>';
-
-		$ftp_server = "ftp-outgoing2.dwd.de"; // /gds/specials/alerts/cap/GER/status/
-		$ftp_user = "gds18541";
-		$ftp_pass = "olvfEVIY";
-
+		
+		/* Nach 119 sec. tod*/
+		$ftp_server = "ftp-outgoing2.dwd.de"; // 
+		$ftp_dir 		= "gds/specials/alerts/cap/GER/status/";
+		$ftp_user 	= "gds18541";
+		$ftp_pass 	= "olvfEVIY";
+		/*
+		
+		$ftp_server 			= "ispweb.backbone.co.at"; // /gds/specials/alerts/cap/GER/status/
+		$ftp_user 				= "ftp_test";
+		$ftp_pass 				= "diamond11";
+		$ftp_dir 					= "web/ftp_test";
+		*/
+		
 		$ftp = new FTP_CAP_CLASS();
 		
-		$ftp->cap_ftp_login($ftp_server, $ftp_user, $ftp_pass);
+		$ftp->cap_ftp_open_conection($ftp_server, $ftp_user, $ftp_pass);
+	
+		$ftp->cap_ftp_dir($ftp_dir);
+		
+		$ftp->get_cap_ftp_content();
+		
+		print $ftp->debug;
+	}
+	elseif($_GET['ftp'] == 2)
+	{
+		$ftp = new FTP_CAP_CLASS();
 
+		$ftp->cap_zip_extract();
+		
+		print $ftp->debug;
+	}
+	elseif($_GET['ftp'] == 3)
+	{
+		$ftp = new FTP_CAP_CLASS();
+		
+		$ftp->convert_all_cap_ftp();
+		
+		print $ftp->debug;		
 	}
 ?>

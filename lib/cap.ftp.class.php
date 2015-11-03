@@ -30,6 +30,9 @@
 
 	class FTP_CAP_CLASS{
 		
+		var $conn_id = 0;
+		var $debug = "<p>FTP: <p>"; // $this->debug = "
+		var $files = array();
 		/**
      * initialize Class with Data
      *
@@ -40,25 +43,117 @@
 			
 		}
 		
-		function cap_ftp_login($ftp_server, $ftp_user, $ftp_pass)
+		function cap_ftp_open_conection($ftp_server, $ftp_user, $ftp_pass)
 		{
 			global $conf, $lang;
-			$ftp_server = "ftp-outgoing2.dwd.de"; // /gds/specials/alerts/cap/GER/status/
-			$ftp_user = "gds18541";
-			$ftp_pass = "olvfEVIY";
 			
 			// Verbindung aufbauen
-			$conn_id = ftp_connect($ftp_server) or die("Couldn't connect to ".$ftp_server);
+			$this->conn_id = ftp_connect($ftp_server) or $this->debug = "Couldn't connect to ".$ftp_server;
 			
 			// Anmeldung versuchen
-			if (@ftp_login($conn_id, $ftp_user, $ftp_pass)) {
-			    echo "Angemeldet als ".$ftp_user."@".$ftp_server."\n";
+			if (@ftp_login($this->conn_id, $ftp_user, $ftp_pass)) {
+			    $this->debug.= "<p>Angemeldet als ".$ftp_user."@".$ftp_server;
 			} else {
-			    echo "Anmeldung als ".$ftp_user." nicht möglich\n";
+			    $this->debug.= "<p>Anmeldung als ".$ftp_user." nicht möglich";
 			}
 			
+		}
+		
+		function cap_ftp_dir($dir)
+		{
+				$this->debug.= "<p>Change dir from: ".ftp_pwd($this->conn_id);
+				ftp_chdir($this->conn_id, $dir);
+				$this->debug.= "<p>To: ".ftp_pwd($this->conn_id);
+		}
+		
+		function get_cap_ftp_content()
+		{
+			$time_start = microtime(true);
+			$this->debug.= "<p>Read all files form: ".ftp_pwd($this->conn_id);
+			$this->files = ftp_nlist($this->conn_id, ".");
+			
+			foreach($this->files as $key => $filename)
+			{
+				if(!file_exists("ftp_tmp/".$filename))
+				{
+					$this->debug.= "<br>".$key." => ".$filename;
+					
+					$filesize = ftp_size($this->conn_id, $filename);
+					
+					//echo $filename.' - '.$filesize.' - '.date("Y-m-d H:i:s").'<br>';
+	
+					$handle = "ftp_tmp/".$filename;
+					
+					$time_end = microtime(true);
+					$time = $time_end - $time_start;
+					
+					echo "Start --- ".$filename." size: ".$filesize." time:".$time."<p>";
+					flush();
+					ob_flush();
+					
+					$res = $this->cap_ftp_download($handle, $filename);
+					
+					//sleep(1);
+					
+					echo "Fertig -- ".$filename." === ".$res."<p>";
+					flush();
+					ob_flush();
+					
+					if($res)
+					{
+						$this->debug.= "Finshd file: ".$handle;
+					}
+					else
+					{
+						$this->debug.= "Can't save file: ".$handle;
+					}
+				}
+			}			
+		}
+		
+		function cap_ftp_download($handle, $filename)
+		{
+			$res = ftp_get($this->conn_id, $handle, $filename, FTP_BINARY, 0);
+			return $res;
+		}
+		
+		function cap_zip_extract()
+		{
+			$files2 = scandir('ftp_tmp', 1);
+			foreach($files2 as $file)
+			{
+				if($file != "." && $file != "..")
+				{
+					$this->debug.= $file."<p>";
+					$zip = new ZipArchive;
+					if ($zip->open("ftp_tmp/".$file) === TRUE) {
+					    $zip->extractTo('ftp_zip/');
+					    $zip->close();
+					    $this->debug.= ' ok<br>';
+					} else {
+					    $this->debug.= ' Fehler<br>';
+					}
+				}
+			}
+		}
+		
+		function convert_all_cap_ftp()
+		{
+			$files2 = scandir('ftp_zip', 1);
+			foreach($files2 as $file)
+			{
+				if($file != "." && $file != "..")
+				{
+					$this->debug.= '<br>To convert: '.$file ;
+				}
+			}
+		}
+		
+		function cap_ftp_close_conection()
+		{
 			// Verbindung schließen
-			ftp_close($conn_id);
+			ftp_close($this->conn_id);
+			$this->debug.= "<p>FTP Conection Closed";
 		}
 	}
 ?>
