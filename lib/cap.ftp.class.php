@@ -156,7 +156,7 @@
 					$alert = new alert("ftp_zip/".$file);
 					$cap = $alert->output();
 						
-					if(!file_exists("ftp_convert/".$cap['identifier'].".conv.cap") && !file_exists("ftp_convert/".$cap['identifier'].".conv.cap.prc") && (strtotime($cap['info'][0]['expires']) > strtotime('now')))
+					if(!file_exists("ftp_convert/".$cap['identifier'].".conv.cap") && !file_exists("ftp_convert/".$cap['identifier'].".conv.cap.prc") && !file_exists("ftp_convert/".$cap['identifier'].".conv.cap.err") && (strtotime($cap['info'][0]['expires']) > strtotime('now')))
 					{
 						echo "Start --- from: ".$file." to: "."ftp_convert/".$cap['identifier'].".conv.cap<p>";
 						flush();
@@ -185,7 +185,7 @@
 			$files2 = scandir('ftp_convert', 1);
 			foreach($files2 as $file)
 			{
-				if($file != "." && $file != ".." && substr ($file, -4) != ".prc")
+				if($file != "." && $file != ".." && substr ($file, -4) != ".prc" && substr ($file, -4) != ".err")
 				{
 					$conf->cap->output = "ftp_convert";
 					$_POST[filename] = $file;
