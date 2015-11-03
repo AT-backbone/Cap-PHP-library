@@ -133,7 +133,8 @@
 		function convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)
 		{
 			global $conf;
-			$this->destination = $conf->cap->output;
+			if($cap_output_path) $this->destination = $cap_output_path;
+			else								 $this->destination = $conf->cap->output;
 			
 			cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
 			cap_syslog('Start Converting !', LOG_INFO, 'CAP_Converter'); // LOG_EMERG LOG_ALER, LOG_CRIT LOG_ERR LOG_WARNING LOG_NOTICE LOG_INFO LOG_DEBUG

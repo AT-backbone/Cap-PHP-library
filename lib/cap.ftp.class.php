@@ -137,14 +137,204 @@
 			}
 		}
 		
-		function convert_all_cap_ftp()
+		function convert_all_cap_ftp($input, $output)
 		{
+			global $conf;
+			require_once 'lib/cap.convert.class.php';
+			require_once 'lib/cap.read.class.php';
+			
+			error_reporting(E_ERROR);
+			set_time_limit ( 1500 );
+			$conf->disable_log = 1;
+			
 			$files2 = scandir('ftp_zip', 1);
 			foreach($files2 as $file)
 			{
 				if($file != "." && $file != "..")
 				{
-					$this->debug.= '<br>To convert: '.$file ;
+					// read the cap
+					$alert = new alert("ftp_zip/".$file);
+					$cap = $alert->output();
+						
+					if(!file_exists("ftp_convert/".$cap['identifier'].".conv.cap"))
+					{
+						echo "Start --- from: ".$file." to: "."ftp_convert/".$cap['identifier'].".conv.cap<p>";
+						flush();
+						ob_flush();
+						
+						$converter = new Convert_CAP_Class();						
+						$capconvertet = $converter->convert($cap, 'test',	'test', $input, $output, 'ftp_convert/');
+				
+						$this->debug.= '<br>To convert: '.$file." id: ".$cap['identifier'];
+						unset($converter, $cap, $alert);				
+					}
+					else
+					{
+						$this->debug.= '<br>Alredy converted: '.$file." id: ".$cap['identifier'];
+						echo "<br>Stop --- from: ".$file." to: "."ftp_convert/".$cap['identifier'].".conv.cap<p>";
+						flush();
+						ob_flush();
+					}
+				}
+			}
+		}
+		
+		function send_cap_ftp_soap()
+		{
+			global $conf;
+			
+			error_reporting(E_ERROR);
+			
+			$files2 = scandir('ftp_convert', 1);
+			foreach($files2 as $file)
+			{
+				if($file != "." && $file != "..")
+				{
+					$conf->cap->output = "ftp_convert";
+					$_POST[filename] = $file;
+					
+					$conf->webservice->password = $this->encrypt_decrypt(2, $conf->webservice->password);
+					
+															
+										require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
+										
+										$filename = $_POST[filename];
+										if($_POST['import']==1) $import = true; else $import = false;
+										// if($_POST['debug']==1) $debug = true; else $debug = false;
+										$debug = true;
+										if($import == "") $import = true;
+										
+										if ($_POST[filename])
+										{
+											// Set the WebService URL
+											$soapclient = new nusoap_client($conf->webservice->WS_DOL_URL); // <-- set the Timeout above 300 Sec.
+											if ($soapclient)
+											{
+												$soapclient->soap_defencoding='UTF-8';
+												$soapclient->decodeUTF8(false);
+											}
+											
+											// Call the WebService method and store its result in $result.
+											$authentication=array(
+											    'dolibarrkey'=>$conf->webservice->securitykey,
+											    'sourceapplication'=>$conf->webservice->WS_METHOD,
+											  	'login'=> $conf->webservice->login,
+										  	  'password'=> $conf->webservice->password);
+										 
+										  $tmpfile = $conf->cap->output.'/'.$_POST[filename];
+											$handle = fopen($tmpfile, "r");                  // Open the temp file
+											$contents = fread($handle, filesize($tmpfile));  // Read the temp file
+											fclose($handle);                                 // Close the temp file
+										
+										   	//$contents = preg_replace('/[\x00-\x1f]/', ' ', $contents);
+											$document=array(
+											    'filename'=> $_POST[filename],
+											    'mimetype'=> 'text/xml',
+											    'content'=> $contents,						//$_FILES["uploadfile"]["tmp_name"]
+											    'length'=> filesize($tmpfile),
+												'warning_import'=>$import,
+												'debug_msg'=>$debug);
+											    	
+											
+												$parameters = array('authentication'=>$authentication, 'document'=>$document);
+												
+												$result = $soapclient->call($conf->webservice->WS_METHOD,$parameters,$conf->webservice->ns,'');
+												if ($soapclient->fault) {
+											    $out.= '<h2>Fault</h2><pre>';
+											    $out.=var_dump($result);
+											    $out.= '</pre>';
+											} else {
+											    // Check for errors
+											    $err = $soapclient->getError();
+											    if ($err) {
+											        // Display the error
+											        $out.= '<h2>Error</h2><pre>' . $err . '</pre>';
+											    } else {
+											        // write file to tmp Directory
+											        // file_put_contents('tmp/'.$result["document"]["filename"], $result["document"]["content"]);
+											        // Display the result
+											    }
+											}
+											if($result["syntaxcheck"]["capformat_error"]==1) $format_error = "YES"; else $format_error = "NO";
+											if($result["syntaxcheck"]["capvalue_error"]==1) $value_error = "YES"; else $value_error = "NO";
+											if($result["syntaxcheck"]["cnt_errors"]>0) $error_bool = '<p>CAP format Error:'.$format_error.'<p>CAP value Error:'.$value_error.'<p>Cnt Errors:'.$result["syntaxcheck"]["cnt_errors"].'<p>';
+											
+											// Display the request and response
+											$out.= '<h2>Response</h2>';
+											$out.= '<h3>Message:</h3>';
+											$out.= '<pre>'.$result["result"]["result_label"].'</pre>';
+											$out.= '<pre>'.$result["result_label"].'</pre>';
+											$out.= '<pre>'.$error_bool.$result["syntaxcheck"]["error_log"].$result["syntaxcheck"]["debug_msg"].'</pre>';
+										
+										}
+					echo $out;
+					flush();
+					ob_flush();
+					unset($out);
+					
+					$conf->webservice->password = $this->encrypt_decrypt(1, $conf->webservice->password);
+					
+				}
+			}
+		}
+		
+		
+		/**
+     * encrypt and decrypt function for passwords
+     *     
+     * @return	string
+     */
+		function encrypt_decrypt($action, $string, $key) 
+		{
+			global $conf;
+			
+			$output = false;
+		
+			$encrypt_method = "AES-256-CBC";
+			$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
+			$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+		
+			// hash
+			$key = hash('sha256', $secret_key);
+			
+			// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+			$iv = substr(hash('sha256', $secret_iv), 0, 16);
+		
+			if( $action == 1 ) {
+				$output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+				$output = base64_encode($output);
+			}
+			else if( $action == 2 ){
+				$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+			}
+		
+			return $output;
+		}
+		
+		function delete_all_cap_ftp()
+		{
+			$files2 = scandir('ftp_tmp', 1);
+			foreach($files2 as $file)
+			{
+				if($file != "." && $file != "..")
+				{
+					unlink('ftp_tmp/'.$file);
+				}
+			}
+			$files2 = scandir('ftp_zip', 1);
+			foreach($files2 as $file)
+			{
+				if($file != "." && $file != "..")
+				{
+					unlink('ftp_zip/'.$file);
+				}
+			}
+			$files2 = scandir('ftp_convert', 1);
+			foreach($files2 as $file)
+			{
+				if($file != "." && $file != "..")
+				{
+					unlink('ftp_convert/'.$file);
 				}
 			}
 		}

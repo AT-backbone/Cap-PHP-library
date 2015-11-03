@@ -66,7 +66,7 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
     // If syslog module enabled
     //if (empty($conf->syslog->enabled)) return;
 
-    if (! empty($level))
+    if (! empty($level) && empty($conf->disable_log))
     {
         // Test log level
         $logLevels = array( LOG_EMERG, LOG_ALERT, LOG_CRIT, LOG_ERR, LOG_WARNING, LOG_NOTICE, LOG_INFO, LOG_DEBUG);

@@ -2,15 +2,15 @@
 date_default_timezone_set('Europe/Vienna');
 $conf->timezone->set_default                           = 'Europe/Vienna';
 
-$conf->user->lang                                      = 'de_DE';
+$conf->user->lang                                      = 'en_US';
 
 $conf->cap->save                                       = 1;
 $conf->cap->output                                     = 'output';
 
 $conf->identifier->WMO_OID                             = '2.49.0.20.0';
-$conf->identifier->ISO                                 = 'AT';
+$conf->identifier->ISO                                 = '';
 $conf->identifier->time->on                            = 1;
-$conf->identifier->ID_ID                               = 135;
+$conf->identifier->ID_ID                               = 140;
 
 $conf->lang['en-GB']                                   = 'english';
 $conf->lang['ca']                                      = 'català';
@@ -77,13 +77,13 @@ $conf->select->lang['mk']                              = 0;
 
 $conf->webservice->on                                  = 1;
 $conf->webservice->sourceapplication                   = 'putCap';
-$conf->webservice->login                               = '';
-$conf->webservice->password                            = '';
+$conf->webservice->login                               = 'googletest';
+$conf->webservice->password                            = 'SHlvRkt6bGRESENKRXQ4eEg0Qmd0UT09';
 $conf->webservice->entity                              = 1;
 $conf->webservice->WS_METHOD                           = 'putCap';
 $conf->webservice->ns                                  = 'http://www.meteoalarm.eu:8080/functions/webservices/';
 $conf->webservice->WS_DOL_URL                          = 'http://www.meteoalarm.eu:8080/functions/webservices/capimport.php';
-$conf->webservice->securitykey                         = '';
+$conf->webservice->securitykey                         = '5c2947c0c574e56ac11a4cf8f410d40b';
 
 $conf->conf->output                                    = '';
 

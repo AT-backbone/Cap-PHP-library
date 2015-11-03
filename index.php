@@ -227,7 +227,23 @@
 	{
 		$ftp = new FTP_CAP_CLASS();
 		
-		$ftp->convert_all_cap_ftp();
+		$ftp->convert_all_cap_ftp('dwd','meteoalarm');
+		
+		print $ftp->debug;		
+	}
+	elseif($_GET['ftp'] == 4)
+	{
+		$ftp = new FTP_CAP_CLASS();
+		
+		$ftp->send_cap_ftp_soap();
+		
+		print $ftp->debug;		
+	}
+	elseif($_GET['ftp'] == 5)
+	{
+		$ftp = new FTP_CAP_CLASS();
+		
+		$ftp->delete_all_cap_ftp();
 		
 		print $ftp->debug;		
 	}
