@@ -4,7 +4,7 @@
 *.pui
 *.demosource/conf/*.0
 conf/*.demo
-
+conf.php
 *.cap
 .xml
 ftp_tmp/*.zip
