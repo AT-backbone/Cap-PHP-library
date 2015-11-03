@@ -156,7 +156,7 @@
 					$alert = new alert("ftp_zip/".$file);
 					$cap = $alert->output();
 						
-					if(!file_exists("ftp_convert/".$cap['identifier'].".conv.cap"))
+					if(!file_exists("ftp_convert/".$cap['identifier'].".conv.cap") && !file_exists("ftp_convert/".$cap['identifier'].".conv.cap.prc") && (strtotime($cap['info'][0]['expires']) > strtotime('now')))
 					{
 						echo "Start --- from: ".$file." to: "."ftp_convert/".$cap['identifier'].".conv.cap<p>";
 						flush();
@@ -171,9 +171,6 @@
 					else
 					{
 						$this->debug.= '<br>Alredy converted: '.$file." id: ".$cap['identifier'];
-						echo "<br>Stop --- from: ".$file." to: "."ftp_convert/".$cap['identifier'].".conv.cap<p>";
-						flush();
-						ob_flush();
 					}
 				}
 			}
@@ -188,7 +185,7 @@
 			$files2 = scandir('ftp_convert', 1);
 			foreach($files2 as $file)
 			{
-				if($file != "." && $file != "..")
+				if($file != "." && $file != ".." && substr ($file, -4) != ".prc")
 				{
 					$conf->cap->output = "ftp_convert";
 					$_POST[filename] = $file;
@@ -267,10 +264,19 @@
 											$out.= '<pre>'.$error_bool.$result["syntaxcheck"]["error_log"].$result["syntaxcheck"]["debug_msg"].'</pre>';
 										
 										}
-					echo $out;
+					echo '<h1> File:'.$file.'</h1>'.$out;
 					flush();
 					ob_flush();
 					unset($out);
+					
+					if($result["syntaxcheck"]["capformat_error"]==1 || $result["syntaxcheck"]["capvalue_error"] == 1 || $result["syntaxcheck"]["cnt_errors"] > 0)
+					{
+						rename ("ftp_convert/".$file, "ftp_convert/".$file.".err");
+					}
+					else
+					{
+						rename ("ftp_convert/".$file, "ftp_convert/".$file.".prc");
+					}
 					
 					$conf->webservice->password = $this->encrypt_decrypt(1, $conf->webservice->password);
 					

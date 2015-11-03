@@ -768,8 +768,8 @@
 						foreach($info['eventCode'] as $key => $eventCode)
 						{
 							$xml->tag_open('eventCode');							
-								$xml->tag_simple('valueName', $eventCode['valueName']);
-								$xml->tag_simple('value', $eventCode['value']);							
+								$xml->tag_simple('valueName', htmlentities($eventCode['valueName']));
+								$xml->tag_simple('value', htmlentities($eventCode['value']));							
 							$xml->tag_close('eventCode');
 						}
 						
@@ -790,8 +790,8 @@
 						foreach($info['parameter'] as $key => $parameter)
 						{
 							$xml->tag_open('parameter');						
-								$xml->tag_simple('valueName', $parameter['valueName']);
-								$xml->tag_simple('value', $parameter['value']);							
+								$xml->tag_simple('valueName', htmlentities($parameter['valueName']));
+								$xml->tag_simple('value', htmlentities($parameter['value']));							
 							$xml->tag_close('parameter');						
 						} // foreach parameter
 						
@@ -808,8 +808,8 @@
 								foreach($area['geocode'] as $key => $geocode)
 								{
 									$xml->tag_open('geocode');						
-										$xml->tag_simple('valueName', $geocode['valueName']);
-										$xml->tag_simple('value', $geocode['value']);							
+										$xml->tag_simple('valueName', htmlentities($geocode['valueName']));
+										$xml->tag_simple('value', htmlentities($geocode['value']));							
 									$xml->tag_close('geocode');
 								} // foreach geocode
 							
