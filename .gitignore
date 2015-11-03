@@ -1,9 +1,1 @@
-*.bak
-*.0
-*.prj
-*.pui
-*.demosource/conf/*.0
-conf/*.demo
-
-*.cap
-.xml
+html/
