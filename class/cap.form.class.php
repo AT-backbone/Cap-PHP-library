@@ -145,11 +145,11 @@
 						if(!is_array($this->identifier))
 						{
 							$out.= '<div class="ui-grid-c">';
-								$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
+								if(!empty($conf->identifier->WMO_OID))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
 								if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
 								if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
-								else																		$out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" ></div>'; // YYMMDDHHMMSS
-								$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
+								if(!empty($conf->identifier->ID_ID))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
+								if(empty($conf->identifier->ID_ID)) 		$out.= '<div class="ui-block-d"><input placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
 							$out.= '</div>';
 						}
 						else
@@ -1430,9 +1430,23 @@
 		 */
 		function MakeIdentifier($post)
 		{
-			if(!empty($post[identifier][WMO]) && ! empty($post[identifier][ISO]) && ! empty($post[identifier][time])) 
+			if(!empty($post[identifier][WMO]) || ! empty($post[identifier][ISO]) || ! empty($post[identifier][time])) 
 			{
-				$temp = $post[identifier][WMO].".".$post[identifier][ISO].".".$post[identifier][time].".".$post[identifier][ID];
+				$temp = "";
+				$i = 0;
+				foreach($post[identifier] as $id_val)
+				{
+					if($i == 0)
+					{
+						$temp.= $id_val;
+					}
+					else
+					{
+						$temp.= ".".$id_val;					
+					}
+					if(!empty($id_val)) $i++;
+				}
+				
 				unset($post[identifier]);
 				$post[identifier] = $temp;
 			}
