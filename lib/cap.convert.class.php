@@ -33,7 +33,7 @@
 		var $cap = "";
 		var $destination = "output";
 		var $debug = "";
-
+		var $_log = "";
 		
 		// alert
 		var $identifier			= ""; 			// WMO Organisation ID green -> Your Country ISO Code -> Your File Date/Time "YYMMDDHHMMSS" -> your warning ID (CHAR max Len: 20 / special characters are not allowed only a-Z 0-9 and "_") -> 2.49.0.3.0.AT.150112080000.52550478
@@ -132,24 +132,26 @@
 
 		function convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)
 		{
+			error_reporting(E_ERROR);
 			global $conf;
-			$this->destination = $conf->cap->output;
+			if($cap_output_path) $this->destination = $cap_output_path;
+			else								 $this->destination = $conf->cap->output;
 			
-			cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
-			cap_syslog('Start Converting !', LOG_INFO, 'CAP_Converter'); // LOG_EMERG LOG_ALER, LOG_CRIT LOG_ERR LOG_WARNING LOG_NOTICE LOG_INFO LOG_DEBUG
-			cap_syslog('', LOG_INFO, 'CAP_Converter');
-			cap_syslog(array('Input File: ', 'conv_'.$input.'.conf.php'), LOG_INFO, 'CAP_Converter');
-			cap_syslog(array('Output File: ', 'conv_'.$output.'.conf.php'), LOG_INFO, 'CAP_Converter');
-			cap_syslog('', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('Start Converting !', LOG_INFO, 'CAP_Converter'); // LOG_EMERG LOG_ALER, LOG_CRIT LOG_ERR LOG_WARNING LOG_NOTICE LOG_INFO LOG_DEBUG
+			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('Input File: ', 'conv_'.$input.'.conf.php'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('Output File: ', 'conv_'.$output.'.conf.php'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			
 			if(!file_exists('./convert/conv_'.$input.'.conf.php'))
 			{
-				cap_syslog('Could not found: ./convert/conv_'.$input.'.conf.php', LOG_ERR, 'CAP_Converter');
+				$this->_log.= cap_syslog('Could not found: ./convert/conv_'.$input.'.conf.php', LOG_ERR, 'CAP_Converter');
 				return 'Could not found: ./convert/conv_'.$input.'.conf.php';
 			}			
 			if(!file_exists('./convert/conv_'.$output.'.conf.php'))
 			{
-				cap_syslog('Could not found: ./convert/conv_'.$output.'.conf.php', LOG_ERR, 'CAP_Converter');
+				$this->_log.= cap_syslog('Could not found: ./convert/conv_'.$output.'.conf.php', LOG_ERR, 'CAP_Converter');
 				return 'Could not found: ./convert/conv_'.$output.'.conf.php';
 			}
 			
@@ -163,12 +165,12 @@
 			
 			$this->conv = $conv;
 				
-			cap_syslog(array('start:','convert_input()'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('start:','convert_input()'), LOG_INFO, 'CAP_Converter');
 					
 			$icap = $this->convert_input($cap);
 			
-			cap_syslog(array('end:','convert_input()'), LOG_INFO, 'CAP_Converter');
-			cap_syslog('', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('end:','convert_input()'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			// Output
 			$this->tmpconv = $this->conv;
 			unset($this->conv, $conv);
@@ -178,23 +180,23 @@
 			$this->input_actions = $this->actions;
 			unset($this->actions);
 							
-			cap_syslog(array('start:','convert_output()'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('start:','convert_output()'), LOG_INFO, 'CAP_Converter');
 							
 			$ocap = $this->convert_output($icap);
 			
-			cap_syslog(array('end:','convert_output()'), LOG_INFO, 'CAP_Converter');
-			cap_syslog('', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('end:','convert_output()'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			
-			cap_syslog(array('start:','Create File'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('start:','Create File'), LOG_INFO, 'CAP_Converter');
 			
-			cap_syslog(array('build:','Build the Cap to xml content'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('build:','Build the Cap to xml content'), LOG_INFO, 'CAP_Converter');
 			$this->buildCap($ocap);
-			cap_syslog(array('create:','save Cap'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('create:','save Cap'), LOG_INFO, 'CAP_Converter');
 			$path = $this->createFile($ocap);
-			cap_syslog(array('end:','Create File'), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('end:','Create File'), LOG_INFO, 'CAP_Converter');
 			
-			cap_syslog(array('file:',$path), LOG_INFO, 'CAP_Converter');
-			cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('file:',$path), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
 			
 			return $this->cap;	
 		}
@@ -213,14 +215,14 @@
 							$scap = $this->get_cap_structur($tag, $cap);
 							if($stag == "") 
 							{
-								cap_syslog(array('translate:','in <alert>','<'.$tag.'>',$cap[$tag].' -> '.$this->translate_input($cap[$tag])), LOG_INFO, 'CAP_Converter');
+								$this->_log.= cap_syslog(array('translate:','in <alert>','<'.$tag.'>',$cap[$tag].' -> '.$this->translate_input($cap[$tag])), LOG_INFO, 'CAP_Converter');
 								$cap[$tag] =  $this->translate_input($cap[$tag]);
 							}
 							elseif($stag == "info")
 							{
 								foreach($cap['info'] as $key => $tmp)
 								{
-									cap_syslog(array('translate:','in <info>','<'.$tag.'>',$cap['info'][$key][$tag].' -> '.$this->translate_input($cap['info'][$key][$tag])), LOG_INFO, 'CAP_Converter');
+									$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'>',$cap['info'][$key][$tag].' -> '.$this->translate_input($cap['info'][$key][$tag])), LOG_INFO, 'CAP_Converter');
 									$cap['info'][$key][$tag] =  $this->translate_input($cap['info'][$key][$tag]);
 								}
 							}
@@ -230,7 +232,7 @@
 								{
 									foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 									{
-										cap_syslog(array('translate:','in <area>','<'.$tag.'>',$cap['info'][$key]['area'][$key2][$tag].' -> '.$this->translate_input($cap['info'][$key]['area'][$key2][$tag])), LOG_INFO, 'CAP_Converter');
+										$this->_log.= cap_syslog(array('translate:','in <area>','<'.$tag.'>',$cap['info'][$key]['area'][$key2][$tag].' -> '.$this->translate_input($cap['info'][$key]['area'][$key2][$tag])), LOG_INFO, 'CAP_Converter');
 										$cap['info'][$key]['area'][$key2][$tag] =  $this->translate_input($cap['info'][$key]['area'][$key2][$tag]);
 									}
 								}
@@ -245,14 +247,14 @@
 							
 							$stag = $this->get_structur($tag);
 							$scap = $this->get_cap_structur($tag, $cap);
-							cap_syslog(array('get structur:','tag:'.$tag,'stag:'.$stag), LOG_INFO, 'CAP_Converter');
+							$this->_log.= cap_syslog(array('get structur:','tag:'.$tag,'stag:'.$stag), LOG_INFO, 'CAP_Converter');
 							if($stag == "") 
 							{
 								foreach($cap[$tag] as $capkey => $capsearch) // 
 								{
 									if($tagnameValueval == $capsearch['valueName'])
 									{						
-										cap_syslog(array('translate:','in <alert>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+										$this->_log.= cap_syslog(array('translate:','in <alert>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
 										
 										$cap[$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
 										
@@ -268,7 +270,7 @@
 									{
 										if($tagnameValueval == $capsearch['valueName'])
 										{							
-											cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+											$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
 											
 											$cap['info'][$key][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
 											
@@ -287,7 +289,7 @@
 										{
 											if($tagnameValueval == $capsearch['valueName'])
 											{						
-												cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+												$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
 												
 												$cap['info'][$key]['area'][$key2][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
 												
@@ -311,7 +313,7 @@
 			// move
 			$cap = $this->move_input($cap);
 			
-			cap_syslog('', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			foreach($this->conv->move as $key_m => $val_arr)
 			{
 				end($val_arr);
@@ -320,7 +322,7 @@
 				$action = $this->move_action[$val];		
 				$cap = $this->move_output($cap, $key_m, $val, $action);
 			}
-			cap_syslog('', LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			
 			// Copy paste event
 			$copy_arr = $this->copy_input($cap);
@@ -340,16 +342,16 @@
 					$stag = $this->get_structur($movetag);
 					if($stag == "") 
 					{
-						cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap[$movetag].' -> '.$this->translate_output($cap[$movetag])), LOG_INFO, 'CAP_Converter');
-						$this->move_action[$this->input_actions['move'][$movetag]] = $this->translate_output($cap[$movetag]);
+						$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap[$movetag].' -> '.$this->translate_output($cap[$movetag])), LOG_INFO, 'CAP_Converter');
+						$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap[$movetag]);
 						unset($cap[$movetag]);
 					}
 					elseif($stag == "info")
 					{
 						foreach($cap['info'] as $key => $tmp)
 						{							
-							cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key][$movetag].' -> '.$this->translate_output($cap['info'][$key][$movetag])), LOG_INFO, 'CAP_Converter');
-							$this->move_action[$this->input_actions['move'][$movetag]] = $this->translate_output($cap['info'][$key][$movetag]);
+							$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key][$movetag].' -> '.$this->translate_output($cap['info'][$key][$movetag])), LOG_INFO, 'CAP_Converter');
+							$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key][$movetag]);
 							unset($cap['info'][$key][$movetag]);
 						}
 					}
@@ -359,8 +361,8 @@
 						{
 							foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 							{
-								cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key]['area'][$key2][$movetag].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag])), LOG_INFO, 'CAP_Converter');
-								$this->move_action[$this->input_actions['move'][$movetag]] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag]);
+								$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key]['area'][$key2][$movetag].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag])), LOG_INFO, 'CAP_Converter');
+								$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag]);
 								unset($cap['info'][$key]['area'][$key2][$movetag]);
 							}
 						}
@@ -377,8 +379,8 @@
 							{
 								if($cap[$movetag][$capkey]['valueName'] == $movetagval)
 								{
-									cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap[$movetag][$capkey]['value'].' -> '.$this->translate_output($cap[$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
-									$this->move_action[$movetagval] = $this->translate_output($cap[$movetag][$capkey]['value']);
+									$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap[$movetag][$capkey]['value'].' -> '.$this->translate_output($cap[$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+									$this->move_action[$movetagval][] = $this->translate_output($cap[$movetag][$capkey]['value']);
 									unset($cap[$movetag][$capkey]);
 								}
 							}
@@ -391,8 +393,8 @@
 								{
 									if($cap['info'][$key][$movetag][$capkey]['valueName'] == $movetagval)
 									{
-										cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
-										$this->move_action[$movetagval] = $this->translate_output($cap['info'][$key][$movetag][$capkey]['value']);
+										$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+										$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key][$movetag][$capkey]['value']);
 										unset($cap['info'][$key][$movetag][$capkey]);
 									}
 								}
@@ -408,8 +410,8 @@
 									{
 										if($cap['info'][$key]['area'][$key2][$movetag][$capkey]['valueName'] == $movetagval)
 										{
-											cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
-											$this->move_action[$movetagval] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value']);
+											$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+											$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value']);
 											unset($cap['info'][$key]['area'][$key2][$movetag][$capkey]);
 										}
 									}
@@ -430,15 +432,15 @@
 			{ // wenn z.b: der tag web übersetzt wird
 				if($this->get_structur($stag) == "")
 				{
-					cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
+					$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
 					$cap[$stag] = $action;
 				}
 				elseif($this->get_structur($stag) == "info")
 				{
 					foreach($cap['info'] as $key => $tmp)
 					{
-						cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
-						$cap['info'][$key][$stag] = $action;
+						$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key]), LOG_INFO, 'CAP_Converter');
+						$cap['info'][$key][$stag] = $action[$key];
 					}
 				}
 				elseif($this->get_structur($stag) == "area")
@@ -447,26 +449,28 @@
 					{
 						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 						{
-							cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
-							$cap['info'][$key]['area'][$key2][$stag] = $action;
+							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
+							$cap['info'][$key]['area'][$key2][$stag] = $action[$key2];
 						}
 					}
 				}
 			}
 			else
 			{ // wenn z.b: der tag parameter übersetzt wird
-				$deeptag['valueName'] = $tag;
-				$deeptag['value'] = $action;
 				if($this->get_structur($stag) == "")
 				{
-					cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
+					$deeptag['valueName'] = $tag;
+					$deeptag['value'] = $action;
+					$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
 					$cap[$stag][]  = $deeptag;
 				}
 				elseif($this->get_structur($stag) == "info")
 				{
 					foreach($cap['info'] as $key => $tmp)
 					{
-						cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
+						$deeptag['valueName'] = $tag;
+						$deeptag['value'] = $action[$key];
+						$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key]), LOG_INFO, 'CAP_Converter');
 						$cap['info'][$key][$stag][]  = $deeptag;
 					}
 				}
@@ -476,7 +480,9 @@
 					{
 						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 						{
-							cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action), LOG_INFO, 'CAP_Converter');
+							$deeptag['valueName'] = $tag;
+							$deeptag['value'] = $action[$key2];
+							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
 							$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
 						}
 					}
@@ -497,14 +503,14 @@
 				$stag = $this->get_structur($copytag);
 				if($stag == "")
 				{
-					cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap[$copytag]), LOG_INFO, 'CAP_Converter');
+					$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap[$copytag]), LOG_INFO, 'CAP_Converter');
 					$copy_arr[$copy] = $cap[$copytag];
 				}
 				elseif($stag == "info")
 				{
 					foreach($cap['info'] as $key => $tmp)
 					{
-						cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key][$copytag]), LOG_INFO, 'CAP_Converter');
+						$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key][$copytag]), LOG_INFO, 'CAP_Converter');
 						$copy_arr[$copy] = $cap['info'][$key][$copytag];
 					}
 				}
@@ -514,7 +520,7 @@
 					{
 						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 						{
-							cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key]['area'][$key2][$copytag]), LOG_INFO, 'CAP_Converter');
+							$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key]['area'][$key2][$copytag]), LOG_INFO, 'CAP_Converter');
 							$copy_arr[$copy] = $cap['info'][$key]['area'][$key2][$copytag];
 						}
 					}
@@ -534,14 +540,14 @@
 					$stag = $this->get_structur($inserttag);
 					if($stag == "")
 					{
-						cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+						$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
 						$cap[$inserttag]  = $this->translate_output($copy_arr[$insert_code]);
 					}
 					elseif($stag == "info")
 					{
 						foreach($cap['info'] as $key => $tmp)
 						{
-							cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+							$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
 							$cap['info'][$key][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
 						}
 					}
@@ -551,7 +557,7 @@
 						{
 							foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 							{
-								cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+								$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
 								$cap['info'][$key]['area'][$key2][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
 							}
 						}
@@ -640,7 +646,7 @@
 			}
 			else
 			{
-				cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');			
+				$this->_log.= cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');			
 				return $val;
 			}
 		}
@@ -658,7 +664,7 @@
 					}
 				}
 			}
-			cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');		
+			$this->_log.= cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');		
 			return $val; // wenn keine übersetzung
 		}
 		
@@ -767,8 +773,8 @@
 						foreach($info['eventCode'] as $key => $eventCode)
 						{
 							$xml->tag_open('eventCode');							
-								$xml->tag_simple('valueName', $eventCode['valueName']);
-								$xml->tag_simple('value', $eventCode['value']);							
+								$xml->tag_simple('valueName', ($eventCode['valueName']));
+								$xml->tag_simple('value', ($eventCode['value']));							
 							$xml->tag_close('eventCode');
 						}
 						
@@ -789,8 +795,8 @@
 						foreach($info['parameter'] as $key => $parameter)
 						{
 							$xml->tag_open('parameter');						
-								$xml->tag_simple('valueName', $parameter['valueName']);
-								$xml->tag_simple('value', $parameter['value']);							
+								$xml->tag_simple('valueName', ($parameter['valueName']));
+								$xml->tag_simple('value', ($parameter['value']));							
 							$xml->tag_close('parameter');						
 						} // foreach parameter
 						
@@ -807,8 +813,8 @@
 								foreach($area['geocode'] as $key => $geocode)
 								{
 									$xml->tag_open('geocode');						
-										$xml->tag_simple('valueName', $geocode['valueName']);
-										$xml->tag_simple('value', $geocode['value']);							
+										$xml->tag_simple('valueName', ($geocode['valueName']));
+										$xml->tag_simple('value', ($geocode['value']));							
 									$xml->tag_close('geocode');
 								} // foreach geocode
 							
@@ -819,7 +825,7 @@
 				}// Foreach info lang
 					
 			$xml->tag_close('alert');
-			
+
 			$this->cap = $xml->output();
 		}		
 			
@@ -829,7 +835,7 @@
      * @return	path of the New CAP 1.2
      */
 		function createFile($cap)
-		{
+		{			
 			$capfile = fopen($this->destination.'/'.$cap['identifier'].'.conv.cap', "w") or die("Unable to open file! ".$this->destination.'/'.$cap['identifier'].'.conv.cap');
 			fwrite($capfile, $this->cap);
 			fclose($capfile);
@@ -845,7 +851,7 @@
 			{
 			   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 			}
-			
+
 			file_put_contents($this->destination.'/'.$cap['identifier'].'.conv.cap', $data);
 			
 			return $this->destination.'/'.$cap['identifier'].'.conv.cap';
