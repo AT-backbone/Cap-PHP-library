@@ -30,7 +30,6 @@
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
-	require_once 'lib/cap.dwd.class.php';
 	require_once 'class/translate.class.php';
 	
 	if(file_exists('conf/conf.php'))
@@ -42,7 +41,13 @@
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 	}
-	
+	$conf->meteoalarm = 1;
+	if($conf->meteoalarm == 1)
+	{			
+		include 'web_test.php';		
+		if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
+		$AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+	}
 	if(!file_exists('conf/conf.php'))
 	{
 		$cap = new CAP_Form();			
@@ -136,7 +141,7 @@
 
 			print $form->Form();
 	}
-	elseif(empty($_POST['action']) && $_GET['webservice'] != 1 && empty($_GET['ftp']))
+	elseif(empty($_POST['action']) && $_GET['webservice'] != 1 && empty($_GET['web_test']))
 	{
 		// Build Cap Creator form
 		if(! empty($_GET['delete']))
@@ -189,94 +194,8 @@
 		$form->WriteConf();
 		return true;
 	}
-	elseif($_GET['dwd'] == 1)
+	elseif($_GET['web_test'] == "1")
 	{
 		
-		/* Nach 119 sec. tod*/
-		$ftp_server = "ftp-outgoing2.dwd.de"; // 
-		$ftp_dir 		= "gds/specials/alerts/cap/GER/status/";
-		$ftp_user 	= "gds18541";
-		$ftp_pass 	= "olvfEVIY";
-		/*
-		
-		$ftp_server 			= "ispweb.backbone.co.at"; // /gds/specials/alerts/cap/GER/status/
-		$ftp_user 				= "ftp_test";
-		$ftp_pass 				= "diamond11";
-		$ftp_dir 					= "web/ftp_test";
-		*/
-		
-		$ftp = new DWD_CAP_CLASS();
-		
-		$ftp->cap_ftp_open_connection($ftp_server, $ftp_user, $ftp_pass);
-	
-		$ftp->cap_ftp_dir($ftp_dir);
-		
-		$ftp->get_cap_ftp_content();
-		
-		print $ftp->debug;
-	}
-	elseif($_GET['dwd'] == 2)
-	{
-		$ftp = new DWD_CAP_CLASS();
-
-		$ftp->cap_zip_extract();
-		
-		print $ftp->debug;
-	}
-	elseif($_GET['dwd'] == 3)
-	{
-		$ftp = new DWD_CAP_CLASS();
-		
-		$ftp->convert_all_cap_ftp('dwd','meteoalarm');
-		
-		print $ftp->debug;		
-	}
-	elseif($_GET['dwd'] == 4)
-	{
-		$ftp = new DWD_CAP_CLASS();
-		
-		$ftp->send_cap_ftp_soap();
-		
-		print $ftp->debug;		
-	}
-	elseif($_GET['dwd'] == 'reset')
-	{
-		$ftp = new DWD_CAP_CLASS();
-		
-		$ftp->delete_all_cap_ftp();
-		
-		print $ftp->debug;		
-	}
-	elseif($_GET['dwd'] == 'auto')
-	{
-			
-		/* Nach 119 sec. tod*/
-		$ftp_server = "ftp-outgoing2.dwd.de"; // 
-		$ftp_dir 		= "gds/specials/alerts/cap/GER/status/";
-		$ftp_user 	= "gds18541";
-		$ftp_pass 	= "olvfEVIY";
-		
-		/*		
-		$ftp_server 			= "ispweb.backbone.co.at"; // /gds/specials/alerts/cap/GER/status/
-		$ftp_user 				= "ftp_test";
-		$ftp_pass 				= "diamond11";
-		$ftp_dir 					= "web/ftp_test";
-		*/
-		
-		$ftp = new DWD_CAP_CLASS();
-		
-		$ftp->cap_ftp_open_connection($ftp_server, $ftp_user, $ftp_pass);
-	
-		$ftp->cap_ftp_dir($ftp_dir);
-		
-		$ftp->get_cap_ftp_content();
-		
-		$ftp->cap_zip_extract();
-				
-		$ftp->convert_all_cap_ftp('dwd','meteoalarm');
-				
-		$ftp->send_cap_ftp_soap();
-		
-		print $ftp->debug;		
 	}
 ?>

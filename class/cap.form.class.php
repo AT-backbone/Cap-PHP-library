@@ -109,7 +109,7 @@
      */
 		function InputStandard($type, $lang="")
 		{
-			global $conf, $langs;
+			global $conf, $langs, $AreaCodesArray;
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i:s');
@@ -255,7 +255,7 @@
 							{
 								$out.= '<div class="ui-grid-b">';
 									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]" value="'.$eventCode['valueName'].'"></div>';
-									$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
+									$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
 								$out.= '</div>';
 							}	
 							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
@@ -429,7 +429,7 @@
 							{
 								$out.= '<div class="ui-grid-b">';
 									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
-									$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
+									$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
 								$out.= '</div>';
 							}	
 							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
@@ -472,27 +472,79 @@
 						break;
 						
 					case 'geocode':
+						// $out.= $AreaCodesArray;
+						foreach($AreaCodesArray as $key => $area_arr)
+						{
+							$S_Area[$area_arr['geocode']] = $area_arr['AreaCaption'];
+							$G_Area[$area_arr['geocode']] = $area_arr['geotype'];
+						}
 						
-						$out = '<input placeholder="Valuename" type="text" name="geocode[valueName][]"><input placeholder="geocode Value" type="text" name="geocode[value][]"><input type="button" onclick="plusInput(\'geocode\')" value="+">';
-	
+						if(is_array($S_Area))
+						{
+							$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';	
+							//$out.= '<input placeholder="Valuename" type="hidden" name="geocode[valueName][]" value="'.$AreaCodesArray[0]['geotype'].'">';
+							//$out.= $this->buildSelect("geocode[valueName][]", $G_Area, 'data-native-menu="false" multiple="multiple" style="display:none;"');
+							$out = '<select name="geocode[value][]" id="geocode-select" data-native-menu="false" multiple="multiple">';
+								$out.='<option></option>';							
+								foreach($S_Area as $data_val => $data_name)
+								{
+									$sel = false;
+									foreach($this->geocode[0] as $key => $geocode	) 
+									{
+										if($geocode['value'] == $data_val)
+										{
+											$sel = true;
+										}
+									}
+									
+									if($sel == true)
+									{
+										$out.= '<option value="'.$data_val.'" selected>';
+									}
+									else
+									{
+										$out.= '<option value="'.$data_val.'">';
+									}
 
-
-						$out = '<div id="Geocodeappend">';
-							$out.= '<legend>'.$langs->trans("LabelGeocode").': '.$this->tooltip($type, $langs->trans("LabelGeocodeDesc")).'</legend>';	
-							foreach($this->geocode[0] as $key => $geocode)
+									$out.= $data_name;
+									$out.= '</option>';
+								}							
+							$out.= '</select>';
+							
+							foreach($S_Area as $data_val => $data_name)
 							{
+								$out.= '<input type="checkbox" name="geocode[valueName][]" value="'.$G_Area[$data_val].'" id="'.$data_val.'" style="display: none;">';
+							}
+							
+							$out.= 	'<script>
+											$( "#geocode-select" ).change(function() {
+											  var res = $( "#geocode-select" ).val();
+											  var data = "";
+											  $("input[name=\'geocode[valueName][]\']").prop("checked", false);
+											  $.each( res, function( i, val ) {
+												  $( "#" + val).prop("checked", true);
+												});
+											});											
+											</script>';
+						}
+						else
+						{
+							$out = '<div id="Geocodeappend">';
+								$out.= '<legend>'.$langs->trans("LabelGeocode").': '.$this->tooltip($type, $langs->trans("LabelGeocodeDesc")).'</legend>';	
+								foreach($this->geocode[0] as $key => $geocode)
+								{
+									$out.= '<div class="ui-grid-b">';
+										$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]" value="'.$geocode['valueName'].'"></div>';
+										$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="geocode[value][]" value="'.$geocode['value'].'"></div>';
+									$out.= '</div>';
+								}	
 								$out.= '<div class="ui-grid-b">';
-									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]" value="'.$geocode['valueName'].'"></div>';
-									$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="geocode[value][]" value="'.$geocode['value'].'"></div>';
-								$out.= '</div>';
-							}	
-							$out.= '<div class="ui-grid-b">';
-								$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
-								$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="geocode[value][]"></div>';
-								$out.= '<div class="ui-block-c"><input type="button" onclick="plusGeocodeInput()" value="+"></div>';
-							$out.= '</div>';							
-						$out.= '</div>';
-						
+									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
+									$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="geocode[value][]"></div>';
+									$out.= '<div class="ui-block-c"><input type="button" onclick="plusGeocodeInput()" value="+"></div>';
+								$out.= '</div>';							
+							$out.= '</div>';
+						}
 						break;															
 
 					/*
@@ -871,10 +923,10 @@
 
 			// Area Page
 			$type['area'][] = "areaDesc";
+			$type['area'][] = "geocode";
 			$type['area'][] = "polygon";
 			$type['area'][] = "circle";
-			$type['area'][] = "map";
-			$type['area'][] = "geocode";
+			$type['area'][] = "map";			
 
 			// conf Page	
 			$type['conf'][] = "cap_save";
