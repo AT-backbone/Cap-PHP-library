@@ -6,6 +6,7 @@
 
 global $out;
 
+ini_set("default_socket_timeout", 60000);
 require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 
 $filename = $_POST[filename];
@@ -17,7 +18,7 @@ if($import == "") $import = true;
 if ($_POST[filename])
 {
 	// Set the WebService URL
-	$soapclient = new nusoap_client($conf->webservice->WS_DOL_URL); // <-- set the Timeout above 300 Sec.
+	$soapclient = new nusoap_client($conf->webservice->WS_DOL_URL, '' , false, false, false, false, 0, 300); // <-- set the Timeout above 300 Sec.
 	if ($soapclient)
 	{
 		$soapclient->soap_defencoding='UTF-8';

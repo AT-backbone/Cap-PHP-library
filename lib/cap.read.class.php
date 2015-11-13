@@ -159,8 +159,7 @@
 			function __construct($xml=''){
 				
 				if(is_file($xml)){
-					$f = simplexml_load_file ($xml);
-				
+					$f = simplexml_load_file ($xml);					
 				}elseif(is_array($xml) || is_object($xml)){
 					$f = $xml;
 				

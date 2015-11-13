@@ -56,14 +56,14 @@
      * @return	None
      */
  		function tag_simple($tag,$value='',$options=array(),$trimtext=false)
- 		{
+ 		{ 			
  			if ($trimtext == 1) $value = trim($value); 
  			if($value == '' and empty($options)) return '';
   	
  				$row = ($this->lt.$tag.$this->aToT($options));
  				if(trim($value) != ''){
  					$row.= ($this->gt);
- 					$row.= $value;
+ 					$row.= htmlspecialchars(($value), ENT_QUOTES, "UTF-8");	
  					$row.= ($this->lt.'/'.$tag.$this->gt);
  				}else{
  					if($tag == 'summary'){

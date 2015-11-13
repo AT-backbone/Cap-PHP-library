@@ -98,12 +98,13 @@
 		$conv->translate['HH'][]												=	"HAMBURG";
 		$conv->translate['HE'][]												=	"HESSEN";
 		$conv->translate['MV'][]												=	"MECKLENBURG-VORPOMMERN";
-		$conv->translate['NI'][]												=	"NIEDERSACHSEN";
+		$conv->translate['NS'][]												=	"NIEDERSACHSEN";
 		$conv->translate['NW'][]												=	"NORDRHEIN-WESTFALEN";
+		$conv->translate['NRW'][]												=	"NORDRHEIN-WESTFALEN";
 		$conv->translate['RP'][]												=	"RHEINLAND-PFALZ";
 		$conv->translate['SL'][]												=	"SAARLAND";
 		$conv->translate['SN'][]												=	"SACHSEN";
-		$conv->translate['ST'][]												=	"SACHSEN-ANHALT";
+		$conv->translate['SA'][]												=	"SACHSEN-ANHALT";
 		$conv->translate['SH'][]												=	"SCHLESWIG-HOLSTEIN";
 		$conv->translate['TH'][]												=	"THÜRINGEN";
 	
