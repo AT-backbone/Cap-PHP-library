@@ -109,7 +109,7 @@
      */
 		function InputStandard($type, $lang="")
 		{
-			global $conf, $langs, $AreaCodesArray;
+			global $conf, $langs, $AreaCodesArray, $ParameterArray;
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i:s');
@@ -422,21 +422,49 @@
 					break;
 
 				case 'parameter': 
-					$out = '<div id="Parameterappend">';
-						$out.= '<legend>'.$langs->trans("LabelParameter").': '.$this->tooltip($type, $langs->trans("LabelParameterDesc")).'</legend>';	
-						$out.= '<div class="ui-grid-b">';
-							foreach($this->parameter[0] as $key => $parameter)
-							{
-								$out.= '<div class="ui-grid-b">';
-									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
-									$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
-								$out.= '</div>';
-							}	
-							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
-							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="parameter[value][]"></div>';
-							$out.= '<div class="ui-block-c"><input type="button" onclick="plusParameterInput()" value="+"></div>';
+					$l_level = array( "Unknown", "Minor", "Moderate", "Severe", "Extreme"  );
+					
+					if(is_array($ParameterArray['AWT']))
+					foreach($ParameterArray['AWT'] as $key => $area_arr)
+					{
+						$S_Param_AWT[$area_arr['id'].'; '.$area_arr['hazard_type']] = $area_arr['hazard_type_DESC'];
+						$G_Param_AWT[$area_arr['id'].'; '.$area_arr['hazard_type']] = 'awareness_type'; //awareness_type awareness_level
+					}
+					
+					if(is_array($ParameterArray['AWL']))
+					foreach($ParameterArray['AWL'] as $key => $area_arr)
+					{
+						$S_Param_AWL[$area_arr['id'].'; '.$area_arr['hazard_level'].';'.$l_level[$area_arr['id']]] = $area_arr['hazard_level'];
+						$G_Param_AWL[$area_arr['id'].'; '.$area_arr['hazard_level'].';'.$l_level[$area_arr['id']]] = 'awareness_level'; //awareness_type awareness_level
+						$this->level_color[$area_arr['hazard_level']] = $area_arr['hazard_level_color'];
+					}
+					//die(print_r($S_Param_AWL));
+					if(is_array($S_Param_AWT) && is_array($S_Param_AWT))
+					{
+						$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
+						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awt',$S_Param_AWT, $G_Param_AWT, $this->geocode[0]);
+
+						$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
+						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awl',$S_Param_AWL, $G_Param_AWL, $this->geocode[0]);
+					}
+					else
+					{
+						$out = '<div id="Parameterappend">';
+							$out.= '<legend>'.$langs->trans("LabelParameter").': '.$this->tooltip($type, $langs->trans("LabelParameterDesc")).'</legend>';	
+							$out.= '<div class="ui-grid-b">';
+								foreach($this->parameter[0] as $key => $parameter)
+								{
+									$out.= '<div class="ui-grid-b">';
+										$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
+										$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
+									$out.= '</div>';
+								}	
+								$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
+								$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="parameter[value][]"></div>';
+								$out.= '<div class="ui-block-c"><input type="button" onclick="plusParameterInput()" value="+"></div>';
+							$out.= '</div>';
 						$out.= '</div>';
-					$out.= '</div>';
+					}
 					break;
 					
 				/*
@@ -481,51 +509,8 @@
 						
 						if(is_array($S_Area))
 						{
-							$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';	
-							//$out.= '<input placeholder="Valuename" type="hidden" name="geocode[valueName][]" value="'.$AreaCodesArray[0]['geotype'].'">';
-							//$out.= $this->buildSelect("geocode[valueName][]", $G_Area, 'data-native-menu="false" multiple="multiple" style="display:none;"');
-							$out = '<select name="geocode[value][]" id="geocode-select" data-native-menu="false" multiple="multiple">';
-								$out.='<option></option>';							
-								foreach($S_Area as $data_val => $data_name)
-								{
-									$sel = false;
-									foreach($this->geocode[0] as $key => $geocode	) 
-									{
-										if($geocode['value'] == $data_val)
-										{
-											$sel = true;
-										}
-									}
-									
-									if($sel == true)
-									{
-										$out.= '<option value="'.$data_val.'" selected>';
-									}
-									else
-									{
-										$out.= '<option value="'.$data_val.'">';
-									}
-
-									$out.= $data_name;
-									$out.= '</option>';
-								}							
-							$out.= '</select>';
-							
-							foreach($S_Area as $data_val => $data_name)
-							{
-								$out.= '<input type="checkbox" name="geocode[valueName][]" value="'.$G_Area[$data_val].'" id="'.$data_val.'" style="display: none;">';
-							}
-							
-							$out.= 	'<script>
-											$( "#geocode-select" ).change(function() {
-											  var res = $( "#geocode-select" ).val();
-											  var data = "";
-											  $("input[name=\'geocode[valueName][]\']").prop("checked", false);
-											  $.each( res, function( i, val ) {
-												  $( "#" + val).prop("checked", true);
-												});
-											});											
-											</script>';
+							$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
+							$out.= $this->buildSelectValueName('geocode[value][]', 'geocode[valueName][]', 'geocode',$S_Area, $G_Area, $this->geocode[0]);
 						}
 						else
 						{
@@ -765,6 +750,82 @@
 			
 			return $out;
 		 }
+		
+		var $script = "";
+		/**
+     * Output Html select
+     *
+     * @param   string	$name					The POST/GET name of the select
+     * @param   array		$data					the content of the select array("option value" => "option Name")
+     * @param   string  $option
+     * @param   string  $placeholder 
+     * @param 	int 		$empty 				if 1 then make a empty value 
+     * @return	string								HTML select field
+     */
+		function buildSelectValueName($name, $name2, $name3, $S_Area, $G_Area, $select = array())
+		{
+			$out = '<select name="'.$name.'" id="'.$name3.'-select" data-native-menu="false" multiple="multiple">';
+				$out.='<option></option>';							
+				foreach($S_Area as $data_val => $data_name)
+				{
+					$sel = false;
+					foreach($select as $key => $select_code	) 
+					{
+						if($select_code['value'] == $data_val)
+						{
+							$sel = true;
+						}
+					}
+					
+					if($sel == true)
+					{
+						$out.= '<option '.$style_color.' value="'.$data_val.'" selected>';
+					}
+					else
+					{
+						$out.= '<option '.$style_color.' value="'.$data_val.'">';
+					}
+	
+					$out.= $data_name;
+					$out.= '</option>';
+				}							
+			$out.= '</select>';
+			
+			foreach($S_Area as $data_val => $data_name)
+			{
+				$out.= '<input type="checkbox" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_val.'" style="display: none;">';
+			}
+			
+			$this->script.= 	'
+							$( document ).ready(function() 
+							{							
+								var res = $( "#'.$name3.'-select" ).val();
+								if($.isArray(res))
+								{
+								  var data = "";
+								  $("input[name=\''.$name2.'\']").prop("checked", false);								  
+
+									$.each( res, function( i, val ) {
+										  $( \'#\' + val).prop("checked", true);
+									});
+								}
+							});
+							
+							$( "#'.$name3.'-select" ).change(function() {
+							
+							  var res = $( "#'.$name3.'-select" ).val();
+							  var data = "";
+							  $(\'input[name="'.$name2.'"]\').prop("checked", false);
+							  
+							  $.each( res, function( i, val ) {
+								  $(val).prop("checked", true);
+								});
+								
+							});											
+							';
+						
+				return $out;
+		}
 		
 		/**
      * Output Html select
@@ -1043,8 +1104,7 @@
 			
 			$out = $this->Header_llx();
 			
-			$out.= '<body>';
-			
+			$out.= '<body>';			
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 			$out.= '<input type="hidden" name="action" value="create">';
 
@@ -1147,6 +1207,9 @@
 
 			$out.= '</form>';
 			
+			$out.= '<script>
+							'.$this->script.'
+							</script>';
 			
 			$out.= '</body>';
 			$out.= 
