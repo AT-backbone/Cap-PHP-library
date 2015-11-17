@@ -779,6 +779,7 @@
 						{
 							$sel = true;
 							$sel_tmp = "selected";
+							if($name3 == "parameter_awt" || $name3 == "parameter_awl") $check = 'checked="checked"';
 						}
 					}
 					
@@ -835,7 +836,7 @@
 			}	
 			elseif($name3 == "parameter_awt" || $name3 == "parameter_awl")
 			{
-				$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;" '.$sel_tmp.'>';
+				$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;" '.$sel_tmp.' '.$check.'>';
 				
 				$this->script.= 	'
 									$( "#'.$name3.'-select" ).change(function() {
