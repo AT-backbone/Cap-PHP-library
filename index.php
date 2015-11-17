@@ -44,6 +44,8 @@
 	}
 	else
 	{
+		$capfile = fopen('conf/conf.php', "w");
+		fclose($capfile);
 		$conf->user->lang = 'en_US';
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
