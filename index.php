@@ -121,7 +121,8 @@
 		
 		header("Refresh:0");
 	}
-	elseif($_GET['conv'] == 1)
+	
+	if($_GET['conv'] == 1)
 	{
 		if(! empty($_POST['location']) || ! empty($_FILES["uploadfile"]["name"]))
 		{
