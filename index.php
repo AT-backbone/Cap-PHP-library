@@ -33,7 +33,7 @@
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
 	
-	$langs = new Translate();	
+	$langs = new Translate();
 	if(file_exists('conf/conf.php'))
 	{
 		include 'conf/conf.php';
@@ -42,6 +42,13 @@
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 	}
+	else
+	{
+		$conf->user->lang = 'en_US';
+		$langs->setDefaultLang($conf->user->lang);		
+		$langs->load("main");	
+	}
+	
 	$conf->meteoalarm = 1;
 	if($conf->meteoalarm == 1)
 	{			
