@@ -25,50 +25,19 @@
 /**
  * Front end of the Cap-php-library
  */
-
+	error_reporting(E_ERROR);
+	
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
 	
-	/**
-   * encrypt and decrypt function for passwords
-   *     
-   * @return	string
-   */
-	function encrypt_decrypt($action, $string, $key) 
-	{
-		global $conf;
-		
-		$output = false;
-	
-		$encrypt_method = "AES-256-CBC";
-		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-		$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
-	
-		// hash
-		$key = hash('sha256', $secret_key);
-		
-		// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-		$iv = substr(hash('sha256', $secret_iv), 0, 16);
-	
-		if( $action == 1 ) {
-			$output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
-			$output = base64_encode($output);
-		}
-		else if( $action == 2 ){
-			$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
-		}
-	
-		return $output;
-	}
-	
+	$langs = new Translate();	
 	if(file_exists('conf/conf.php'))
 	{
 		include 'conf/conf.php';
 	
-		$langs = new Translate();		
 		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
@@ -241,4 +210,37 @@
 	{
 		
 	}
+	
+	/**
+   * encrypt and decrypt function for passwords
+   *     
+   * @return	string
+   */
+	function encrypt_decrypt($action, $string, $key) 
+	{
+		global $conf;
+		
+		$output = false;
+	
+		$encrypt_method = "AES-256-CBC";
+		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
+		$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+	
+		// hash
+		$key = hash('sha256', $secret_key);
+		
+		// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+		$iv = substr(hash('sha256', $secret_iv), 0, 16);
+	
+		if( $action == 1 ) {
+			$output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+			$output = base64_encode($output);
+		}
+		else if( $action == 2 ){
+			$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+		}
+	
+		return $output;
+	}
+	
 ?>
