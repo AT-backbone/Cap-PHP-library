@@ -770,9 +770,12 @@
 				foreach($S_Area as $data_val => $data_name)
 				{
 					$sel = false;
-					foreach($select as $key => $select_code	) 
+
+					foreach($select as $key => $select_code) 
 					{
-						if($select_code['value'] == $data_val)
+						$select_code['value'] = str_replace(';', '&#59;', $select_code['value']);
+						
+						if( $data_val == $select_code['value'] )
 						{
 							$sel = true;
 							$sel_tmp = "selected";
