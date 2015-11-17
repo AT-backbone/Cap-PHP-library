@@ -427,25 +427,25 @@
 					if(is_array($ParameterArray['AWT']))
 					foreach($ParameterArray['AWT'] as $key => $area_arr)
 					{
-						$S_Param_AWT[$area_arr['id'].'; '.$area_arr['hazard_type']] = $area_arr['hazard_type_DESC'];
-						$G_Param_AWT[$area_arr['id'].'; '.$area_arr['hazard_type']] = 'awareness_type'; //awareness_type awareness_level
+						$S_Param_AWT[$area_arr['id'].'&#59; '.$area_arr['hazard_type']] = $area_arr['hazard_type_DESC'];
+						$G_Param_AWT[$area_arr['id'].'&#59; '.$area_arr['hazard_type']] = 'awareness_type'; //awareness_type awareness_level
 					}
 					
 					if(is_array($ParameterArray['AWL']))
 					foreach($ParameterArray['AWL'] as $key => $area_arr)
 					{
-						$S_Param_AWL[$area_arr['id'].'; '.$area_arr['hazard_level'].';'.$l_level[$area_arr['id']]] = $area_arr['hazard_level'];
-						$G_Param_AWL[$area_arr['id'].'; '.$area_arr['hazard_level'].';'.$l_level[$area_arr['id']]] = 'awareness_level'; //awareness_type awareness_level
+						$S_Param_AWL[$area_arr['id'].'&#59; '.$area_arr['hazard_level'].'&#59; '.$l_level[$area_arr['id']]] = $area_arr['hazard_level'];
+						$G_Param_AWL[$area_arr['id'].'&#59; '.$area_arr['hazard_level'].'&#59; '.$l_level[$area_arr['id']]] = 'awareness_level'; //awareness_type awareness_level
 						$this->level_color[$area_arr['hazard_level']] = $area_arr['hazard_level_color'];
 					}
 					//die(print_r($S_Param_AWL));
 					if(is_array($S_Param_AWT) && is_array($S_Param_AWT))
 					{
 						$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
-						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awt',$S_Param_AWT, $G_Param_AWT, $this->geocode[0]);
+						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awt',$S_Param_AWT, $G_Param_AWT, $this->parameter[0]);
 
 						$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
-						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awl',$S_Param_AWL, $G_Param_AWL, $this->geocode[0]);
+						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awl',$S_Param_AWL, $G_Param_AWL, $this->parameter[0]);
 					}
 					else
 					{
@@ -764,7 +764,8 @@
      */
 		function buildSelectValueName($name, $name2, $name3, $S_Area, $G_Area, $select = array())
 		{
-			$out = '<select name="'.$name.'" id="'.$name3.'-select" data-native-menu="false" multiple="multiple">';
+			if($name3 == "geocode") $multi = 'multiple="multiple"';
+			$out = '<select name="'.$name.'" id="'.$name3.'-select" data-native-menu="false" '.$multi.'>';
 				$out.='<option></option>';							
 				foreach($S_Area as $data_val => $data_name)
 				{
@@ -774,6 +775,7 @@
 						if($select_code['value'] == $data_val)
 						{
 							$sel = true;
+							$sel_tmp = "selected";
 						}
 					}
 					
@@ -791,40 +793,64 @@
 				}							
 			$out.= '</select>';
 			
-			foreach($S_Area as $data_val => $data_name)
+			if($name3 == "geocode")
 			{
-				$out.= '<input type="checkbox" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;">';
-			}
-			
-			$this->script.= 	'
-							$( document ).ready(function() 
-							{							
-								var res = $( "#'.$name3.'-select" ).val();
-								if($.isArray(res))
-								{
-								  var data = "";
-								  $("input[name=\''.$name2.'\']").prop("checked", false);								  
-
-									$.each( res, function( i, val ) {
-										  $( \'#\' + val).prop("checked", true);
-									});
-								}
-							});
-							
-							$( "#'.$name3.'-select" ).change(function() {
-							
-							  var res = $( "#'.$name3.'-select" ).val();
-							  var data = "";
-							  $(\'input[name="'.$name2.'"]\').prop("checked", false);
-							  
-							  $.each( res, function( i, val ) {
-								  $(val).prop("checked", true);
+				foreach($S_Area as $data_val => $data_name)
+				{
+					$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;">';
+				}
+				
+				$this->script.= 	'
+								$( document ).ready(function() 
+								{							
+									var res = $( "#'.$name3.'-select" ).val();
+									if($.isArray(res))
+									{
+									  var data = "";
+									  $(".'.$name3.'").prop("checked", false);								  
+	
+										$.each( res, function( i ) {
+												i++;
+											  $( \'#\' + $( "#'.$name3.'-select option:eq(" + i + ")").text()).prop("checked", true);
+										});
+									}
 								});
 								
-							});											
-							';
-						
-				return $out;
+								$( "#'.$name3.'-select" ).change(function() {
+								
+								  var res = $( "#'.$name3.'-select" ).val();
+								  var data = "";
+								  $(".'.$name3.'").prop("checked", false);
+								  
+								  $.each( res, function( i ) {
+								  	i++;
+									  $("#" + $( "#'.$name3.'-select option:eq(" + i + ")").text()).prop("checked", true);
+									});
+									
+								});											
+								';
+			}	
+			elseif($name3 == "parameter_awt" || $name3 == "parameter_awl")
+			{
+				$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;" '.$sel_tmp.'>';
+				
+				$this->script.= 	'
+									$( "#'.$name3.'-select" ).change(function() {
+										var res = $( "#'.$name3.'-select" ).val();
+										if(res)
+										{
+											$(".'.$name3.'").prop("checked", true);
+										}
+										else
+										{
+											$(".'.$name3.'").prop("checked", false);
+										}
+									});											
+								';
+			}
+			
+			
+			return $out;
 		}
 		
 		/**
@@ -1061,6 +1087,8 @@
      */
 		function Header_llx()
 		{			
+			global $conf;
+			
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
@@ -1075,9 +1103,17 @@
 				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
 				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
 			
-				$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
- 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+				if( $conf->webservice_aktive == 1 )
+				{
+					$out.= '<link rel="stylesheet" href="css/MeteoalarmMobile.css" />';
+ 					
+ 				}
+ 				else
+ 				{
+ 					$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
+ 				}
  				
+ 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
  				// OpenStreetMap
 				$out.= '<script src="includes/jquery/jquery.geo.min.js"></script>';
 				

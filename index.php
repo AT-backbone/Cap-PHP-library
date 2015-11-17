@@ -88,6 +88,8 @@
 			if($_GET['web_test'] == 2) die(print_r($ParameterArray));
 			$ParameterArray = $ParameterArray['document']['AreaInfo'];
 		}
+		
+		if(is_array($AreaCodesArray) && is_array($AreaCodesArray)) $conf->webservice_aktive = 1;
 	}
 	if(!file_exists('conf/conf.php'))
 	{
