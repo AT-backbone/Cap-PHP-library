@@ -21,6 +21,16 @@
 					{
 						$("#conf-detail").hide();
 					}
+				});				
+				
+				$("body").on("pageshow", function(event) 
+				{
+					if(!$( "#webservice_switch" ).prop('checked') || $( "conf[webservice][login]").val() == "" || $( "conf[webservice][password]").val() == "")
+					{					
+						setTimeout(function(){
+							$( "#Login-alert" ).popup("open");
+						}, 2000);
+					}
 				});
 				
 				$( "#msgType" ).change(function() {
