@@ -74,7 +74,6 @@
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 	}
-	}
 	else
 	{
 		$capfile = fopen('conf/conf.php', "w");
