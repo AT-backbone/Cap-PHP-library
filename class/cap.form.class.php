@@ -33,7 +33,7 @@
 	class CAP_Form{
 		
 		var $version = '1.2';
-		
+		var $login_id = 0;
 		/**
      * initialize Class with Data
      *
@@ -749,36 +749,26 @@
 						break;
 					
 					case 'login_popup':
+						$this->login_id++;
 						$out = '<h3>'.$langs->trans("PleasLoginToYourWebservice").'</h3>';
 						
 						$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
-							$out.= '<input type="text" name="Session_login_name">';
+							$out.= '<input type="text" name="Session_login_name['.$this->login_id.']" value="'.$conf->webservice->login.'">';
 
 						$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
-							$out.= '<input type="password" name="Session_login_pass">';
+							$out.= '<input type="password" name="Session_login_pass['.$this->login_id.']" value="'.$conf->webservice->password.'">';
 
-						$out.= '<label><input type="checkbox" name="savepass">'.$langs->trans("SaveWebservicePass").'</label>';
-							
-						$out.= '<input type="submit" name="send-login" value="'.$langs->trans("Login").'" data-theme="b">';		
+						$out.= '<label><input type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 						
-						/*
-						$TypePage_arr = $this->Types();
+						if($conf->webservice_aktive == 1)
+						{
+							$out.= '<input type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b">';
+						}
+						else
+						{
+							$out.= '<input type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
+						}
 						
-							$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
-								$out.= '<h2>'.$TypePage_arr['detail']['name'].'</h2>';
-								$out.= '<ul data-role="listview">';
-
-									foreach($TypePage_arr['Login']['detail'] as $key_ex => $type_ex)
-									{		
-										if($key_ex != 'name')
-										{
-											$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
-										}
-									}						
-													
-								$out.= '</ul>';
-							$out.= '</div>'; // COLLAPSIBLE		
-						*/
 						break;
 					/*
 					 * Default
@@ -1289,11 +1279,14 @@
 										
 									$out.= '</ul>';
 								$out.= '</div>'; // PANEL
-					
+							
+								if($conf->webservice->login && $conf->webservice_aktive) $login_show_name = $conf->webservice->login;
+								else $login_show_name = $langs->trans('Login');								
+						
 								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
-									$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">Login</a>';
+									$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">'.$login_show_name.'</a>';
 								$out.= '</div>'; // HEADER					
 								
 								// Main
