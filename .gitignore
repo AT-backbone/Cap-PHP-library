@@ -8,4 +8,3 @@ conf.php
 *.cap
 .xml
 ftp_tmp/*.zip
-web_test.php

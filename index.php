@@ -73,24 +73,30 @@
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 	}
+	
+	// METEOALARM WEBSERVICE ---
 	$conf->meteoalarm = 1;
 	if($conf->meteoalarm == 1)
 	{			
-		if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
+		if($conf->webservice->on > 0)
 		{
-			include 'lib/cap.meteoalarm.webservices.Area.php';		
-			if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
-			$AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+			if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
+			{
+				include 'lib/cap.meteoalarm.webservices.Area.php';		
+				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
+				$AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+			}
+			if(file_exists('lib/cap.meteoalarm.webservices.Parameter.php'))
+			{
+				include 'lib/cap.meteoalarm.webservices.Parameter.php';		
+				if($_GET['web_test'] == 2) die(print_r($ParameterArray));
+				$ParameterArray = $ParameterArray['document']['AreaInfo'];
+			}
+			
+			if(is_array($AreaCodesArray) && is_array($AreaCodesArray)) $conf->webservice_aktive = 1;
 		}
-		if(file_exists('lib/cap.meteoalarm.webservices.Parameter.php'))
-		{
-			include 'lib/cap.meteoalarm.webservices.Parameter.php';		
-			if($_GET['web_test'] == 2) die(print_r($ParameterArray));
-			$ParameterArray = $ParameterArray['document']['AreaInfo'];
-		}
-		
-		if(is_array($AreaCodesArray) && is_array($AreaCodesArray)) $conf->webservice_aktive = 1;
 	}
+	
 	if(!file_exists('conf/conf.php'))
 	{
 		$cap = new CAP_Form();			
@@ -193,7 +199,14 @@
 			header('Location: '.$_SERVER['PHP_SELF'].'#read');
 		}
 		
-			$form = new CAP_Form();
+		if(file_exists('conf/template.cap'))
+		{
+			require_once 'lib/cap.read.class.php';
+			$alert = new alert('conf/template.cap');
+			$cap = $alert->output();
+		}
+		
+			$form = new CAP_Form($cap);
 
 			print $form->Form();
 	}
@@ -235,6 +248,28 @@
 		$form = new CAP_Form();		
 		$form->PostToConf($_POST['conf']);		
 		$form->WriteConf();
+		
+		if($_POST['template_on'] == 'on')
+		{
+			if(!empty($_POST['Template']))
+			{
+				if(!file_exists('conf/'.$_POST['Template']))
+				{
+					if (!copy($conf->cap->output.'/'.$_POST['Template'], 'conf/template.cap')) 
+					{
+						die('Permision problems detectet pleas fix this: copy ['.$conf->cap->output.'/'.$_POST['Template'].'] to [conf/template.cap]' );
+					}
+				}
+			}
+		}
+		else
+		{
+			if(file_exists('conf/template.cap'))
+			{
+				unlink('conf/template.cap');
+			}
+		}
+		
 		return true;
 	}
 	elseif($_GET['web_test'] == "1")

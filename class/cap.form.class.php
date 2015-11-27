@@ -32,6 +32,8 @@
 
 	class CAP_Form{
 		
+		var $version = '1.2';
+		
 		/**
      * initialize Class with Data
      *
@@ -573,6 +575,33 @@
 						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
 						break;	
 						
+					case 'template':
+					
+						foreach(scandir($conf->cap->output) as $num => $capfilename)
+						{
+							if($capfilename != '.' && $capfilename != '..' && $capfilename != '.cap' && $capfilename != '.conv.cap')
+							{
+								$files[$capfilename] = $capfilename;
+							}
+						}
+						
+						$out = '<label for="Template">'.$langs->trans("Template").':</label>';
+						if(file_exists('conf/template.cap')) $onoroff = 'checked=""'; else $onoroff = '';
+							$out.= '<input type="checkbox" data-role="flipswitch" name="template_on" id="template_on" '.$onoroff.' data-theme="b">';
+							
+							if(file_exists('conf/template.cap'))
+							{
+								require_once 'lib/cap.read.class.php';
+								$alert = new alert('conf/template.cap');
+								$template = $alert->output();
+								
+								$files[$template['identifier']] = $template['identifier']; 
+							}
+		
+							$out.=  $this->buildSelect("Template", $files, "data-native-menu=\"false\"", "Template", $template['identifier'] );
+					
+						break;
+						
 					case 'lang_conf':
 						$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
 						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
@@ -645,8 +674,8 @@
 					case 'webservice_on':
 							if($conf->webservice->on == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
-							$out = '<label for="identifier_time">'.$langs->trans("Webservice").':</label>';
-							$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
+							$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
+							$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_switch" '.$onoroff.' data-theme="b">';
 						break;
 								
 					case 'webservice_password':
@@ -717,6 +746,37 @@
 						$out.= '</fieldset>';
 						$out.= '<input type="submit" value="<h1>'.$langs->trans("Read").'</h1>" data-ajax="false">';
 						$out.= '</form><form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
+						break;
+					
+					case 'login_popup':
+						$out = '<h3>'.$langs->trans("PleasLoginToYourWebservice").'</h3>';
+						
+						$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
+							$out.= '<input type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+
+						$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
+							$out.= '<input type="password" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+
+						$out.= '<label><input type="checkbox" name="savepass">'.$langs->trans("SaveWebservicePass").'</label>';
+							
+						$out.= '<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">'.$langs->trans("Login").'</button>';		
+							
+						$TypePage_arr = $this->Types();
+						
+							$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
+								$out.= '<h2>'.$TypePage_arr['detail']['name'].'</h2>';
+								$out.= '<ul data-role="listview">';
+
+									foreach($TypePage_arr['Login']['detail'] as $key_ex => $type_ex)
+									{		
+										if($key_ex != 'name')
+										{
+											$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+										}
+									}						
+													
+								$out.= '</ul>';
+							$out.= '</div>'; // COLLAPSIBLE		
 						break;
 					/*
 					 * Default
@@ -975,32 +1035,32 @@
      */
 		function Types()
 		{
-			//$type['main'][] = "CapButton";
+			global $conf, $langs;
 			
 			// Alert Page		
 			$type['alert'][] = "identifier";	
 			$type['alert'][] = "status";
 			$type['alert'][] = "category";
-			$type['alert'][] = "urgency";				      
-      
+			$type['alert'][] = "urgency";	
       //$type['alert'][] = "references"; // will be automaticlie added by msgType Update and Cancel
-     	
-     	// Detail Page
-     	$type['alert']['detail'][] = "sent";
-     	
-      $type['alert']['detail'][] = "effective";
-      $type['alert']['detail'][] = "onset";
-      $type['alert']['detail'][] = "expires";
       
-			$type['alert']['detail'][] = "eventCode";
-			$type['alert']['detail'][] = "parameter";
-			
-			$type['alert']['detail'][] = "source";
-			$type['alert']['detail'][] = "restriction";
-			$type['alert']['detail'][] = "addresses";
-			$type['alert']['detail'][] = "code";
-			$type['alert']['detail'][] = "note";
-			$type['alert']['detail'][] = "incidents";
+     	// Alert Detail Page
+     		$type['alert']['detail']['name'] = $langs->trans("Detail");
+	     	$type['alert']['detail'][] = "sent";
+	     	
+	      $type['alert']['detail'][] = "effective";
+	      $type['alert']['detail'][] = "onset";
+	      $type['alert']['detail'][] = "expires";
+	      
+				$type['alert']['detail'][] = "eventCode";
+				$type['alert']['detail'][] = "parameter";
+				
+				$type['alert']['detail'][] = "source";
+				$type['alert']['detail'][] = "restriction";
+				$type['alert']['detail'][] = "addresses";
+				$type['alert']['detail'][] = "code";
+				$type['alert']['detail'][] = "note";
+				$type['alert']['detail'][] = "incidents";
 			
 			// Info Page	
 			//$type['info'][] = "info";
@@ -1019,68 +1079,103 @@
 			$type['area'][] = "circle";
 			$type['area'][] = "map";			
 
-			// conf Page	
+			// Conf Page	
 			$type['conf'][] = "cap_save";
 			$type['conf'][] = "cap_output";
 			
 			// $type['conf'][] = "conf_output";
-					
+			// Identifier conf
 			$type['conf'][] = "WMO_OID";
 			$type['conf'][] = "ISO";			
 			$type['conf'][] = "ID_ID";
 			$type['conf'][] = "identifier_time";
 			
+			$type['conf'][] = "template";
+			
+			// Lang conf
 			$type['conf'][] = "lang_conf_use";
 			$type['conf'][] = "lang_conf_plus";
 			$type['conf'][] = "lang_conf_remove";
 			$type['conf'][] = "lang_conf";
 			
-			/* TO DO */
+			// Webservice conf
 			$type['conf'][] = "webservice_on";
-			$type['conf']['detail'][] = "webservice_securitykey";
-			$type['conf']['detail'][] = "webservice_sourceapplication";
-			$type['conf']['detail'][] = "webservice_login";
-			$type['conf']['detail'][] = "webservice_password";
-			$type['conf']['detail'][] = "webservice_entity";
-			//$type['conf']['detail'][] = "webservice_destination";
-			$type['conf']['detail'][] = "webservice_WS_METHOD";
-			$type['conf']['detail'][] = "webservice_ns";
-			$type['conf']['detail'][] = "webservice_WS_DOL_URL";
+				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
+				$type['conf']['detail'][] = "webservice_securitykey";
+				$type['conf']['detail'][] = "webservice_sourceapplication";
+				$type['conf']['detail'][] = "webservice_login";
+				$type['conf']['detail'][] = "webservice_password";
+				$type['conf']['detail'][] = "webservice_entity";
+				$type['conf']['detail'][] = "webservice_WS_METHOD";
+				$type['conf']['detail'][] = "webservice_ns";
+				$type['conf']['detail'][] = "webservice_WS_DOL_URL";
+				
+				
+			// CAP View
+			$type['capview'][] 	= 'capview';
 			
+			// Cap List 
+			$type['read'][] 		= 'caplist';
 			
-			$type['capview'][] = 'capview';
-			
-			$type['read'][] = 'caplist';
-
+			// LOGIN POPUP
+			$type['Login'][] 		= 'login_popup';
+			/*
+				$type['Login']['detail']['name'] = $langs->trans("WebserviceConfiguration");
+				$type['Login']['detail'][] = "webservice_securitykey";
+				$type['Login']['detail'][] = "webservice_sourceapplication";
+				$type['Login']['detail'][] = "webservice_login";
+				$type['Login']['detail'][] = "webservice_password";
+				$type['Login']['detail'][] = "webservice_entity";
+				$type['Login']['detail'][] = "webservice_WS_METHOD";
+				$type['Login']['detail'][] = "webservice_ns";
+				$type['Login']['detail'][] = "webservice_WS_DOL_URL";
+			*/
       return $type;
 		}
 		
 		function Pages()
 		{
 			global $langs;
-			//$pages['#main'] 					= $langs->trans("TitleMain");
+			//$pages['#MAIN'] 					= $langs->trans("TitleMain");
+			//$pages['next']['name']['PAGENAME'] = 'NEXT_PGAENAME';
 			
 			$pages['#alert'] 					= $langs->trans("TitleAlert");
-			//$pages['alert']['next'] = 'info';
 			
 			$pages['#info']  					= $langs->trans("TitleInfo");
-			//$pages['info']['next'] 	= 'area';
 			
 			$pages['#area']  					= $langs->trans("TitleArea");
-			//$pages['area']['next'] 	= 'capview';
 			
 			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
-			//$pages['conf']['send'] 	= true; 
 			
 			$pages['#read'] 		 		= $langs->trans("TitleCapList");
-			//$pages['conf']['send'] 	= true; 
 			
 			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");
-			$pages['noajax'][]				= '?conv=1#capconv';
 			
 			$pages['#conf']  					= $langs->trans("TitleConfig");
 			
-						
+			// Links
+			$pages['next']['name']['alert'] = 'info';
+			$pages['next']['name']['info'] 	= 'area';
+			$pages['next']['name']['area'] 	= 'capview';
+			
+			// Input or else
+			$pages['next']['nolink']['capview'] = '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
+			
+			$pages['next']['nolink']['conf'] 		= '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
+			$pages['next']['nolink']['conf'] 	 .= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';
+			$pages['next']['nolink']['conf'] 	 .= $langs->trans('Saved!');
+			$pages['next']['nolink']['conf'] 	 .= '</div>';
+
+			// Page without ajax (pagelink)
+			$pages['noajax'][]				= '?conv=1#capconv';
+			//$pages['noajax'][]				= '#login';
+			
+			// Pages that shoud be a dialog
+			//$pages['#login'] 					= $langs->trans("TitleLogin");
+			$pages['popup'][] 				= 'Login'; // intial login as popup (Translate name is $langs->trans("TitleLogin) )
+			
+			$pages['header']['right'] = '<a href="#Login" data-rel="popup" data-position-to="window" data-transition="pop">Login</a>';
+			
 			return $pages;
 		}
 		
@@ -1140,112 +1235,158 @@
      */
 		function Form()
 		{
-			global $langs;
+			global $conf, $langs;
+			
+			$Type_arr = $this->Types(); // TYPES FOR PAGES
+			$Pages_arr = $this->Pages(); // PAGES
 			
 			$out = $this->Header_llx();
 			
 			$out.= '<body>';			
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
-			$out.= '<input type="hidden" name="action" value="create">';
-
-					$Type_arr = $this->Types();
+				$out.= '<input type="hidden" name="action" value="create">';
+					
 					foreach($Type_arr as $pagename => $TypePage)
 					{
-						$out.= '<div data-role="page" id="'.$pagename.'">';
-						
-							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
-    						$out.= '<!-- panel content goes here -->';
-    						$out.= '<ul data-role="listview">';
-    							
-    							$out.= '<li style="height: 91px;">';
-    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
-    								$out.= '<h1>';
-    									$out.= 'Cap Creator';
-    								$out.= '</h1>';
-    								$out.= '<br>';
-    								$out.= '<span style="font-size: 10px;">';
-    									$out.= 'Cap v1.1';
-    								$out.= '</span>';
-    							$out.= '</li>';
-    							
-    							$Pages_arr = $this->Pages();
-									foreach($Pages_arr as $link => $Page_Name)
-									{
-										if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
-										if($link != 'noajax')
+						if(!in_array('#'.$pagename, $Pages_arr['popup']))
+						{
+							$out.= '<div data-role="page" id="'.$pagename.'">';
+
+								$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
+	    						$out.= '<!-- panel content goes here -->';
+	    						$out.= '<ul data-role="listview">';
+	    							
+	    							$out.= '<li style="height: 91px;">';
+	    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+	    								$out.= '<h1>';
+	    									$out.= 'Cap Creator';
+	    								$out.= '</h1>';
+	    								$out.= '<br>';
+	    								$out.= '<span style="font-size: 10px;">';
+	    									$out.= 'Cap v'.$this->version;
+	    								$out.= '</span>';
+	    							$out.= '</li>';    							
+	    							
+										foreach($Pages_arr as $link => $Page_Name)
 										{
-											if($link == '#'.$pagename) 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
-											else 										$out.= '<li><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
-										}
-										unset($data);
-									}
-									
-								$out.= '</ul>';
-							$out.= '</div>';
-							
-							$out.= '<div data-theme="b" data-role="header">';								
-								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-								$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';							
-							$out.= '</div>';
-							
-							
-							// Main
-							$out.= '<div class="ui-content ui-page-theme-a" data-form="ui-page-theme-a" data-theme="a" role="main">';
-								
-								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
-									$out.= '<ul data-role="listview" data-divider-theme="b">';
-									
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr['#'.$pagename].'</h1></li>';
-									
-										foreach($TypePage as $key => $type)
-										{							
-											if(is_numeric($key))
-											{	
-												$out.= '<li>';
-													$out.= $this->InputStandard($type);
-												$out.= '</li>';
+											if($link != 'popup' && $link != 'next' && $link != 'header')
+											{
+												if(!in_array($link, $Pages_arr['popup'])) // a dialog shoud not be in the panel !
+												{
+													if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
+													if($link != 'noajax')
+													{
+														if($link == '#'.$pagename) 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+														else 										$out.= '<li><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+													}
+													unset($data);
+												}
 											}
 										}
-									
+										
 									$out.= '</ul>';
-								$out.= '</div>';	
+								$out.= '</div>'; // PANEL
+					
+								$out.= '<div data-theme="b" data-role="header">';								
+									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
+										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
+									$out.= $Pages_arr['header']['right'];
+								$out.= '</div>'; // HEADER					
 								
-								if(count ($TypePage['detail']) >= 1)
-								{
-									$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
-										$out.= '<h2>Detail</h2>';
-										$out.= '<ul data-role="listview">';
-	
-											foreach($TypePage['detail'] as $key_ex => $type_ex)
-											{		
-												$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
-											}						
-															
+								// Main
+								$out.= '<div class="ui-content ui-page-theme-a" data-form="ui-page-theme-a" data-theme="a" role="main">';
+									
+									$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
+										$out.= '<ul data-role="listview" data-divider-theme="b">';
+										
+										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr['#'.$pagename].'</h1></li>';
+										
+											foreach($TypePage as $key => $type)
+											{							
+												if(is_numeric($key))
+												{	
+													$out.= '<li>';
+														$out.= $this->InputStandard($type);
+													$out.= '</li>';
+												}
+											}
+										
 										$out.= '</ul>';
-									$out.= '</div>';		
+									$out.= '</div>';	 // UI_BODY_A
+									
+									// DETAILS
+									if(count ($TypePage['detail']) >= 1)
+									{
+										if($conf->webservice->on == 0 && $pagename == "conf") $visibl = 'style="display:none;"'; 
+										$out.= '<div data-role="collapsible" id="'.$pagename.'-detail" data-theme="b" data-content-theme="a" '.$visibl.'>';
+											$out.= '<h2>'.$TypePage['detail']['name'].'</h2>';
+											$out.= '<ul data-role="listview">';
+		
+												foreach($TypePage['detail'] as $key_ex => $type_ex)
+												{		
+													if($key_ex != 'name')
+													{
+														$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+													}
+												}						
+																
+											$out.= '</ul>';
+										$out.= '</div>'; // DETAILS		
+									}
+									
+								$out.= '</div>'; // MAIN CONTENT
+								
+								$out.= '<div data-role="footer" data-theme="b">';						
+									//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
+									if(!empty($Pages_arr['next']['name'][$pagename]) || !empty($Pages_arr['next']['nolink'][$pagename]))
+									{
+										if(!empty($Pages_arr['next']['nolink'][$pagename]))
+										{
+											$out.= $Pages_arr['next']['nolink'][$pagename];
+										}
+										else
+										{
+											$out.= '<ul data-role="listview" data-inset="true"><li><a href="#'.$Pages_arr['next']['name'][$pagename].'"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
+										}
+									}
+									
+								$out.= '</div>'; // FOOTER
+								
+								// POPUP
+								foreach($Pages_arr['popup'] as $key => $popupname)
+								{
+									$TypePopup = $Type_arr[$popupname];
+									
+									$out.= '<div data-role="popup" id="'.$popupname.'" data-theme="a" class="ui-corner-all" style="width: 150%; left: -25%;">';
+										//$out.= '<form>';
+																			
+												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
+													$out.= '<ul data-role="listview" data-divider-theme="b">';
+													
+													$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans('Title'.$popupname).'</h1></li>';
+													
+														foreach($TypePopup as $key => $type)
+														{							
+															if(is_numeric($key))
+															{	
+																$out.= '<li>';
+																	$out.= $this->InputStandard($type);
+																$out.= '</li>';
+															}
+														}
+													
+													$out.= '</ul>';
+												//$out.= '</div>';	 // UI_BODY_A												
+											
+										//$out.= '</form>';
+									$out.= '</div>';
 								}
 								
-							$out.= '</div>';
-							
-							$out.= '<div data-role="footer" data-theme="b">';						
-								//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
-								if($pagename == 'alert') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
-								if($pagename == 'info') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#area"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
-								if($pagename == 'area') 					$out.= '<ul data-role="listview" data-inset="true"><li><a href="#capview"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
-								if($pagename == 'capview') 				$out.= '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
-								if($pagename == 'conf') 					$out.= '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
-								
-									if($pagename == 'conf') $out.= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';
-
-									if($pagename == 'conf') $out.= $langs->trans('Saved!');
-									if($pagename == 'conf') $out.= '</div>';
-							
-							$out.= '</div>';
-							
-						$out.= '</div>';
-					}
-
-			$out.= '</form>';
+							$out.= '</div>'; // PAGE END
+						}
+					}					
+		
+			$out.= '</form>'; // FORM
 			
 			$out.= '<script>
 							'.$this->script.'
@@ -1613,6 +1754,46 @@
 			}
 			return $post;
 		}
+		
+		/*
+		function login_page()
+		{
+			global $conf, $langs;
+	
+				//$out.= '<form method="POST" id="login_form" name="login_form" action="index.php?login=1" enctype="multipart/form-data" >';
+			
+					$out.= '<div data-role="page" id="login">';
+
+						$out.= '<div data-role="header">';
+							$out.= '<h1>Login to an Webservice</h1>';
+						$out.= '</div><!-- /header -->';
+					
+							$out.= '<div role="main" class="ui-content">';							
+											
+								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
+									$out.= '<ul data-role="listview" data-divider-theme="b">';
+										
+										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Configuration</h1></li>';
+	
+										
+									
+									$out.= '</ul>';								
+								$out.= '</div>';	
+	
+								$out.= '<input type="submit" value="Submit" data-theme="a">';
+	
+							$out.= '</div><!-- /content -->';
+					
+						$out.= '<div data-role="footer">';
+						$out.= '</div><!-- /footer -->';
+						
+					$out.= '</div><!-- /page -->';
+					
+				//$out.= '</form>';
+			
+			return $out;
+		}
+		*/
 		
 		/**
 		 * Function to install the interface of the Cap PHP library

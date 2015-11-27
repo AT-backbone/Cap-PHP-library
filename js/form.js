@@ -12,6 +12,17 @@
 				});
 				
 				
+				$( "#webservice_switch" ).change(function() {
+					if($( "#webservice_switch" ).prop('checked'))
+					{
+						$("#conf-detail").show();
+					}
+					else
+					{
+						$("#conf-detail").hide();
+					}
+				});
+				
 				$( "#msgType" ).change(function() {
 					if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
 					{		
