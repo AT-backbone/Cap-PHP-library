@@ -760,26 +760,15 @@
 
 						$out.= '<label><input type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 						
-						$out.= '<input type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';		
+						if($conf->webservice_aktive == 1)
+						{
+							$out.= '<input type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b">';
+						}
+						else
+						{
+							$out.= '<input type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
+						}
 						
-						/*
-						$TypePage_arr = $this->Types();
-						
-							$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
-								$out.= '<h2>'.$TypePage_arr['detail']['name'].'</h2>';
-								$out.= '<ul data-role="listview">';
-
-									foreach($TypePage_arr['Login']['detail'] as $key_ex => $type_ex)
-									{		
-										if($key_ex != 'name')
-										{
-											$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
-										}
-									}						
-													
-								$out.= '</ul>';
-							$out.= '</div>'; // COLLAPSIBLE		
-						*/
 						break;
 					/*
 					 * Default

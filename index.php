@@ -155,26 +155,39 @@ $"."conf->lang['en-GB']                                   = 'english';
 		header("Refresh:0");
 	}
 	
-	if(!empty($_POST['send-login']))
+	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
-		end($_POST['send-login']);
-		$key = key($_POST['send-login']);
 		
-		if(!empty($_POST['savepass'][$key]))
-		{		
-			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
-			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-			setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
-			setcookie("Session_login_pass", $_POST['Session_login_pass'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
+		if(!is_array($_POST['send-logout']))
+		{	
+			end($_POST['send-login']);
+			$key = key($_POST['send-login']);
+			
+			if(!empty($_POST['savepass'][$key]))
+			{		
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
+				setcookie("Session_login_pass", $_POST['Session_login_pass'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
+			}
+			else
+			{
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
+				$_SESSION['Session_login_pass'] = $_POST['Session_login_pass'][$key];
+			}
+			unset($_POST);
 		}
 		else
 		{
 			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-			$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
-			$_SESSION['Session_login_pass'] = $_POST['Session_login_pass'][$key];
+			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
+			unset($_POST);
+			$conf->webservice->login = "";
+			$conf->webservice->password = "";
 		}
-		unset($_POST);
 	}
 	
 	if($_COOKIE['Session_login_name'])
