@@ -79,36 +79,36 @@
 		$capfile = fopen('conf/conf.php', "w");
 		fwrite($capfile, "
 		<?php
-		$"."conf->lang['en-GB']                                   = 'english';
-		$"."conf->lang['ca']                                      = 'catal�';
-		$"."conf->lang['cs']                                      = 'ce�tina';
+$"."conf->lang['en-GB']                                   = 'english';
+		$"."conf->lang['ca']                                      = 'català';
+		$"."conf->lang['cs']                                      = 'ceština';
 		$"."conf->lang['da-DK']                                   = 'dansk';
 		$"."conf->lang['de-DE']                                   = 'deutsch';
-		$"."conf->lang['es-ES']                                   = 'espa�ol';
+		$"."conf->lang['es-ES']                                   = 'español';
 		$"."conf->lang['et']                                      = 'eesti';
 		$"."conf->lang['eu']                                      = 'euskera';
-		$"."conf->lang['fr-FR']                                   = 'fran�ais';
+		$"."conf->lang['fr-FR']                                   = 'français';
 		$"."conf->lang['gl']                                      = 'galego';
 		$"."conf->lang['hr-HR']                                   = 'hrvatski';
-		$"."conf->lang['is']                                      = '�slenska';
+		$"."conf->lang['is']                                      = 'íslenska';
 		$"."conf->lang['it-IT']                                   = 'italiano';
 		$"."conf->lang['lt']                                      = 'lietuviu';
-		$"."conf->lang['lv']                                      = 'latvie�u';
+		$"."conf->lang['lv']                                      = 'latviešu';
 		$"."conf->lang['hu-HU']                                   = 'magyar';
 		$"."conf->lang['mt']                                      = 'malti';
 		$"."conf->lang['nl-NL']                                   = 'nederlands';
 		$"."conf->lang['no']                                      = 'norsk';
 		$"."conf->lang['pl']                                      = 'polski';
-		$"."conf->lang['pt-PT']                                   = 'portugu�s';
-		$"."conf->lang['ro']                                      = 'rom�na';
-		$"."conf->lang['sr']                                      = '??????';
-		$"."conf->lang['sl']                                      = 'sloven�cina';
+		$"."conf->lang['pt-PT']                                   = 'português';
+		$"."conf->lang['ro']                                      = 'româna';
+		$"."conf->lang['sr']                                      = 'српски';
+		$"."conf->lang['sl']                                      = 'slovenšcina';
 		$"."conf->lang['sk']                                      = 'slovencina';
 		$"."conf->lang['fi-FI']                                   = 'suomi';
 		$"."conf->lang['sv-SE']                                   = 'svenska';
-		$"."conf->lang['el-GR']                                   = '????????';
+		$"."conf->lang['el-GR']                                   = 'Ελληνικά';
 		$"."conf->lang['bg']                                      = 'bulgarian';
-		$"."conf->lang['mk']                                      = '??????????';
+		$"."conf->lang['mk']                                      = 'македонски';
 		$"."conf->lang['name']                                    = '';
 		
 		$"."conf->select->lang['en-GB']                           = 1;
@@ -143,8 +143,8 @@
 		$"."conf->select->lang['mk']                              = 0;
 		$"."conf->trans['en_US']                                  = 'english';
 		$"."conf->trans['de_DE']                                  = 'deutsch';
-		$"."conf->trans['fr_FR']                                  = 'fran�ais';
-		$"."conf->trans['es_ES']                                  = 'Espa�ol';
+		$"."conf->trans['fr_FR']                                  = 'français';
+		$"."conf->trans['es_ES']                                  = 'Español';
 		?>
 		");
 		fclose($capfile);
@@ -153,6 +153,50 @@
 		$langs->load("main");	
 		
 		header("Refresh:0");
+	}
+	
+	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
+	{
+		if(empty($_POST['send-logout']))
+		{
+			end($_POST['send-login']);
+			$key = key($_POST['send-login']);
+			
+			if(!empty($_POST['savepass'][$key]))
+			{		
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
+				setcookie("Session_login_pass", $_POST['Session_login_pass'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
+			}
+			else
+			{
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
+				$_SESSION['Session_login_pass'] = $_POST['Session_login_pass'][$key];
+			}
+			unset($_POST);
+		}
+		else
+		{
+			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
+			unset($_POST);
+		}
+	}
+	
+	if($_COOKIE['Session_login_name'])
+	{
+		$conf->webservice->login = $_COOKIE['Session_login_name'];
+		$conf->webservice->password = $_COOKIE['Session_login_pass'];
+	}
+	
+	if($_SESSION['Session_login_name'])
+	{
+		$conf->webservice->login = $_SESSION['Session_login_name'];
+		$conf->webservice->password = $_SESSION['Session_login_pass'];
 	}
 	
 	// METEOALARM WEBSERVICE ---
@@ -165,16 +209,32 @@
 			{
 				include 'lib/cap.meteoalarm.webservices.Area.php';		
 				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
-				$AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+				if(!empty($AreaCodesArray['document']['AreaInfo']))
+				{
+					$AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+				}
 			}
 			if(file_exists('lib/cap.meteoalarm.webservices.Parameter.php'))
 			{
 				include 'lib/cap.meteoalarm.webservices.Parameter.php';		
 				if($_GET['web_test'] == 2) die(print_r($ParameterArray));
-				$ParameterArray = $ParameterArray['document']['AreaInfo'];
+				if(!empty($AreaCodesArray['document']['AreaInfo']))
+				{
+					$ParameterArray = $ParameterArray['document']['AreaInfo'];
+				}
 			}
 			
-			if(is_array($AreaCodesArray) && is_array($AreaCodesArray)) $conf->webservice_aktive = 1;
+			if(is_array($AreaCodesArray) && is_array($AreaCodesArray))
+			{
+				 $conf->webservice_aktive = 1;
+			}
+			else
+			{
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				unset($conf->webservice->login);
+				unset($conf->webservice->password);
+			}
 		}
 	}
 	
