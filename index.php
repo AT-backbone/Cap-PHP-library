@@ -157,8 +157,9 @@ $"."conf->lang['en-GB']                                   = 'english';
 	
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
-		if(empty($_POST['send-logout']))
-		{
+		
+		if(!is_array($_POST['send-logout']))
+		{	
 			end($_POST['send-login']);
 			$key = key($_POST['send-login']);
 			
@@ -184,6 +185,8 @@ $"."conf->lang['en-GB']                                   = 'english';
 			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
 			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
 			unset($_POST);
+			$conf->webservice->login = "";
+			$conf->webservice->password = "";
 		}
 	}
 	
