@@ -752,15 +752,16 @@
 						$out = '<h3>'.$langs->trans("PleasLoginToYourWebservice").'</h3>';
 						
 						$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
-							$out.= '<input type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+							$out.= '<input type="text" name="Session_login_name">';
 
 						$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
-							$out.= '<input type="password" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+							$out.= '<input type="password" name="Session_login_pass">';
 
 						$out.= '<label><input type="checkbox" name="savepass">'.$langs->trans("SaveWebservicePass").'</label>';
 							
-						$out.= '<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">'.$langs->trans("Login").'</button>';		
-							
+						$out.= '<input type="submit" name="send-login" value="'.$langs->trans("Login").'" data-theme="b">';		
+						
+						/*
 						$TypePage_arr = $this->Types();
 						
 							$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
@@ -777,6 +778,7 @@
 													
 								$out.= '</ul>';
 							$out.= '</div>'; // COLLAPSIBLE		
+						*/
 						break;
 					/*
 					 * Default
@@ -1045,22 +1047,23 @@
       //$type['alert'][] = "references"; // will be automaticlie added by msgType Update and Cancel
       
      	// Alert Detail Page
-     		$type['alert']['detail']['name'] = $langs->trans("Detail");
-	     	$type['alert']['detail'][] = "sent";
+     		$type['conf']['detail']['value'][] = "DUMMY";
+	     	$type['alert']['detail']['value'][] = "sent";
 	     	
-	      $type['alert']['detail'][] = "effective";
-	      $type['alert']['detail'][] = "onset";
-	      $type['alert']['detail'][] = "expires";
+	      $type['alert']['detail']['value'][] = "effective";
+	      $type['alert']['detail']['value'][] = "onset";
+	      $type['alert']['detail']['value'][] = "expires";
 	      
-				$type['alert']['detail'][] = "eventCode";
-				$type['alert']['detail'][] = "parameter";
+				$type['alert']['detail']['value'][] = "eventCode";
+				$type['alert']['detail']['value'][] = "parameter";
 				
-				$type['alert']['detail'][] = "source";
-				$type['alert']['detail'][] = "restriction";
-				$type['alert']['detail'][] = "addresses";
-				$type['alert']['detail'][] = "code";
-				$type['alert']['detail'][] = "note";
-				$type['alert']['detail'][] = "incidents";
+				$type['alert']['detail']['value'][] = "source";
+				$type['alert']['detail']['value'][] = "restriction";
+				$type['alert']['detail']['value'][] = "addresses";
+				$type['alert']['detail']['value'][] = "code";
+				$type['alert']['detail']['value'][] = "note";
+				$type['alert']['detail']['value'][] = "incidents";
+				$type['alert']['detail']['name'] = $langs->trans("Detail");
 			
 			// Info Page	
 			//$type['info'][] = "info";
@@ -1100,15 +1103,17 @@
 			
 			// Webservice conf
 			$type['conf'][] = "webservice_on";
+		
+				$type['conf']['detail']['value'][] = "DUMMY";
+				$type['conf']['detail']['value'][] = "webservice_securitykey";
+				$type['conf']['detail']['value'][] = "webservice_sourceapplication";
+				$type['conf']['detail']['value'][] = "webservice_login";
+				$type['conf']['detail']['value'][] = "webservice_password";
+				$type['conf']['detail']['value'][] = "webservice_entity";
+				$type['conf']['detail']['value'][] = "webservice_WS_METHOD";
+				$type['conf']['detail']['value'][] = "webservice_ns";
+				$type['conf']['detail']['value'][] = "webservice_WS_DOL_URL";
 				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
-				$type['conf']['detail'][] = "webservice_securitykey";
-				$type['conf']['detail'][] = "webservice_sourceapplication";
-				$type['conf']['detail'][] = "webservice_login";
-				$type['conf']['detail'][] = "webservice_password";
-				$type['conf']['detail'][] = "webservice_entity";
-				$type['conf']['detail'][] = "webservice_WS_METHOD";
-				$type['conf']['detail'][] = "webservice_ns";
-				$type['conf']['detail'][] = "webservice_WS_DOL_URL";
 				
 				
 			// CAP View
@@ -1173,8 +1178,6 @@
 			// Pages that shoud be a dialog
 			//$pages['#login'] 					= $langs->trans("TitleLogin");
 			$pages['popup'][] 				= 'Login'; // intial login as popup (Translate name is $langs->trans("TitleLogin) )
-			
-			$pages['header']['right'] = '<a href="#Login" data-rel="popup" data-position-to="window" data-transition="pop">Login</a>';
 			
 			return $pages;
 		}
@@ -1248,7 +1251,7 @@
 					
 					foreach($Type_arr as $pagename => $TypePage)
 					{
-						if(!in_array('#'.$pagename, $Pages_arr['popup']))
+						if(!in_array($pagename, $Pages_arr['popup']))
 						{
 							$out.= '<div data-role="page" id="'.$pagename.'">';
 
@@ -1290,7 +1293,7 @@
 								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
-									$out.= $Pages_arr['header']['right'];
+									$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">Login</a>';
 								$out.= '</div>'; // HEADER					
 								
 								// Main
@@ -1315,14 +1318,14 @@
 									$out.= '</div>';	 // UI_BODY_A
 									
 									// DETAILS
-									if(count ($TypePage['detail']) >= 1)
+									if(count ($TypePage['detail']['value']) >= 1)
 									{
 										if($conf->webservice->on == 0 && $pagename == "conf") $visibl = 'style="display:none;"'; 
 										$out.= '<div data-role="collapsible" id="'.$pagename.'-detail" data-theme="b" data-content-theme="a" '.$visibl.'>';
 											$out.= '<h2>'.$TypePage['detail']['name'].'</h2>';
 											$out.= '<ul data-role="listview">';
-		
-												foreach($TypePage['detail'] as $key_ex => $type_ex)
+												
+												foreach($TypePage['detail']['value'] as $key_ex => $type_ex)
 												{		
 													if($key_ex != 'name')
 													{
@@ -1357,7 +1360,7 @@
 								{
 									$TypePopup = $Type_arr[$popupname];
 									
-									$out.= '<div data-role="popup" id="'.$popupname.'" data-theme="a" class="ui-corner-all" style="width: 150%; left: -25%;">';
+									$out.= '<div data-role="popup" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 150%; left: -25%;">';
 										//$out.= '<form>';
 																			
 												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
@@ -1566,7 +1569,7 @@
 						$out.= '<div role="main" class="ui-content">';							
 										
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
-								
+								/*								
 								// get all convert files
 								$std_tmp = scandir('convert/');								
 								foreach($std_tmp as $num => $filename)
@@ -1603,6 +1606,7 @@
 											$out.= $std;					
 											$out.= $area;							
 									$out.= '</fieldset>';
+								*/
 								
 								// get all convert files
 								$converter_tmp = scandir('convert/');								
