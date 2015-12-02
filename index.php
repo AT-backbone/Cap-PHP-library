@@ -193,13 +193,13 @@ $"."conf->lang['en-GB']                                   = 'english';
 	if($_COOKIE['Session_login_name'])
 	{
 		$conf->webservice->login = $_COOKIE['Session_login_name'];
-		$conf->webservice->password = $_COOKIE['Session_login_pass'];
+		$conf->webservice->password = encrypt_decrypt(1, $_COOKIE['Session_login_pass']);
 	}
 	
 	if($_SESSION['Session_login_name'])
 	{
 		$conf->webservice->login = $_SESSION['Session_login_name'];
-		$conf->webservice->password = $_SESSION['Session_login_pass'];
+		$conf->webservice->password = encrypt_decrypt(1,$_SESSION['Session_login_pass']);
 	}
 	
 	// METEOALARM WEBSERVICE ---
@@ -221,13 +221,13 @@ $"."conf->lang['en-GB']                                   = 'english';
 			{
 				include 'lib/cap.meteoalarm.webservices.Parameter.php';		
 				if($_GET['web_test'] == 2) die(print_r($ParameterArray));
-				if(!empty($AreaCodesArray['document']['AreaInfo']))
+				if(!empty($ParameterArray['document']['AreaInfo']))
 				{
 					$ParameterArray = $ParameterArray['document']['AreaInfo'];
 				}
 			}
 			
-			if(is_array($AreaCodesArray) && is_array($AreaCodesArray))
+			if(is_array($AreaCodesArray) && is_array($ParameterArray))
 			{
 				 $conf->webservice_aktive = 1;
 			}
