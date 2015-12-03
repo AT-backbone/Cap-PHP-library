@@ -115,8 +115,7 @@
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i:s');
-			$st['zone'] = date('H:i', date('P'));
-
+			$st['zone'] = substr(date('P'), 1);
 			
 			switch($type)
 			{
@@ -253,6 +252,8 @@
 					$out = '<div id="Eventappend">';
 						$out.= '<legend>'.$langs->trans("LabelEventCode").': '.$this->tooltip($type, $langs->trans("LabelEventCodeDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
+						if(is_array($this->eventCode[0]))
+						{
 							foreach($this->eventCode[0] as $key => $eventCode)
 							{
 								$out.= '<div class="ui-grid-b">';
@@ -260,9 +261,10 @@
 									$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
 								$out.= '</div>';
 							}	
-							$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
-							$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="eventCode[value][]"></div>';
-							$out.= '<div class="ui-block-c"><input type="button" onclick="plusEventCodeInput()" value="+"></div>';
+						}
+						$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
+						$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="eventCode[value][]"></div>';
+						$out.= '<div class="ui-block-c"><input type="button" onclick="plusEventCodeInput()" value="+"></div>';
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
@@ -511,7 +513,7 @@
 						
 						if(is_array($S_Area))
 						{
-							$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
+							$out = '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
 							$out.= $this->buildSelectValueName('geocode[value][]', 'geocode[valueName][]', 'geocode',$S_Area, $G_Area, $this->geocode[0]);
 						}
 						else
@@ -795,7 +797,7 @@
 		 
 		 function tooltip($name, $info, $alttext='ToolboxInfo')
 		 {
-		 		$out.= '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$alttext.'">'.$name.'</a>';
+		 		$out = '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$alttext.'">'.$name.'</a>';
 		 		$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:100%;">';
 				$out.= $info;
 				$out.= '</div>';
@@ -816,6 +818,7 @@
      */
 		function buildSelectValueName($name, $name2, $name3, $S_Area, $G_Area, $select = array())
 		{
+			$style_color = "";
 			if($name3 == "geocode") $multi = 'multiple="multiple"';
 			$out = '<select name="'.$name.'" id="'.$name3.'-select" data-native-menu="false" '.$multi.'>';
 				$out.='<option></option>';							
@@ -1019,159 +1022,7 @@
 			
 			return $out;
 		}
-		
-		/**
-     * Output Type Array
-     *
-     * @return	array						Array with the first CAP 1.1 entery's
-     */
-		function Types()
-		{
-			global $conf, $langs;
-			
-			// Alert Page		
-			$type['alert'][] = "identifier";	
-			$type['alert'][] = "status";
-			$type['alert'][] = "category";
-			$type['alert'][] = "urgency";	
-      //$type['alert'][] = "references"; // will be automaticlie added by msgType Update and Cancel
-      
-     	// Alert Detail Page
-     		$type['conf']['detail']['value'][] = "DUMMY";
-	     	$type['alert']['detail']['value'][] = "sent";
-	     	
-	      $type['alert']['detail']['value'][] = "effective";
-	      $type['alert']['detail']['value'][] = "onset";
-	      $type['alert']['detail']['value'][] = "expires";
-	      
-				$type['alert']['detail']['value'][] = "eventCode";
-				$type['alert']['detail']['value'][] = "parameter";
-				
-				$type['alert']['detail']['value'][] = "source";
-				$type['alert']['detail']['value'][] = "restriction";
-				$type['alert']['detail']['value'][] = "addresses";
-				$type['alert']['detail']['value'][] = "code";
-				$type['alert']['detail']['value'][] = "note";
-				$type['alert']['detail']['value'][] = "incidents";
-				$type['alert']['detail']['name'] = $langs->trans("Detail");
-			
-			// Info Page	
-			//$type['info'][] = "info";
-			$type['info'][] = "lang";
-			$type['info'][] = "event";	
-			$type['info'][] = "senderName";
-			$type['info'][] = "sender";		
-			$type['info'][] = "audience";
-			$type['info'][] = "contact";
-			$type['info'][] = "web";
 
-			// Area Page
-			$type['area'][] = "areaDesc";
-			$type['area'][] = "geocode";
-			$type['area'][] = "polygon";
-			$type['area'][] = "circle";
-			$type['area'][] = "map";			
-
-			// Conf Page	
-			$type['conf'][] = "cap_save";
-			$type['conf'][] = "cap_output";
-			
-			// $type['conf'][] = "conf_output";
-			// Identifier conf
-			$type['conf'][] = "WMO_OID";
-			$type['conf'][] = "ISO";			
-			$type['conf'][] = "ID_ID";
-			$type['conf'][] = "identifier_time";
-			
-			$type['conf'][] = "template";
-			
-			// Lang conf
-			$type['conf'][] = "lang_conf_use";
-			$type['conf'][] = "lang_conf_plus";
-			$type['conf'][] = "lang_conf_remove";
-			$type['conf'][] = "lang_conf";
-			
-			// Webservice conf
-			$type['conf'][] = "webservice_on";
-		
-				$type['conf']['detail']['value'][] = "DUMMY";
-				$type['conf']['detail']['value'][] = "webservice_securitykey";
-				$type['conf']['detail']['value'][] = "webservice_sourceapplication";
-				$type['conf']['detail']['value'][] = "webservice_login";
-				$type['conf']['detail']['value'][] = "webservice_password";
-				$type['conf']['detail']['value'][] = "webservice_entity";
-				$type['conf']['detail']['value'][] = "webservice_WS_METHOD";
-				$type['conf']['detail']['value'][] = "webservice_ns";
-				$type['conf']['detail']['value'][] = "webservice_WS_DOL_URL";
-				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
-				
-				
-			// CAP View
-			$type['capview'][] 	= 'capview';
-			
-			// Cap List 
-			$type['read'][] 		= 'caplist';
-			
-			// LOGIN POPUP
-			$type['Login'][] 		= 'login_popup';
-			/*
-				$type['Login']['detail']['name'] = $langs->trans("WebserviceConfiguration");
-				$type['Login']['detail'][] = "webservice_securitykey";
-				$type['Login']['detail'][] = "webservice_sourceapplication";
-				$type['Login']['detail'][] = "webservice_login";
-				$type['Login']['detail'][] = "webservice_password";
-				$type['Login']['detail'][] = "webservice_entity";
-				$type['Login']['detail'][] = "webservice_WS_METHOD";
-				$type['Login']['detail'][] = "webservice_ns";
-				$type['Login']['detail'][] = "webservice_WS_DOL_URL";
-			*/
-      return $type;
-		}
-		
-		function Pages()
-		{
-			global $langs;
-			//$pages['#MAIN'] 					= $langs->trans("TitleMain");
-			//$pages['next']['name']['PAGENAME'] = 'NEXT_PGAENAME';
-			
-			$pages['#alert'] 					= $langs->trans("TitleAlert");
-			
-			$pages['#info']  					= $langs->trans("TitleInfo");
-			
-			$pages['#area']  					= $langs->trans("TitleArea");
-			
-			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
-			
-			$pages['#read'] 		 		= $langs->trans("TitleCapList");
-			
-			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");
-			
-			$pages['#conf']  					= $langs->trans("TitleConfig");
-			
-			// Links
-			$pages['next']['name']['alert'] = 'info';
-			$pages['next']['name']['info'] 	= 'area';
-			$pages['next']['name']['area'] 	= 'capview';
-			
-			// Input or else
-			$pages['next']['nolink']['capview'] = '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
-			
-			$pages['next']['nolink']['conf'] 		= '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
-			$pages['next']['nolink']['conf'] 	 .= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';
-			$pages['next']['nolink']['conf'] 	 .= $langs->trans('Saved!');
-			$pages['next']['nolink']['conf'] 	 .= '</div>';
-
-			// Page without ajax (pagelink)
-			$pages['noajax'][]				= '?conv=1#capconv';
-			//$pages['noajax'][]				= '#login';
-			
-			// Pages that shoud be a dialog
-			//$pages['#login'] 					= $langs->trans("TitleLogin");
-			$pages['popup'][] 				= 'Login'; // intial login as popup (Translate name is $langs->trans("TitleLogin) )
-			
-			return $pages;
-		}
-		
 	  /**
      * Output Html Head
      *
@@ -1230,8 +1081,22 @@
 		{
 			global $conf, $langs;
 			
-			$Type_arr = $this->Types(); // TYPES FOR PAGES
-			$Pages_arr = $this->Pages(); // PAGES
+			
+			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
+			{
+				include 'menu/standard_menu.lib.php';
+			}
+			elseif(!empty($conf->optional_menu))
+			{
+				include addslashes($conf->optional_menu);
+			}
+			else
+			{
+				die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
+			}
+			
+			$Type_arr = Types(); // TYPES FOR PAGES
+			$Pages_arr = Pages(); // PAGES
 			
 			$out = $this->Header_llx();
 			
@@ -1266,6 +1131,7 @@
 											{
 												if(!in_array($link, $Pages_arr['popup'])) // a dialog shoud not be in the panel !
 												{
+													$data = "";
 													if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
 													if($link != 'noajax')
 													{
@@ -1313,19 +1179,23 @@
 									// DETAILS
 									if(count ($TypePage['detail']['value']) >= 1)
 									{
+										$visibl = "";
 										if($conf->webservice->on == 0 && $pagename == "conf") $visibl = 'style="display:none;"'; 
 										$out.= '<div data-role="collapsible" id="'.$pagename.'-detail" data-theme="b" data-content-theme="a" '.$visibl.'>';
 											$out.= '<h2>'.$TypePage['detail']['name'].'</h2>';
 											$out.= '<ul data-role="listview">';
 												
-												foreach($TypePage['detail']['value'] as $key_ex => $type_ex)
-												{		
-													if($key_ex != 'name')
-													{
-														$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+												if(is_array($TypePage['detail']['value']))
+												{
+													foreach($TypePage['detail']['value'] as $key_ex => $type_ex)
+													{		
+														if($key_ex != 'name')
+														{
+															$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+														}
 													}
-												}						
-																
+												}
+														
 											$out.= '</ul>';
 										$out.= '</div>'; // DETAILS		
 									}
@@ -1517,6 +1387,19 @@
 		function ListCap()
 		{
 			global $conf, $langs;
+			
+			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
+			{
+				include 'menu/standard_menu.lib.php';
+			}
+			elseif(!empty($conf->optional_menu))
+			{
+				include addslashes($conf->optional_menu);
+			}
+			else
+			{
+				die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
+			}
 			
 			$out = $this->Header_llx();
 			
@@ -1799,6 +1682,7 @@
 		 */
 		function install()
 		{
+			include 'menu/standard_menu.lib.php';
 			
 			$out = $this->Header_llx();
 			

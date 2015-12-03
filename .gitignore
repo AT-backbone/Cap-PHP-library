@@ -9,3 +9,4 @@ conf.php
 .xml
 ftp_tmp/*.zip
 web_test.php
+menu/refugees_menu.lib.php

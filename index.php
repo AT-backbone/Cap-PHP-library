@@ -40,7 +40,7 @@
    *     
    * @return	string
    */
-	function encrypt_decrypt($action, $string, $key) 
+	function encrypt_decrypt($action, $string, $key = "") 
 	{
 		global $conf;
 		
@@ -79,7 +79,7 @@
 		$capfile = fopen('conf/conf.php', "w");
 		fwrite($capfile, "
 		<?php
-$"."conf->lang['en-GB']                                   = 'english';
+		$"."conf->lang['en-GB']                                   = 'english';
 		$"."conf->lang['ca']                                      = 'català';
 		$"."conf->lang['cs']                                      = 'ceština';
 		$"."conf->lang['da-DK']                                   = 'dansk';
@@ -345,9 +345,10 @@ $"."conf->lang['en-GB']                                   = 'english';
 		
 		if(file_exists('conf/template.cap'))
 		{
-			require_once 'lib/cap.read.class.php';
-			$alert = new alert('conf/template.cap');
-			$cap = $alert->output();
+			require_once 'lib/cap.read.template.class.php';
+			$alert = new alert_template('conf/template.cap');
+			$cap = $alert->output_template();
+			unset($alert);
 		}
 		
 			$form = new CAP_Form($cap);
