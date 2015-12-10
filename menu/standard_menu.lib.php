@@ -21,12 +21,7 @@
  *	\file      	stabdard_menu.lib.php
  *  \ingroup   	menu
  */
-		
-		/**
-     * Output Type Array
-     *
-     * @return	array						Array with the first CAP 1.1 entery's
-     */
+ 
 		function Types()
 		{
 			global $conf, $langs;
@@ -178,6 +173,128 @@
 			$pages['popup'][] 				= 'Login'; // intial login as popup (Translate name is $langs->trans("TitleLogin) )
 			
 			return $pages;
+		}
+		
+		function TypeStatus()
+		{
+			/*
+			Requirenes level
+			key : theme : desc
+			O   : A     : optional
+			OD  : B     : optional (Dark)			
+			C   : E     : conditional
+			R   : C     : required
+			*/
+			
+			$status['identifier'] 	= "R";
+			
+			// Group
+			$status['status'] 			= "R";			
+			$status['msgType'] 			= "R";
+			$status['scope'] 				= "R";
+			
+			// Group
+			$status['category']	 		= "R";			
+			$status['responseType']	= "R";
+			
+			// Group
+			$status['urgency'] 			= "R";			
+			$status['severity'] 		= "R";
+			$status['certainty'] 		= "R";
+
+			$status['sent'] 				= "R";
+			$status['lang'] 				= "R";
+
+			// Group
+			$status['event'] 				= "R";			
+			$status['headline'] 		= "O";
+			$status['description']	= "O";
+			$status['instruction']	= "O";
+
+			$status['sender'] 			= "R";
+			$status['areaDesc'] 		= "R";
+			$status['geocode'] 			= "R";
+
+			$status['restriction'] 	= "C"; // required when Scope is = Restricted
+			$status['required']['restriction']['Scope'] = 'Restricted'; // restriction is required when Scope is Restricted
+			
+			$status['addresses'] 		= "C"; // required when Scope is = Private
+			$status['required']['addresses']['Scope'] = 'Private'; // addresses is required when Scope is Private
+			
+			$status['effective'] 		= "O";
+			$status['onset'] 				= "O";
+			$status['expires'] 			= "O";
+			$status['eventCode'] 		= "O";
+			$status['parameter'] 		= "O";
+			$status['source'] 			= "O";
+			$status['code'] 				= "O";
+			$status['note'] 				= "O";
+			$status['incidents'] 		= "O";
+			$status['senderName'] 	= "O";
+			$status['audience'] 		= "O";
+			$status['contact'] 			= "O";
+			$status['web'] 					= "O";
+			$status['polygon'] 			= "O";
+			$status['circle'] 			= "O";
+			$status['map'] 					= "O";
+			
+			return $status;
+		}
+		
+		function dependencies()
+		{
+			// if select parameter_awt is 10; Rain than select category = MET
+			//  if     ----  name			  ----				  is     ----				than 		   ----  name   ----     is      ---
+			$depends['select']	['id']	['parameter_awt-select']	['10; Rain']						['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['9; avalanches']				['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['8; forest-fire']			['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['7; coastalevent']			['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['6; low-temperature']	['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['5; high-temperature']	['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['4; Fog']							['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['3; Thunderstorm']			['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['2; snow-ice']					['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['1; Wind']							['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['12; flooding']				['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['13; rain-flood']			['select']	['name'] 	['category'] 			= "Met";
+			$depends['select']	['id']	['parameter_awt-select']	['14; Refugees']				['select']	['name'] 	['category'] 			= "Met";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['severity'] 			= "Minor";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['severity'] 			= "Moderate";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['severity'] 			= "Severe";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['severity'] 			= "Extreme";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['urgency'] 			= "Expected";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['urgency'] 			= "Expected";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['urgency'] 			= "Expected";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['urgency'] 			= "Expected";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['certainty'] 		= "Likely";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['certainty'] 		= "Likely";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['certainty'] 		= "Likely";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['certainty'] 		= "Likely";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['responseType'] 	= "None";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['responseType'] 	= "None";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['responseType'] 	= "None";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['responseType'] 	= "None";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['status'] 				= "Actual";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['status'] 				= "Actual";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['status'] 				= "Actual";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['status'] 				= "Actual";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['msgType'] 			= "Alert";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['msgType'] 			= "Alert";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['msgType'] 			= "Alert";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['msgType'] 			= "Alert";
+
+			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['scope'] 				= "Public";
+			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['scope'] 				= "Public";
+			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['scope'] 				= "Public";
+			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['scope'] 				= "Public";
+			 
+			return $depends;
 		}
 
 ?>

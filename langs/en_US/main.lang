@@ -138,3 +138,21 @@ LabelEffectiveDesc=(OPTIONAL)<br>The effective time of the information of the al
 LabelOnsetDesc=(OPTIONAL)<br>The expected time of the beginning of the subject event of the alert message.
 LabelExpiresDesc=(OPTIONAL)<br>The expiry time of the information of the alert message.
 LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associated with the alert message.
+
+###Login###
+TitleLogin=Login
+Service=Service
+User=User
+LoginDate=Login date
+LoginToYourWebservice=Login to your Webservice
+SaveWebservicePass=Save password?
+
+###Meteoalarm Webservice###
+LabelAwarenessTypeWebservice=LabelAwarenessTypeWebservice
+LabelAwarenessTypeWebserviceDesc=LabelAwarenessTypeWebserviceDesc
+
+LabelAwarenessLevelWebservice=LabelAwarenessLevelWebservice
+LabelAwarenessLevelWebserviceDesc=LabelAwarenessLevelWebserviceDesc
+
+LabelGeocodeWebservice=LabelGeocodeWebservice
+LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc

@@ -102,6 +102,37 @@
 			exit;
 		}
 		
+		function GetTypeStatusFromArray($status_theme, $getreq = 0)
+		{
+			$required = "";
+			switch($status_theme) // if object have a value than its data-theme="f"
+			{
+				case 'O':
+					$status_theme = 'data-theme="a"';
+					break;
+					
+				case 'OD':
+					$status_theme = 'data-theme="b"';
+					break;
+					
+				case 'C':
+					$status_theme = 'data-theme="e"';
+					break;
+					
+				case 'R':
+					$status_theme = 'data-theme="c"';
+					$required = '';
+					break;
+					
+				default:
+					$status_theme = "";
+					break;
+			}
+			
+			if($getreq == 1) return $required;
+			return $status_theme;
+		}
+		
     /**
      * Output input field for CAP 1.1 value's
      *
@@ -109,13 +140,27 @@
      * @param   string	$lang			the language (in RFC 3066)
      * @return	string						HTML edit field
      */
-		function InputStandard($type, $lang="")
+		function InputStandard($type, $status_arr = "")
 		{
 			global $conf, $langs, $AreaCodesArray, $ParameterArray;
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i:s');
 			$st['zone'] = substr(date('P'), 1);
+			
+			/*
+			Requirenes level
+			key : theme : desc
+			O   : A     : optional
+			OD  : B     : optional (Dark)			
+			C   : E     : conditional
+			R   : C     : required
+			*/
+			
+			if(is_array($status_arr))
+			{
+				$status_theme = $this->GetTypeStatusFromArray($status_arr[$type]);
+			}
 			
 			switch($type)
 			{
@@ -141,67 +186,93 @@
 					break;
 					
 				case 'identifier':
+					
+					if(!empty($this->identifier[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+				
 					$out = '<div id="Identapend">';
 						$out.= '<label>'.$langs->trans("LabelIdentifier").': '.$this->tooltip($type, $langs->trans("LabelIdentifierDesc")).'</label>';
 						if(!is_array($this->identifier))
 						{
+							$status_theme_wm = $status_theme;
+							$status_theme_is = $status_theme;
+							$status_theme_ti = $status_theme;
+							$status_theme_id = $status_theme;
+							
+							if(!empty($conf->identifier->WMO_OID)) 	$status_theme_wm = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->identifier->ISO)) 			$status_theme_is = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->identifier->ID_ID)) 		$status_theme_ti = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if($conf->identifier->time->on == true) $status_theme_id = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							
 							$out.= '<div class="ui-grid-c">';
-								if(!empty($conf->identifier->WMO_OID))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
-								if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
-								if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
-								if(!empty($conf->identifier->ID_ID))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
-								if(empty($conf->identifier->ID_ID)) 		$out.= '<div class="ui-block-d"><input placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
+								if(!empty($conf->identifier->WMO_OID))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" '.$status_theme_wm.' type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
+								if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input '.$status_theme_is.' placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
+								if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input '.$status_theme_ti.' placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
+								if(!empty($conf->identifier->ID_ID))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input '.$status_theme_id.' placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
+								if(empty($conf->identifier->ID_ID)) 		$out.= '<div class="ui-block-d"><input '.$status_theme.' placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
 							$out.= '</div>';
 						}
 						else
 						{
-							$out.= '<input placeholder="" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'">';
+							$out.= '<input '.$status_theme.' placeholder="" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'">';
 						}
 					$out.= '</div>';					
 					break;
 					
 				case 'sender':
+					if(!empty($this->sender[0])) $status_theme = 'data-theme="f"';
 					$out = '<legend>'.$langs->trans("Labelsender").': '.$this->tooltip($type, $langs->trans("LabelsenderDesc")).'</legend>';	
-					$out.= '<input placeholder="sender" type="text" name="sender" value="'.$this->sender[0].'">';
+					$out.= '<input '.$status_theme.' placeholder="sender" type="text" name="sender" value="'.$this->sender[0].'">';
 					break;
 					
 				case 'sent':
+					if(!empty($this->sent[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					if($this->sent[0]) $st = $this->make_cap_time($this->sent[0]);
 					$out = '<div id="Sentapend">';
 						$out.= '<label>'.$langs->trans("LabelSent").': '.$this->tooltip($type, $langs->trans("LabelSentDesc")).'</label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input type="date" name="sent[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.' type="date" name="sent[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input  type="time" name="sent[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="time" name="sent[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
 								$out.= '</div>';
 							$out.= '</div>';
+							$out.= '<div class="ui-block-c" style="width: 24px;">';
+								$out.= '<input type="text" max-size="1" value="+" name="sent[plus]" style="height: 37px;">';
+							$out.= '</div>';
 							$out.= '<div class="ui-block-c" style="width: 155px;">';
-								$out.= '<input type="time" name="sent[UTC]" value="'.$st['zone'].'">';
+								$out.= '<input '.$status_theme.'  type="time" name="sent[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 				
 				case 'references': 
+					if(!empty($this->references[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$out = '<legend>'.$langs->trans("Labelreferences").': '.$this->tooltip($type, $langs->trans("LabelreferencesDesc")).'</legend>';	
-					$out.= '<input placeholder="references" type="text" name="references" value="'.$this->references[0].'">'; // web / identifier / sent 
+					$out.= '<input '.$status_theme.'  placeholder="references" type="text" name="references" value="'.$this->references[0].'">'; // web / identifier / sent 
 					break;
 				
 				case 'status': 
+					$status_theme_st = $status_theme;
+					$status_theme_ms = $this->GetTypeStatusFromArray($status_arr['msgType']);
+					$status_theme_sc = $this->GetTypeStatusFromArray($status_arr['scope']);
+
+					if(!empty($this->status[0])) $status_theme_st = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+					if(!empty($this->msgType[0])) $status_theme_ms = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['msgType'], 1);
+					if(!empty($this->scope[0])) $status_theme_sc = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['scope'], 1);
 					// Actual / Test / Exercise / System / Test / Draft
-					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), "data-native-menu=\"false\"", "Status", $this->status[0]); 
+					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), " ".$status_theme_st." data-native-menu=\"false\"", "Status", $this->status[0]); 
 
 				 	// Alert / Update / Cancel / Ack / Error
-					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), "data-native-menu=\"false\" id=\"msgType\"", "MsgType", $this->msgType[0]); 
+					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), " ".$status_theme_ms." data-native-menu=\"false\" id=\"msgType\"", "MsgType", $this->msgType[0]); 
 
 					// Public / Restricted / Private
-					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), "data-native-menu=\"false\"", "Scope", $this->scope[0]);  
+					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), " ".$status_theme_sc." data-native-menu=\"false\"", "Scope", $this->scope[0]);  
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetTheTypesOfTheMessageDesc")).'</legend>';							
@@ -211,10 +282,15 @@
 						$out.= '</fieldset>';
 				break;
 				
-				case 'category': // Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
-					$category = $this->buildSelect("category", array( "Geo" => $langs->trans("Geo"), "Met" => $langs->trans("Met"), "Safety" => $langs->trans("Safety"), "Security" => $langs->trans("Security"), "Rescue" => $langs->trans("Rescue"), "Fire" => $langs->trans("Fire"), "Health" => $langs->trans("Health"), "Env" => $langs->trans("Env"), "Transport" => $langs->trans("Transport"), "Infra" => $langs->trans("Infra"), "CBRNE" => $langs->trans("CBRNE"), "Other" => $langs->trans("Other") ), "data-native-menu=\"false\"", "Category", $this->category[0]);
+				case 'category': 
+					$status_theme_ca = $status_theme;
+					$status_theme_re = $this->GetTypeStatusFromArray($status_arr['responseType']);
+					if(!empty($this->category[0])) $status_theme_ca = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['category'], 1);
+					if(!empty($this->responseType[0])) $status_theme_re = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['responseType'], 1);
+					// Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
+					$category = $this->buildSelect("category", array( "Geo" => $langs->trans("Geo"), "Met" => $langs->trans("Met"), "Safety" => $langs->trans("Safety"), "Security" => $langs->trans("Security"), "Rescue" => $langs->trans("Rescue"), "Fire" => $langs->trans("Fire"), "Health" => $langs->trans("Health"), "Env" => $langs->trans("Env"), "Transport" => $langs->trans("Transport"), "Infra" => $langs->trans("Infra"), "CBRNE" => $langs->trans("CBRNE"), "Other" => $langs->trans("Other") ), " ".$status_theme_ca." data-native-menu=\"false\"", "Category", $this->category[0]);
 					// Shelter / Evacuate / Prepare / Execute / Avoid / Monitor / Assess / AllClear / None
-					$responseType = $this->buildSelect("responseType", array( "Shelter" => $langs->trans("Shelter"), "Evacuate" => $langs->trans("Evacuate"), "Prepare" => $langs->trans("Prepare"), "Execute" => $langs->trans("Execute"), "Avoid" => $langs->trans("Avoid"), "Monitor" => $langs->trans("Monitor"), "Assess" => $langs->trans("Assess"), "AllClear" => $langs->trans("AllClear"), "None" => $langs->trans("None") ), "data-native-menu=\"false\"", "Response Type", ($this->responseType[0][0]));
+					$responseType = $this->buildSelect("responseType", array( "Shelter" => $langs->trans("Shelter"), "Evacuate" => $langs->trans("Evacuate"), "Prepare" => $langs->trans("Prepare"), "Execute" => $langs->trans("Execute"), "Avoid" => $langs->trans("Avoid"), "Monitor" => $langs->trans("Monitor"), "Assess" => $langs->trans("Assess"), "AllClear" => $langs->trans("AllClear"), "None" => $langs->trans("None") ), " ".$status_theme_re." data-native-menu=\"false\"", "Response Type", ($this->responseType[0][0]));
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").': '.$this->tooltip($type, $langs->trans("LabelSetTheHazardTypeDesc")).'</legend>';							
@@ -225,14 +301,21 @@
 				break;
 
 				case 'urgency': 
+					$status_theme_ur = $status_theme;
+					$status_theme_se = $this->GetTypeStatusFromArray($status_arr['severity']);
+					$status_theme_ce = $this->GetTypeStatusFromArray($status_arr['certainty']);
+
+					if(!empty($this->urgency[0])) $status_theme_ur = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+					if(!empty($this->severity[0])) $status_theme_se = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['severity'], 1);
+					if(!empty($this->certainty[0])) $status_theme_ce = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['certainty'], 1);
 					// Immediate / Expected / Future / Past
-					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), "data-native-menu=\"false\"", "Urgency", $this->urgency[0]);
+					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), " ".$status_theme_ur." data-native-menu=\"false\"", "Urgency", $this->urgency[0]);
 					
 					// Extreme / Severe / Moderate / Minor / Unknown 
-					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Severity", $this->severity[0]);
+					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), " ".$status_theme_se." data-native-menu=\"false\"", "Severity", $this->severity[0]);
 
 					// Observed / Likely / Possible/ Unlikely / Unknown
-					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), "data-native-menu=\"false\"", "Certainty", $this->certainty[0]);
+					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), " ".$status_theme_ce." data-native-menu=\"false\"", "Certainty", $this->certainty[0]);
 				
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
 							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetThePriorityOfTheMessageDesc")).'</legend>';							
@@ -244,11 +327,13 @@
 				break;		
 
 				case 'audience': 
+					if(!empty($this->audience[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$out = '<legend>'.$langs->trans("Labelaudience").': '.$this->tooltip($type, $langs->trans("LabelaudienceDesc")).'</legend>';	
-					$out.= '<input placeholder="audience" type="text" name="audience" value="'.$this->audience[0].'">';
+					$out.= '<input '.$status_theme.'  placeholder="audience" type="text" name="audience" value="'.$this->audience[0].'">';
 					break;
 					
 				case 'eventCode': 
+					if(!empty($this->eventCode[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$out = '<div id="Eventappend">';
 						$out.= '<legend>'.$langs->trans("LabelEventCode").': '.$this->tooltip($type, $langs->trans("LabelEventCodeDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
@@ -257,14 +342,14 @@
 							foreach($this->eventCode[0] as $key => $eventCode)
 							{
 								$out.= '<div class="ui-grid-b">';
-									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]" value="'.$eventCode['valueName'].'"></div>';
-									$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
+									$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="eventCode[valueName][]" value="'.$eventCode['valueName'].'"></div>';
+									$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
 								$out.= '</div>';
 							}	
 						}
-						$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
-						$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="eventCode[value][]"></div>';
-						$out.= '<div class="ui-block-c"><input type="button" onclick="plusEventCodeInput()" value="+"></div>';
+						$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
+						$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value" type="text" name="eventCode[value][]"></div>';
+						$out.= '<div class="ui-block-c"><input '.$status_theme.'  type="button" onclick="plusEventCodeInput()" value="+"></div>';
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
@@ -278,78 +363,91 @@
 						$out.= '</div>';
 					break;
 				
-				case 'effective': 					
+				case 'effective':
+					if(!empty($this->effective[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					if($this->effective[0]) $st = $this->make_cap_time($this->effective[0]);
 					$out = '<div id="Effectiveapend">';
 						$out.= '<legend>'.$langs->trans("LabelEffective").': '.$this->tooltip($type, $langs->trans("LabelEffectiveDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input type="date" name="effective[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.'  type="date" name="effective[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input  type="time" name="effective[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="time" name="effective[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
 								$out.= '</div>';
 							$out.= '</div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;">';
-								$out.= '<input type="time" name="effective[UTC]" value="'.$st['zone'].'">';
+							$out.= '<div class="ui-block-c" style="width: 24px;">';
+								$out.= '<input type="text" max-size="1" value="+" name="effective[plus]" style="height: 37px;">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-d" style="width: 155px;">';
+								$out.= '<input '.$status_theme.'  type="time" name="effective[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 
-				case 'onset': 					
+				case 'onset':
+					if(!empty($this->onset[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					if($this->onset[0]) $st = $this->make_cap_time($this->onset[0]);
 					$out = '<div id="Onsetapend">';
 						$out.= '<legend>'.$langs->trans("LabelOnset").': '.$this->tooltip($type, $langs->trans("LabelOnsetDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input type="date" name="onset[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.'  type="date" name="onset[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input  type="time" name="onset[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="time" name="onset[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
 								$out.= '</div>';
 							$out.= '</div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;">';
-								$out.= '<input type="time" name="onset[UTC]" value="'.$st['zone'].'">';
+							$out.= '<div class="ui-block-c" style="width: 24px;">';
+								$out.= '<input type="text" max-size="1" value="+" name="onset[plus]" style="height: 37px;">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-d" style="width: 155px;">';
+								$out.= '<input '.$status_theme.'  type="time" name="onset[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 					
-				case 'expires': 					
+				case 'expires': 		
+					if(!empty($this->expires[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);		
 					if($this->expires[0]) $st = $this->make_cap_time($this->expires[0]);
 					$out = '<div id="Expieresapend">';
 						$out.= '<legend>'.$langs->trans("LabelExpires").': '.$this->tooltip($type, $langs->trans("LabelExpiresDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input type="date" name="expires[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.'  type="date" name="expires[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input  type="time" name="expires[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="time" name="expires[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
 								$out.= '</div>';
 							$out.= '</div>';
-							$out.= '<div class="ui-block-c" style="width: 155px;">';
-								$out.= '<input type="time" name="expires[UTC]" value="'.$st['zone'].'">';
+							$out.= '<div class="ui-block-c" style="width: 24px;">';
+								$out.= '<input type="text" max-size="1" value="+" name="expires[plus]" style="height: 37px;">';
+							$out.= '</div>';
+							$out.= '<div class="ui-block-d" style="width: 155px;">';
+								$out.= '<input '.$status_theme.'  type="time" name="expires[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
 
 				case 'senderName': 
+					if(!empty($this->senderName[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);			
 					$out = '<legend>'.$langs->trans("LabelsenderName").': '.$this->tooltip($type, $langs->trans("LabelsenderNameDesc")).'</legend>';	
-					$out.= '<input placeholder="senderName" type="text" name="senderName" value="'.$this->senderName[0].'">'; 
+					$out.= '<input '.$status_theme.'  placeholder="senderName" type="text" name="senderName" value="'.$this->senderName[0].'">'; 
 					break;
 					
 				case 'info':
@@ -357,6 +455,7 @@
 					break;
 					
 				case 'lang':
+					if(!empty($this->language[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);			
 					$langs_arr = $this->getlang();	
 						
 					foreach($langs_arr as $key_l => $val_l)
@@ -376,7 +475,7 @@
 					{
 						if(in_array($key,$this->language)) $display = true; else $display = false;
 						$extralang.= '<a href="#" class="ui-btn Lang_Button" role="button" id="'.$key.'_Button" style="'.$styleD[$display].' border-right: 1px solid #dddddd;">'.$langs_val.' <span id="'.$key.'_Remove_Button" style="color:red; padding-left: 5px;">X</span><input type="hidden" name="language[]" id="'.$key.'_language_input" value=""></a>';
-						if($display == true) $extralang.= '<input type="hidden" value="'.$key.'" name="language[]">';
+						if($display == true) $extralang.= '<input '.$status_theme.'  type="hidden" value="'.$key.'" name="language[]">';
 					}
 					$extralang.= '</div>';
 					
@@ -385,7 +484,15 @@
 					break;
 					
 				case 'event': 
+					$status_theme_ev = $status_theme;
+					$status_theme_he = $this->GetTypeStatusFromArray($status_arr['headline']);
+					$status_theme_de = $this->GetTypeStatusFromArray($status_arr['description']);
+					$status_theme_in = $this->GetTypeStatusFromArray($status_arr['instruction']);
 
+					if(!empty($this->event[0])) $status_theme_ev = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+					if(!empty($this->headline[0])) $status_theme_he = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['headline'], 1);
+					if(!empty($this->description[0])) $status_theme_de = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['description'], 1);
+					if(!empty($this->instruction[0])) $status_theme_in = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['instruction'], 1);
 					$langs_arr = $this->getlang();	
 					$extralang = "";
 					$styleD[true] = "";
@@ -399,13 +506,13 @@
 						
 						$extralang.= '<div class="lang_input" id="'.$key.'" style="'.$styleD[$display].'">';
 						
-								$extralang.= '<input placeholder="event" type="text" name="event['.$key.']" value="'.$this->event[$i].'">';
+								$extralang.= '<input '.$status_theme_ev.'  placeholder="event" type="text" name="event['.$key.']" value="'.$this->event[$i].'">';
 
-								$extralang.= '<input placeholder="headline" type="text" name="headline['.$key.']" value="'.$this->headline[$i].'">';
+								$extralang.= '<input '.$status_theme_he.'  placeholder="headline" type="text" name="headline['.$key.']" value="'.$this->headline[$i].'">';
 
-								$extralang.= '<textarea placeholder="description" name="description['.$key.']">'.$this->description[$i].'</textarea>';
+								$extralang.= '<textarea '.$status_theme_de.'  placeholder="description" name="description['.$key.']">'.$this->description[$i].'</textarea>';
 
-								$extralang.= '<input placeholder="instruction" type="text" name="instruction['.$key.']" value="'.$this->instruction[$i].'">';
+								$extralang.= '<input '.$status_theme_in.'  placeholder="instruction" type="text" name="instruction['.$key.']" value="'.$this->instruction[$i].'">';
 
 						$extralang.= '</div>';
 						
@@ -416,16 +523,19 @@
 					break;
 					
 				case 'web': 
+					if(!empty($this->web[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$out = '<legend>'.$langs->trans("Labelweb").': '.$this->tooltip($type, $langs->trans("LabelwebDesc")).'</legend>';	
-					$out.= '<input placeholder="web" type="text" name="web" value="'.$this->web[0].'">'; 
+					$out.= '<input '.$status_theme.'  placeholder="web" type="text" name="web" value="'.$this->web[0].'">'; 
 					break;
 					
 				case 'contact': 
+					if(!empty($this->contact[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$out = '<legend>'.$langs->trans("Labelcontact").': '.$this->tooltip($type, $langs->trans("LabelcontactDesc")).'</legend>';	
-					$out.= '<input placeholder="contact" type="text" name="contact" value="'.$this->contact[0].'">'; 
+					$out.= '<input '.$status_theme.'  placeholder="contact" type="text" name="contact" value="'.$this->contact[0].'">'; 
 					break;
 
 				case 'parameter': 
+					if(!empty($this->parameter[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$l_level = array( "Unknown", "Minor", "Moderate", "Severe", "Extreme"  );
 					
 					if(is_array($ParameterArray['AWT']))
@@ -445,10 +555,10 @@
 					//die(print_r($S_Param_AWL));
 					if(is_array($S_Param_AWT) && is_array($S_Param_AWT))
 					{
-						$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
+						$out.= '<legend>'.$langs->trans("LabelAwarenessTypeWebservice").': '.$this->tooltip($type, $langs->trans("LabelAwarenessTypeWebserviceDesc")).'</legend>';							
 						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awt',$S_Param_AWT, $G_Param_AWT, $this->parameter[0]);
 
-						$out.= '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
+						$out.= '<legend>'.$langs->trans("LabelAwarenessLevelWebservice").': '.$this->tooltip($type, $langs->trans("LabelAwarenessLevelWebserviceDesc")).'</legend>';							
 						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awl',$S_Param_AWL, $G_Param_AWL, $this->parameter[0]);
 					}
 					else
@@ -459,13 +569,13 @@
 								foreach($this->parameter[0] as $key => $parameter)
 								{
 									$out.= '<div class="ui-grid-b">';
-										$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
-										$out.= '<div class="ui-block-b"><input placeholder="Value Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
+										$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
+										$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
 									$out.= '</div>';
 								}	
-								$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
-								$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="parameter[value][]"></div>';
-								$out.= '<div class="ui-block-c"><input type="button" onclick="plusParameterInput()" value="+"></div>';
+								$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
+								$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value" type="text" name="parameter[value][]"></div>';
+								$out.= '<div class="ui-block-c"><input '.$status_theme.'  type="button" onclick="plusParameterInput()" value="+"></div>';
 							$out.= '</div>';
 						$out.= '</div>';
 					}
@@ -475,18 +585,21 @@
 				 * Area
 				 */					
 					case 'areaDesc': 
+						if(!empty($this->areaDesc[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						$out = '<legend>'.$langs->trans("LabelareaDesc").': '.$this->tooltip($type.'tool', $langs->trans("LabelareaDescDesc")).'</legend>';
-						$out.= '<input placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc[0].'">';
+						$out.= '<input '.$status_theme.'  placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc[0].'">';
 						break;
 	
 					case 'polygon': 
+						if(!empty($this->polygon[0][0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						$out = '<legend>'.$langs->trans("Labelpolygon").': '.$this->tooltip($type.'tool', $langs->trans("LabelpolygonDesc")).'</legend>';	
-						$out.= '<input placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon[0][0].'">';
+						$out.= '<input '.$status_theme.'  placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon[0][0].'">';
 						break;
 	
 					case 'circle': 
+						if(!empty($this->circle[0][0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						$out = '<legend>'.$langs->trans("Labelcircle").': '.$this->tooltip($type.'tool', $langs->trans("LabelcircleDesc")).'</legend>';	
-						$out.= '<input placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle[0][0].'">';
+						$out.= '<input '.$status_theme.'  placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle[0][0].'">';
 						break;
 						
 					case 'map':
@@ -504,6 +617,7 @@
 						break;
 						
 					case 'geocode':
+						if(!empty($this->geocode[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						// $out.= $AreaCodesArray;
 						foreach($AreaCodesArray as $key => $area_arr)
 						{
@@ -523,14 +637,14 @@
 								foreach($this->geocode[0] as $key => $geocode)
 								{
 									$out.= '<div class="ui-grid-b">';
-										$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]" value="'.$geocode['valueName'].'"></div>';
-										$out.= '<div class="ui-block-b"><input placeholder="geocode Value" type="text" name="geocode[value][]" value="'.$geocode['value'].'"></div>';
+										$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="geocode[valueName][]" value="'.$geocode['valueName'].'"></div>';
+										$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="geocode Value" type="text" name="geocode[value][]" value="'.$geocode['value'].'"></div>';
 									$out.= '</div>';
 								}	
 								$out.= '<div class="ui-grid-b">';
-									$out.= '<div class="ui-block-a"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
-									$out.= '<div class="ui-block-b"><input placeholder="Value" type="text" name="geocode[value][]"></div>';
-									$out.= '<div class="ui-block-c"><input type="button" onclick="plusGeocodeInput()" value="+"></div>';
+									$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
+									$out.= '<div class="ui-block-b"><input '.$status_theme.' placeholder="Value" type="text" name="geocode[value][]"></div>';
+									$out.= '<div class="ui-block-c"><input '.$status_theme.' type="button" onclick="plusGeocodeInput()" value="+"></div>';
 								$out.= '</div>';							
 							$out.= '</div>';
 						}
@@ -541,44 +655,46 @@
 					 */					 
 					 
 					case 'cap_save':
+						if(!empty($conf->cap->save)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						if($conf->cap->save == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
 						$out = '<label for="identifier_time">'.$langs->trans("LabelSaveCapsInOutputFolder").':</label>';
-						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[cap][save]" id="cap_save" '.$onoroff.' data-theme="b">';
+						$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[cap][save]" id="cap_save" '.$onoroff.' data-theme="b">';
 						break;
 					
 					case 'cap_output':
+							if(!empty($conf->cap->output)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("Labelcap_output").': '.$this->tooltip($type.'tool', $langs->trans("Labelcap_outputDesc")).'</legend>';
-							$out.= '<input type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
-						break;
-					
-					case 'conf_output':
-							$out = $langs->trans("LabelOutputOfTheConf").': <input type="text" placeholder="Cap Output" name="conf[conf][output]" value="'.$conf->conf->output.'">';
-						break;	
-						
+							$out.= '<input '.$status_theme.' type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
+						break;						
 
 					case 'ID_ID':
-							$out = $langs->trans("LabelIdentifierNumber").': <input type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
+							if(!empty($conf->identifier->ID_ID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							$out = $langs->trans("LabelIdentifierNumber").': <input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
 						break;
+						
 					case 'WMO_OID':
+							if(!empty($conf->identifier->WMO_OID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("LabelWMO_OID").': '.$this->tooltip($type.'tool', $langs->trans("LabelWMO_OIDDesc")).'</legend>';
-							$out.= '<input type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
+							$out.= '<input '.$status_theme.'  type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
 						break;
 						
 					case 'ISO':
-						$out = $langs->trans("LabelISO").': <input type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
+						if(!empty($conf->identifier->ISO)) $status_theme = 'data-theme="f"';
+						$out = $langs->trans("LabelISO").': <input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
 					 break;
 					 
 					case 'identifier_time':
+						if(!empty($conf->identifier->time->on)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
 						$out = '<legend>'.$langs->trans("LabelAutomaticIdentifierTime").': '.$this->tooltip($type.'tool', $langs->trans("LabelAutomaticIdentifierTimeDesc")).'</legend>';
 						//$out = '<label for="identifier_time">'.$langs->trans("LabelAutomaticIdentifierTime").':</label>';
-						$out.= '<input type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
+						$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
 						break;	
 						
 					case 'template':
-					
+						if(file_exists('conf/template.cap')) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						foreach(scandir($conf->cap->output) as $num => $capfilename)
 						{
 							if($capfilename != '.' && $capfilename != '..' && $capfilename != '.cap' && $capfilename != '.conv.cap')
@@ -589,7 +705,7 @@
 						
 						$out = '<label for="Template">'.$langs->trans("Template").':</label>';
 						if(file_exists('conf/template.cap')) $onoroff = 'checked=""'; else $onoroff = '';
-							$out.= '<input type="checkbox" data-role="flipswitch" name="template_on" id="template_on" '.$onoroff.' data-theme="b">';
+							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="template_on" id="template_on" '.$onoroff.' data-theme="b">';
 							
 							if(file_exists('conf/template.cap'))
 							{
@@ -605,6 +721,7 @@
 						break;
 						
 					case 'lang_conf':
+						if(!empty($conf->select->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
 						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
 						foreach($conf->lang as $key => $lang_name)
@@ -623,6 +740,7 @@
 						break;
 						
 					case 'lang_conf_use':
+							if(!empty($conf->user->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
 							$out.= '<select name="conf[user][lang]" id="lang_conf_use" data-native-menu="false" data-iconpos="left">';
 							foreach($conf->trans as $key => $lang_name)
@@ -645,9 +763,9 @@
 								//$out.='<label for="sent[date]">'.$langs->trans("LabelAddLanguage").': </label>';
 								$out.= '<legend>'.$langs->trans("Labellang_conf_plus").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_plusDesc")).'</legend>';
 								$out.= '<div class="ui-grid-b">';
-									$out.= '<div class="ui-block-a"><input type="text" maxsize="5" placeholder="RFC 3066" name="conf[lang][key]" id="lang_conf_plus_key"></div>';
-									$out.= '<div class="ui-block-b"><input type="text" name="conf[lang][name]" placeholder="Name" id="lang_conf_plus_name"></div>';
-									$out.= '<div class="ui-block-c" style="width: 54px;"><input type="button" onclick="plusLangInput()" value="+" data-theme="b"></div>';
+									$out.= '<div class="ui-block-a"><input '.$status_theme.' type="text" maxsize="5" placeholder="RFC 3066" name="conf[lang][key]" id="lang_conf_plus_key"></div>';
+									$out.= '<div class="ui-block-b"><input '.$status_theme.' type="text" name="conf[lang][name]" placeholder="Name" id="lang_conf_plus_name"></div>';
+									$out.= '<div class="ui-block-c" style="width: 54px;"><input '.$status_theme.' type="button" onclick="plusLangInput()" value="+" data-theme="b"></div>';
 									$out.= '</div>';
 							$out.= '</div>';
 						break;
@@ -666,8 +784,8 @@
 										$out.= '</select>';
 									$out.= '</div>';
 									$out.= '<div class="ui-block-b" style="width: 54px;">';
-										$out.= '<input type="button" onclick="minusLangInput()" value="-" id="lang_remove_input_button" data-theme="b">';
-										$out.= '<input type="hidden" id="lang_remove_input" value="remove">';
+										$out.= '<input '.$status_theme.' type="button" onclick="minusLangInput()" value="-" id="lang_remove_input_button" data-theme="b">';
+										$out.= '<input '.$status_theme.' type="hidden" id="lang_remove_input" value="remove">';
 									$out.= '</div>';
 								$out.= '</div>';
 							$out.= '</div>';
@@ -677,27 +795,27 @@
 							if($conf->webservice->on == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
 							$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
-							$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_switch" '.$onoroff.' data-theme="b">';
+							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_switch" '.$onoroff.' data-theme="b">';
 						break;
 								
 					case 'webservice_password':
-							$out = $langs->trans("Labelwebservice_password").':<input type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+							$out = $langs->trans("Labelwebservice_password").':<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
 						break;
 						
 					case 'webservice_securitykey':
-							$out = $langs->trans("Labelwebservice_securitykey").':<input type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
+							$out = $langs->trans("Labelwebservice_securitykey").':<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
 						break;
 						
 					case 'webservice_sourceapplication':
-							$out = $langs->trans("Labelwebservice_sourceapplication").':<input type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
+							$out = $langs->trans("Labelwebservice_sourceapplication").':<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
 						break;
 						
 					case 'webservice_login':
-							$out = $langs->trans("Labelwebservice_login").':<input type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+							$out = $langs->trans("Labelwebservice_login").':<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
 						break;
 						
 					case 'webservice_entity':
-							$out = $langs->trans("Labelwebservice_entity").':<input type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
+							$out = $langs->trans("Labelwebservice_entity").':<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
 						break;
 						
 					//case 'webservice_destination':
@@ -706,17 +824,17 @@
 					//	break;
 						
 					case 'webservice_WS_METHOD':
-							$out = $langs->trans("webservice_WS_METHOD").':<input type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
+							$out = $langs->trans("webservice_WS_METHOD").':<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
 						break;
 						
 					case 'webservice_ns':
 							$out = '<legend>'.$langs->trans("Labelwebservice_ns").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_nsDesc")).'</legend>';
-							$out.= '<input type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
 						break;
 						
 					case 'webservice_WS_DOL_URL':
 							$out = '<legend>'.$langs->trans("Labelwebservice_WS_DOL_URL").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_WS_DOL_URLDesc")).'</legend>';
-							$out.= '<input type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
 						
 					case 'capview':
@@ -726,16 +844,20 @@
 					case 'caplist':
 						$out = '</form><form method="POST" id="capform2" name="capform2" action="index.php?read=1" enctype="multipart/form-data" data-ajax="false">';
 						$out.= '<input type="file" name="uploadfile" id="uploadfile"><input type="submit" value="'.$langs->trans('LabelUpload').'" name="upload" data-ajax="false">';
-						$out.= '<fieldset data-role="controlgroup">';
-						
+
+						$out.= '<fieldset data-role="controlgroup">';						
 								foreach(scandir($conf->cap->output) as $num => $capfilename)
 								{
 									if($num > 1)
 									{
 										$out.= '<div class="ui-grid-a">';
-											$out.= '<div class="ui-block-a" style="width:90%"><input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
-											$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label></div>';
-											$out.= '<div class="ui-block-b" style="width:10%"><a href="#cap_file_'.$num.'_delete" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini"><span style="color:#ff0000">X</span></a></div>';
+											$out.= '<div class="ui-block-a" style="width:90%">';
+												$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
+												$out.= '<label for="cap_file_'.$num.'">'.$capfilename.' <span style="font-size: 12px;color: #5A5A5A;">('.filesize($conf->cap->output.'/'.$capfilename).'b | '.date('d.m.Y H:i:s',filectime($conf->cap->output.'/'.$capfilename)).')</span> </label>';
+											$out.= '</div>';
+											$out.= '<div class="ui-block-b" style="width:10%">';
+												$out.= '<a href="#cap_file_'.$num.'_delete" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini"><span style="color:#ff0000">X</span></a>';
+											$out.= '</div>';
 										$out.= '</div>';
 										
 										$out.= '<div data-role="popup" id="cap_file_'.$num.'_delete" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">';
@@ -746,31 +868,59 @@
 									}
 								}
 						$out.= '</fieldset>';
+
 						$out.= '<input type="submit" value="<h1>'.$langs->trans("Read").'</h1>" data-ajax="false">';
 						$out.= '</form><form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 						break;
 					
 					case 'login_popup':
-						$this->login_id++;
-						$out = '<h3>'.$langs->trans("PleasLoginToYourWebservice").'</h3>';
-						
-						$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
-							$out.= '<input type="text" name="Session_login_name['.$this->login_id.']" value="'.$conf->webservice->login.'">';
-
-						$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
-							$out.= '<input type="password" name="Session_login_pass['.$this->login_id.']" value="'.$conf->webservice->password.'">';
-
-						$out.= '<label><input type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
-						
-						if($conf->webservice_aktive == 1)
+						if($conf->webservice->on == 1)
 						{
-							$out.= '<input type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b">';
+							$this->login_id++;
+							
+							if($conf->webservice_aktive == 1) // Logout
+							{
+								$out.= '<ul data-role="listview" data-divider-theme="b">';
+									$out.= '<li>'.$langs->trans("Service").': '.$_SESSION['ServiceHost'].'</li>';
+									$out.= '<li>'.$langs->trans("User").': '.$conf->webservice->login.'</li>';
+									$out.= '<li>'.$langs->trans("LoginDate").': '.date('d.m.Y H:i:s', $_SESSION['timestamp']).'</li>';
+									$out.= '<li><input '.$status_theme.' type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b"></li>';
+								$out.= '</ul>';
+							}
+							else // Login
+							{
+								$out = '<h3>'.$langs->trans("LoginToYourWebservice").'</h3>';
+														
+								$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
+									$out.= '<input '.$status_theme.' type="text" name="Session_login_name['.$this->login_id.']" value="'.$conf->webservice->login.'">';
+		
+								$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
+									$out.= '<input '.$status_theme.' type="password" name="Session_login_pass['.$this->login_id.']" value="'.$conf->webservice->password.'">';
+		
+								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
+								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
+							}
+							
+							if(empty($conf->webservice_aktive) && $conf->webservice->on == 1 && $this->login_id == 1)
+							{
+								$out.= 			'
+													<script>
+														$("#Login-alert").on("keyup",function(event){
+															if ( event.which == 13 ) 
+															{
+																$( "#submit_login_button" ).trigger( "click" );
+															}
+														});
+														
+														$(document).on("pageshow", "#alert" ,function ()
+														{
+						                  $( "#Login-alert" ).popup();
+															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 100 );
+														});
+													</script>
+														';
+							}
 						}
-						else
-						{
-							$out.= '<input type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
-						}
-						
 						break;
 					/*
 					 * Default
@@ -779,7 +929,7 @@
 							
 							$out = '<div>';
 								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Info".$type)).'</label>';
-								$out.= '<input type="text" placeholder="'.$type.'" name="'.$type.'">';
+								$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'">';
 							$out.= '</div>';
 						break;
 			}
@@ -1097,6 +1247,7 @@
 			
 			$Type_arr = Types(); // TYPES FOR PAGES
 			$Pages_arr = Pages(); // PAGES
+			$Type_Status_arr = TypeStatus(); // Type Status (Like Required)
 			
 			$out = $this->Header_llx();
 			
@@ -1152,7 +1303,7 @@
 								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
-									$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">'.$login_show_name.'</a>';
+									if($conf->webservice->on == 1) $out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">'.$login_show_name.'</a>';
 								$out.= '</div>'; // HEADER					
 								
 								// Main
@@ -1168,7 +1319,7 @@
 												if(is_numeric($key))
 												{	
 													$out.= '<li>';
-														$out.= $this->InputStandard($type);
+														$out.= $this->InputStandard($type, $Type_Status_arr);
 													$out.= '</li>';
 												}
 											}
@@ -1191,7 +1342,7 @@
 													{		
 														if($key_ex != 'name')
 														{
-															$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
+															$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex, $Type_Status_arr).'</li>';
 														}
 													}
 												}
@@ -1236,7 +1387,7 @@
 															if(is_numeric($key))
 															{	
 																$out.= '<li>';
-																	$out.= $this->InputStandard($type);
+																	$out.= $this->InputStandard($type, $Type_Status_arr);
 																$out.= '</li>';
 															}
 														}
@@ -1263,6 +1414,81 @@
 			'
 			<script>					
 				';
+					
+					$depends = dependencies(); // from menu php
+					
+					$out.= '
+									function dependencies_js()
+									{';
+									
+						foreach($depends as $is_object => $depends_array)
+						{							
+							foreach($depends_array as $name_or_id => $depends_array_next)
+							{
+								foreach($depends_array_next as $object_name => $obj_arr)
+								{										
+									foreach($obj_arr as $condition => $condition_arr)
+									{										
+										foreach($condition_arr as $change_is => $change_to_arr)
+										{											
+											foreach($change_to_arr as $change_name_or_id => $change_to_array)
+											{												
+												foreach($change_to_array as $change_name => $change_to_val)
+												{													
+													if($name_or_id == "name")
+													{
+														$out.= 	'
+																			if( $( "'.$is_object.'[name=\''.$object_name.'\']" ).val() == "'.$condition.'" )
+																			{
+																		';
+													}
+													else
+													{
+														$out.= 	'
+																			if( $( "#'.$object_name.'" ).val() == "'.$condition.'" )
+																			{
+																		';
+													}
+													if($change_name_or_id == "name")
+													{
+														$out.= 	'
+																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).val( "'.$change_to_val.'" );	
+																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).selectmenu().selectmenu("refresh");				
+																			 if($( "'.$change_is.'[name=\''.$change_name.'\']" ).is("select"))
+																			 {
+																			  	$( "'.$change_is.'[name=\''.$change_name.'\']" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
+																			 }
+																			 else
+																			 {
+																				 $( "'.$change_is.'[name=\''.$change_name.'\']" ).parent( ).addClass( "ui-body-f" ); // its a input
+																			 }
+																	   }																
+																	';
+													}
+													else
+													{
+														$out.= 	'
+																			 $( "#'.$change_name.'" ).val( "'.$change_to_val.'" );	
+																			 $( "#'.$change_name.'" ).selectmenu().selectmenu("refresh");					
+																			 if($( "#'.$change_name.'" ).is("select"))
+																			 {
+																			  	$( "#'.$change_name.'" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
+																			 }
+																			 else
+																			 {
+																				 $( "#'.$change_name.'" ).parent( ).addClass( "ui-body-f" ); // its a input
+																			 }
+																	   }															
+																	';
+													}				
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					$out.= '}';
 					
 					$langs_arr = $this->getlang();	
 					

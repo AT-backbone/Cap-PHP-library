@@ -183,7 +183,7 @@
 				
 				if($this->useingaclass == false)
 				{
-					$xml->tag_simple('sent', date("Y-m-d\TH:i:s" , strtotime($this->sent['date']." ".$this->sent['time'] ))."+".date("H:i",strtotime($this->sent['UTC'])));
+					$xml->tag_simple('sent', date("Y-m-d\TH:i:s" , strtotime($this->sent['date']." ".$this->sent['time'] )).$this->sent['plus'].date("H:i",strtotime($this->sent['UTC'])));
 				}
 				else
 				{
@@ -249,9 +249,9 @@
 							{
 								// 2015-01-15T00:04:01+01:00
 								//$this->debug = date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC']));
-								$xml->tag_simple('effective', date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] ))."+".date("H:i",strtotime($this->effective['UTC'])));
-								$xml->tag_simple('onset', date("Y-m-d\TH:i:s" , strtotime($this->onset['date']." ".$this->onset['time'] ))."+".date("H:i",strtotime($this->onset['UTC'])));
-								$xml->tag_simple('expires', date("Y-m-d\TH:i:s" , strtotime($this->expires['date']." ".$this->expires['time'] ))."+".date("H:i",strtotime($this->expires['UTC'])));
+								$xml->tag_simple('effective', date("Y-m-d\TH:i:s" , strtotime($this->effective['date']." ".$this->effective['time'] )).$this->effective['plus'].date("H:i",strtotime($this->effective['UTC'])));
+								$xml->tag_simple('onset', date("Y-m-d\TH:i:s" , strtotime($this->onset['date']." ".$this->onset['time'] )).$this->onset['plus'].date("H:i",strtotime($this->onset['UTC'])));
+								$xml->tag_simple('expires', date("Y-m-d\TH:i:s" , strtotime($this->expires['date']." ".$this->expires['time'] )).$this->expires['plus'].date("H:i",strtotime($this->expires['UTC'])));
 							}
 							else
 							{

@@ -138,3 +138,21 @@ LabelEffectiveDesc=(OPTIONAL)<br>Der Zeitpunkt des Inkrafttreten der Warnung
 LabelOnsetDesc=(OPTIONAL)<br>Der erwartete Beginn des in der Warnung beschriebenen Ereignis.
 LabelExpiresDesc=(OPTIONAL)<br>Der Zeitpunkt an welchem die Warnung ausläuft.
 LabelParameterDesc=(OPTIONAL)<br>System-spezifische weitere Parameter im Zusammenhang mit der Warnung.
+
+###Login###
+TitleLogin=Login
+Service=Service
+User=User
+LoginDate=Login date
+LoginToYourWebservice=Login to your Webservice
+SaveWebservicePass=Save password?
+
+###Meteoalarm Webservice###
+LabelAwarenessTypeWebservice=LabelAwarenessTypeWebservice
+LabelAwarenessTypeWebserviceDesc=LabelAwarenessTypeWebserviceDesc
+
+LabelAwarenessLevelWebservice=LabelAwarenessLevelWebservice
+LabelAwarenessLevelWebserviceDesc=LabelAwarenessLevelWebserviceDesc
+
+LabelGeocodeWebservice=LabelGeocodeWebservice
+LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc

@@ -9,6 +9,8 @@
 								
 				$( "input, select" ).change(function() {
 					updateCapXML();
+					updateColor(this);
+					dependencies_js();
 				});
 				
 				
@@ -22,16 +24,6 @@
 						$("#conf-detail").hide();
 					}
 				});				
-				
-				$("body").on("pageshow", function(event) 
-				{
-					if(!$( "#webservice_switch" ).prop('checked') || $( "conf[webservice][login]").val() == "" || $( "conf[webservice][password]").val() == "")
-					{					
-						setTimeout(function(){
-							$( "#Login-alert" ).popup("open");
-						}, 2000);
-					}
-				});
 				
 				$( "#msgType" ).change(function() {
 					if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
@@ -172,4 +164,44 @@
 				function plusGeocodeInput()
 				{
 					$("#Geocodeappend").after('<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="geocode[value][]"></div></div><div class="ui-block-c"></div></div>');
+				}
+				
+				function updateColor(this_element)
+				{
+					if($(this_element).val())
+					{
+						if($( this_element ).is("select"))
+						{
+							$( this_element ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
+						}
+						else
+						{
+							$( this_element ).parent( ).addClass( "ui-body-f" ); // its a input
+						}
+					}
+					else
+					{
+						if($( this_element ).is("select"))
+						{
+							if(!$(this_element).prop('required'))
+							{
+								$( this_element ).parent( ).find("a").removeClass( "ui-btn-f" ); // its a select
+							}
+							else
+							{
+								$( this_element ).parent( ).find("a").removeClass( "ui-btn-f" ).addClass( "ui-btn-c" ); // its a select
+							}
+						}
+						else
+						{
+							if(!$(this_element).prop('required'))
+							{
+								$( this_element ).parent( ).removeClass( "ui-body-f" ); // its a input
+							}
+							else
+							{
+								$( this_element ).parent( ).removeClass( "ui-body-f" ).addClass( "ui-body-c" ); // its a input
+							}
+						}
+					}
 				}
