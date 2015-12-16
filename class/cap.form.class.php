@@ -1382,7 +1382,7 @@
 								{
 									$TypePopup = $Type_arr[$popupname];
 									
-									$out.= '<div data-role="popup" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 150%; left: -25%;">';
+									$out.= '<div data-role="popup" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
 										//$out.= '<form>';
 																			
 												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
