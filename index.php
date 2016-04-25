@@ -159,18 +159,19 @@
 	$conf->webservice->password = "";
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
-
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
 		
 		if(!is_array($_POST['send-logout']))
-		{	
+		{
 			end($_POST['send-login']);
 			$key = key($_POST['send-login']);
+
 			if(!empty($_POST['savepass'][$key]))
 			{		
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				
 				session_unset();
 				session_start();
 
@@ -184,8 +185,10 @@
 			{
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				
 				session_unset();
 				session_start();
+				
 				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
 				$_SESSION['ServiceHost'] = $Webservicename[1];
 				$_SESSION['timestamp'] = strtotime('now');
@@ -196,46 +199,35 @@
 		}
 		else
 		{
+			session_unset();
 			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
 			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
 			unset($_POST);
-			$conf->webservice->login = "";
-			$conf->webservice->password = "";
 		}
 	}
 	
 	if($_COOKIE['Session_login_name'])
 	{
-		
 		$conf->webservice->login = $_COOKIE['Session_login_name'];
 		$conf->webservice->password =  $_COOKIE['Session_login_pass'];
-		echo "1...1.............1";
-		sleep(3);
-		
-		//$conf->webservice->password = encrypt_decrypt(1, $_COOKIE['Session_login_pass']);
-
 	}
 	
 	if($_SESSION['Session_login_name'])
 	{
-		echo "2................";
-		sleep(3);
 		$conf->webservice->login = $_SESSION['Session_login_name'];
 		$conf->webservice->password = $_SESSION['Session_login_pass'];
-		//$conf->webservice->password = encrypt_decrypt(1,$_SESSION['Session_login_pass']);
 	}
 	
 	// METEOALARM WEBSERVICE ---
 	$conf->meteoalarm = 1;
 	if($conf->meteoalarm == 1)
 	{			
-
 		if($conf->webservice->on > 0)
 		{
 			if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
 			{
-				include 'lib/cap.meteoalarm.webservices.Area.php';
+				include 'lib/cap.meteoalarm.webservices.Area.php';		
 				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
 				if(!empty($AreaCodesArray['document']['AreaInfo']))
 				{
@@ -252,14 +244,7 @@
 				}
 			}
 			
-		echo "SLN".$_SESSION['Session_login_name']."<br>";
-		echo "SUP".$_SESSION['Session_login_pass']."<br>";
-		echo "CLN".$_COOKIE['Session_login_pass']."<br>";
-		echo "CFG".$conf->webservice->login;
-		echo "3................<br>";
-		exit;
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
-//		if(is_array($AreaCodesArray) && is_array($ParameterArray))
 			{
 				 $conf->webservice_aktive = 1;
 			}
