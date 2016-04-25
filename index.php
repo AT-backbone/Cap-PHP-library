@@ -155,34 +155,22 @@
 		header("Refresh:0");
 	}
 	
-<<<<<<< HEAD
 	$conf->webservice->login = "";
 	$conf->webservice->password = "";
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
-=======
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
+
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
 		
 		if(!is_array($_POST['send-logout']))
-<<<<<<< HEAD
-		{
-			end($_POST['send-login']);
-			$key = key($_POST['send-login']);
-
-=======
 		{	
 			end($_POST['send-login']);
 			$key = key($_POST['send-login']);
-			
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
 			if(!empty($_POST['savepass'][$key]))
 			{		
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-<<<<<<< HEAD
-				
 				session_unset();
 				session_start();
 
@@ -191,17 +179,12 @@
 				setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_pass", encrypt_decrypt(1,$_POST['Session_login_pass'][$key]), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
-=======
-				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
-				setcookie("Session_login_pass", $_POST['Session_login_pass'][$key], strtotime(' + 1 day'));  /* verfällt in 1 Stunde */
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
 			}
 			else
 			{
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-<<<<<<< HEAD
-				
+
 				session_unset();
 				session_start();
 				
@@ -210,49 +193,34 @@
 				$_SESSION['timestamp'] = strtotime('now');
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
 				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
-=======
-				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
-				$_SESSION['Session_login_pass'] = $_POST['Session_login_pass'][$key];
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
 			}
 			unset($_POST);
 		}
 		else
 		{
-<<<<<<< HEAD
-			session_unset();
-=======
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
 			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
 			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
 			unset($_POST);
-<<<<<<< HEAD
-=======
 			$conf->webservice->login = "";
 			$conf->webservice->password = "";
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
 		}
 	}
 	
 	if($_COOKIE['Session_login_name'])
 	{
 		$conf->webservice->login = $_COOKIE['Session_login_name'];
-<<<<<<< HEAD
 		$conf->webservice->password =  $_COOKIE['Session_login_pass'];
-=======
-		$conf->webservice->password = encrypt_decrypt(1, $_COOKIE['Session_login_pass']);
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
+
+		//$conf->webservice->password = encrypt_decrypt(1, $_COOKIE['Session_login_pass']);
+
 	}
 	
 	if($_SESSION['Session_login_name'])
 	{
 		$conf->webservice->login = $_SESSION['Session_login_name'];
-<<<<<<< HEAD
 		$conf->webservice->password = $_SESSION['Session_login_pass'];
-=======
-		$conf->webservice->password = encrypt_decrypt(1,$_SESSION['Session_login_pass']);
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
+		//$conf->webservice->password = encrypt_decrypt(1,$_SESSION['Session_login_pass']);
 	}
 	
 	// METEOALARM WEBSERVICE ---
@@ -280,11 +248,9 @@
 				}
 			}
 			
-<<<<<<< HEAD
+
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
-=======
-			if(is_array($AreaCodesArray) && is_array($ParameterArray))
->>>>>>> a016514a5b6dafddc2e1a0cfca1269edc1a44398
+//		if(is_array($AreaCodesArray) && is_array($ParameterArray))
 			{
 				 $conf->webservice_aktive = 1;
 			}
