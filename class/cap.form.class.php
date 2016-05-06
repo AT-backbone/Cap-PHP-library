@@ -996,58 +996,35 @@
 						}
 					}
 					
-					if($sel == true)
+					if($name3 == "geocode")
 					{
-						$out.= '<option '.$style_color.' value="'.$data_val.'" selected>';
+						if($sel == true)
+						{
+							$out.= '<option '.$style_color.' value="'.$data_val.'<|>'.$G_Area[$data_val].'" selected>';
+						}
+						else
+						{
+							$out.= '<option '.$style_color.' value="'.$data_val.'<|>'.$G_Area[$data_val].'">';
+						}
 					}
 					else
 					{
-						$out.= '<option '.$style_color.' value="'.$data_val.'">';
+						if($sel == true)
+						{
+							$out.= '<option '.$style_color.' value="'.$data_val.'" selected>';
+						}
+						else
+						{
+							$out.= '<option '.$style_color.' value="'.$data_val.'">';
+						}
 					}
-	
+
 					$out.= $data_name;
 					$out.= '</option>';
 				}							
 			$out.= '</select>';
-			
-			if($name3 == "geocode")
-			{
-				foreach($S_Area as $data_val => $data_name)
-				{
-					$out.= '<input type="hidden" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;">';
-				}
-				
-				$this->script.= 	'
-								$( document ).ready(function() 
-								{							
-									var res = $( "#'.$name3.'-select" ).val();
-									if($.isArray(res))
-									{
-									  var data = "";
-									  $(".'.$name3.'").prop("checked", false);								  
-	
-										$.each( res, function( i ) {
-												i++;
-											  $( \'#\' + $( "#'.$name3.'-select option:eq(" + i + ")").text()).prop("checked", true);
-										});
-									}
-								});
-								
-								$( "#'.$name3.'-select" ).change(function() {
-								
-								  var res = $( "#'.$name3.'-select" ).val();
-								  var data = "";
-								  $(".'.$name3.'").prop("checked", false);
-								  
-								  $.each( res, function( i ) {
-								  	i++;
-									  $("#" + $( "#'.$name3.'-select option:eq(" + i + ")").text()).prop("checked", true);
-									});
-									
-								});											
-								';
-			}	
-			elseif($name3 == "parameter_awt" || $name3 == "parameter_awl")
+
+			if($name3 == "parameter_awt" || $name3 == "parameter_awl")
 			{
 				$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;" '.$sel_tmp.' '.$check.'>';
 				

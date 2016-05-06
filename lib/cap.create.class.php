@@ -291,7 +291,7 @@
 							} // foreach parameter
 							
 							// look if area zone is used
-							if(! empty($this->areaDesc) || ! empty($this->polygon)  || ! empty($this->circle) || ! empty($this->geocode['valueName'][0]))
+							if(! empty($this->areaDesc) || ! empty($this->polygon)  || ! empty($this->circle) || ! empty($this->geocode['value'][0]))
 							{
 								$xml->tag_open('area');
 							
@@ -304,9 +304,11 @@
 									{
 										if(!empty($this->geocode['value'][$key]))
 										{
-											$xml->tag_open('geocode');						
-												$xml->tag_simple('valueName', $this->geocode['valueName'][$key]);
-												$xml->tag_simple('value', $this->geocode['value'][$key]);							
+											$tmp_geocode = explode('<|>', $this->geocode['value'][$key]);
+
+											$xml->tag_open('geocode');
+												$xml->tag_simple('valueName', $tmp_geocode[1]);
+												$xml->tag_simple('value', $tmp_geocode[0]);							
 											$xml->tag_close('geocode');
 										}
 									} // foreach geocode
