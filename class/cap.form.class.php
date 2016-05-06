@@ -1014,7 +1014,7 @@
 			{
 				foreach($S_Area as $data_val => $data_name)
 				{
-					$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;">';
+					$out.= '<input type="hidden" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;">';
 				}
 				
 				$this->script.= 	'

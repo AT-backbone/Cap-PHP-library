@@ -299,10 +299,10 @@
 									$xml->tag_simple('polygon', $this->polygon);
 									$xml->tag_simple('circle', $this->circle);
 								
-									if(! empty($this->geocode['valueName'][0]))
-									foreach($this->geocode['valueName'] as $key => $geocode)
+									if(! empty($this->geocode['value'][0]))
+									foreach($this->geocode['value'] as $key => $geocode)
 									{
-										if(!empty($this->geocode['valueName'][$key]))
+										if(!empty($this->geocode['value'][$key]))
 										{
 											$xml->tag_open('geocode');						
 												$xml->tag_simple('valueName', $this->geocode['valueName'][$key]);

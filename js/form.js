@@ -77,18 +77,26 @@
 					
 				});
 			});
+
+				var xhr_of_upcapxml
 				function updateCapXML()
 				{
 					var url = "index.php?cap=1"; // the script where you handle the form input.
-					
-					$.ajax({
+
+					//kill the request
+					if(xhr_of_upcapxml && xhr_of_upcapxml.abort) xhr_of_upcapxml.abort()
+
+					xhr_of_upcapxml = $.ajax({
 					      	type: "POST",
 					        url: url,
 					        data: $("#capform").serialize(), // serializes the forms elements.
 					        success: function(data)
-					        {					        	
+					        {			
 					        	$("#capviewtextarea").val(data);
-					        }
+					        },
+							error: function(errorThrown){
+								console.log( errorThrown);
+							}
 					       });
 					
 					return false; // avoid to execute the actual submit of the form.
