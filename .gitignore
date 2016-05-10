@@ -1,0 +1,13 @@
+*.bak
+*.0
+*.prj
+*.pui
+*.demosource/conf/*.0
+conf/*.demo
+conf.php
+*.cap
+.xml
+ftp_tmp/*.zip
+web_test.php
+menu/refugees_menu.lib.php
+css/old/*.old
