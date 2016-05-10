@@ -1614,6 +1614,9 @@
 			
 			$out = $this->Header_llx();
 			
+			$Type_arr = Types(); // TYPES FOR PAGES
+			$Pages_arr = Pages(); // PAGES
+
 			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
 					$out.= '<div data-role="page" id="capview">';
@@ -1633,7 +1636,6 @@
     								$out.= '</span>';
     							$out.= '</li>';
     							
-    							$Pages_arr = $this->Pages();
 									foreach($Pages_arr as $link => $Page_Name)
 									{
 										if(!in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"'; // turn all links to ajax off (when not jquery can not link to the other pages)
