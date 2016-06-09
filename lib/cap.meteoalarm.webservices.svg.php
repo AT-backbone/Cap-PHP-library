@@ -48,7 +48,7 @@ if($conf->meteoalarm == 1)
 			$parameters = array('authentication'=>$authentication, 'getSvgInfo'=>$GenInsInput);
 			
 			$svgArray = $soapclient->call('getSvgInfo',$parameters,$ns,'');
-			
+
 			if ($soapclient->fault) 
 			{
 		    $out.= '<h2>Fault</h2><pre>';

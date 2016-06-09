@@ -73,10 +73,6 @@
 			// LOGIN POPUP
 			$type['Login'][] 		= 'login_popup';
 
-			// PAGES WOH DO NOT USE DETAIL FUNKTION
-			$type['info']['detail']['value'] 		= ""; // no detail
-			$type['info']['detail']['name']  		= ""; // no detail
-
 			$type['area']['detail']['value'] 		= ""; // no detail			
 			$type['area']['detail']['name']  		= ""; // no detail
 

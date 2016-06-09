@@ -101,3 +101,12 @@ textarea{
   left: 20px;
   width: 130px;
 }
+
+.awareness {
+	background-color: white;
+	border: 1px solid #dddddd;
+	width: 25px;
+	height: 25px;
+	padding: 2.5px 4.5px 0px 2.5px;
+	margin-bottom: 5px;
+}

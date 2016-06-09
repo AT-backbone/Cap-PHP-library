@@ -217,6 +217,7 @@ $( document ).ready(function()
 	}
 
 	var pol_sel = 0;
+	var svg;
 	function ini_meteo_map()
 	{
 		$( window ).resize(function() {
@@ -252,6 +253,8 @@ $( document ).ready(function()
 				pol_sel = 0;
 			}
 		});
+
+		svg = d3.select("#svg-id");
 
 		$('#svg-id polygon').on('click', function(){
 			$('[class^=pol_]').css('fill-opacity', 1);

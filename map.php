@@ -247,10 +247,10 @@
 			if(file_exists('lib/cap.meteoalarm.webservices.svg.php'))
 			{
 				include 'lib/cap.meteoalarm.webservices.svg.php';		
-				if($_GET['web_test'] == 3) die(var_dump($svgArray));
-				if(!empty($svgArray['document']['AreaInfo']))
+				if($_GET['web_test'] == 3) die(var_dump($svgArray)); // Array ( [result] => Array ( [result_code] => OK [result_label] => Array ( [iso] => AT [EMMA_ID] => ) ) [document] => Array ( [SvgInfo] => /*SVG*/ [Error] => )) 1
+				if(!empty($svgArray['document']['SvgInfo']))
 				{
-					$svgArray = $svgArray['document']['AreaInfo'];
+					$soap_SVG = $svgArray['document']['SvgInfo'];
 				}
 			}
 			
