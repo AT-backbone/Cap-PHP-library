@@ -2,7 +2,7 @@ $( document ).ready(function()
 {
 	// Inital ClockPicker Addon
 	$('.clockpicker').clockpicker().find('input').change(function(){
-		console.log(this.value);
+		//console.log(this.value);
 	});
 	
 	updateCapXML();
@@ -216,10 +216,15 @@ $( document ).ready(function()
 		}
 	}
 
+	var time = Date.now || function() {
+		return +new Date;
+	};
+
 	var pol_sel = 0;
 	var svg;
 	var area_arr = []; // areay with all area names
 	var area_list_on = false;
+	var changes_arr = [];
 	function ini_meteo_map()
 	{
 		$( window ).resize(function() {
@@ -240,6 +245,24 @@ $( document ).ready(function()
 				minZoom: 0.5,
 			});
 		})
+
+		changes_arr['idx'] = [];
+		changes_arr['change'] = [];
+
+		$('input, textarea').change(function() {
+			changes_arr['change'].push(this.value);
+			changes_arr['idx'].push(this.id);
+			changes_arr['last'] = (changes_arr['idx'].length - 1);
+			console.log( changes_arr );
+		});
+
+		$('#Undo').click(function() {
+			document.execCommand('undo', false, null);
+		});
+
+		$('#Redo').click(function() {
+			document.execCommand('redo', false, null);
+		});
 
 		svg = d3.select("#svg-id");
 		/*
@@ -273,7 +296,7 @@ $( document ).ready(function()
 				area_arr[aid][ty]['text'] 	= text;
 				area_arr[aid][ty]['to'] 	= to;
 				area_arr[aid][ty]['from'] 	= from;
-				area_arr[aid][ty]['ident']	 = ident;
+				area_arr[aid][ty]['ident']	= ident;
 			}
 
 			/*Show*/
@@ -318,7 +341,7 @@ $( document ).ready(function()
 							
 							for (noty=1; noty <= (3 - value.length); noty++) 
 							{
-								out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
+								out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
 							}
 
 							$.each(value, function (key2, data) {
@@ -334,7 +357,7 @@ $( document ).ready(function()
 
 									if(tmp_type < 10) tmp_type_f = '0'+tmp_type;
 										//out+= ' ' + tmp_level + ' ' + tmp_type + ' ';
-									out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+')"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
+									out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
 								}
 							});
 
@@ -355,12 +378,15 @@ $( document ).ready(function()
 				}
 
 				$('#process_toolbox').html(out);
+				delete(out);
 		});
 	}
 
-	function area_warning_detail(aid, key_type)
+	function area_warning_detail(aid, key_type, tmp_this)
 	{
 		//console.log($('#svg-id polygon[aid='+aid+']').attr('area_name'));
+		$('.process_toolbox_area .awareness').css('border', '');
+		$(tmp_this).css('border', '1px solid #0000ff');
 		if(key_type > -1)
 		{
 			lang_1 = $('#lang_1').val();
@@ -380,24 +406,24 @@ $( document ).ready(function()
 
 			$('#left_area_name').html(tmp_area_name);
 
-			$('#desc_0').html((tmp_area_text_0));
-			$('#inst_0').html((tmp_area_inst_0));
-			$('#desc_1').html((tmp_area_text_1));
-			$('#inst_1').html((tmp_area_inst_1));
+			$('#desc_0').html((tmp_area_text_0)).trigger('input');
+			$('#inst_0').html((tmp_area_inst_0)).trigger('input');
+			$('#desc_1').html((tmp_area_text_1)).trigger('input');
+			$('#inst_1').html((tmp_area_inst_1)).trigger('input');
 
-			$('#from_0').val(tmp_area_from.slice(11));
-			$('#to_0').val(tmp_area_to.slice(11));
+			$('#from_0').val(tmp_area_from.slice(11)).trigger('input');
+			$('#to_0').val(tmp_area_to.slice(11)).trigger('input');
 		}
 		else
 		{
-			$('#desc_0').html('');
-			$('#inst_0').html('');
-			$('#desc_1').html('');
-			$('#inst_1').html('');
-			$('#from_0').val('00:00');
-			$('#to_0').val('00:00');
+			$('#desc_0').html('').trigger('input');
+			$('#inst_0').html('').trigger('input');
+			$('#desc_1').html('').trigger('input');
+			$('#inst_1').html('').trigger('input');
+			$('#from_0').val('00:00').trigger('input');
+			$('#to_0').val('00:00').trigger('input');
 			tmp_area_name = $('#svg-id polygon[aid='+aid+']').attr('area_name');
-			$('#left_area_name').html(tmp_area_name);
+			$('#left_area_name').html(tmp_area_name).trigger('input');
 			$('#AreaDetailUL').css('opacity', 1);
 		}
 	}
