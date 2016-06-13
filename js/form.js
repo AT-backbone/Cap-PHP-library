@@ -218,6 +218,8 @@ $( document ).ready(function()
 
 	var pol_sel = 0;
 	var svg;
+	var area_arr = []; // areay with all area names
+	var area_list_on = false;
 	function ini_meteo_map()
 	{
 		$( window ).resize(function() {
@@ -239,44 +241,181 @@ $( document ).ready(function()
 			});
 		})
 
-		$('#svg-id').click(function( event ) {
- 			 var target = $( event.target );
-			if ( target.is( "polygon" ) ) 
-			{
-
-			}
-			else	
-			{
-				$('[class^=pol_]').css('fill-opacity', 1);
-				$('[class^=pol_]').css('stroke', 'grey');
-				$('[class^=pol_]').css('stroke-width', '1');
-				pol_sel = 0;
-			}
-		});
-
 		svg = d3.select("#svg-id");
-
+		/*
+		area_text
+		area_to
+		area_from
+		area_level
+		area_type
+		area_name
+		*/
 		$('#svg-id polygon').on('click', function(){
-			$('[class^=pol_]').css('fill-opacity', 1);
-			$('[class^=pol_]').css('stroke', 'grey');
-			$('[class^=pol_]').css('stroke-width', '1');
 
-			$('.'+$(this).attr('class')).css('stroke-width', '3px');
-			$('.'+$(this).attr('class')).css('stroke', 'blue');
-			$('.'+$(this).attr('class')).css('fill-opacity', 0.5);
+			/*Get*/
+			cinfo = parseInt($('.'+$(this).attr('class')).attr('cinfo'));
+			aid = parseInt($('.'+$(this).attr('class')).attr('aid'));
+			area_arr[aid] = [];
+			area_arr[aid]['name'] = $('.'+$(this).attr('class')).attr('area_name');
 
-			pol_sel = $(this).attr('class');
+			for (ty=0; ty < cinfo; ty++) 
+			{	//aid
+				level = $('.'+$(this).attr('class')).attr('area_level['+ty+']');
+				type = $('.'+$(this).attr('class')).attr('area_type['+ty+']');
+				text = $('.'+$(this).attr('class')).attr('area_text['+ty+']');
+				to = $('.'+$(this).attr('class')).attr('area_to['+ty+']');
+				from = $('.'+$(this).attr('class')).attr('area_from['+ty+']');
+				ident = $('.'+$(this).attr('class')).attr('area_ident['+ty+']');
+				area_arr[aid][ty] = [];
+				
+				area_arr[aid][ty]['level'] 	= level;
+				area_arr[aid][ty]['type'] 	= level;
+				area_arr[aid][ty]['text'] 	= text;
+				area_arr[aid][ty]['to'] 	= to;
+				area_arr[aid][ty]['from'] 	= from;
+				area_arr[aid][ty]['ident']	 = ident;
+			}
+
+			/*Show*/
+
+			if($('.'+$(this).attr('class')).attr('sel') == 1)
+			{
+				$('.'+$(this).attr('class')).css('stroke-width', '1');
+				$('.'+$(this).attr('class')).css('stroke', 'grey');
+				$('.'+$(this).attr('class')).css('fill-opacity', 1);
+				$('.'+$(this).attr('class')).attr('sel', 0);
+				area_arr[aid].pop();
+				delete(area_arr[aid]);
+			}
+			else
+			{
+				$('.'+$(this).attr('class')).css('stroke-width', '3px');
+				$('.'+$(this).attr('class')).css('stroke', 'blue');
+				$('.'+$(this).attr('class')).css('fill-opacity', 0.6);
+				$('.'+$(this).attr('class')).attr('sel', 1);
+			}
+
+			// show Area in Proccess list
+				out = "";
+				area_real_len = 0;
+				$.each(area_arr, function (key, data) {
+					if(data !== undefined)
+					{
+						value = data;
+						area_real_len++;
+						if(area_list_on == false)
+						{
+							$('#work_toolbox').animate({
+								right: $('#process_toolbox').width()+"px"
+							}, 500);
+							$('#process_toolbox').animate({
+								right: "-1px"
+							}, 500);
+							area_list_on = true;
+						}
+
+						out+= '<div class="process_toolbox_area" id="aid_'+key+'">';
+							
+							for (noty=1; noty <= (3 - value.length); noty++) 
+							{
+								out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
+							}
+
+							$.each(value, function (key2, data) {
+								if(data !== undefined)
+								{
+									// Warnungen
+									tmp_level = parseInt(data['level']);
+									tmp_type = parseInt(data['type']);
+									tmp_text = data['text'];
+									tmp_to = data['to'];
+									tmp_from = data['from'];
+									tmp_ident = data['ident'];
+
+									if(tmp_type < 10) tmp_type_f = '0'+tmp_type;
+										//out+= ' ' + tmp_level + ' ' + tmp_type + ' ';
+									out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+')"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
+								}
+							});
+
+							out+= '<div class="divtextscroll">' + value['name'] + '</div>'; // name
+						out+= '</div>';
+					}
+				});
+
+				if(area_real_len < 1)
+				{
+					$('#work_toolbox').animate({
+						right: "0px"
+					}, 500);
+					$('#process_toolbox').animate({
+						right: "-"+($('#process_toolbox').width() + 1)+"px"
+					}, 500);
+					area_list_on = false;
+				}
+
+				$('#process_toolbox').html(out);
 		});
+	}
+
+	function area_warning_detail(aid, key_type)
+	{
+		//console.log($('#svg-id polygon[aid='+aid+']').attr('area_name'));
+		if(key_type > -1)
+		{
+			lang_1 = $('#lang_1').val();
+			tmp_area_name 		= $('#svg-id polygon[aid='+aid+']').attr('area_name');
+			tmp_area_text_0 	= $('#svg-id polygon[aid='+aid+']').attr('area_text['+key_type+'][en-gb]');
+			tmp_area_inst_0 	= $('#svg-id polygon[aid='+aid+']').attr('area_inst['+key_type+'][en-gb]');
+			tmp_area_text_1 	= $('#svg-id polygon[aid='+aid+']').attr('area_text['+key_type+']['+lang_1+']');
+			tmp_area_inst_1 	= $('#svg-id polygon[aid='+aid+']').attr('area_inst['+key_type+']['+lang_1+']');
+			tmp_area_to 		= $('#svg-id polygon[aid='+aid+']').attr('area_to['+key_type+']');
+			tmp_area_from 		= $('#svg-id polygon[aid='+aid+']').attr('area_from['+key_type+']');
+
+			$('#desc_0').html('');
+			$('#inst_0').html('');
+			$('#desc_1').html('');
+			$('#inst_1').html('');
+			$('#AreaDetailUL').css('opacity', 1);
+
+			$('#left_area_name').html(tmp_area_name);
+
+			$('#desc_0').html((tmp_area_text_0));
+			$('#inst_0').html((tmp_area_inst_0));
+			$('#desc_1').html((tmp_area_text_1));
+			$('#inst_1').html((tmp_area_inst_1));
+
+			$('#from_0').val(tmp_area_from.slice(11));
+			$('#to_0').val(tmp_area_to.slice(11));
+		}
+		else
+		{
+			$('#desc_0').html('');
+			$('#inst_0').html('');
+			$('#desc_1').html('');
+			$('#inst_1').html('');
+			$('#from_0').val('00:00');
+			$('#to_0').val('00:00');
+			tmp_area_name = $('#svg-id polygon[aid='+aid+']').attr('area_name');
+			$('#left_area_name').html(tmp_area_name);
+			$('#AreaDetailUL').css('opacity', 1);
+		}
 	}
 
 	function policlick(aid)
 	{
-		if(pol_sel == 0)
-		{
-			$('[class^=pol_]').css('stroke', 'grey');
-			$('[class^=pol_]').css('stroke-width', '1');
+		$('[sel=0]').css('stroke', 'grey');
+		$('[sel=0]').css('stroke-width', '1');
 
-			$('.pol_'+aid).css('stroke-width', '3px');
-			$('.pol_'+aid).css('stroke', 'blue');
+		$('.pol_'+aid).css('stroke-width', '3px');
+		$('.pol_'+aid).css('stroke', 'blue');
+	}
+
+	function poliaway(aid)
+	{
+		if($('.pol_'+aid).attr('sel') == 0)
+		{
+			$('.pol_'+aid).css('stroke', 'grey');
+			$('.pol_'+aid).css('stroke-width', '1');
 		}
 	}
