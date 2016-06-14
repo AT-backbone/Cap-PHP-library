@@ -225,15 +225,11 @@ $( document ).ready(function()
 	var area_arr = []; // areay with all area names
 	var area_list_on = false;
 	var changes_arr = [];
+	var aktive_type = false;
+	var aktive_level = false;
 	function ini_meteo_map()
 	{
-		$( window ).resize(function() {
-			$('#svg-id').attr('width', $('#canvas').width());
-			$('#svg-id').attr('height', $('#canvas').height());
-		});
 		$(function() {
-			$('#svg-id').attr('width', $('#canvas').width());
-			$('#svg-id').attr('height', $('#canvas').height());
 			panZoomInstance = svgPanZoom('#svg-id', {
 				zoomEnabled: true,
 				zoomScaleSensitivity: 0.5,
@@ -264,7 +260,133 @@ $( document ).ready(function()
 			document.execCommand('redo', false, null);
 		});
 
-		svg = d3.select("#svg-id");
+		$('#del_war').on('click', function(){
+			if(aktive_warning_aid > 0)
+			{
+				cinfo = parseInt($('#svg-id polygon[aid='+aktive_warning_aid+']').attr('cinfo'));
+				lang_1 = $('#lang_1').val();
+				
+				for (ty=0; ty < cinfo; ty++) 
+				{
+					level 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_level_'+ty+'');
+					type 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_type_'+ty+'');
+					text 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+ty+'');
+					text_text_0	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+ty+'_en-gb');
+					text_inst_0	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_inst_'+ty+'_en-gb');
+					text_text_1	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+ty+'_'+lang_1+'');
+					text_inst_1	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_inst_'+ty+'_'+lang_1+'');
+					to 		= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_to_'+ty+'');
+					from 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_from_'+ty+'');
+					ident 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_ident_'+ty+'');
+					area_arr[aid][ty] = [];
+					
+					area_arr[aid][ty]['level']	= level;
+					area_arr[aid][ty]['type']	= type;
+					area_arr[aid][ty]['text']	= text;
+					area_arr[aid][ty]['to']		= to;
+					area_arr[aid][ty]['from']	= from;
+					area_arr[aid][ty]['ident']	= ident;
+				}
+				delete(area_arr[aid][aktive_warning_key]);
+
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('cinfo', cinfo - 1);
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_level_'+aktive_warning_key+'');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_type_'+aktive_warning_key+'');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_text_'+aktive_warning_key+'_en-gb');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_inst_'+aktive_warning_key+'_en-gb');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_text_'+aktive_warning_key+'_'+lang_1+'');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_inst_'+aktive_warning_key+'_'+lang_1+'');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_to_'+aktive_warning_key+'');
+				$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_from_'+aktive_warning_key+'');
+
+				tmp_key = 0;
+				$.each(area_arr[aid], function (key2, data) {
+					if(data !== undefined)
+					{
+						// Warnungen
+						tmp_level = parseInt(data['level']);
+						tmp_type = parseInt(data['type']);
+						tmp_text = data['text'];
+						tmp_to = data['to'];
+						tmp_from = data['from'];
+						tmp_ident = data['ident'];
+
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_level_'+tmp_key+'', tmp_level);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_type_'+tmp_key+'', tmp_type);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+tmp_key+'_en-gb', text_text_0);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_inst_'+tmp_key+'_en-gb', text_inst_0);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+tmp_key+'_'+lang_1+'', text_text_1);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_inst_'+tmp_key+'_'+lang_1+'', text_inst_1);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_to_'+tmp_key+'', tmp_to);
+						$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_from_'+tmp_key+'', tmp_from);
+						tmp_key++;
+					}
+				});
+
+				$('#desc_0').html('');
+				$('#inst_0').html('');
+				$('#desc_1').html('');
+				$('#inst_1').html('');
+				$('#AreaDetailUL').css('opacity', 0.5);
+
+				$('#left_area_name').html('');
+				calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');
+			}
+		});
+		$('li:not(#map-container)').on('click', function(){
+			aktive_type = false;
+			$('#awareness_toolbox .awareness').css('border', '');
+			$('#awareness_toolbox .awareness').css('opacity', 1);
+			aktive_level = false;
+			$('#awareness_color_toolbox .awareness').css('border', '');
+			$('#awareness_color_toolbox .awareness').css('opacity', 1);
+			$('#svg-id').css('cursor', 'auto');
+			$('#awareness_color_toolbox').css('display', '');
+		});
+		$('#awareness_toolbox .awareness').on('click', function(){
+			if(aktive_type != $(this).attr('type'))
+			{
+				$('#awareness_toolbox .awareness').css('opacity', 0.5);
+				$(this).css('opacity', 1);
+				$('#awareness_toolbox .awareness').css('border', '');
+				$(this).css('border', '1px solid #0000ff');
+				var position = $(this).position();
+				$('#awareness_color_toolbox').css('top', (position.top - 16));
+				$('#awareness_color_toolbox').css('display', 'block');
+				aktive_type = parseInt($(this).attr('type'));
+			}
+			else
+			{
+				aktive_type = false;
+				$('#awareness_toolbox .awareness').css('border', '');
+				$('#awareness_toolbox .awareness').css('opacity', 1);
+				aktive_level = false;
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$('#awareness_color_toolbox .awareness').css('opacity', 1);
+				$('#svg-id').css('cursor', 'auto');
+				$('#awareness_color_toolbox').css('display', '');
+			}
+		});
+
+		$('#awareness_color_toolbox .awareness').on('click', function(){
+			if(aktive_level != $(this).attr('level'))
+			{
+				$('#awareness_color_toolbox .awareness').css('opacity', 0.5);
+				$(this).css('opacity', 1);
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$(this).css('border', '1px solid #0000ff');
+				aktive_level = parseInt($(this).attr('level'));
+				$('#svg-id').css('cursor', 'url(includes/meteoalarm/fill.png), auto');
+			}
+			else
+			{
+				aktive_level = false;
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$('#awareness_color_toolbox .awareness').css('opacity', 1);
+				$('#svg-id').css('cursor', 'auto');
+			}
+		});
+
 		/*
 		area_text
 		area_to
@@ -273,130 +395,213 @@ $( document ).ready(function()
 		area_type
 		area_name
 		*/
+
+
+		svg = d3.select("#svg-id");
 		$('#svg-id polygon').on('click', function(){
+			calc_map_aktion(this, 'user');
+		});
+	}
+	var level_c = [];
+	level_c[1] = '#29d660';
+	level_c[2] = '#ffff00';
+	level_c[3] = '#fecb31';
+	level_c[4] = '#fe0104';
 
-			/*Get*/
-			cinfo = parseInt($('.'+$(this).attr('class')).attr('cinfo'));
-			aid = parseInt($('.'+$(this).attr('class')).attr('aid'));
-			area_arr[aid] = [];
-			area_arr[aid]['name'] = $('.'+$(this).attr('class')).attr('area_name');
+	function calc_map_aktion(tmp_this, is_auto)
+	{
+		/*Get*/
+		cinfo = parseInt($('.'+$(tmp_this).attr('class')).attr('cinfo'));
+		aid = parseInt($('.'+$(tmp_this).attr('class')).attr('aid'));
+		area_arr[aid] = [];
+		area_arr[aid]['name'] = $('.'+$(tmp_this).attr('class')).attr('area_name');
 
-			for (ty=0; ty < cinfo; ty++) 
-			{	//aid
-				level = $('.'+$(this).attr('class')).attr('area_level['+ty+']');
-				type = $('.'+$(this).attr('class')).attr('area_type['+ty+']');
-				text = $('.'+$(this).attr('class')).attr('area_text['+ty+']');
-				to = $('.'+$(this).attr('class')).attr('area_to['+ty+']');
-				from = $('.'+$(this).attr('class')).attr('area_from['+ty+']');
-				ident = $('.'+$(this).attr('class')).attr('area_ident['+ty+']');
+		for (ty=0; ty < cinfo; ty++) 
+		{	//aid
+			level = $('.'+$(tmp_this).attr('class')).attr('area_level_'+ty+'');
+			type = $('.'+$(tmp_this).attr('class')).attr('area_type_'+ty+'');
+			text = $('.'+$(tmp_this).attr('class')).attr('area_text_'+ty+'');
+			to = $('.'+$(tmp_this).attr('class')).attr('area_to_'+ty+'');
+			from = $('.'+$(tmp_this).attr('class')).attr('area_from_'+ty+'');
+			ident = $('.'+$(tmp_this).attr('class')).attr('area_ident_'+ty+'');
+			area_arr[aid][ty] = [];
+			
+			area_arr[aid][ty]['level'] 	= level;
+			area_arr[aid][ty]['type'] 	= type;
+			area_arr[aid][ty]['text'] 	= text;
+			area_arr[aid][ty]['to'] 	= to;
+			area_arr[aid][ty]['from'] 	= from;
+			area_arr[aid][ty]['ident']	= ident;
+		}
+
+		if(aktive_level != false && aktive_type != false)
+		{
+			// Paint mode !!!
+			/*
+				color: 1 #29d660  2 #ffff00  3 #fecb31  4 #fe0104 
+			*/
+			processing = true;
+			tmp_wid = 0;
+			cinfo = parseInt($('.'+$(tmp_this).attr('class')).attr('cinfo'));
+			aid = parseInt($('.'+$(tmp_this).attr('class')).attr('aid'));
+			
+			$.each(area_arr[aid], function (key, data) {
+				if(data !== undefined)
+				{
+					if(parseInt(aktive_type) == parseInt(data['type']))
+					{
+						console.log(data);
+						processing = false;
+						tmp_wid = key;
+					}
+				}
+			});
+
+			if(processing && cinfo < 3)
+			{
+				$(tmp_this).css('fill', level_c[aktive_level]);
+
+				ty = cinfo;
 				area_arr[aid][ty] = [];
+				area_arr[aid][ty]['level'] 	= parseInt(aktive_level);
+				area_arr[aid][ty]['type'] 	= parseInt(aktive_type);
+				area_arr[aid][ty]['text'] 	= "";
+				area_arr[aid][ty]['to'] 	= "23:59";
+				area_arr[aid][ty]['from'] 	= "00:00";
 				
-				area_arr[aid][ty]['level'] 	= level;
-				area_arr[aid][ty]['type'] 	= level;
-				area_arr[aid][ty]['text'] 	= text;
-				area_arr[aid][ty]['to'] 	= to;
-				area_arr[aid][ty]['from'] 	= from;
-				area_arr[aid][ty]['ident']	= ident;
+				if(cinfo != 3) $('.'+$(tmp_this).attr('class')).attr('cinfo', cinfo + 1 );
+
+				$(tmp_this).attr('area_level_'+ty+'', area_arr[aid][ty]['level']);
+				$(tmp_this).attr('area_type_'+ty+'', area_arr[aid][ty]['type']);
+
+				$(tmp_this).attr('area_to_'+ty+'', area_arr[aid][ty]['to']);
+				$(tmp_this).attr('area_from_'+ty+'', area_arr[aid][ty]['from']);
+				$(tmp_this).attr('area_ident_'+ty+'', area_arr[aid][ty]['ident']);
+				console.log(area_arr[aid][ty]);
+				//$(tmp_this).attr('area_type['+cinfo+']', aktive_type);
+			}
+			else if(processing == false)
+			{
+				area_arr[aid][tmp_wid]['level'] = parseInt(aktive_level);
+				$(tmp_this).attr('area_level_'+tmp_wid+'', area_arr[aid][tmp_wid]['level']);
+				console.log(area_arr[aid][ty]);
 			}
 
-			/*Show*/
-
-			if($('.'+$(this).attr('class')).attr('sel') == 1)
+			tmp_level = 0;
+			$.each(area_arr[aid], function (key, data) {
+				if(data !== undefined)
+				{
+					if(parseInt(data['level']) > tmp_level)
+					{
+						tmp_level = parseInt(data['level']);
+					}
+				}
+			});
+			$(tmp_this).css('fill', level_c[tmp_level]);
+		}
+		/*Show*/
+		if(is_auto != "auto")
+		{
+			if($('.'+$(tmp_this).attr('class')).attr('sel') == 1 && aktive_level == false && aktive_type == false)
 			{
-				$('.'+$(this).attr('class')).css('stroke-width', '1');
-				$('.'+$(this).attr('class')).css('stroke', 'grey');
-				$('.'+$(this).attr('class')).css('fill-opacity', 1);
-				$('.'+$(this).attr('class')).attr('sel', 0);
+				$('.'+$(tmp_this).attr('class')).css('stroke-width', '1');
+				$('.'+$(tmp_this).attr('class')).css('stroke', 'grey');
+				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 1);
+				$('.'+$(tmp_this).attr('class')).attr('sel', 0);
 				area_arr[aid].pop();
 				delete(area_arr[aid]);
 			}
 			else
 			{
-				$('.'+$(this).attr('class')).css('stroke-width', '3px');
-				$('.'+$(this).attr('class')).css('stroke', 'blue');
-				$('.'+$(this).attr('class')).css('fill-opacity', 0.6);
-				$('.'+$(this).attr('class')).attr('sel', 1);
+				$('.'+$(tmp_this).attr('class')).css('stroke-width', '3px');
+				$('.'+$(tmp_this).attr('class')).css('stroke', 'blue');
+				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 0.6);
+				$('.'+$(tmp_this).attr('class')).attr('sel', 1);
 			}
-
-			// show Area in Proccess list
-				out = "";
-				area_real_len = 0;
-				$.each(area_arr, function (key, data) {
-					if(data !== undefined)
-					{
-						value = data;
-						area_real_len++;
-						if(area_list_on == false)
-						{
-							$('#work_toolbox').animate({
-								right: $('#process_toolbox').width()+"px"
-							}, 500);
-							$('#process_toolbox').animate({
-								right: "-1px"
-							}, 500);
-							area_list_on = true;
-						}
-
-						out+= '<div class="process_toolbox_area" id="aid_'+key+'">';
-							
-							for (noty=1; noty <= (3 - value.length); noty++) 
-							{
-								out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
-							}
-
-							$.each(value, function (key2, data) {
-								if(data !== undefined)
-								{
-									// Warnungen
-									tmp_level = parseInt(data['level']);
-									tmp_type = parseInt(data['type']);
-									tmp_text = data['text'];
-									tmp_to = data['to'];
-									tmp_from = data['from'];
-									tmp_ident = data['ident'];
-
-									if(tmp_type < 10) tmp_type_f = '0'+tmp_type;
-										//out+= ' ' + tmp_level + ' ' + tmp_type + ' ';
-									out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
-								}
-							});
-
-							out+= '<div class="divtextscroll">' + value['name'] + '</div>'; // name
-						out+= '</div>';
-					}
-				});
-
-				if(area_real_len < 1)
+		}
+		// show Area in Proccess list
+		out = "";
+		area_real_len = 0;
+		$.each(area_arr, function (key, data) {
+			if(data !== undefined)
+			{
+				value = data;
+				area_real_len++;
+				if(area_list_on == false)
 				{
 					$('#work_toolbox').animate({
-						right: "0px"
+						right: $('#process_toolbox').width()+"px"
 					}, 500);
 					$('#process_toolbox').animate({
-						right: "-"+($('#process_toolbox').width() + 1)+"px"
+						right: "-1px"
 					}, 500);
-					area_list_on = false;
+					area_list_on = true;
 				}
 
-				$('#process_toolbox').html(out);
-				delete(out);
+				out+= '<div class="process_toolbox_area" id="aid_'+key+'">';
+					
+					for (noty=1; noty <= (3 - value.length); noty++) 
+					{
+						out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
+					}
+
+					$.each(value, function (key2, data) {
+						if(data !== undefined)
+						{
+							// Warnungen
+							tmp_level = parseInt(data['level']);
+							tmp_type = parseInt(data['type']);
+							tmp_text = data['text'];
+							tmp_to = data['to'];
+							tmp_from = data['from'];
+							tmp_ident = data['ident'];
+
+							if(tmp_type < 10) tmp_type_f = '0'+tmp_type;
+							else tmp_type_f = tmp_type;
+							//out+= ' ' + tmp_level + ' ' + tmp_type + ' ';
+							out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
+						}
+					});
+
+					out+= '<div class="divtextscroll">' + value['name'] + '</div>'; // name
+				out+= '</div>';
+			}
 		});
+
+		if(area_real_len < 1)
+		{
+			$('#work_toolbox').animate({
+				right: "0px"
+			}, 500);
+			$('#process_toolbox').animate({
+				right: "-"+($('#process_toolbox').width() + 1)+"px"
+			}, 500);
+			area_list_on = false;
+		}
+
+		$('#process_toolbox').html(out);
+		delete(out);
 	}
 
+	var aktive_warning_aid;
+	var aktive_warning_key;
 	function area_warning_detail(aid, key_type, tmp_this)
 	{
 		//console.log($('#svg-id polygon[aid='+aid+']').attr('area_name'));
+		aktive_warning_aid = aid;
+		aktive_warning_key = key_type;
 		$('.process_toolbox_area .awareness').css('border', '');
 		$(tmp_this).css('border', '1px solid #0000ff');
 		if(key_type > -1)
 		{
 			lang_1 = $('#lang_1').val();
 			tmp_area_name 		= $('#svg-id polygon[aid='+aid+']').attr('area_name');
-			tmp_area_text_0 	= $('#svg-id polygon[aid='+aid+']').attr('area_text['+key_type+'][en-gb]');
-			tmp_area_inst_0 	= $('#svg-id polygon[aid='+aid+']').attr('area_inst['+key_type+'][en-gb]');
-			tmp_area_text_1 	= $('#svg-id polygon[aid='+aid+']').attr('area_text['+key_type+']['+lang_1+']');
-			tmp_area_inst_1 	= $('#svg-id polygon[aid='+aid+']').attr('area_inst['+key_type+']['+lang_1+']');
-			tmp_area_to 		= $('#svg-id polygon[aid='+aid+']').attr('area_to['+key_type+']');
-			tmp_area_from 		= $('#svg-id polygon[aid='+aid+']').attr('area_from['+key_type+']');
+			tmp_area_text_0 	= $('#svg-id polygon[aid='+aid+']').attr('area_text_'+key_type+'_en-gb');
+			tmp_area_inst_0 	= $('#svg-id polygon[aid='+aid+']').attr('area_inst_'+key_type+'_en-gb');
+			tmp_area_text_1 	= $('#svg-id polygon[aid='+aid+']').attr('area_text_'+key_type+'_'+lang_1+'');
+			tmp_area_inst_1 	= $('#svg-id polygon[aid='+aid+']').attr('area_inst_'+key_type+'_'+lang_1+'');
+			tmp_area_to 		= $('#svg-id polygon[aid='+aid+']').attr('area_to_'+key_type+'');
+			tmp_area_from 		= $('#svg-id polygon[aid='+aid+']').attr('area_from_'+key_type+'');
 
 			$('#desc_0').html('');
 			$('#inst_0').html('');

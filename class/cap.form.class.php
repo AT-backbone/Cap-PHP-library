@@ -236,7 +236,7 @@
 										$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px;">'; // solfe border problem: margin-bottom:10px;
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
-													$out.= '<a href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
+													$out.= '<a id="del_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
 														$out.= 'Delete';
 													$out.= '</a>';
 												$out.= '</div>';
@@ -259,23 +259,23 @@
 											$out.= '<h1 style="font-size:22px;float:left;">Meteoalarm Visio Level</h1>';
 										$out.= '</li>';
 										
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;">';
+										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';
 
 											// dddddd, a4a4a4, 878787
 											$out.= '<div id="awareness_toolbox" class="awareness_div">';
 												for ($ty=1; $ty <= 13; $ty++) 
 												{ 
 													if($ty < 10) $ty = '0'.$ty;
-													$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
+													$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1" type="'.$ty.'"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
 												}
 											$out.= '</div>';
 
 											$out.= '<div id="awareness_color_toolbox" class="awareness_color_div">';
 												// 29d660, ffff00, fecb31, fe0104
-												$out.= '<div class="awareness" id="left_box_level_1" aktive="1"></div>';
-												$out.= '<div class="awareness" id="left_box_level_2" aktive="1"></div>';
-												$out.= '<div class="awareness" id="left_box_level_3" aktive="1"></div>';
-												$out.= '<div class="awareness" id="left_box_level_4" aktive="1"></div>';
+												$out.= '<div class="awareness" id="left_box_level_1" aktive="1" level="1"></div>';
+												$out.= '<div class="awareness" id="left_box_level_2" aktive="1" level="2"></div>';
+												$out.= '<div class="awareness" id="left_box_level_3" aktive="1" level="3"></div>';
+												$out.= '<div class="awareness" id="left_box_level_4" aktive="1" level="4"></div>';
 											$out.= '</div>';
 
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_1">';

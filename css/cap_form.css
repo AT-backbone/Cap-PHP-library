@@ -176,11 +176,12 @@ textarea{
 }
 
 .awareness_color_div {
+	display: none;
 	position: absolute; 
 	top: -1px; 
 	left: 64px;
 	width: 128px;
-	padding: 15px; 
+	padding: 16px; 
 	text-shadow: none; 
 	background-color: rgba(0, 0, 0, 0.25);
 	border: 1px solid #dddddd;
