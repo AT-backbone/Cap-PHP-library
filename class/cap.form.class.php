@@ -178,15 +178,17 @@
 						}
 
 						$out = '<style>.ui-footer {display:none !important;}</style>';
+						$out.= '<input type="hidden" value="'.$langs->trans('Delete Warning?').'" id="del_warn_lang">';
+						$out.= '<input type="hidden" value="'.$langs->trans('Change Warning without Saving Changes?').'" id="chang_without_save">';
 						$out.= '<input type="hidden" value="MD" id="iso">';
 						$out.= '<input type="hidden" value="2" id="green">';
 						$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
 						$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
 						$out.= '<div class="ui-grid-a">';
 							$out.= '<div class="ui-block-a" style="width: 30%;">';
-								$out.= '<div class="ui-bar">';
+								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
 									// Info
-									$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
+									$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
 										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Area: <span id="left_area_name">None</span></h1></li>';
 										
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
@@ -241,7 +243,7 @@
 													$out.= '</a>';
 												$out.= '</div>';
 												$out.= '<div class="ui-block-b">';
-													$out.= '<a href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+													$out.= '<a id="sav_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
 														$out.= 'Save';
 													$out.= '</a>';
 												$out.= '</div>';
@@ -329,7 +331,7 @@
 						$out.= '<div class="ui-bar">';
 							$out.= '<ul data-role="listview" data-divider-theme="b">'; // as long as it is without Area show 50% alpha
 								$out.= '<li data-role="list-divider" data-theme="b" style="padding: 15px;">';
-									$out.= '<a href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
 										$out.= 'Submit';
 									$out.= '</a>';
 								$out.= '</li>';

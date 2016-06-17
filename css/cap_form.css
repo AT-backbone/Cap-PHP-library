@@ -338,6 +338,23 @@ textarea{
 	overflow: auto;
 }
 
+.problem {
+	border:1px solid red;
+	color:#000;
+}
+
+.problem_callsign {
+	position: relative;
+    left: -4px;
+	text-shadow: 0px 0px 3px red,0px 0px 3px red,0px 0px 3px red;
+	font-size: 20px;
+}
+
+.problem_text {
+	color: red;
+    text-shadow: 0px 0px 3px white,0px 0px 3px white,0px 0px 3px white,0px 0px 3px white;
+}
+
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
