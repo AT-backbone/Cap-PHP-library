@@ -281,7 +281,7 @@ textarea{
 .work_toolbox_div {
 	position: absolute; 
 	top: -1px; 
-	right: 0px;
+	right: -1px;
 	width: 34px; 
 	padding: 15px; 
 	text-shadow: none; 
@@ -297,7 +297,7 @@ textarea{
 .process_toolbox_div {
 	position: absolute; 
 	top: -1px; 
-	right: -262px; 
+	right: -263px; 
 	width: 261px;
 	height: 100%;
 	text-shadow: none; 

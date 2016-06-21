@@ -78,6 +78,19 @@ $( document ).ready(function()
 	});
 
 	ini_meteo_map();
+
+	$('div').on('pageshow',function(event, ui){
+		panZoomInstance = svgPanZoom('#svg-id', {
+			zoomEnabled: true,
+			zoomScaleSensitivity: 0.5,
+			dblClickZoomEnabled: false,
+			preventMouseEventsDefault: false, 
+			controlIconsEnabled: true,
+			fit: true,
+			center: true,
+			minZoom: 0.5,
+		});
+	} );
 });
 
 	var xhr_of_upcapxml
@@ -231,19 +244,6 @@ $( document ).ready(function()
 	var warning_detail_changed = false;
 	function ini_meteo_map()
 	{
-		$(function() {
-			panZoomInstance = svgPanZoom('#svg-id', {
-				zoomEnabled: true,
-				zoomScaleSensitivity: 0.5,
-				dblClickZoomEnabled: false,
-				preventMouseEventsDefault: false, 
-				controlIconsEnabled: true,
-				fit: true,
-				center: true,
-				minZoom: 0.5,
-			});
-		})
-
 		changes_arr['idx'] = [];
 		changes_arr['change'] = [];
 
@@ -515,7 +515,7 @@ $( document ).ready(function()
 				if(area_list_on == false)
 				{
 					$('#work_toolbox').animate({
-						right: $('#process_toolbox').width()+"px"
+						right: ($('#process_toolbox').width())+"px"
 					}, 500);
 					$('#process_toolbox').animate({
 						right: "-1px"
@@ -566,10 +566,10 @@ $( document ).ready(function()
 		if(area_real_len < 1)
 		{
 			$('#work_toolbox').animate({
-				right: "0px"
+				right: "-1px"
 			}, 500);
 			$('#process_toolbox').animate({
-				right: "-"+($('#process_toolbox').width() + 1)+"px"
+				right: "-"+($('#process_toolbox').width() + 2)+"px"
 			}, 500);
 			area_list_on = false;
 		}
@@ -784,38 +784,44 @@ $( document ).ready(function()
 			lang_1 = $('#lang_1').val();
 			cinfo = parseInt($(this).attr('cinfo'));
 			aid = parseInt($(this).attr('aid'));
-			area_arr_final[aid] = {};
-			area_arr_final[aid]['name'] = $(this).attr('area_name');
-
-			for (ty=0; ty < cinfo; ty++) 
+			eid = $(this).attr('eid');
+			if(area_arr_final[aid] === undefined)
 			{
-				level 	= parseInt($(this).attr('area_level_'+ty+''));
-				type 	= parseInt($(this).attr('area_type_'+ty+''));
-				text 	= $(this).attr('area_text_'+ty+'');
-				text_0 	= $(this).attr('area_text_'+ty+'_en-gb');
-				inst_0 	= $(this).attr('area_inst_'+ty+'_en-gb');
-				text_1 	= $(this).attr('area_text_'+ty+'_'+lang_1);
-				inst_1 	= $(this).attr('area_inst_'+ty+'_'+lang_1);
-				to 		= $(this).attr('area_to_'+ty+'');
-				from 	= $(this).attr('area_from_'+ty+'');
-				ident 	= $(this).attr('area_ident_'+ty+'');
-				
-				if(level > 0 && type > 0)
+				area_arr_final[aid] = {};
+				if(cinfo < 1) cinfo = 1;
+				for (ty=0; ty < cinfo; ty++) 
 				{
 					area_arr_final[aid][ty] = {};
-					area_arr_final[aid][ty]['level'] 	= level;
-					area_arr_final[aid][ty]['type'] 	= type;
-					area_arr_final[aid][ty]['text'] 	= text;
-					area_arr_final[aid][ty]['text_0']	= text_0;
-					area_arr_final[aid][ty]['inst_0']	= inst_0;
-					area_arr_final[aid][ty]['text_1']	= text_1;
-					area_arr_final[aid][ty]['inst_1']	= inst_1;
-					area_arr_final[aid][ty]['from'] 	= from;
-					area_arr_final[aid][ty]['to'] 		= to;
-					area_arr_final[aid][ty]['ident']	= ident;
-				}
+					area_arr_final[aid][ty]['name'] = $(this).attr('area_name');
 
-				delete(level, type ,text ,text_0,inst_0,text_1,inst_1,to,from,ident);
+					level 	= parseInt($(this).attr('area_level_'+ty+''));
+					type 	= parseInt($(this).attr('area_type_'+ty+''));
+					text 	= $(this).attr('area_text_'+ty+'');
+					text_0 	= $(this).attr('area_text_'+ty+'_en-gb');
+					inst_0 	= $(this).attr('area_inst_'+ty+'_en-gb');
+					text_1 	= $(this).attr('area_text_'+ty+'_'+lang_1);
+					inst_1 	= $(this).attr('area_inst_'+ty+'_'+lang_1);
+					to 		= $(this).attr('area_to_'+ty+'');
+					from 	= $(this).attr('area_from_'+ty+'');
+					ident 	= $(this).attr('area_ident_'+ty+'');
+					
+					if(level > 0 && type > 0)
+					{
+						area_arr_final[aid][ty]['eid'] 		= eid;
+						area_arr_final[aid][ty]['level'] 	= level;
+						area_arr_final[aid][ty]['type'] 	= type;
+						area_arr_final[aid][ty]['text'] 	= text;
+						area_arr_final[aid][ty]['text_0']	= text_0;
+						area_arr_final[aid][ty]['inst_0']	= inst_0;
+						area_arr_final[aid][ty]['text_1']	= text_1;
+						area_arr_final[aid][ty]['inst_1']	= inst_1;
+						area_arr_final[aid][ty]['from'] 	= from;
+						area_arr_final[aid][ty]['to'] 		= to;
+						area_arr_final[aid][ty]['ident']	= ident;
+					}
+
+					delete(level, type ,text ,text_0,inst_0,text_1,inst_1,to,from,ident);
+				}
 			}
 		});
 
@@ -826,11 +832,39 @@ $( document ).ready(function()
 			{cap_array:jsonOb},
 			function(r){
 				//your success response
-				alert('OK!');
+				//alert('OK!');
+				send_final(r);
 			}
 		);
+	}
 
-		console.log(area_arr_final);
+	function send_final(r)
+	{
+		console.log(r);
+
+		var content = '<form>';
+		$.each(jQuery.parseJSON(r), function(index, data) {
+			// file position and name: data
+				content+= '<div class="cbGroup'+data['aid']+'">';
+					content+= '<label for="checkbox-'+data['aid']+'">'+data['name']+'</label>';
+				content+= '</div>';
+		});
+		content+= '</form>';
+
+		$('[type="checkbox"]').checkboxradio();
+		$('[type="checkbox"]').checkboxradio("refresh");
+
+		$('#set').append( content ).trigger('create');
+		$('#set').collapsibleset( "refresh" );
+		
+		$.each(jQuery.parseJSON(r), function(index, data) {
+			var newBox = '<input type="checkbox" name="checkbox-'+data['aid']+'" id="checkbox-'+data['aid']+'" checked="checked"/>';
+			$(".cbGroup"+data['aid']).append(newBox).trigger('create');
+		});
+
+		$('div .ui-checkbox').css('margin', '-1px 0');
+
+		$('#CAPpopupDialog').popup( "open" );
 	}
 
 	function policlick(aid)
