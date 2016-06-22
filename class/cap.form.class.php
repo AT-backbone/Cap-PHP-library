@@ -239,12 +239,12 @@
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
 													$out.= '<a id="del_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
-														$out.= 'Delete';
+														$out.= $langs->trans('Delete');
 													$out.= '</a>';
 												$out.= '</div>';
 												$out.= '<div class="ui-block-b">';
 													$out.= '<a id="sav_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-														$out.= 'Save';
+														$out.= $langs->trans('Save');
 													$out.= '</a>';
 												$out.= '</div>';
 											$out.= '</div><!-- /grid-a -->';
@@ -343,11 +343,48 @@
 								$out.= '<h2>'.$langs->trans('PaintGreen').'</h2>';
 							$out.= '</div>';
 							$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content">';
+								$out.= $langs->trans('DESC_PaintGreen');
 								$out.= '<div data-role="collapsibleset" data-content-theme="a" data-iconpos="right" id="set">';
 								$out.= '</div>';
+
+								// Dissmis or OK
+								$out.= '<div class="ui-grid-a">';
+									$out.= '<div class="ui-block-a">';
+										$out.= '<a id="green_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
+											$out.= $langs->trans('No');
+										$out.= '</a>';
+									$out.= '</div>';
+									$out.= '<div class="ui-block-b">';
+										$out.= '<a id="green_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+											$out.= $langs->trans('Yes');
+										$out.= '</a>';
+									$out.= '</div>';
+								$out.= '</div><!-- /grid-a -->';
 							$out.= '</div>';
 						$out.= '</div>';
-						
+
+						$out.= '<div data-role="popup" id="CAP_Send_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
+							$out.= '<div data-role="header" id="CAP_Send_popupDialog_header" data-theme="a">';
+								$out.= '<h2>'.$langs->trans('SendCaps').'</h2>';
+							$out.= '</div>';
+							$out.= '<div role="main" id="CAP_Send_popupDialog_main" class="ui-content">';
+								$out.= $langs->trans('Send Caps to Meteoalarm?');
+								// Dissmis or OK
+								$out.= '<div class="ui-grid-a">';
+									$out.= '<div class="ui-block-a">';
+										$out.= '<a id="send_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
+											$out.= $langs->trans('No');
+										$out.= '</a>';
+									$out.= '</div>';
+									$out.= '<div class="ui-block-b">';
+										$out.= '<a id="send_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+											$out.= $langs->trans('Yes');
+										$out.= '</a>';
+									$out.= '</div>';
+								$out.= '</div><!-- /grid-a -->';
+							$out.= '</div>';
+						$out.= '</div>';
+
 					break;
 
 				case 'CapButton':
