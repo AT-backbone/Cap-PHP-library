@@ -77,20 +77,8 @@ $( document ).ready(function()
 		
 	});
 
-	ini_meteo_map();
+	if($('#init_map').val() == 1) ini_meteo_map();
 
-	$('div').on('pageshow',function(event, ui){
-		panZoomInstance = svgPanZoom('#svg-id', {
-			zoomEnabled: true,
-			zoomScaleSensitivity: 0.5,
-			dblClickZoomEnabled: false,
-			preventMouseEventsDefault: false, 
-			controlIconsEnabled: true,
-			fit: true,
-			center: true,
-			minZoom: 0.5,
-		});
-	} );
 });
 
 	var xhr_of_upcapxml
@@ -244,6 +232,19 @@ $( document ).ready(function()
 	var warning_detail_changed = false;
 	function ini_meteo_map()
 	{
+		$('div').on('pageshow',function(event, ui){
+			panZoomInstance = svgPanZoom('#svg-id', {
+				zoomEnabled: true,
+				zoomScaleSensitivity: 0.5,
+				dblClickZoomEnabled: false,
+				preventMouseEventsDefault: false, 
+				controlIconsEnabled: true,
+				fit: true,
+				center: true,
+				minZoom: 0.5,
+			});
+		} );
+
 		changes_arr['idx'] = [];
 		changes_arr['change'] = [];
 

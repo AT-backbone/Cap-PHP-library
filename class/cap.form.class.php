@@ -178,6 +178,7 @@
 						}
 
 						$out = '<style>.ui-footer {display:none !important;}</style>';
+						if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<input type="hidden" value="1" id="init_map">';
 						$out.= '<input type="hidden" value="'.$langs->trans('Delete Warning?').'" id="del_warn_lang">';
 						$out.= '<input type="hidden" value="'.$langs->trans('Change Warning without Saving Changes?').'" id="chang_without_save">';
 						$out.= '<input type="hidden" value="MD" id="iso">';
@@ -1395,7 +1396,7 @@
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/d3/d3.v3.min.js"></script>';
-				$out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
+				
 
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 				
@@ -1410,7 +1411,7 @@
 				if( $conf->webservice_aktive == 1 )
 				{
 					$out.= '<link rel="stylesheet" href="css/MeteoalarmMobile.css" />';
- 					
+					if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
  				}
  				else
  				{
@@ -1462,7 +1463,7 @@
 			
 			$out = $this->Header_llx();
 			
-			$out.= '<body>';			
+			$out.= '<body>';
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 				$out.= '<input type="hidden" name="action" value="create">';
 					
