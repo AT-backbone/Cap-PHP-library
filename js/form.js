@@ -374,10 +374,11 @@ $( document ).ready(function()
 	}
 	var level_c = [];
 	level_c[0] = '#ffffee';
-	level_c[1] = '#29d660';
-	level_c[2] = '#ffff00';
-	level_c[3] = '#fecb31';
-	level_c[4] = '#fe0104';
+	level_c[1] = '#99FF99';
+	level_c[2] = '#FFFF66';
+	level_c[3] = '#FFCC33';
+	level_c[4] = '#FF6666';
+	level_c[5] = '#AF0064';
 
 	function calc_map_aktion(tmp_this, is_auto)
 	{
@@ -843,7 +844,7 @@ $( document ).ready(function()
 				}
 			}
 		});
-
+		console.log(area_arr_final);
 		var jsonOb = JSON.stringify(area_arr_final);
 
 		$.post(
