@@ -156,3 +156,6 @@ LabelAwarenessLevelWebserviceDesc=LabelAwarenessLevelWebserviceDesc
 
 LabelGeocodeWebservice=LabelGeocodeWebservice
 LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
+
+PaintGreen=White areas
+DESC_PaintGreen=Should these white areas get colored green?

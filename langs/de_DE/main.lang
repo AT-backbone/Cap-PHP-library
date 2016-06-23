@@ -156,3 +156,6 @@ LabelAwarenessLevelWebserviceDesc=LabelAwarenessLevelWebserviceDesc
 
 LabelGeocodeWebservice=LabelGeocodeWebservice
 LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
+
+PaintGreen=Weise Gebiete
+DESC_PaintGreen=Sollen diese Gebiete ohne Warnung grün Gewarnt werden?

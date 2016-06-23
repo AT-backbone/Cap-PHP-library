@@ -15,6 +15,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
 .optional {
 	/* grauer rand */
 	border: 1px solid rgba(0, 0, 0, 0.25) !important;
@@ -100,4 +110,262 @@ textarea{
   top: 15px;
   left: 20px;
   width: 130px;
+}
+
+.awareness_div {
+	position: absolute; 
+	top: -1px; 
+	left: -1px; 
+	width: 34px; 
+	padding: 15px; 
+	text-shadow: none; 
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	pointer-events: none;
+}
+
+.awareness_div .awareness:last-child {
+	margin-bottom: 0px;
+}
+
+.awareness {
+	background-color: white;
+	border: 1px solid #dddddd;
+	width: 25px;
+	height: 25px;
+	padding: 2.5px 4.5px 0px 2.5px;
+	margin-bottom: 5px;
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+.awareness:hover{
+	border: 1px solid #000000;
+}
+
+.awareness[aktive='0'] {
+	background-color: white;
+	border: 1px solid #dddddd;
+	width: 25px;
+	height: 25px;
+	padding: 2.5px 4.5px 0px 2.5px;
+	margin-bottom: 5px;
+	cursor: inherit;
+	opacity: 0.5;
+}
+
+.awareness[aktive='2'] {
+	background-color: white;
+	border: 1px solid #dddddd;
+	width: 25px;
+	height: 25px;
+	padding: 2.5px 4.5px 0px 2.5px;
+	margin-bottom: 5px;
+	cursor: inherit;
+	opacity: 0.5;
+}
+
+.awareness[aktive='2']:hover {
+	border: 1px solid #000000;
+}
+
+.awareness[id=reload] {
+	background-color: #afd5ef;
+	margin-top: 8px;
+	padding-bottom: 1px;
+}
+
+.awareness_color_div {
+	display: none;
+	position: absolute; 
+	top: -1px; 
+	left: 64px;
+	width: 128px;
+	padding: 16px; 
+	text-shadow: none; 
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	pointer-events: none;
+}
+
+.awareness_color_div .awareness{
+    float: left;
+    padding: 0px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    pointer-events: auto;
+}
+
+.awareness_color_div #left_box_level_1 {
+	background-color: #29d660;
+}
+.awareness_color_div #left_box_level_2 {
+	background-color: #ffff00;
+}
+.awareness_color_div #left_box_level_3 {
+	background-color: #fecb31;
+}
+.awareness_color_div #left_box_level_4 {
+	background-color: #fe0104;
+}
+
+.level_1 {
+	background-color: #29d660;
+}
+.level_2 {
+	background-color: #ffff00;
+}
+.level_3 {
+	background-color: #fecb31;
+}
+.level_4 {
+	background-color: #fe0104;
+}
+
+.meteo_toolbox_div_1 {
+	position: absolute;
+	bottom: -1px;
+	left: -1px;
+	width: 155px;
+	height: 45px;
+	padding-left: 15px !important;
+	padding: 3px;
+	text-shadow: none;
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	border-right: none;
+	pointer-events: none;
+}
+
+.meteo_toolbox_div_1 .ui-select a {
+	padding: 4px;
+	pointer-events: auto;
+}
+
+.meteo_toolbox_div_2 {
+	position: absolute;
+	bottom: -1px;
+	left: 173px;
+	width: 150px;
+	height: 45px;
+	padding-left: 15px !important;
+	padding: 3px;
+	text-shadow: none;
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	border-left: none;
+	border-right: none;
+	pointer-events: none;
+}
+
+.meteo_toolbox_div_2 .ui-select a {
+	padding: 4px;
+	pointer-events: auto;
+}
+
+.meteo_toolbox_div_3 {
+	position: absolute;
+	bottom: -1px;
+	left: 341px;
+	width: 50px;
+	height: 45px;
+	padding-left: 15px !important;
+	padding: 3px;
+	text-shadow: none;
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	border-left: none;
+	pointer-events: none;
+}
+
+.work_toolbox_div {
+	position: absolute; 
+	top: -1px; 
+	right: -1px;
+	width: 34px; 
+	padding: 15px; 
+	text-shadow: none; 
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	pointer-events: none;
+}
+
+.work_toolbox_div .awareness:last-child {
+	margin-bottom: 0px;
+}
+
+.process_toolbox_div {
+	position: absolute; 
+	top: -1px; 
+	right: -263px; 
+	width: 261px;
+	height: 100%;
+	text-shadow: none; 
+	background-color: rgba(0, 0, 0, 0.25);
+	border: 1px solid #dddddd;
+	border-bottom: none;
+	overflow-y: auto;
+	overflow-x: hidden;
+	pointer-events: auto;
+}
+
+.process_toolbox_area {
+	/*
+	    padding-right: 0px;
+    	width: 244px;
+    	font-size: 23px;
+	*/
+    padding: 15px;
+    width: 246px;
+	height: 30px;
+	border-bottom: 1px solid #dddddd;
+	color: #fff;
+	font-weight: bold;
+}
+
+.process_toolbox_area .awareness {
+	float: left;
+	margin-right: 5px;
+	pointer-events: auto;
+}
+
+.process_toolbox_area .divtextscroll {
+	width: 121px;
+	height: 45px;
+	float: left;
+	word-wrap: break-word;
+	word-break: break-word;
+	overflow: auto;
+}
+
+.problem {
+	border:1px solid red;
+	color:#000;
+}
+
+.problem_callsign {
+	position: relative;
+    left: -4px;
+	text-shadow: 0px 0px 3px red,0px 0px 3px red,0px 0px 3px red;
+	font-size: 20px;
+}
+
+.problem_text {
+	color: red;
+    text-shadow: 0px 0px 3px white,0px 0px 3px white,0px 0px 3px white,0px 0px 3px white;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+::-webkit-scrollbar-track {
+    background-color: #eaeaea;
+    border-left: 1px solid #ccc;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #696969;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
 }
