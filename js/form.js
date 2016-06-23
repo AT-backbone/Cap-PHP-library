@@ -507,7 +507,7 @@ $( document ).ready(function()
 			if($('.'+$(tmp_this).attr('class')).attr('sel') == 1 && aktive_level == false && aktive_type == false)
 			{
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '1');
-				$('.'+$(tmp_this).attr('class')).css('stroke', 'grey');
+				$('.'+$(tmp_this).attr('class')).css('stroke', 'black');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 1);
 				$('.'+$(tmp_this).attr('class')).attr('sel', 0);
 				area_arr[aid].pop();
@@ -973,7 +973,7 @@ $( document ).ready(function()
 
 	function policlick(aid)
 	{
-		$('[sel=0]').css('stroke', 'grey');
+		$('[sel=0]').css('stroke', 'black');
 		$('[sel=0]').css('stroke-width', '1');
 
 		$('.pol_'+aid).css('stroke-width', '3px');
@@ -984,7 +984,7 @@ $( document ).ready(function()
 	{
 		if($('.pol_'+aid).attr('sel') == 0)
 		{
-			$('.pol_'+aid).css('stroke', 'grey');
+			$('.pol_'+aid).css('stroke', 'black');
 			$('.pol_'+aid).css('stroke-width', '1');
 		}
 	}

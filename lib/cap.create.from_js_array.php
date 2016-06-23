@@ -184,6 +184,7 @@
 			{
 				//print '<br>'.$warning->type.' '.$warning->eid.' '.$cap_ident[$warning->type][$warning->eid];
 				$ident = $cap_ident[$warning->type][$warning->eid]['id'];
+				$warning->aid = $aid;
 				if($ident != "" && $ident == $warning->ident && $cap_ident[$warning->type][$warning->eid]['level'] == $warning->level)
 				{
 					// made no warning
@@ -194,15 +195,15 @@
 					$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
 					$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
 					$warning->references 	= $ident;
-					$warning->aid = $aid;
 					$cap_data['Update'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
 				}
 				else
 				{
 					// made a Alert
-					$warning->aid = $aid;
 					$cap_data['Alert'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
 				}
+
+				$cancel_check[$warning->eid][$warning->type] = $warning;
 			}
 			else
 			{
@@ -211,9 +212,48 @@
 		}
 	}
 
+
+
+	//print '<pre>cancel data: ';
+	//	print_r($cancel_check);
+	//print '</pre>';
+
+	// Look for Cancel
+	foreach($AreaCodesArray as $key => $vl_warning)
+	{
+		//print '<br><pre>'.print_r($vl_warning, true).'</pre>';
+		if(! isset($cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']]) )
+		{
+			// Cancel This
+			//print '<br>Cancel: '.$vl_warning['EMMA_ID'].' '.$vl_warning['type'];
+			unset($warning);
+			$ident = $vl_warning['identifier'];
+			$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
+			$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
+			$warning->references 	= $ident;
+
+			$warning->name = $vl_warning['AreaCaption'];
+			$warning->eid = $vl_warning['EMMA_ID'];
+
+			$warning->text_0 = "no warning";
+			$warning->type = $vl_warning['type'];
+			$warning->level = 1;
+
+			$warning->from = date('Y-m-d').' 00:00:00';
+			$warning->to = date('Y-m-d').' 23:59:59';
+
+			$cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning'][] = $warning;
+			//print '<pre>Update data: ';
+			//	print_r($cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning']);
+			//print '</pre>';
+		}
+	}
+
 	//print '<pre>cap data: ';
 	//	print_r($cap_data);
 	//print '</pre>';
+
+	unset($cancel_check);
 
 	$langs_arr = getlang();	
 							
@@ -229,14 +269,14 @@
 	$capid = 0;
 	foreach($cap_data as $ref => $ref_arr)
 	{
-		foreach($ref_arr as $type => $level_arr)
+		foreach($ref_arr as $type => $type_arr)
 		{
 			//print '<br>type:'.$type;
 			// Neues CAP
-			foreach ($level_arr as $level => $area_arr)
+			foreach ($type_arr as $level => $level_arr)
 			{
 				//print '<br>level:'.$level;
-				foreach($area_arr as $from => $from_arr)
+				foreach($level_arr as $from => $from_arr)
 				{
 					//print '<br>from:'.$from;
 					foreach($from_arr as $to => $to_arr)
@@ -245,6 +285,9 @@
 						// Neues CAP
 						foreach($to_arr as $text_0 => $data_arr)
 						{
+							//print '<pre>data_arr data: ';
+							//	print_r($data_arr);
+							//print '</pre>';
 							if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $aid > 0)
 							{
 								$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$aid;

@@ -106,7 +106,8 @@ if($conf->meteoalarm == 1)
 		$GenInsInput=array(
     		'iso'=>$iso,
     		'show_warnings'=> 1,
-    		'view_type'=>2
+    		'view_type'=>2,
+    		'use_warntable'=>1
     	);
 		    	
 		
