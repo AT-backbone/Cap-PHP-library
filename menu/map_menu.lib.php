@@ -94,20 +94,22 @@
 			//$pages['#MAIN'] 					= $langs->trans("TitleMain");
 			//$pages['next']['name']['PAGENAME'] = 'NEXT_PGAENAME';
 			
-			$pages['#alert'] 					= $langs->trans("TitleAlert");
+			$pages['index.php#alert'] 					= $langs->trans("TitleAlert");
 			$pages['notitle']['#alert'] 		= 1;
 
-			$pages['#info']  					= $langs->trans("TitleInfo");
+			$pages['index.php#info']  					= $langs->trans("TitleInfo");
 			
-			$pages['#area']  					= $langs->trans("TitleArea");
+			$pages['index.php#area']  					= $langs->trans("TitleArea");
+
+			$pages['map.php']  					= $langs->trans("TitleMap");
 			
-			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
+			$pages['index.php#capview'] 		 		= $langs->trans("TitleCapView");
 			
-			$pages['#read'] 		 		= $langs->trans("TitleCapList");
+			$pages['index.php#read'] 		 		= $langs->trans("TitleCapList");
 			
-			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");
+			$pages['index.php?conv=1#capconv']	= $langs->trans("TitleCapConv");
 			
-			$pages['#conf']  					= $langs->trans("TitleConfig");
+			$pages['index.php#conf']  					= $langs->trans("TitleConfig");
 			
 			// Links
 			//$pages['next']['name']['alert'] = 'info';
@@ -124,7 +126,14 @@
 			$pages['next']['nolink']['conf'] 	 .= '</div>';
 
 			// Page without ajax (pagelink)
-			$pages['noajax'][]				= '?conv=1#capconv';
+			$pages['noajax'][]				= 'index.php#alert';
+			$pages['noajax'][]				= 'index.php#info';
+			$pages['noajax'][]				= 'index.php#area';
+			$pages['noajax'][]				= 'index.php#capview';
+			$pages['noajax'][]				= 'index.php#read';
+			$pages['noajax'][]				= 'index.php?conv=1#capconv';
+			$pages['noajax'][]				= 'index.php#conf';
+			$pages['noajax'][]				= 'map.php';
 			//$pages['noajax'][]				= '#login';
 			
 			// Pages that shoud be a dialog

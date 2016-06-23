@@ -32,7 +32,7 @@
 
 	class CAP_Form{
 		
-		var $version = '1.2';
+		var $version = '1.3';
 		var $login_id = 0;
 		/**
      * initialize Class with Data
@@ -1479,11 +1479,11 @@
 	    							$out.= '<li style="height: 91px;">';
 	    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
 	    								$out.= '<h1>';
-	    									$out.= 'Cap Creator';
+	    									$out.= $langs->trans('Cap Creator');
 	    								$out.= '</h1>';
 	    								$out.= '<br>';
 	    								$out.= '<span style="font-size: 10px;">';
-	    									$out.= 'Cap v'.$this->version;
+	    									$out.= 'v'.$this->version;
 	    								$out.= '</span>';
 	    							$out.= '</li>';    							
 	    							

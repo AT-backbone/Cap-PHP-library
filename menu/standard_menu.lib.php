@@ -142,6 +142,8 @@
 			$pages['#info']  					= $langs->trans("TitleInfo");
 			
 			$pages['#area']  					= $langs->trans("TitleArea");
+
+			$pages['map.php']  					= $langs->trans("TitleMap");
 			
 			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
 			
@@ -166,6 +168,7 @@
 
 			// Page without ajax (pagelink)
 			$pages['noajax'][]				= '?conv=1#capconv';
+			$pages['noajax'][]				= 'map.php';
 			//$pages['noajax'][]				= '#login';
 			
 			// Pages that shoud be a dialog
