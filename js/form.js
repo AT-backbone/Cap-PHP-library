@@ -119,6 +119,9 @@ $( document ).ready(function()
 		        }
 		       });
 		
+		setTimeout(function(){
+			window.location = "index.php#conf";
+		}, 1500);
 		return false; // avoid to execute the actual submit of the form.
 	}
 	

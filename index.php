@@ -152,7 +152,9 @@
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 		
-		header("Refresh:0");
+		// index.php#conf
+		header('Location: index.php#conf');
+		exit;
 	}
 	
 	$conf->webservice->login = "";
