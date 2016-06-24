@@ -206,16 +206,17 @@
 					$cap_data['Alert'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
 				}
 
-				$cancel_check[$warning->eid][$warning->type] = $warning;
+				$cancel_check[$warning->eid][$warning->type][date('Y-m-d', strtotime($warning->from))] = $warning;
 			}
 			else
 			{
-				$white_data[$aid] = $warning;
+				if($warning->level_1 == 0)
+				{
+					$white_data[$aid] = $warning;
+				}
 			}
 		}
 	}
-
-
 
 	//print '<pre>cancel data: ';
 	//	print_r($cancel_check);
@@ -225,14 +226,16 @@
 	foreach($AreaCodesArray as $key => $vl_warning)
 	{
 		//print '<br><pre>'.print_r($vl_warning, true).'</pre>';
-		if(! isset($cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']]) )
+		//print date('Y-m-d', strtotime(str_replace('&nbsp;', ' ',$vl_warning['from']).' + 2 hours ')).' == '.date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
+
+		if(! isset($cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']]) && date('Y-m-d', strtotime(str_replace('&nbsp;', ' ',$vl_warning['from']).' + 2 hours ')) == date('Y-m-d', strtotime('now + '.$_POST['data'].' days')))
 		{
 			// Cancel This
-			//print '<br>Cancel: '.$vl_warning['EMMA_ID'].' '.$vl_warning['type'];
 			unset($warning);
 			$warning = $cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']];
-			if($warning->level > 1)
+			if($vl_warning['level'] > 1)
 			{
+				//print '<br>Cancel: '.$vl_warning['EMMA_ID'].' '.$vl_warning['type'].' '.date('Y-m-d', strtotime(str_replace('&nbsp;', ' ',$vl_warning['from']))).' = '.date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
 				$ident = $vl_warning['identifier'];
 				$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
 				$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];

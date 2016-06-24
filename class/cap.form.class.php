@@ -180,9 +180,9 @@
 
 						$out = '<style>.ui-footer {display:none !important;}</style>';
 						if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<input type="hidden" value="1" id="init_map">';
-						$out.= '<input type="hidden" value="'.$langs->trans('(Warnungen werden bald neu Berechnet!)').'" id="mk_process_lang">';
-						$out.= '<input type="hidden" value="'.$langs->trans('Delete Warning?').'" id="del_warn_lang">';
-						$out.= '<input type="hidden" value="'.$langs->trans('Change Warning without Saving Changes?').'" id="chang_without_save">';
+						$out.= '<input type="hidden" value="'.$langs->trans('WarnGetCalculated').'" id="mk_process_lang">';
+						$out.= '<input type="hidden" value="'.$langs->trans('DelWarning').'" id="del_warn_lang">';
+						$out.= '<input type="hidden" value="'.$langs->trans('ChangeWithoutSave').'" id="chang_without_save">';
 						$out.= '<input type="hidden" value="MD" id="iso">';
 						$out.= '<input type="hidden" value="2" id="green">';
 						$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
@@ -261,7 +261,7 @@
 									// Map
 									$out.= '<ul data-role="listview" data-divider-theme="b">';
 										$out.= '<li data-role="list-divider" data-theme="b">';
-											$out.= '<h1 style="font-size:22px;float:left;">Meteoalarm Visio Level <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
+											$out.= '<h1 style="font-size:22px;float:left;"><span id="CountryInfo"></span> '.date('Y-m-d', strtotime('now + '.$_GET['data'].' days')).' <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
 										$out.= '</li>';
 										
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';

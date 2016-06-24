@@ -159,3 +159,8 @@ LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
 
 PaintGreen=Weise Gebiete
 DESC_PaintGreen=Sollen diese Gebiete ohne Warnung grün Gewarnt werden?
+WarnGetCalculated=(Warnungen werden bald neu Berechnet!)
+DelWarning=Delete Warning?
+ChangeWithoutSave=Change Warning without Saving Changes?
+Delete=Löschen
+Save=Speichern

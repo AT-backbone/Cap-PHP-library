@@ -250,6 +250,8 @@ $( document ).ready(function()
 			});
 		} );
 
+		$('#CountryInfo').html($('#svg-id').attr('country'));
+
 		if($('#svg-id').attr('process') > 0)
 		{
 			$('#mk_process_info').html($('#mk_process_lang').val());
@@ -435,10 +437,13 @@ $( document ).ready(function()
 
 	function calc_map_aktion(tmp_this, is_auto)
 	{
+		//delete(area_arr);
+		//area_arr = [];
 		/*Get*/
 		lang_1 = $('#lang_1').val();
 		cinfo = parseInt($('.'+$(tmp_this).attr('class')).attr('cinfo'));
 		aid = parseInt($('.'+$(tmp_this).attr('class')).attr('aid'));
+		delete(area_arr[aid]);
 		area_arr[aid] = [];
 		area_arr[aid]['name'] = $('.'+$(tmp_this).attr('class')).attr('area_name');
 		for (ty=0; ty < cinfo; ty++) 
@@ -555,7 +560,8 @@ $( document ).ready(function()
 					}
 				}
 			});
-			$(tmp_this).css('fill', level_c[tmp_level]);
+			if(tmp_level == 0 && $(tmp_this).attr('level_1') == 1) $(tmp_this).css('fill', level_c[1]);
+			else $(tmp_this).css('fill', level_c[tmp_level]);
 		}
 		/*Show*/
 		if(is_auto != "auto")
@@ -607,6 +613,7 @@ $( document ).ready(function()
 						if(data !== undefined && coun <= 3)
 						{
 							coun++;
+							problem = 0;
 							// Warnungen
 							tmp_level = parseInt(data['level']);
 							tmp_type = parseInt(data['type']);
@@ -800,16 +807,19 @@ $( document ).ready(function()
 				to 		= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_to_'+ty+'');
 				from 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_from_'+ty+'');
 				ident 	= $('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_ident_'+ty+'');
-				area_arr[aid][ty] = [];
+				area_arr[aktive_warning_aid][ty] = [];
 				
-				area_arr[aid][ty]['level']	= level;
-				area_arr[aid][ty]['type']	= type;
-				area_arr[aid][ty]['text']	= text;
-				area_arr[aid][ty]['to']		= to;
-				area_arr[aid][ty]['from']	= from;
-				area_arr[aid][ty]['ident']	= ident;
+				area_arr[aktive_warning_aid][ty]['level']	= level;
+				area_arr[aktive_warning_aid][ty]['type']	= type;
+				area_arr[aktive_warning_aid][ty]['text']	= text;
+				area_arr[aktive_warning_aid][ty]['to']		= to;
+				area_arr[aktive_warning_aid][ty]['from']	= from;
+				area_arr[aktive_warning_aid][ty]['ident']	= ident;
 			}
-			delete(area_arr[aid][aktive_warning_key]);
+
+			//length_tmp = area_arr[aktive_warning_aid].length;
+			delete(area_arr[aktive_warning_aid][aktive_warning_key]);
+			//area_arr[aktive_warning_aid].length = length_tmp - 1;
 
 			$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('cinfo', cinfo - 1);
 			$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_level_'+aktive_warning_key+'');
@@ -822,7 +832,7 @@ $( document ).ready(function()
 			$('#svg-id polygon[aid='+aktive_warning_aid+']').removeAttr('area_from_'+aktive_warning_key+'');
 
 			tmp_key = 0;
-			$.each(area_arr[aid], function (key2, data) {
+			$.each(area_arr[aktive_warning_aid], function (key2, data) {
 				if(data !== undefined)
 				{
 					// Warnungen
@@ -873,8 +883,9 @@ $( document ).ready(function()
 				for (ty=0; ty < cinfo; ty++) 
 				{
 					area_arr_final[aid][ty] = {};
-					area_arr_final[aid][ty]['name'] = $(this).attr('area_name');
-					area_arr_final[aid][ty]['eid'] = eid;
+					area_arr_final[aid][ty]['name'] 	= $(this).attr('area_name');
+					area_arr_final[aid][ty]['eid'] 		= eid;
+					area_arr_final[aid][ty]['level_1']	= $(this).attr('level_1');
 
 					level 	= parseInt($(this).attr('area_level_'+ty+''));
 					type 	= parseInt($(this).attr('area_type_'+ty+''));
