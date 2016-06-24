@@ -165,7 +165,8 @@
 			switch($type)
 			{
 				case 'meteo_map':
-					print_r($svgArray);
+					//print_r($svgArray);
+						if(!isset($_GET['data'])) $_GET['data'] = 0;
 						$langs_arr = $this->getlang();	
 							
 						foreach($langs_arr as $key_l => $val_l)
@@ -179,6 +180,7 @@
 
 						$out = '<style>.ui-footer {display:none !important;}</style>';
 						if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<input type="hidden" value="1" id="init_map">';
+						$out.= '<input type="hidden" value="'.$langs->trans('(Warnungen werden bald neu Berechnet!)').'" id="mk_process_lang">';
 						$out.= '<input type="hidden" value="'.$langs->trans('Delete Warning?').'" id="del_warn_lang">';
 						$out.= '<input type="hidden" value="'.$langs->trans('Change Warning without Saving Changes?').'" id="chang_without_save">';
 						$out.= '<input type="hidden" value="MD" id="iso">';
@@ -259,7 +261,7 @@
 									// Map
 									$out.= '<ul data-role="listview" data-divider-theme="b">';
 										$out.= '<li data-role="list-divider" data-theme="b">';
-											$out.= '<h1 style="font-size:22px;float:left;">Meteoalarm Visio Level</h1>';
+											$out.= '<h1 style="font-size:22px;float:left;">Meteoalarm Visio Level <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
 										$out.= '</li>';
 										
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';
@@ -280,27 +282,22 @@
 												$out.= '<div class="awareness" id="left_box_level_3" aktive="1" level="3"></div>';
 												$out.= '<div class="awareness" id="left_box_level_4" aktive="1" level="4"></div>';
 											$out.= '</div>';
-
+											
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_1">';
-												$day_text[] = date('d.m.Y', strtotime('now'));
-												$day_value[] = date('d.m.Y', strtotime('now'));
-												$day_text[] = date('d.m.Y', strtotime('now + 1 day'));
-												$day_value[] = date('d.m.Y', strtotime('now + 1 day'));
-												$day_text[] = date('d.m.Y', strtotime('now + 2 day'));
-												$day_value[] = date('d.m.Y', strtotime('now + 2 day'));
-												//$out.= $this->buildSelectValueName('day', 'day', 'day', $day_text, $day_value, date('d.m.Y', strtotime('now')), 'meteo_day');
-												$out.= $this->buildSelect("day", $day_text, "data-native-menu=\"false\" id=\"day\"", $langs->trans("Day"));
+												$day_text[0] = date('d.m.Y', strtotime('now'));
+												$day_text[1] = date('d.m.Y', strtotime('now + 1 day'));
+												$day_text[2] = date('d.m.Y', strtotime('now + 2 day'));
+												$out.= $this->buildSelect("day", $day_text, "data-native-menu=\"false\" id=\"day\"", $langs->trans("Day"), $_GET['data']);
 											$out.= '</div>';
 
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
+												$S_Param_AWT[0] = 'No Type';
 												if(is_array($ParameterArray['AWT']))
 												foreach($ParameterArray['AWT'] as $key => $area_arr)
 												{
-													$S_Param_AWT[$area_arr['id'].'&#59; '.$area_arr['hazard_type']] = $area_arr['hazard_type_DESC'];
-													$G_Param_AWT[$area_arr['id'].'&#59; '.$area_arr['hazard_type']] = 'awareness_type'; //awareness_type awareness_level
+													$S_Param_AWT[$area_arr['id']] = $area_arr['hazard_type_DESC'];
 												}
-												//$out.= $this->buildSelectValueName('type', 'type', $G_Param_AWT, $S_Param_AWT, '');
-												$out.= $this->buildSelect("type", $S_Param_AWT, "data-native-menu=\"false\" id=\"type\"", $langs->trans("Type"));
+												$out.= $this->buildSelect("type", $S_Param_AWT, "data-native-menu=\"false\" id=\"type\"", $langs->trans("Type"), $_GET['type']);
 											$out.= '</div>';
 
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_3">';
@@ -319,8 +316,8 @@
 
 										$out.= '</li>';
 
-										$out.= '<li style="border: 1px solid #dddddd; border-left: none; border-right: none;">';
-										$out.= '</li>';
+										//$out.= '<li style="border: 1px solid #dddddd; border-left: none; border-right: none;">';
+										//$out.= '</li>';
 
 									$out.= '</ul>';
 

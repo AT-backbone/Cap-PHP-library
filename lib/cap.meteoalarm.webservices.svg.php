@@ -8,6 +8,11 @@ $conf->meteoalarm = 1;
 if($conf->meteoalarm == 1)
 {
 	global $out;
+	$data = $_GET['data'];
+	if($data == "") $data = 0;
+
+	$type = $_GET['type'];
+
 	$conf->webservice->password = encrypt_decrypt(2, $conf->webservice->password);
 	ini_set("default_socket_timeout", 60000);
 	require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
@@ -41,6 +46,8 @@ if($conf->meteoalarm == 1)
 		
 		$GenInsInput=array(
 			'iso'=>$iso,
+			'data' => $data,
+			'type' => $type,
 			'EMMA_ID'=>$_GET["EMMA_ID"]
 		);
 		    	

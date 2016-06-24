@@ -233,6 +233,8 @@ $( document ).ready(function()
 	var aktive_level = false;
 	var something_changed = false;
 	var warning_detail_changed = false;
+	var mk_pro_interval;
+	var aktive_types;
 	function ini_meteo_map()
 	{
 		$('div').on('pageshow',function(event, ui){
@@ -247,6 +249,44 @@ $( document ).ready(function()
 				minZoom: 0.5,
 			});
 		} );
+
+		if($('#svg-id').attr('process') > 0)
+		{
+			$('#mk_process_info').html($('#mk_process_lang').val());
+
+			loading_dots();
+
+			mk_pro_interval = setInterval(function(){ 
+				$.ajax({
+					type: "POST",
+					url: 'lib/cap.meteoalarm.webservices.mkv.php',
+					data: '', // serializes the forms elements.
+					success: function(data)
+					{			
+						if(parseInt(data) > 0)
+						{
+							//loading_dots();
+						}
+						else
+						{
+							location.reload();	
+						}
+					}
+				});
+			}, 30000);
+		}
+
+		aktive_types = [];
+		for (var i = 1; i <= 13; i++) {
+			awt_bool = $('#svg-id').attr('awt_'+i);
+			aktive_types[i] = awt_bool;
+			if(i < 10) i_tmp = '0' + i;
+			else i_tmp = i;
+			$('#left_box_type_' + i_tmp).attr('aktive', awt_bool);
+			if(awt_bool == "0") $("#type option[value='"+i+"']").remove();
+		};
+
+		console.log(aktive_types);
 
 		changes_arr['idx'] = [];
 		changes_arr['change'] = [];
@@ -268,6 +308,15 @@ $( document ).ready(function()
 			{
 				warning_detail_changed = true;
 			}
+		});
+
+		
+		$('#reload').click(function() {
+			data = $('#day').val();
+			if(data == "" || data === undefined) data = 0;
+			type = $('#type').val();
+			if(type == "" || type === undefined || type == 0) type = "";
+			window.location = "map.php?data="+data+'&type='+type;
 		});
 
 		$('#Undo').click(function() {
@@ -317,7 +366,7 @@ $( document ).ready(function()
 			$('#svg-id').css('cursor', 'auto');
 			$('#awareness_color_toolbox').css('display', '');
 		});
-		$('#awareness_toolbox .awareness').on('click', function(){
+		$('#awareness_toolbox .awareness[aktive=1]').on('click', function(){
 			if(aktive_type != $(this).attr('type'))
 			{
 				$('#awareness_toolbox .awareness').css('opacity', 0.5);
@@ -333,7 +382,7 @@ $( document ).ready(function()
 			{
 				aktive_type = false;
 				$('#awareness_toolbox .awareness').css('border', '');
-				$('#awareness_toolbox .awareness').css('opacity', 1);
+				$('#awareness_toolbox .awareness[aktive=1]').css('opacity', 1);
 				aktive_level = false;
 				$('#awareness_color_toolbox .awareness').css('border', '');
 				$('#awareness_color_toolbox .awareness').css('opacity', 1);
@@ -392,7 +441,6 @@ $( document ).ready(function()
 		aid = parseInt($('.'+$(tmp_this).attr('class')).attr('aid'));
 		area_arr[aid] = [];
 		area_arr[aid]['name'] = $('.'+$(tmp_this).attr('class')).attr('area_name');
-
 		for (ty=0; ty < cinfo; ty++) 
 		{	//aid
 			level = $('.'+$(tmp_this).attr('class')).attr('area_level_'+ty+'');
@@ -405,18 +453,22 @@ $( document ).ready(function()
 			to = $('.'+$(tmp_this).attr('class')).attr('area_to_'+ty+'');
 			from = $('.'+$(tmp_this).attr('class')).attr('area_from_'+ty+'');
 			ident = $('.'+$(tmp_this).attr('class')).attr('area_ident_'+ty+'');
-			area_arr[aid][ty] = [];
 			
-			area_arr[aid][ty]['level'] 	= level;
-			area_arr[aid][ty]['type'] 	= type;
-			area_arr[aid][ty]['text'] 	= text;
-			area_arr[aid][ty]['text_0']	= text_0;
-			area_arr[aid][ty]['inst_0']	= inst_0;
-			area_arr[aid][ty]['text_1']	= text_1;
-			area_arr[aid][ty]['inst_1']	= inst_1;
-			area_arr[aid][ty]['from'] 	= from;
-			area_arr[aid][ty]['to'] 	= to;
-			area_arr[aid][ty]['ident']	= ident;
+			//if(parseInt(level) > 1)
+			//{
+				area_arr[aid][ty] = [];
+				
+				area_arr[aid][ty]['level'] 	= level;
+				area_arr[aid][ty]['type'] 	= type;
+				area_arr[aid][ty]['text'] 	= text;
+				area_arr[aid][ty]['text_0']	= text_0;
+				area_arr[aid][ty]['inst_0']	= inst_0;
+				area_arr[aid][ty]['text_1']	= text_1;
+				area_arr[aid][ty]['inst_1']	= inst_1;
+				area_arr[aid][ty]['from'] 	= from;
+				area_arr[aid][ty]['to'] 	= to;
+				area_arr[aid][ty]['ident']	= ident;
+			//}
 		}
 
 		if(aktive_level != false && aktive_type != false)
@@ -546,7 +598,6 @@ $( document ).ready(function()
 				}
 
 				out+= '<div class="process_toolbox_area" id="aid_'+key+'">';
-					
 					for (noty=1; noty <= (3 - value.length); noty++) 
 					{
 						out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
@@ -573,9 +624,16 @@ $( document ).ready(function()
 							if(tmp_type < 10) tmp_type_f = '0'+tmp_type;
 							else tmp_type_f = tmp_type;
 							//out+= ' ' + tmp_level + ' ' + tmp_type + ' ';
-							if(problem)	out+= '<div class="problem awareness level_'+tmp_level+'" ktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"><span class="problem_callsign">!</span></div>';
-							else 		out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
-							if(problem) tmp_problem = 1;
+							if(tmp_level > 1) // zeige keine level 1 oder 0
+							{
+								if(problem)	out+= '<div class="problem awareness level_'+tmp_level+'" ktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"><span class="problem_callsign">!</span></div>';
+								else 		out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
+								if(problem) tmp_problem = 1;
+							}
+							else
+							{
+								out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key2+', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
+							}
 						}
 					});
 					
@@ -848,12 +906,15 @@ $( document ).ready(function()
 				}
 			}
 		});
-		console.log(area_arr_final);
+		
+		data = $('#day').val();
+		if(data == "" || data === undefined) data = 0;
+		//console.log(area_arr_final);
 		var jsonOb = JSON.stringify(area_arr_final);
 
 		$.post(
 			"lib/cap.create.from_js_array.php",
-			{cap_array:jsonOb},
+			{cap_array:jsonOb, data:data},
 			function(r){
 				//your success response
 				//alert('OK!');
@@ -934,12 +995,14 @@ $( document ).ready(function()
 					}
 				}
 			});
-
+			
+			data = $('#day').val();
+			if(data == "" || data === undefined) data = 0;
 			var jsonOb = JSON.stringify(area_green_final);
 
 			$.post(
 				"lib/cap.create.from_js_array.php",
-				{cap_array:jsonOb, no_del:1},
+				{cap_array:jsonOb, no_del:1, data:data},
 				function(r){
 					//your success response
 					//alert('OK!');
@@ -966,8 +1029,32 @@ $( document ).ready(function()
 				{no_del:1},
 				function(r){
 					//your success response
-					alert('OK!');
 					$('#CAP_Send_popupDialog').popup( "close" );
+					setTimeout(function(){
+						something_changed=false;
+						$('#mk_process_info').html($('#mk_process_lang').val());
+
+						loading_dots();
+
+						mk_pro_interval = setInterval(function(){ 
+							$.ajax({
+								type: "POST",
+								url: 'lib/cap.meteoalarm.webservices.mkv.php',
+								data: '', // serializes the forms elements.
+								success: function(data)
+								{			
+									if(parseInt(data) > 0)
+									{
+										//loading_dots();
+									}
+									else
+									{
+										location.reload();	
+									}
+								}
+							});
+						}, 30000);
+					}, 100);
 					//send_final(r);
 				}
 			);
@@ -991,6 +1078,26 @@ $( document ).ready(function()
 			$('.pol_'+aid).css('stroke', 'black');
 			$('.pol_'+aid).css('stroke-width', '1');
 		}
+	}
+
+	var mk_pro_dot_interval;
+	var mk_pro_dot_interval_i = 0;
+	function loading_dots()
+	{
+		$('#mk_process_info').html($('#mk_process_lang').val() + ' ');
+		mk_pro_dot_interval_i = 0;
+		mk_pro_dot_interval = setInterval(function(){ 
+			if(mk_pro_dot_interval_i < 3)
+			{
+				$('#mk_process_info').html($('#mk_process_info').html() + '.');
+				mk_pro_dot_interval_i++;
+			}
+			else
+			{
+				$('#mk_process_info').html($('#mk_process_lang').val() + ' ');
+				mk_pro_dot_interval_i = 0;
+			}
+		}, 1000);
 	}
 
 	Date.prototype.yyyymmdd = function() {

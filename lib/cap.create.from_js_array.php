@@ -157,7 +157,9 @@
 	foreach($AreaCodesArray as $key => $vl_warn)
 	{
 		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['id'] 		= $vl_warn['identifier'];
-		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['level'] 		= $vl_warn['level'];
+		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['level'] 		= intval($vl_warn['level']);
+		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['from'] 		= str_replace('&nbsp;', ' ', $vl_warn['from']);
+		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['to'] 		= str_replace('&nbsp;', ' ', $vl_warn['to']);
 		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['sender'] 	= $vl_warn['sender'];
 		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['timestamp'] 	= $vl_warn['timestamp'];
 	}
@@ -182,16 +184,17 @@
 		{
 			if($warning->level > 0)
 			{
-				//print '<br>'.$warning->type.' '.$warning->eid.' '.$cap_ident[$warning->type][$warning->eid];
 				$ident = $cap_ident[$warning->type][$warning->eid]['id'];
 				$warning->aid = $aid;
-				if($ident != "" && $ident == $warning->ident && $cap_ident[$warning->type][$warning->eid]['level'] == $warning->level)
+				if(($ident != "" && $ident == $warning->ident && $cap_ident[$warning->type][$warning->eid]['level'] == $warning->level) || ($cap_ident[$warning->type][$warning->eid]['level'] == $warning->level && $cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from) && $cap_ident[$warning->type][$warning->eid]['to'] == str_replace('&nbsp;', ' ', $warning->to)))
 				{
 					// made no warning
+					//print '<br>NO: '.print_r($warning, true).' '.print_r($cap_ident[$warning->type][$warning->eid], true);
 				}
 				elseif($ident != "")
 				{
 					// made a Update
+					//print 'YES: <br>'.$warning->type.' '.$warning->eid.' '.$warning->level.' '.print_r($cap_ident[$warning->type][$warning->eid], true);
 					$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
 					$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
 					$warning->references 	= $ident;
@@ -227,22 +230,26 @@
 			// Cancel This
 			//print '<br>Cancel: '.$vl_warning['EMMA_ID'].' '.$vl_warning['type'];
 			unset($warning);
-			$ident = $vl_warning['identifier'];
-			$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
-			$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
-			$warning->references 	= $ident;
+			$warning = $cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']];
+			if($warning->level > 1)
+			{
+				$ident = $vl_warning['identifier'];
+				$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
+				$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
+				$warning->references 	= $ident;
 
-			$warning->name = $vl_warning['AreaCaption'];
-			$warning->eid = $vl_warning['EMMA_ID'];
+				$warning->name = $vl_warning['AreaCaption'];
+				$warning->eid = $vl_warning['EMMA_ID'];
 
-			$warning->text_0 = "no warning";
-			$warning->type = $vl_warning['type'];
-			$warning->level = 1;
+				$warning->text_0 = "no warning";
+				$warning->type = $vl_warning['type'];
+				$warning->level = 1;
 
-			$warning->from = date('Y-m-d').' 00:00:00';
-			$warning->to = date('Y-m-d').' 23:59:59';
+				$warning->from = date('Y-m-d').' 00:00:00';
+				$warning->to = date('Y-m-d').' 23:59:59';
 
-			$cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning'][] = $warning;
+				$cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning'][] = $warning;
+			}
 			//print '<pre>Update data: ';
 			//	print_r($cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning']);
 			//print '</pre>';
@@ -290,18 +297,18 @@
 							//print '</pre>';
 							if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $aid > 0)
 							{
-								$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$aid;
+								$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 								if($ref == "Update") 
 								{
-									$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$aid;
+									$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 									if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 									$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\+01:00', strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
 								}
 								$post['sender']					= 'admin@meteoalarm.eu';
-								$post['status']['date'] 		= date('Y-m-d');
+								$post['status']['date'] 		= date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
 								$post['status']['time'] 		= date('H:i:s');
 								$post['status']['plus'] 		= '+';
-								$post['status']['UTC']  		= '01:00';
+								$post['status']['UTC']  		= '02:00';
 								$post['status'] 				= 'Actual';
 								if($ref == "Update")
 								{
@@ -320,18 +327,18 @@
 								$post['severity'] 				= $severity[$data_arr[0]->level];
 								$post['certainty'] 				= 'Likely';
 								
-								$post['effective']['date'] = date("Y-m-d");
+								$post['effective']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
 								$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 								$post['effective']['plus'] = '+';
-								$post['effective']['UTC'] = '01:00';
-								$post['onset']['date'] = date("Y-m-d");
+								$post['effective']['UTC'] = '02:00';
+								$post['onset']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
 								$post['onset']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 								$post['onset']['plus'] = '+';
-								$post['onset']['UTC'] = '01:00';
-								$post['expires']['date'] = date("Y-m-d");
+								$post['onset']['UTC'] = '02:00';
+								$post['expires']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
 								$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
 								$post['expires']['plus'] = '+';
-								$post['expires']['UTC'] = '01:00';
+								$post['expires']['UTC'] = '02:00';
 
 								$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
 

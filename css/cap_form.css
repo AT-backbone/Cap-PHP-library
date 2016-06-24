@@ -112,6 +112,10 @@ textarea{
   width: 130px;
 }
 
+#map-container{
+	margin-bottom: 9px;
+}
+
 .awareness_div {
 	position: absolute; 
 	top: -1px; 
@@ -306,7 +310,7 @@ textarea{
 	border-bottom: none;
 	overflow-y: auto;
 	overflow-x: hidden;
-	pointer-events: auto;
+	pointer-events: none;
 }
 
 .process_toolbox_area {
