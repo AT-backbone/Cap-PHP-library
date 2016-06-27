@@ -709,7 +709,7 @@ $( document ).ready(function()
 				$('#inst_1').val('');
 				$('#AreaDetailDIV').css('background-color', '#ffffff');
 				$('#AreaDetailUL').css('opacity', 1);
-				$('#AreaDetailUL').css('pointer-events', 'auto ');
+				$('#AreaDetailUL').css('pointer-events', 'auto');
 
 				$('#left_area_name').html(tmp_area_name);
 
