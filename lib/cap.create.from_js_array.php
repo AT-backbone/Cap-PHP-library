@@ -198,7 +198,7 @@
 					$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
 					$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
 					$warning->references 	= $ident;
-					$cap_data['Update'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
+					$cap_data['Update'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0).$warning->eid][] = $warning; // Updates have to be send one by one!
 				}
 				else
 				{
