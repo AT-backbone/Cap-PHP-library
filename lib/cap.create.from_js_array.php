@@ -173,9 +173,11 @@
 	if($_GET['cap_array']) $cap_array_tmp = $_GET['cap_array'];
 	$cap_array = json_decode($cap_array_tmp);
 
-	//print '<pre>cap array: ';
-	//	print_r($cap_array);
-	//print '</pre>';
+	//if($_POST['no_del']){
+	//	print '<pre>cap array: ';
+	//		print_r($cap_array);
+	//	print '</pre>';
+	//}
 	foreach($cap_array as $aid => $warr)
 	{
 		//print $warr->name;
