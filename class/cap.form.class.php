@@ -192,7 +192,7 @@
 								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
 									// Info
 									$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
-										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Area: <span id="left_area_name">None</span></h1></li>';
+										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Area: <span id="left_area_name">None</span><span id="right_area_type"></span></h1></li>';
 										
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[0]]).': '.$this->tooltip($type, $langs->trans("LabelLanguage")).'</legend>';
@@ -340,7 +340,7 @@
 							$out.= '<div data-role="header" id="CAPpopupDialog_header" data-theme="a">';
 								$out.= '<h2>'.$langs->trans('PaintGreen').'</h2>';
 							$out.= '</div>';
-							$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content">';
+							$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
 								$out.= $langs->trans('DESC_PaintGreen');
 								$out.= '<div data-role="collapsibleset" data-content-theme="a" data-iconpos="right" id="set">';
 								$out.= '</div>';
@@ -380,6 +380,17 @@
 										$out.= '</a>';
 									$out.= '</div>';
 								$out.= '</div><!-- /grid-a -->';
+							$out.= '</div>';
+						$out.= '</div>';
+
+						$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
+							$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
+							$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
+								$out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
+							$out.= '</div>';
+							$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
+								$out.= '<ul data-role="listview" data-inset="true" data-shadow="false" id="SOAPUL">';
+								$out.= '</ul>';
 							$out.= '</div>';
 						$out.= '</div>';
 

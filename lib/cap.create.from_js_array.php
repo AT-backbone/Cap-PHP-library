@@ -171,12 +171,14 @@
 	$cap_data = array();
 	if($_POST['cap_array']) $cap_array_tmp = $_POST['cap_array'];
 	if($_GET['cap_array']) $cap_array_tmp = $_GET['cap_array'];
+	if($_POST['awt']) $awt_arr = $_POST['awt'];
+	if($_GET['awt']) $awt_arr = $_GET['awt'];
 	$cap_array = json_decode($cap_array_tmp);
 
 	//if($_POST['no_del']){
-	//	print '<pre>cap array: ';
-	//		print_r($cap_array);
-	//	print '</pre>';
+	//print '<pre>cap array: ';
+	//	print_r($cap_array);
+	//print '</pre>';
 	//}
 	foreach($cap_array as $aid => $warr)
 	{
@@ -190,13 +192,13 @@
 				$warning->aid = $aid;
 				if(($ident != "" && $ident == $warning->ident && $cap_ident[$warning->type][$warning->eid]['level'] == $warning->level) || ($cap_ident[$warning->type][$warning->eid]['level'] == $warning->level && $cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from) && $cap_ident[$warning->type][$warning->eid]['to'] == str_replace('&nbsp;', ' ', $warning->to)))
 				{
-					// made no warning
+					// made no warning (warning allready exist)
 					//print '<br>NO: '.print_r($warning, true).' '.print_r($cap_ident[$warning->type][$warning->eid], true);
 				}
 				elseif($ident != "")
 				{
 					// made a Update
-					//print 'YES: <br>'.$warning->type.' '.$warning->eid.' '.$warning->level.' '.print_r($cap_ident[$warning->type][$warning->eid], true);
+					//print 'YES: <br>'.$warning->type.' '.$warning->eid.' '.$warning->level.' '.$warning->ident.' '.print_r($cap_ident[$warning->type][$warning->eid], true);
 					$warning->sender 		= $cap_ident[$warning->type][$warning->eid]['sender'];
 					$warning->timestamp 	= $cap_ident[$warning->type][$warning->eid]['timestamp'];
 					$warning->references 	= $ident;
@@ -208,6 +210,7 @@
 					$cap_data['Alert'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
 				}
 
+				//$warn_ges[$aid][$warning->type] = $warning->eid;
 				$cancel_check[$warning->eid][$warning->type][date('Y-m-d', strtotime($warning->from))] = $warning;
 			}
 			else
@@ -388,11 +391,15 @@
 			}
 		}
 	}
-
+	//print_r($_POST['awt']);
+	//$awt_arr = $_POST['awt'];
+	//print_r($white_data);
 	unset($data);
 	foreach($white_data as $aid => $data)
-	{
-		$white_area[] = array( 'aid' => $aid,  'eid' => $data->eid, 'name' => $data->name);
+	{	
+		//foreach ($awt_arr as $type => $awt_bool) {
+			$white_area[] = array( 'aid' => $aid,  'eid' => $data->eid, 'name' => $data->name);
+		//}
 	}
 
 	echo json_encode($white_area);

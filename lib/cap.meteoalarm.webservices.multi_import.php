@@ -122,6 +122,7 @@
 		{
 			if($file != "." && $file != ".." && $file != "ftp_prc" && $file != "skeleton_green")
 			{
+				$out = "";
 				// lege das output verzeichnis fest
 				$_POST[filename] = $file;
 					// sezte das passwort
@@ -133,7 +134,7 @@
 					$filename = $_POST[filename];
 					if($_POST['import']==1) $import = true; else $import = false;
 					// if($_POST['debug']==1) $debug = true; else $debug = false;
-					$debug = true;
+					$debug = false;
 					$import = true;
 					
 					if ($_POST[filename])
@@ -151,7 +152,7 @@
 						    'dolibarrkey'=>$conf->webservice->securitykey,
 						    'sourceapplication'=>$conf->webservice->WS_METHOD,
 						  	'login'=> $conf->webservice->login,
-					  	  'password'=> $conf->webservice->password);
+					  		'password'=> $conf->webservice->password);
 					 
 						$tmpfile = $conf->cap->output.'/'.$_POST[filename];
 						$handle = fopen($tmpfile, "r");                  // Open the temp file
@@ -187,9 +188,9 @@
 						        // Display the result
 						    }
 						}
-						if($result["syntaxcheck"]["capformat_error"]==1) $format_error = "YES"; else $format_error = "NO";
-						if($result["syntaxcheck"]["capvalue_error"]==1) $value_error = "YES"; else $value_error = "NO";
-						if($result["syntaxcheck"]["cnt_errors"]>0) $error_bool = '<p>CAP format Error:'.$format_error.'<p>CAP value Error:'.$value_error.'<p>Cnt Errors:'.$result["syntaxcheck"]["cnt_errors"].'<p>';
+						if($result["syntaxcheck"]["capformat_error"]==1) 	$format_error = "YES"; else $format_error = "NO";
+						if($result["syntaxcheck"]["capvalue_error"]==1) 	$value_error = "YES"; else $value_error = "NO";
+						if($result["syntaxcheck"]["cnt_errors"]>0) 			$error_bool = '<p>CAP format Error:'.$format_error.'<p>CAP value Error:'.$value_error.'<p>Cnt Errors:'.$result["syntaxcheck"]["cnt_errors"].'<p>';
 						
 						// Display the request and response
 						$out.= '<h2>Response</h2>';
@@ -199,7 +200,16 @@
 						$out.= '<pre>'.$error_bool.$result["syntaxcheck"]["error_log"].$result["syntaxcheck"]["debug_msg"].'</pre>';
 					
 					}
-				print $out;
+
+				$icon = 'info';
+				if($result["syntaxcheck"]["capformat_error"]==1)	$icon = 'alert';
+				if($result["syntaxcheck"]["capvalue_error"]==1)		$icon = 'alert';
+				if($result["syntaxcheck"]["cnt_errors"]>0)			$icon = 'alert';
+				if($result["syntaxcheck"]["warning_import"] < 1) 	$icon = 'alert';
+				print '<li data-role="collapsible" data-icon="'.$icon.'" data-iconpos="right" data-inset="false" class="ui-icon-alert '.$icon.'">';
+					print '<h2>'.$file.'</h2>';
+					print $out;
+				print '</li>';
 			}
 		}
 	}

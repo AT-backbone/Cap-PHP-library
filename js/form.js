@@ -312,7 +312,22 @@ $( document ).ready(function()
 			}
 		});
 
-		
+		//$( "#CAP_SOAP_popupDialog" ).collapsible({
+		//	expand: function( event, ui ) {
+		//		$('#CAP_SOAP_popupDialog').popup( "reposition");
+		//	}
+		//});
+
+		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) { 
+			$("#CAP_SOAP_popupDialog").popup("reposition", {positionTo: 'origin'});
+			$('#CAP_SOAP_popupDialog').resize();
+		});
+
+		$( "#CAP_SOAP_popupDialog" ).on( "collapsiblecollapse", function( event, ui ) {
+			$("#CAP_SOAP_popupDialog").popup("reposition", {positionTo: 'origin'});
+			$('#CAP_SOAP_popupDialog').resize();
+		});
+
 		$('#reload').click(function() {
 			data = $('#day').val();
 			if(data == "" || data === undefined) data = 0;
@@ -361,7 +376,7 @@ $( document ).ready(function()
 		$('li:not(#map-container)').on('click', function(){
 			aktive_type = false;
 			$('#awareness_toolbox .awareness').css('border', '');
-			$('#awareness_toolbox .awareness').css('opacity', 1);
+			$('#awareness_toolbox .awareness[aktive=1]').css('opacity', 1);
 			aktive_level = false;
 			$('#awareness_color_toolbox .awareness').css('border', '');
 			$('#awareness_color_toolbox .awareness').css('opacity', 1);
@@ -440,24 +455,26 @@ $( document ).ready(function()
 		//delete(area_arr);
 		//area_arr = [];
 		/*Get*/
+		//this_class= $(tmp_this).attr('class');
+		//this_classtest= $('.'+this_class+'[main=1]').attr('aid');
 		lang_1 = $('#lang_1').val();
-		cinfo = parseInt($('.'+$(tmp_this).attr('class')).attr('cinfo'));
-		aid = parseInt($('.'+$(tmp_this).attr('class')).attr('aid'));
+		cinfo = parseInt($('.'+$(tmp_this).attr('class')+'[main=1]').attr('cinfo'));
+		aid = parseInt($('.'+$(tmp_this).attr('class')+'[main=1]').attr('aid'));
 		delete(area_arr[aid]);
 		area_arr[aid] = [];
-		area_arr[aid]['name'] = $('.'+$(tmp_this).attr('class')).attr('area_name');
+		area_arr[aid]['name'] = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_name');
 		for (ty=0; ty < cinfo; ty++) 
 		{	//aid
-			level = $('.'+$(tmp_this).attr('class')).attr('area_level_'+ty+'');
-			type = $('.'+$(tmp_this).attr('class')).attr('area_type_'+ty+'');
-			text = $('.'+$(tmp_this).attr('class')).attr('area_text_'+ty+'');
-			text_0 = $('.'+$(tmp_this).attr('class')).attr('area_text_'+ty+'_en-gb');
-			inst_0 = $('.'+$(tmp_this).attr('class')).attr('area_inst_'+ty+'_en-gb');
-			text_1 = $('.'+$(tmp_this).attr('class')).attr('area_text_'+ty+'_'+lang_1);
-			inst_1 = $('.'+$(tmp_this).attr('class')).attr('area_inst_'+ty+'_'+lang_1);
-			to = $('.'+$(tmp_this).attr('class')).attr('area_to_'+ty+'');
-			from = $('.'+$(tmp_this).attr('class')).attr('area_from_'+ty+'');
-			ident = $('.'+$(tmp_this).attr('class')).attr('area_ident_'+ty+'');
+			level = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_level_'+ty+'');
+			type = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_type_'+ty+'');
+			text = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_text_'+ty+'');
+			text_0 = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_text_'+ty+'_en-gb');
+			inst_0 = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_inst_'+ty+'_en-gb');
+			text_1 = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_text_'+ty+'_'+lang_1);
+			inst_1 = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_inst_'+ty+'_'+lang_1);
+			to = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_to_'+ty+'');
+			from = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_from_'+ty+'');
+			ident = $('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_ident_'+ty+'');
 			
 			//if(parseInt(level) > 1)
 			//{
@@ -484,8 +501,8 @@ $( document ).ready(function()
 			*/
 			processing = true;
 			tmp_wid = 0;
-			cinfo = parseInt($('.'+$(tmp_this).attr('class')).attr('cinfo'));
-			aid = parseInt($('.'+$(tmp_this).attr('class')).attr('aid'));
+			cinfo = parseInt($('.'+$(tmp_this).attr('class')+'[main=1]').attr('cinfo'));
+			aid = parseInt($('.'+$(tmp_this).attr('class')+'[main=1]').attr('aid'));
 			
 			$.each(area_arr[aid], function (key, data) {
 				if(data !== undefined)
@@ -517,14 +534,14 @@ $( document ).ready(function()
 				area_arr[aid][ty]['to'] 	= date.yyyymmdd()+" 23:59:59";
 				area_arr[aid][ty]['from'] 	= date.yyyymmdd()+" 00:00:00";
 				
-				if(cinfo != 3) $('.'+$(tmp_this).attr('class')).attr('cinfo', cinfo + 1 );
+				if(cinfo != 3) $('.'+$(tmp_this).attr('class')+'[main=1]').attr('cinfo', cinfo + 1 );
 
-				$(tmp_this).attr('area_level_'+ty+'', area_arr[aid][ty]['level']);
-				$(tmp_this).attr('area_type_'+ty+'', area_arr[aid][ty]['type']);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_level_'+ty+'', area_arr[aid][ty]['level']);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_type_'+ty+'', area_arr[aid][ty]['type']);
 
-				$(tmp_this).attr('area_to_'+ty+'', area_arr[aid][ty]['to']);
-				$(tmp_this).attr('area_from_'+ty+'', area_arr[aid][ty]['from']);
-				$(tmp_this).attr('area_ident_'+ty+'', area_arr[aid][ty]['ident']);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_to_'+ty+'', area_arr[aid][ty]['to']);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_from_'+ty+'', area_arr[aid][ty]['from']);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('area_ident_'+ty+'', area_arr[aid][ty]['ident']);
 				//console.log(area_arr[aid][ty]);
 				//$(tmp_this).attr('area_type['+cinfo+']', aktive_type);
 			}
@@ -566,12 +583,12 @@ $( document ).ready(function()
 		/*Show*/
 		if(is_auto != "auto")
 		{
-			if($('.'+$(tmp_this).attr('class')).attr('sel') == 1 && aktive_level == false && aktive_type == false)
+			if($('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel') == 1 && aktive_level == false && aktive_type == false)
 			{
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '1');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'black');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 1);
-				$('.'+$(tmp_this).attr('class')).attr('sel', 0);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 0);
 				area_arr[aid].pop();
 				delete(area_arr[aid]);
 			}
@@ -580,7 +597,7 @@ $( document ).ready(function()
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '3px');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'blue');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 0.6);
-				$('.'+$(tmp_this).attr('class')).attr('sel', 1);
+				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 1);
 			}
 		}
 		// show Area in Proccess list
@@ -712,6 +729,8 @@ $( document ).ready(function()
 				$('#AreaDetailUL').css('pointer-events', 'auto');
 
 				$('#left_area_name').html(tmp_area_name);
+				$('#right_area_type').html('');
+				$('#right_area_type').append($(tmp_this).clone());
 
 				$('#desc_0').val((tmp_area_text_0)).trigger('input');
 				$('#inst_0').val((tmp_area_inst_0)).trigger('input');
@@ -871,7 +890,7 @@ $( document ).ready(function()
 	var area_green = {};
 	function get_all_warnings()
 	{
-		$('svg polygon').each(function (key, data) {
+		$('svg polygon[main=1]').each(function (key, data) {
 			lang_1 = $('#lang_1').val();
 			cinfo = parseInt($(this).attr('cinfo'));
 			aid = parseInt($(this).attr('aid'));
@@ -917,6 +936,21 @@ $( document ).ready(function()
 				}
 			}
 		});
+	
+		awt_ok = [];
+		awt_ok[0] = 0;
+		for (var ty = 1; ty <= 13; ty++) 
+		{
+			if($('#svg-id').attr('awt_'+ty) == 1)
+			{
+				awt_ok[ty] = 1;
+			}
+			else
+			{
+				awt_ok[ty] = 0;
+			}
+		}
+		var awt_ok_js = JSON.stringify(awt_ok);
 		
 		data = $('#day').val();
 		if(data == "" || data === undefined) data = 0;
@@ -925,7 +959,7 @@ $( document ).ready(function()
 
 		$.post(
 			"lib/cap.create.from_js_array.php",
-			{cap_array:jsonOb, data:data},
+			{cap_array:jsonOb, data:data, awt:awt_ok_js},
 			function(r){
 				//your success response
 				//alert('OK!');
@@ -1029,6 +1063,7 @@ $( document ).ready(function()
 
 		$('#CAPpopupDialog').popup( "close" );
 		setTimeout(function(){
+			$('#set').html('').trigger('create');
         	$('#CAP_Send_popupDialog').popup();
 			$('#CAP_Send_popupDialog').popup( "open" );
         }, 100);
@@ -1044,9 +1079,15 @@ $( document ).ready(function()
 				{no_del:1},
 				function(r){
 					//your success response
+					$('#SOAPUL').html(r).trigger('create');
+					
 					$('#CAP_Send_popupDialog').popup( "close" );
 					setTimeout(function(){
-						something_changed=false;
+						$('#CAP_SOAP_popupDialog').popup();
+						$('#CAP_SOAP_popupDialog').popup( "open" );
+					}, 100);
+					setTimeout(function(){
+						//something_changed=false;
 						$('#mk_process_info').html($('#mk_process_lang').val());
 
 						loading_dots();

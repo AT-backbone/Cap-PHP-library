@@ -3,7 +3,6 @@
  *       \file       htdocs/public/webservices/cap_export_client.php
  *       \brief      Client to make a client call to Meteoalarm WebServices "putCap"
  */
-
 $conf->meteoalarm = 1;
 if($conf->meteoalarm == 1)
 {
@@ -107,6 +106,7 @@ if($conf->meteoalarm == 1)
     		'iso'=>$iso,
     		'show_warnings'=> 1,
     		'view_type'=>2,
+    		'date_b'=> $_POST['data'],
     		'use_warntable'=>1
     	);
 		    	
