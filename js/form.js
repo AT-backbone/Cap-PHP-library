@@ -983,7 +983,7 @@ $( document ).ready(function()
 		$.each(jQuery.parseJSON(r), function(index, data) {
 			// file position and name: data
 				content+= '<div class="cbGroup'+data['aid']+'">';
-					content+= '<label for="checkbox-'+data['aid']+'">'+data['name']+'</label>';
+					content+= '<label for="checkbox-'+data['aid']+'">'+data['name']+' type: '+data['type']+'</label>';
 				content+= '</div>';
 		});
 		content+= '</form>';
@@ -1017,32 +1017,32 @@ $( document ).ready(function()
 				if(area_green_final[aid] === undefined)
 				{
 					area_green_final[aid] = {};
+				}
 					
-					cinfo = 3;
-					for (var ty = 1; ty <= 13; ty++) 
-					{
-						if($('#svg-id').attr('awt_'+ty) == 1)
-						{
-							area_green_final[aid][ty] = {};
-							area_green_final[aid][ty]['name'] = data['name'];
+				cinfo = 3;
+				//for (var ty = 1; ty <= 13; ty++) 
+				//{
+				if($('#svg-id').attr('awt_'+data['type']) == 1)
+				{
+					area_green_final[aid][data['type']] = {};
+					area_green_final[aid][data['type']]['name'] = data['name'];
 
-							level 	= 1;
-							type 	= ty;
-							//to 		= 
-							//from 	= 
-							
-							if(level > 0 && type > 0)
-							{
-								area_green_final[aid][ty]['eid'] 	= data['eid'];
-								area_green_final[aid][ty]['level'] 	= level;
-								area_green_final[aid][ty]['type'] 	= type;
-								area_green_final[aid][ty]['text_0']	= 'no warning';
-								area_green_final[aid][ty]['from'] 	= date.yyyymmdd() + ' 00:00:00';
-								area_green_final[aid][ty]['to'] 	= date.yyyymmdd() + ' 23:59:59';
-							}
-						}
+					level 	= 1;
+					type 	= data['type'];
+					//to 	= 
+					//from 	= 
+					
+					if(level > 0 && type > 0)
+					{
+						area_green_final[aid][data['type']]['eid'] 	= data['eid'];
+						area_green_final[aid][data['type']]['level'] 	= level;
+						area_green_final[aid][data['type']]['type'] 	= type;
+						area_green_final[aid][data['type']]['text_0']	= 'no warning';
+						area_green_final[aid][data['type']]['from'] 	= date.yyyymmdd() + ' 00:00:00';
+						area_green_final[aid][data['type']]['to'] 	= date.yyyymmdd() + ' 23:59:59';
 					}
 				}
+				//}
 			});
 			
 			data = $('#day').val();

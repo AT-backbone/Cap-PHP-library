@@ -137,6 +137,15 @@
 	{			
 		if($conf->webservice->on > 0)
 		{
+			if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
+			{
+				include 'lib/cap.meteoalarm.webservices.Area.php';		
+				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
+				if(!empty($AreaCodesArray['document']['AreaInfo']))
+				{
+					$AreaArray = $AreaCodesArray['document']['AreaInfo'];
+				}
+			}
 			if(file_exists('lib/cap.meteoalarm.webservices.vl.php'))
 			{
 				require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
@@ -150,12 +159,21 @@
 		}
 	}
 
+
+
+	foreach($AreaArray as $key => $area)
+	{
+		$AreaIDArray[$area['aid']] = $area;
+	}
+	unset($AreaArray);
+
 	//print '<pre>vl: ';
 	//	print_r($AreaCodesArray);
 	//print '</pre>';
 
 	foreach($AreaCodesArray as $key => $vl_warn)
 	{
+		$AreaIDArray[$vl_warn['aid']][$vl_warn['type']] = $vl_warn['level'];
 		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['id'] 		= $vl_warn['identifier'];
 		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['level'] 		= intval($vl_warn['level']);
 		$cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['from'] 		= str_replace('&nbsp;', ' ', $vl_warn['from']);
@@ -169,11 +187,12 @@
 	//print '</pre>';
 
 	$cap_data = array();
-	if($_POST['cap_array']) $cap_array_tmp = $_POST['cap_array'];
-	if($_GET['cap_array']) $cap_array_tmp = $_GET['cap_array'];
-	if($_POST['awt']) $awt_arr = $_POST['awt'];
-	if($_GET['awt']) $awt_arr = $_GET['awt'];
+	if(!empty($_POST['cap_array'])) $cap_array_tmp = $_POST['cap_array'];
+	if(!empty($_GET['cap_array'])) $cap_array_tmp = $_GET['cap_array'];
+	if(!empty($_POST['awt'])) $awt_arr_tmp = $_POST['awt'];
+	if(!empty($_GET['awt'])) $awt_arr_tmp = $_GET['awt'];
 	$cap_array = json_decode($cap_array_tmp);
+	$awt_arr = json_decode($awt_arr_tmp);
 
 	//if($_POST['no_del']){
 	//print '<pre>cap array: ';
@@ -210,15 +229,8 @@
 					$cap_data['Alert'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
 				}
 
-				//$warn_ges[$aid][$warning->type] = $warning->eid;
+				$AreaIDArray[$aid][$warning->type] = $warning->level;
 				$cancel_check[$warning->eid][$warning->type][date('Y-m-d', strtotime($warning->from))] = $warning;
-			}
-			else
-			{
-				if($warning->level_1 == 0)
-				{
-					$white_data[$aid] = $warning;
-				}
 			}
 		}
 	}
@@ -263,6 +275,23 @@
 			//print '</pre>';
 		}
 	}
+	
+	//print_r($awt_arr);
+	foreach($AreaIDArray as $aid => $data)
+	{
+		foreach($awt_arr as $type => $awt_bool)
+		{
+			if($awt_bool == 1 && $data[$type] < 1)
+			{
+				//print '<br>w: '.$data['AreaCaption'].' '.$data[$type];
+				$white_data[$aid][$type] = array('aid' => $data['aid'], 'eid' => $data['EMMA_ID'], 'name' => $data['AreaCaption']);
+			}
+		}
+	}
+
+	//print '<pre>Area: ';
+	//	print_r($AreaIDArray);
+	//print '</pre>';
 
 	//print '<pre>cap data: ';
 	//	print_r($cap_data);
@@ -303,8 +332,9 @@
 							//print '<pre>data_arr data: ';
 							//	print_r($data_arr);
 							//print '</pre>';
-							if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $aid > 0)
+							if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $data_arr[0]->eid != "")
 							{
+								//print 'TEST';
 								$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 								if($ref == "Update") 
 								{
@@ -377,7 +407,7 @@
 								{
 									$post['geocode']['value'][] = $data->eid.'<|>emma_id';
 								}
-
+								//print_r($post);
 								$cap = new CAP_Class($post);
 								$cap->buildCap();
 								$cap->destination = $conf->cap->output;
@@ -397,9 +427,9 @@
 	unset($data);
 	foreach($white_data as $aid => $data)
 	{	
-		//foreach ($awt_arr as $type => $awt_bool) {
-			$white_area[] = array( 'aid' => $aid,  'eid' => $data->eid, 'name' => $data->name);
-		//}
+		foreach ($data as $type => $wh_arr) {
+			$white_area[] = array( 'aid' => $wh_arr['aid'],  'eid' => $wh_arr['eid'], 'name' => $wh_arr['name'], 'type' => $type);
+		}
 	}
 
 	echo json_encode($white_area);

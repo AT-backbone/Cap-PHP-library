@@ -340,9 +340,9 @@
 							$out.= '<div data-role="header" id="CAPpopupDialog_header" data-theme="a">';
 								$out.= '<h2>'.$langs->trans('PaintGreen').'</h2>';
 							$out.= '</div>';
-							$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
+							$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content">';
 								$out.= $langs->trans('DESC_PaintGreen');
-								$out.= '<div data-role="collapsibleset" data-content-theme="a" data-iconpos="right" id="set">';
+								$out.= '<div data-role="collapsibleset" data-content-theme="a" data-iconpos="right" id="set" style="max-height: 500px; overflow: auto;">';
 								$out.= '</div>';
 
 								// Dissmis or OK
