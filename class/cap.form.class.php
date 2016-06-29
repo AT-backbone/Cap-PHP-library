@@ -192,10 +192,44 @@
 								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
 									// Info
 									$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
-										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Area: <span id="left_area_name">None</span><span id="right_area_type"></span></h1></li>';
-										
+										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">';
+											$out.= 'Area: ';
+											$out.= '<span id="left_area_name"></span>';
+											$out.= '<span id="select_area_name" style="position: absolute;top: 10px;width: 43%;margin-left: 10px;">';
+											//$out.= 'None';
+												foreach($AreaCodesArray as $key => $area_arr)
+												{
+													$S_Area[$area_arr['aid']] = $area_arr['AreaCaption'];
+												}
+												
+												if(is_array($S_Area))
+												{
+													$out.= '<select name="emmaid" id="emmaid_select" data-native-menu="false" multiple="multiple" class="" tabindex="-1" data-mini="true">';
+														$out.= '<option data-placeholder="true"></option>';
+														foreach($S_Area as $eid => $areaname)
+														{
+															$out.= '<option value="'.$eid.'">'.$areaname.'</option>';
+														}
+													$out.= '</select>';
+												}
+
+											$out.= '</span>';
+											$out.= '<span id="right_area_type"></span>';
+											$out.= '</h1>';
+										$out.= '</li>';
+										$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
+											$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
+											$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
+												$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
+													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
+													$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
+													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
+													$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
+												$out.= '</fieldset>';
+											$out.= '</span>';
+										$out.= '</li>';
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[0]]).': '.$this->tooltip($type, $langs->trans("LabelLanguage")).'</legend>';
+											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[0]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
 										$out.= '</li>';
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 											$out.= '<div class="lang_input" id="'.$langs_keys[0].'">';
@@ -205,7 +239,7 @@
 										$out.= '</li>';
 
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[1]]).': '.$this->tooltip($type, $langs->trans("LabelLanguage")).'</legend>';
+											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[1]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
 										$out.= '</li>';
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 											
@@ -218,7 +252,7 @@
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
-													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip($type, $langs->trans("LabelEffectiveDesc")).'</legend>';
+													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectiveDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
 														$out.= '<input '.$status_theme.' id="from_0" type="time" name="effective[time]" step="1" value="'.$st['time'].'">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
@@ -227,7 +261,7 @@
 													$out.= '</div>';
 												$out.= '</div>';
 												$out.= '<div class="ui-block-b">';
-													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip($type, $langs->trans("LabelExpiresDesc")).'</legend>';
+													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
 														$out.= '<input '.$status_theme.' id="to_0" type="time" name="expires[time]" step="1" value="'.$st['time'].'">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
