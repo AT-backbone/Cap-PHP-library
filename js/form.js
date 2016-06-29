@@ -361,6 +361,20 @@ $( document ).ready(function()
 		});
 
 		$('#emmaid_select').change(function(r) {
+
+			$('#svg-id polygon').css('stroke-width', '1');
+			$('#svg-id polygon').css('stroke', 'black');
+			$('#svg-id polygon').css('fill-opacity', 1);
+			$('#svg-id polygon'+'[main=1]').attr('sel', 0);
+
+			$.each($(this).val(), function(index, data){
+				$('#svg-id polygon[aid='+data+']').css('stroke-width', '3px');
+				$('#svg-id polygon[aid='+data+']').css('stroke', 'blue');
+				$('#svg-id polygon[aid='+data+']').css('fill-opacity', 0.6);
+				$('#svg-id polygon[aid='+data+']'+'[main=1]').attr('sel', 1);
+				calc_map_aktion($('#svg-id polygon[aid='+data+']'), 'auto');
+			});
+			
 			//console.log(r);
 			//area_warning_detail(aid, key_type, tmp_this);
 		});
@@ -908,17 +922,40 @@ $( document ).ready(function()
 			else // when multiselect is aktive
 			{
 				$('#emmaid_select option:checked').each(function(index, data){
+					test_aktive_warning_aid = $(data).val();
+					if(area_arr[test_aktive_warning_aid] !== undefined)
+					{
+						if(area_arr[test_aktive_warning_aid][0] !== undefined)
+						{
+							if(area_arr[test_aktive_warning_aid][0]['type'] !== undefined)
+							{
+								arr_to_clone = test_aktive_warning_aid;
+							}
+						}
+					}
+				});
+				$('#emmaid_select option:checked').each(function(index, data){
 					aktive_warning_aid = $(data).val();
 					aktive_warning_name = $(data).html();
 					if(area_arr[aktive_warning_aid] === undefined)
 					{
-						arr_to_clone = getFirstKey(area_arr);
 						area_arr[aktive_warning_aid] = [];
-						area_arr[aktive_warning_aid]['name'] = aktive_warning_name;
-						if(area_arr[arr_to_clone][0] !== undefined) area_arr[aktive_warning_aid][0] = area_arr[arr_to_clone][0];
-						if(area_arr[arr_to_clone][1] !== undefined) area_arr[aktive_warning_aid][1] = area_arr[arr_to_clone][1];
-						if(area_arr[arr_to_clone][2] !== undefined) area_arr[aktive_warning_aid][2] = area_arr[arr_to_clone][2];
 					}
+					
+					if(area_arr[aktive_warning_aid]['name'] === undefined) area_arr[aktive_warning_aid]['name'] = aktive_warning_name;
+					if(area_arr[arr_to_clone][0] !== undefined && area_arr[aktive_warning_aid][0] === undefined)
+					{
+						area_arr[aktive_warning_aid][0] = area_arr[arr_to_clone][0];
+					}
+					if(area_arr[arr_to_clone][1] !== undefined && area_arr[aktive_warning_aid][1] === undefined)
+					{
+						area_arr[aktive_warning_aid][1] = area_arr[arr_to_clone][1];
+					}
+					if(area_arr[arr_to_clone][2] !== undefined && area_arr[aktive_warning_aid][2] === undefined)
+					{
+						area_arr[aktive_warning_aid][2] = area_arr[arr_to_clone][2];
+					}
+					
 				});
 				$('#emmaid_select option:checked').each(function(index, data){
 					aktive_warning_aid = $(data).val();
@@ -929,6 +966,7 @@ $( document ).ready(function()
 					area_arr[aktive_warning_aid][aktive_warning_key]['inst_1']	= $('#inst_1').val();
 					area_arr[aktive_warning_aid][aktive_warning_key]['from'] 	= $('#from_0').val();
 					area_arr[aktive_warning_aid][aktive_warning_key]['to'] 		= $('#to_0').val();
+					$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('cinfo', area_arr[aktive_warning_aid].length);
 					$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+aktive_warning_key+'_en-gb', area_arr[aktive_warning_aid][aktive_warning_key]['text_0']);
 					$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_inst_'+aktive_warning_key+'_en-gb', area_arr[aktive_warning_aid][aktive_warning_key]['inst_0']);
 					$('#svg-id polygon[aid='+aktive_warning_aid+']').attr('area_text_'+aktive_warning_key+'_'+lang_1+'', area_arr[aktive_warning_aid][aktive_warning_key]['text_1']);
