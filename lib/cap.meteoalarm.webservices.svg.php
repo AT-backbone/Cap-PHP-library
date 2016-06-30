@@ -47,6 +47,7 @@ if($conf->meteoalarm == 1)
 		$GenInsInput=array(
 			'iso'=>$iso,
 			'data' => $data,
+			'utc' => date('P'),
 			'type' => $type,
 			'EMMA_ID'=>$_GET["EMMA_ID"]
 		);

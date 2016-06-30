@@ -166,5 +166,5 @@ ChangeWithoutSave=Change Warning without Saving Changes?
 Delete=Delete
 Save=Save
 SOAPCaps=SOAP Debug Info
-MultiAreaSelectLabel=Multiarea auswahl
+MultiAreaSelectLabel=Multiarea selection
 DESC_MultiAreaSelectLabel=ON erlaubt eine mehrfach auswahl von warnungs typen mit dieser mehere warnungen gleichzeitig editiert werden können

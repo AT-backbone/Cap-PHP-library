@@ -105,6 +105,20 @@ textarea{
 	cursor: pointer;
 }
 
+.lang_collaps {
+	padding: 0px !important;
+	border-top: none !important;
+	border-left: 1px solid #dddddd !important;
+}
+
+.lang_collaps div{
+	border-top: none !important;
+}
+
+.lang_collaps div a{
+	border-top: none !important;
+}
+
 .mapinfo{
   position: absolute;
   top: 15px;

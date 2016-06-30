@@ -185,6 +185,8 @@
 						$out.= '<input type="hidden" value="'.$langs->trans('ChangeWithoutSave').'" id="chang_without_save">';
 						$out.= '<input type="hidden" value="MD" id="iso">';
 						$out.= '<input type="hidden" value="2" id="green">';
+						$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
+						$timezone_name =  date('P').' '.date('T').' '.date_default_timezone_get();
 						$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
 						$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
 						$out.= '<div id="map_main_div" class="ui-grid-a">';
@@ -228,16 +230,26 @@
 												$out.= '</fieldset>';
 											$out.= '</span>';
 										$out.= '</li>';
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[0]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
-										$out.= '</li>';
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-											$out.= '<div class="lang_input" id="'.$langs_keys[0].'">';
-													$out.= '<textarea id="desc_0" placeholder="description" name="description['.$langs_keys[0].']">'.$this->description[$i].'</textarea>';
-													$out.= '<textarea id="inst_0" placeholder="instruction" name="instruction['.$langs_keys[0].']">'.$this->instruction[$i].'</textarea>';
-											$out.= '</div>';
-										$out.= '</li>';
 
+										$i = 0;
+										foreach($langs_keys as $key => $lang_val)
+										{
+											//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+											$not_collaps = '';
+											if($i <= 1) $not_collaps = 'data-collapsed="false"';
+											$out.= '<li data-role="collapsible" '.$not_collaps.' data-iconpos="right" data-inset="false" class="lang_collaps">';
+												$out.= '<legend>'.$langs->trans($langs_arr[$lang_val]).': </legend>';
+											//$out.= '</li>';
+											//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+												//$out.= $this->tooltip($lang_val, $langs->trans("LabelLanguage"));
+												$out.= '<div class="lang_input" id="'.$lang_val.'">';
+														$out.= '<textarea id="desc_0" placeholder="description" name="description['.$lang_val.']"></textarea>';
+														$out.= '<textarea id="inst_0" placeholder="instruction" name="instruction['.$lang_val.']"></textarea>';
+												$out.= '</div>';
+											$out.= '</li>';
+											$i++;
+										}
+										/*
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[1]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
 										$out.= '</li>';
@@ -248,8 +260,8 @@
 													$out.= '<textarea id="inst_1" placeholder="instruction" name="instruction['.$langs_keys[1].']">'.$this->instruction[$i].'</textarea>';
 											$out.= '</div>';
 										$out.= '</li>';
-
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+										*/
+										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;border-top: none; border-right: none;">';
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
 													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectiveDesc")).'</legend>';
@@ -259,6 +271,7 @@
 															$out.= '<span class="glyphicon glyphicon-time"></span>';
 														$out.= '</span>';
 													$out.= '</div>';
+													$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 												$out.= '</div>';
 												$out.= '<div class="ui-block-b">';
 													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresDesc")).'</legend>';
@@ -272,7 +285,7 @@
 											$out.= '</div><!-- /grid-a -->';
 										$out.= '</li>';
 
-										$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px;">'; // solfe border problem: margin-bottom:10px;
+										$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px; border-right: none;">'; // solfe border problem: margin-bottom:10px;
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
 													$out.= '<a id="del_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';

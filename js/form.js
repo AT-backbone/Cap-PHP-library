@@ -299,6 +299,10 @@ $( document ).ready(function()
 		$(window).bind('beforeunload', function(){
 			if(something_changed)
 			{
+				//e.returnValue = 'If you refresh the page your data will be lost';
+				//return confirm('If you refresh the page your data will be lost');
+				//return 'If you refresh the page your data will be lost';
+				//return confirm("Confirm refresh");
 				return 'Are you sure you want to leave?';
 			}
 		});
@@ -751,6 +755,7 @@ $( document ).ready(function()
 
 	var aktive_warning_aid;
 	var aktive_warning_type;
+	var aktive_warning_level;
 	var aktive_warning_key;
 	function area_warning_detail(aid, key_type, tmp_this)
 	{
@@ -788,9 +793,9 @@ $( document ).ready(function()
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
+				aktive_warning_type = 0;
 			}
 			$(tmp_this).css('border', '');
-			//aktive_warning_type = 0;
 			multi = false;
 		}
 		else if($('input[name=multisel_area_name_bool]:checked').val() == "1" && aktive_warning_type !== undefined && aktive_warning_type != 0 && aktive_warning_type != "" && aktive_warning_type !=  $('#svg-id polygon[aid='+aid+']').attr('area_type_'+key_type))
@@ -808,6 +813,7 @@ $( document ).ready(function()
 			eid = $('#svg-id polygon[aid='+aid+']').attr('eid');
 			aktive_warning_key = key_type;
 			aktive_warning_type =  $('#svg-id polygon[aid='+aid+']').attr('area_type_'+key_type);
+			aktive_warning_level =  $('#svg-id polygon[aid='+aid+']').attr('area_level_'+key_type);
 			if( $('input[name=multisel_area_name_bool]:checked').val() == "0") $('.process_toolbox_area .awareness').css('border', '');
 			$(tmp_this).css('border', '1px solid #0000ff');
 			if(key_type > -1)
@@ -925,13 +931,17 @@ $( document ).ready(function()
 					test_aktive_warning_aid = $(data).val();
 					if(area_arr[test_aktive_warning_aid] !== undefined)
 					{
-						if(area_arr[test_aktive_warning_aid][0] !== undefined)
-						{
-							if(area_arr[test_aktive_warning_aid][0]['type'] !== undefined)
+						//area_arr[test_aktive_warning_aid].length
+						$.each(area_arr[test_aktive_warning_aid], function(index, data){
+							if(data['type'] == aktive_warning_type)
 							{
-								arr_to_clone = test_aktive_warning_aid;
+								if(data['level'] == aktive_warning_level)
+								{
+									arr_to_clone = test_aktive_warning_aid;
+									arr_key_to_clone = index;
+								}
 							}
-						}
+						});
 					}
 				});
 				$('#emmaid_select option:checked').each(function(index, data){
@@ -940,22 +950,13 @@ $( document ).ready(function()
 					if(area_arr[aktive_warning_aid] === undefined)
 					{
 						area_arr[aktive_warning_aid] = [];
+						area_arr[aktive_warning_aid][0] = area_arr[arr_to_clone][arr_key_to_clone]
 					}
-					
-					if(area_arr[aktive_warning_aid]['name'] === undefined) area_arr[aktive_warning_aid]['name'] = aktive_warning_name;
-					if(area_arr[arr_to_clone][0] !== undefined && area_arr[aktive_warning_aid][0] === undefined)
+					else if(arr_to_clone != aktive_warning_aid)
 					{
-						area_arr[aktive_warning_aid][0] = area_arr[arr_to_clone][0];
+						if(area_arr[aktive_warning_aid]['name'] === undefined) area_arr[aktive_warning_aid]['name'] = aktive_warning_name;
+						area_arr[aktive_warning_aid][area_arr[aktive_warning_aid].length] = area_arr[arr_to_clone][arr_key_to_clone];
 					}
-					if(area_arr[arr_to_clone][1] !== undefined && area_arr[aktive_warning_aid][1] === undefined)
-					{
-						area_arr[aktive_warning_aid][1] = area_arr[arr_to_clone][1];
-					}
-					if(area_arr[arr_to_clone][2] !== undefined && area_arr[aktive_warning_aid][2] === undefined)
-					{
-						area_arr[aktive_warning_aid][2] = area_arr[arr_to_clone][2];
-					}
-					
 				});
 				$('#emmaid_select option:checked').each(function(index, data){
 					aktive_warning_aid = $(data).val();
@@ -1249,7 +1250,6 @@ $( document ).ready(function()
 			function(r){
 				//your success response
 				//alert('OK!');
-				$.mobile.loading( "hide" );
 				area_green = jQuery.parseJSON(r);
 				if(area_green !== null)
 				{
@@ -1267,11 +1267,14 @@ $( document ).ready(function()
 	{
 		//console.log(r);
 		var content = '<form>';
-		$.each(jQuery.parseJSON(r), function(index, data) {
+		var r_arr = jQuery.parseJSON(r);
+		$.each(r_arr, function(index, data) {
 			// file position and name: data
 				content+= '<div class="cbGroup'+data['aid']+'">';
 					content+= '<label for="checkbox-'+data['aid']+'">'+data['name']+' type: '+data['type']+'</label>';
 				content+= '</div>';
+				console.log(index + ' / ' + r_arr.length);
+				//$.mobile.loading( "option", "text", index + ' / ' + r_arr.length ).trigger('create');
 		});
 		content+= '</form>';
 
@@ -1281,12 +1284,17 @@ $( document ).ready(function()
 		$('#set').append( content ).trigger('create');
 		$('#set').collapsibleset( "refresh" );
 		
-		$.each(jQuery.parseJSON(r), function(index, data) {
+		$.each(r_arr, function(index, data) {
 			var newBox = '<input type="checkbox" name="checkbox-'+data['aid']+'" id="checkbox-'+data['aid']+'" checked="checked"/>';
-			$(".cbGroup"+data['aid']).append(newBox).trigger('create');
+			$(".cbGroup"+data['aid']).append(newBox);
+			console.log(index + ' / ' + r_arr.length);
 		});
 
+		//$('#set div').trigger('create');
+
 		$('div .ui-checkbox').css('margin', '-1px 0');
+
+		$.mobile.loading( "hide" );
 
 		$('#CAPpopupDialog').popup();
 		$('#CAPpopupDialog').popup( "open" );
@@ -1336,6 +1344,7 @@ $( document ).ready(function()
 			if(data == "" || data === undefined) data = 0;
 			var jsonOb = JSON.stringify(area_green_final);
 			
+			$.mobile.loading( "hide" );
 			JQ_loader('Loading', 'b');
 			
 			$.post(
@@ -1351,6 +1360,7 @@ $( document ).ready(function()
 			);
 		}
 
+		$.mobile.loading( "hide" );
 		$('#CAPpopupDialog').popup( "close" );
 		setTimeout(function(){
 			$('#set').html('').trigger('create');
