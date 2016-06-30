@@ -365,18 +365,22 @@
 								$post['severity'] 				= $severity[$data_arr[0]->level];
 								$post['certainty'] 				= 'Likely';
 								
+								$timezone_date = date('P');
+								$timezone_date_p = $timezone_date[0];
+								$timezone_date_h = substr($timezone_date, 1);
+
 								$post['effective']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
 								$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
-								$post['effective']['plus'] = '+';
-								$post['effective']['UTC'] = '02:00';
+								$post['effective']['plus'] = $timezone_date_p;
+								$post['effective']['UTC'] = $timezone_date_h;
 								$post['onset']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
 								$post['onset']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
-								$post['onset']['plus'] = '+';
-								$post['onset']['UTC'] = '02:00';
+								$post['onset']['plus'] = $timezone_date_p;
+								$post['onset']['UTC'] = $timezone_date_h;
 								$post['expires']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
 								$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
-								$post['expires']['plus'] = '+';
-								$post['expires']['UTC'] = '02:00';
+								$post['expires']['plus'] = $timezone_date_p;
+								$post['expires']['UTC'] = $timezone_date_h;
 
 								$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
 
