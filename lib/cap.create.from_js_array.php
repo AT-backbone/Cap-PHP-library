@@ -357,8 +357,11 @@
 									$post['msgType'] 				= 'Alert'; // Or Update / Cancel
 								}
 								$post['scope'] 					= 'Public';
-								$post['event'][$langs_keys[0]]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
-								$post['event'][$langs_keys[1]]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
+								foreach($langs_keys as $key => $lang_val)
+								{
+									$post['event'][$lang_val]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
+								}
+								//$post['event'][$langs_keys[1]]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
 								$post['category'] 				= 'Met';				
 								$post['responseType']			= 'Monitor';
 								$post['urgency'] 				= 'Immediate';
@@ -383,14 +386,19 @@
 								$post['expires']['UTC'] = $timezone_date_h;
 
 								$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
-
-								if($data_arr[0]->text_0 != "")	
+								//print_r($data_arr[0]);
+								foreach($langs_keys as $key => $lang_val)
 								{
-									$post['language'][] = $langs_keys[0];
-									$post['headline'][$langs_keys[0]] = $headline_level[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
-									$post['description'][$langs_keys[0]] = $data_arr[0]->text_0;
-									if($data_arr[0]->inst_0 != "") $post['instruction'][$langs_keys[0]] = $data_arr[0]->inst_0;
+									if($data_arr[0]->{'text_'.$key} != "")	
+									{
+										$post['language'][] = $lang_val;
+										$post['headline'][$lang_val] = $headline_level[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
+										$post['description'][$lang_val] = $data_arr[0]->{'text_'.$key};
+										if($data_arr[0]->inst_0 != "") $post['instruction'][$lang_val] = $data_arr[0]->{'inst_'.$key};
+									}
+
 								}
+								/*
 								if($data_arr[0]->text_1 != "")
 								{
 									$post['language'][] = $langs_keys[1];
@@ -398,7 +406,7 @@
 									$post['description'][$langs_keys[1]] = $data_arr[0]->text_1;
 									if($data_arr[0]->inst_1 != "") $post['instruction'][$langs_keys[1]] = $data_arr[0]->inst_1;
 								}
-
+								*/
 								$post['areaDesc'] = $data_arr[0]->name;
 
 								$post['parameter']['valueName'][0] = 'awareness_level';

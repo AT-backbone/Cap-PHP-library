@@ -187,8 +187,12 @@
 						$out.= '<input type="hidden" value="2" id="green">';
 						$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
 						$timezone_name =  date('P').' '.date('T').' '.date_default_timezone_get();
-						$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
-						$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
+						foreach($langs_keys as $key => $lang_val)
+						{
+							$out.= '<input name="langs" type="hidden" value="'.$lang_val.'" id="lang_'.$key.'">';
+						}
+						//$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
+						//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
 						$out.= '<div id="map_main_div" class="ui-grid-a">';
 							$out.= '<div class="ui-block-a" style="width: 30%;">';
 								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
@@ -243,8 +247,8 @@
 											//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 												//$out.= $this->tooltip($lang_val, $langs->trans("LabelLanguage"));
 												$out.= '<div class="lang_input" id="'.$lang_val.'">';
-														$out.= '<textarea id="desc_0" placeholder="description" name="description['.$lang_val.']"></textarea>';
-														$out.= '<textarea id="inst_0" placeholder="instruction" name="instruction['.$lang_val.']"></textarea>';
+														$out.= '<textarea id="desc_'.$key.'" placeholder="description" name="description['.$lang_val.']"></textarea>';
+														$out.= '<textarea id="inst_'.$key.'" placeholder="instruction" name="instruction['.$lang_val.']"></textarea>';
 												$out.= '</div>';
 											$out.= '</li>';
 											$i++;
