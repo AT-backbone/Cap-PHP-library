@@ -712,14 +712,21 @@ $( document ).ready(function()
 				}
 
 				out+= '<div class="process_toolbox_area" id="aid_'+key+'">';
-					for (noty=1; noty <= (3 - value.length); noty++) 
+					noty_i = 0;
+					$.each(value, function (key2, data) {
+						if(data['type'] !== undefined)
+						{
+							noty_i++;
+						}
+					});
+					for (noty=1; noty <= (3 - noty_i); noty++) 
 					{
 						out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+key+', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
 					}
 					coun = 1;
 
 					$.each(value, function (key2, data) {
-						if(data !== undefined && coun <= 3)
+						if(data['type'] !== undefined && coun <= 3)
 						{
 							coun++;
 							problem = 0;
@@ -992,7 +999,22 @@ $( document ).ready(function()
 					else if(arr_to_clone != aktive_warning_aid)
 					{
 						if(area_arr[aktive_warning_aid]['name'] === undefined) area_arr[aktive_warning_aid]['name'] = aktive_warning_name;
-						area_arr[aktive_warning_aid][area_arr[aktive_warning_aid].length] = area_arr[arr_to_clone][arr_key_to_clone];
+						if(area_arr[aktive_warning_aid][area_arr[aktive_warning_aid].length - 1] === undefined)
+						{
+							area_arr[aktive_warning_aid][area_arr[aktive_warning_aid].length] = area_arr[arr_to_clone][arr_key_to_clone];
+						}
+						if(area_arr[aktive_warning_aid][area_arr[aktive_warning_aid].length] === undefined)
+						{
+							unterschied = true;
+							$.each(area_arr[aktive_warning_aid], function(index, data){
+								if(data['type'] == area_arr[arr_to_clone][arr_key_to_clone]['type'] && data['level'] == area_arr[arr_to_clone][arr_key_to_clone]['level']) 
+									unterschied = false;
+							});
+							if(unterschied == true)
+							{
+								area_arr[aktive_warning_aid][area_arr[aktive_warning_aid].length] = area_arr[arr_to_clone][arr_key_to_clone];
+							}
+						}
 					}
 				});
 				$('#emmaid_select option:checked').each(function(index, data){
