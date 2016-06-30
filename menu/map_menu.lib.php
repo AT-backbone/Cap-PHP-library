@@ -37,7 +37,8 @@
 			// $type['conf'][] = "conf_output";
 			// Identifier conf
 			$type['conf'][] = "WMO_OID";
-			$type['conf'][] = "ISO";			
+			$type['conf'][] = "ISO";	
+			$type['conf'][] = "timezone";			
 			$type['conf'][] = "ID_ID";
 			$type['conf'][] = "identifier_time";
 

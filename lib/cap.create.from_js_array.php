@@ -428,7 +428,10 @@
 	foreach($white_data as $aid => $data)
 	{	
 		foreach ($data as $type => $wh_arr) {
-			$white_area[] = array( 'aid' => $wh_arr['aid'],  'eid' => $wh_arr['eid'], 'name' => $wh_arr['name'], 'type' => $type);
+			if($wh_arr['aid'] > 0)
+			{
+				$white_area[] = array( 'aid' => $wh_arr['aid'],  'eid' => $wh_arr['eid'], 'name' => $wh_arr['name'], 'type' => $type);
+			}
 		}
 	}
 

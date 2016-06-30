@@ -35,11 +35,11 @@
 		var $version = '1.3';
 		var $login_id = 0;
 		/**
-     * initialize Class with Data
-     *
-     * @param   string	$post			Array with Type/Tag of CAP 1.1
-     * @return	None
-     */
+	 * initialize Class with Data
+	 *
+	 * @param   string	$post			Array with Type/Tag of CAP 1.1
+	 * @return	None
+	 */
 		function __construct($post = "")
 		{
 			if(is_array($post))
@@ -133,13 +133,13 @@
 			return $status_theme;
 		}
 		
-    /**
-     * Output input field for CAP 1.1 value's
-     *
-     * @param   string	$type			Type/Tag of CAP 1.1
-     * @param   string	$lang			the language (in RFC 3066)
-     * @return	string						HTML edit field
-     */
+	/**
+	 * Output input field for CAP 1.1 value's
+	 *
+	 * @param   string	$type			Type/Tag of CAP 1.1
+	 * @param   string	$lang			the language (in RFC 3066)
+	 * @return	string						HTML edit field
+	 */
 		function InputStandard($type, $status_arr = "")
 		{
 			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG;
@@ -254,7 +254,7 @@
 												$out.= '<div class="ui-block-a">';
 													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectiveDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-														$out.= '<input '.$status_theme.' id="from_0" type="time" name="effective[time]" step="1" value="'.$st['time'].'">';
+														$out.= '<input '.$status_theme.' id="from_0" type="time" name="effective[time]" step="1" value="00:00:00">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 															$out.= '<span class="glyphicon glyphicon-time"></span>';
 														$out.= '</span>';
@@ -263,7 +263,7 @@
 												$out.= '<div class="ui-block-b">';
 													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-														$out.= '<input '.$status_theme.' id="to_0" type="time" name="expires[time]" step="1" value="'.$st['time'].'">';
+														$out.= '<input '.$status_theme.' id="to_0" type="time" name="expires[time]" step="1" value="23:59:59">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 															$out.= '<span class="glyphicon glyphicon-time"></span>';
 														$out.= '</span>';
@@ -534,7 +534,7 @@
 					// Actual / Test / Exercise / System / Test / Draft
 					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), " ".$status_theme_st." data-native-menu=\"false\"", "Status", $this->status[0]); 
 
-				 	// Alert / Update / Cancel / Ack / Error
+					// Alert / Update / Cancel / Ack / Error
 					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), " ".$status_theme_ms." data-native-menu=\"false\" id=\"msgType\"", "MsgType", $this->msgType[0]); 
 
 					// Public / Restricted / Private
@@ -956,8 +956,14 @@
 					case 'ISO':
 						if(!empty($conf->identifier->ISO)) $status_theme = 'data-theme="f"';
 						$out = $langs->trans("LabelISO").': <input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
-					 break;
-					 
+						break;
+
+					case 'timezone':
+							$timezone = $this->timezone_list();
+							$aktive_timezone = date_default_timezone_get();
+							$out.= $this->buildSelect('conf[timezone]', $timezone, "data-native-menu=\"false\"", "timezone", $aktive_timezone );
+						break;
+
 					case 'identifier_time':
 						if(!empty($conf->identifier->time->on)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
@@ -1188,7 +1194,7 @@
 														
 														$(document).on("pageshow", "#alert" ,function ()
 														{
-						                  $( "#Login-alert" ).popup();
+										  $( "#Login-alert" ).popup();
 															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 100 );
 														});
 													</script>
@@ -1221,8 +1227,8 @@
 		 
 		 function tooltip($name, $info, $alttext='ToolboxInfo')
 		 {
-		 		$out = '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$alttext.'">'.$name.'</a>';
-		 		$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:100%;">';
+				$out = '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$alttext.'">'.$name.'</a>';
+				$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:100%;">';
 				$out.= $info;
 				$out.= '</div>';
 			
@@ -1231,15 +1237,15 @@
 		
 		var $script = "";
 		/**
-     * Output Html select
-     *
-     * @param   string	$name					The POST/GET name of the select
-     * @param   array		$data					the content of the select array("option value" => "option Name")
-     * @param   string  $option
-     * @param   string  $placeholder 
-     * @param 	int 		$empty 				if 1 then make a empty value 
-     * @return	string								HTML select field
-     */
+	 * Output Html select
+	 *
+	 * @param   string	$name					The POST/GET name of the select
+	 * @param   array		$data					the content of the select array("option value" => "option Name")
+	 * @param   string  $option
+	 * @param   string  $placeholder 
+	 * @param 	int 		$empty 				if 1 then make a empty value 
+	 * @return	string								HTML select field
+	 */
 		function buildSelectValueName($name, $name2, $name3, $S_Area, $G_Area, $select = array(), $extclass = "")
 		{
 			$style_color = "";
@@ -1314,15 +1320,15 @@
 		}
 		
 		/**
-     * Output Html select
-     *
-     * @param   string	$name					The POST/GET name of the select
-     * @param   array		$data					the content of the select array("option value" => "option Name")
-     * @param   string  $option
-     * @param   string  $placeholder 
-     * @param 	int 		$empty 				if 1 then make a empty value 
-     * @return	string								HTML select field
-     */
+	 * Output Html select
+	 *
+	 * @param   string	$name					The POST/GET name of the select
+	 * @param   array		$data					the content of the select array("option value" => "option Name")
+	 * @param   string  $option
+	 * @param   string  $placeholder 
+	 * @param 	int 		$empty 				if 1 then make a empty value 
+	 * @return	string								HTML select field
+	 */
 		function buildSelect($name= "", $data = array(), $option = "", $placeholder = "", $selected="", $empty=0)
 		{
 			$out = '<select name="'.$name.'" '.$option.'>';
@@ -1367,10 +1373,10 @@
 		}
 	
 		/**
-     * encrypt and decrypt function for passwords
-     *     
-     * @return	string
-     */
+	 * encrypt and decrypt function for passwords
+	 *     
+	 * @return	string
+	 */
 		function encrypt_decrypt($action, $string, $key) 
 		{
 			global $conf;
@@ -1399,10 +1405,10 @@
 		}
 		
 		/**
-     * Output RFC 3066 Array
-     *     
-     * @return	string						Array with RFC 3066 Array
-     */
+	 * Output RFC 3066 Array
+	 *     
+	 * @return	string						Array with RFC 3066 Array
+	 */
 		function getlang($config = false){
 			global $conf;
 			
@@ -1425,10 +1431,10 @@
 		}
 
 	  /**
-     * Output Html Head
-     *
-     * @return	string						HTML Head
-     */
+	 * Output Html Head
+	 *
+	 * @return	string						HTML Head
+	 */
 		function Header_llx()
 		{			
 			global $conf;
@@ -1454,14 +1460,14 @@
 				{
 					$out.= '<link rel="stylesheet" href="css/MeteoalarmMobile.css" />';
 					if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
- 				}
- 				else
- 				{
- 					$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
- 				}
- 				
- 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
- 				// OpenStreetMap
+				}
+				else
+				{
+					$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
+				}
+				
+				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
+				// OpenStreetMap
 				$out.= '<script src="includes/jquery/jquery.geo.min.js"></script>';
 				
 				// Clockpicker Addon
@@ -1477,10 +1483,10 @@
 		
 				
 		/**
-     * Output Html Form
-     *
-     * @return	string						HTML Form
-     */
+	 * Output Html Form
+	 *
+	 * @return	string						HTML Form
+	 */
 		function Form()
 		{
 			global $conf, $langs;
@@ -1516,20 +1522,20 @@
 							$out.= '<div data-role="page" id="'.$pagename.'">';
 
 								$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
-	    						$out.= '<!-- panel content goes here -->';
-	    						$out.= '<ul data-role="listview">';
-	    							
-	    							$out.= '<li style="height: 91px;">';
-	    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
-	    								$out.= '<h1>';
-	    									$out.= $langs->trans('Cap Creator');
-	    								$out.= '</h1>';
-	    								$out.= '<br>';
-	    								$out.= '<span style="font-size: 10px;">';
-	    									$out.= 'v'.$this->version;
-	    								$out.= '</span>';
-	    							$out.= '</li>';    							
-	    							
+								$out.= '<!-- panel content goes here -->';
+								$out.= '<ul data-role="listview">';
+									
+									$out.= '<li style="height: 91px;">';
+										$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+										$out.= '<h1>';
+											$out.= $langs->trans('Cap Creator');
+										$out.= '</h1>';
+										$out.= '<br>';
+										$out.= '<span style="font-size: 10px;">';
+											$out.= 'v'.$this->version;
+										$out.= '</span>';
+									$out.= '</li>';    							
+									
 										foreach($Pages_arr as $link => $Page_Name)
 										{
 											if($link != 'popup' && $link != 'next' && $link != 'notitle' && $link != 'header')
@@ -1715,7 +1721,7 @@
 																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).selectmenu().selectmenu("refresh");				
 																			 if($( "'.$change_is.'[name=\''.$change_name.'\']" ).is("select"))
 																			 {
-																			  	$( "'.$change_is.'[name=\''.$change_name.'\']" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
+																				$( "'.$change_is.'[name=\''.$change_name.'\']" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
 																			 }
 																			 else
 																			 {
@@ -1731,7 +1737,7 @@
 																			 $( "#'.$change_name.'" ).selectmenu().selectmenu("refresh");					
 																			 if($( "#'.$change_name.'" ).is("select"))
 																			 {
-																			  	$( "#'.$change_name.'" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
+																				$( "#'.$change_name.'" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
 																			 }
 																			 else
 																			 {
@@ -1896,20 +1902,20 @@
 					$out.= '<div data-role="page" id="capview">';
 					
 							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
-    						$out.= '<!-- panel content goes here -->';
-    						$out.= '<ul data-role="listview">';
-    							
-    							$out.= '<li style="height: 91px;">';
-    								$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
-    								$out.= '<h1>';
-    									$out.= 'Cap Creator';
-    								$out.= '</h1>';
-    								$out.= '<br>';
-    								$out.= '<span style="font-size: 10px;">';
-    									$out.= 'Cap v1.1';
-    								$out.= '</span>';
-    							$out.= '</li>';
-    							
+							$out.= '<!-- panel content goes here -->';
+							$out.= '<ul data-role="listview">';
+								
+								$out.= '<li style="height: 91px;">';
+									$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
+									$out.= '<h1>';
+										$out.= 'Cap Creator';
+									$out.= '</h1>';
+									$out.= '<br>';
+									$out.= '<span style="font-size: 10px;">';
+										$out.= 'Cap v1.1';
+									$out.= '</span>';
+								$out.= '</li>';
+								
 									foreach($Pages_arr as $link => $Page_Name)
 									{
 										if(!in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"'; // turn all links to ajax off (when not jquery can not link to the other pages)
@@ -2042,8 +2048,8 @@
 					 */
 					 if($conf->webservice->on == 1)
 					 {
-					 	
-					 	$out.= '<div data-role="page" id="capview">';
+						
+						$out.= '<div data-role="page" id="capview">';
 							
 							// HEADER
 							$out.= '<div data-theme="b" data-role="header">';								
@@ -2255,72 +2261,77 @@
 			/*
 			 * Special
 			 */
-		 	
+			
 			 // set langs
 			$lang_arr = $post['lang'];
 			unset($post['lang']);
 			foreach($lang_arr as $lang_key => $lang_name)
 			{			 	 
-			 	if($lang_key != "key" && $lang_name != "name" && $lang_key != "remove")
-			 	{
-			 		$conf->lang[$lang_key] = $lang_name;
-		 		}
-		 	}
- 	
- 				// conf[lang][remove][en-GB]:remove -> conf[lang][remove][remove]:en-GB
+				if($lang_key != "key" && $lang_name != "name" && $lang_key != "remove")
+				{
+					$conf->lang[$lang_key] = $lang_name;
+				}
+			}
+	
+				// conf[lang][remove][en-GB]:remove -> conf[lang][remove][remove]:en-GB
 			$rmv_lang_arr = array_flip($lang_arr['remove']);
 			unset($post['lang']['remove']);
 			foreach($conf->lang as $lang_key => $lang_name)
 			{			 	 
-			 	if(in_array($lang_key, $rmv_lang_arr))
-			 	{
-			 		unset($conf->lang[$lang_key]);
-			 	}
-		 	}
+				if(in_array($lang_key, $rmv_lang_arr))
+				{
+					unset($conf->lang[$lang_key]);
+				}
+			}
 			 
 			// set visible langs
 			$lang_arr = $post['select']['lang'];
 			unset($post['select']);
 			foreach($conf->select->lang as $lang_name => $lang_boolen)
 			{			 	 
-			 	if(in_array($lang_name, $lang_arr))
-			 	{
-			 		$conf->select->lang[$lang_name] = 1;
-			 	}
-			 	else
-			 	{
-			 		$conf->select->lang[$lang_name] = 0;
-			 	}
-		 	}
-			 
+				if(in_array($lang_name, $lang_arr))
+				{
+					$conf->select->lang[$lang_name] = 1;
+				}
+				else
+				{
+					$conf->select->lang[$lang_name] = 0;
+				}
+			}
+			// specifie the automatic time set
+			if($post['timezone'] != "")
+			{
+				$conf->timezone = $post['timezone'];
+			}
+			unset($post['timezone']);
 			// specifie the automatic time set
 			if($post['identifier']['time']['on'] == "on")
-		 	{
-			 	$conf->identifier->time->on = 1;
+			{
+				$conf->identifier->time->on = 1;
 			}	
 			else
 			{
-			 	$conf->identifier->time->on = 0;
+				$conf->identifier->time->on = 0;
 			}		
 			unset($post['identifier']['time']);
 				
 			if($post['cap']['save'] == "on")
-		 	{
-			 	$conf->cap->save = 1;
+			{
+				$conf->cap->save = 1;
 			}	
 			else
 			{
-			 	$conf->cap->save = 0;
+				$conf->cap->save = 0;
 			}		
 			unset($post['cap']['save']);
 			
 			if($post['webservice']['on'] == "on")
-		 	{
-			 	$conf->webservice->on = 1;
+			{
+				$conf->webservice->on = 1;
 			}	
 			else
 			{
-			 	$conf->webservice->on = 0;
+				$conf->webservice->on = 0;
 			}		
 			unset($post['webservice']['on']);
 			
@@ -2388,7 +2399,7 @@
 			global $conf;
 			
 			$out = "<?php"."\n";
-			$out.= "date_default_timezone_set('".$conf->timezone->set_default."');"."\n";
+			$out.= "date_default_timezone_set('".$conf->timezone."');"."\n";
 			// CONF BASE
 			if(is_object($conf) || is_array($conf_arr))
 			{
@@ -2488,6 +2499,39 @@
 				$i--;
 			}
 			return $space;
+		}
+
+		function timezone_list() {
+			static $timezones = null;
+
+			if ($timezones === null) {
+				$timezones = [];
+				$offsets = [];
+				$now = new DateTime();
+
+				foreach (DateTimeZone::listIdentifiers() as $timezone) {
+					$now->setTimezone(new DateTimeZone($timezone));
+					$offsets[] = $offset = $now->getOffset();
+					$timezones[$timezone] = '(' . $this->format_GMT_offset($offset) . ') ' . $this->format_timezone_name($timezone);
+				}
+
+				array_multisort($offsets, $timezones);
+			}
+
+			return $timezones;
+		}
+
+		function format_GMT_offset($offset) {
+			$hours = intval($offset / 3600);
+			$minutes = abs(intval($offset % 3600 / 60));
+			return 'GMT' . ($offset ? sprintf('%+03d:%02d', $hours, $minutes) : '');
+		}
+
+		function format_timezone_name($name) {
+			$name = str_replace('/', ', ', $name);
+			$name = str_replace('_', ' ', $name);
+			$name = str_replace('St ', 'St. ', $name);
+			return $name;
 		}
 	}
 	

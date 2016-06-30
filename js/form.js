@@ -291,7 +291,7 @@ $( document ).ready(function()
 			if(awt_bool == "0") $("#type option[value='"+i+"']").remove();
 		};
 
-		console.log(aktive_types);
+		//console.log(aktive_types);
 
 		changes_arr['idx'] = [];
 		changes_arr['change'] = [];
@@ -784,7 +784,7 @@ $( document ).ready(function()
 				$('#from_0').val('00:00').trigger('input');
 				$('#to_0').val('00:00').trigger('input');
 				tmp_area_name = $('#svg-id polygon[aid='+aid+']').attr('area_name');
-				$('#left_area_name').html(tmp_area_name).trigger('input');
+				//$('#left_area_name').html(tmp_area_name).trigger('input');
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
@@ -876,7 +876,7 @@ $( document ).ready(function()
 				$('#from_0').val('00:00').trigger('input');
 				$('#to_0').val('00:00').trigger('input');
 				tmp_area_name = $('#svg-id polygon[aid='+aid+']').attr('area_name');
-				$('#left_area_name').html(tmp_area_name).trigger('input');
+				//$('#left_area_name').html(tmp_area_name).trigger('input');
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
@@ -1081,7 +1081,7 @@ $( document ).ready(function()
 					$('#AreaDetailDIV').css('background-color', '#cccccc');
 					$('#AreaDetailUL').css('opacity', 0.5);
 
-					$('#left_area_name').html('');
+					//$('#left_area_name').html('');
 					calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');
 				});
 				$('#emmaid_select option').prop('selected', false);
@@ -1163,7 +1163,7 @@ $( document ).ready(function()
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('opacity', 0.5);
 
-				$('#left_area_name').html('');
+				//$('#left_area_name').html('');
 				calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');
 				aktive_warning_type = 0;
 			}
@@ -1241,12 +1241,15 @@ $( document ).ready(function()
 		//console.log(area_arr_final);
 		var jsonOb = JSON.stringify(area_arr_final);
 
+		JQ_loader('Loading', 'b');
+
 		$.post(
 			"lib/cap.create.from_js_array.php",
 			{cap_array:jsonOb, data:data, awt:awt_ok_js},
 			function(r){
 				//your success response
 				//alert('OK!');
+				$.mobile.loading( "hide" );
 				area_green = jQuery.parseJSON(r);
 				if(area_green !== null)
 				{
@@ -1332,13 +1335,16 @@ $( document ).ready(function()
 			data = $('#day').val();
 			if(data == "" || data === undefined) data = 0;
 			var jsonOb = JSON.stringify(area_green_final);
-
+			
+			JQ_loader('Loading', 'b');
+			
 			$.post(
 				"lib/cap.create.from_js_array.php",
 				{cap_array:jsonOb, no_del:1, data:data},
 				function(r){
 					//your success response
 					//alert('OK!');
+					$.mobile.loading( "hide" );
 					area_green_final_resp = r; // shoud be NULL
 					//send_final(r);
 				}
@@ -1358,10 +1364,13 @@ $( document ).ready(function()
 	{
 		if(yesno == 1)
 		{
+			JQ_loader('Loading', 'b');
+
 			$.post(
 				"lib/cap.meteoalarm.webservices.multi_import.php",
 				{no_del:1},
 				function(r){
+					$.mobile.loading( "hide" );
 					//your success response
 					$('#SOAPUL').html(r).trigger('create');
 					
@@ -1438,6 +1447,26 @@ $( document ).ready(function()
 				mk_pro_dot_interval_i = 0;
 			}
 		}, 1000);
+	}
+
+	function JQ_loader(text_tmp, theme_tmp)
+	{
+		$.mobile.loading( "show", {
+			text: text_tmp,
+			textVisible: true,
+			theme: theme_tmp,
+			html: ""
+		});
+	}
+
+	function JQ_loader(text_tmp, theme_tmp, html_tmp)
+	{
+		$.mobile.loading( "show", {
+			text: text_tmp,
+			textVisible: true,
+			theme: theme_tmp,
+			html: html_tmp
+		});
 	}
 
 	Date.prototype.yyyymmdd = function() {
