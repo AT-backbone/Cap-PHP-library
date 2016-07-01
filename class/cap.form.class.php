@@ -397,17 +397,23 @@
 								$out.= '</div>';
 
 								// Dissmis or OK
-								$out.= '<div class="ui-grid-a">';
+								$out.= '<div class="ui-grid-b">';
 									$out.= '<div class="ui-block-a">';
 										$out.= '<a id="green_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
 											$out.= $langs->trans('No');
 										$out.= '</a>';
 									$out.= '</div>';
 									$out.= '<div class="ui-block-b">';
+										$out.= '<a id="green_edit" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #fff700;color: black;text-shadow: none;border: 1px solid black;">';
+											$out.= $langs->trans('edit');
+										$out.= '</a>';
+									$out.= '</div>';
+									$out.= '<div class="ui-block-c">';
 										$out.= '<a id="green_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
 											$out.= $langs->trans('Yes');
 										$out.= '</a>';
 									$out.= '</div>';
+
 								$out.= '</div><!-- /grid-a -->';
 							$out.= '</div>';
 						$out.= '</div>';
@@ -1458,7 +1464,9 @@
 			
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
+				//$out.= '<script type="text/javascript" src="includes/jquery/jquery-3.0.0.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
+				//$out.= '<script src="https://code.jquery.com/jquery-2.2.4.js"   integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="crossorigin="anonymous"></script>';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/d3/d3.v3.min.js"></script>';
 				

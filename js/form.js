@@ -435,6 +435,15 @@ $( document ).ready(function()
 			make_white_areas_green(1);
 		});
 
+		$('#green_edit').on('click', function(){
+			make_white_areas_green(-1);
+		});
+
+		$('.ui-collapsible-set').on('click', function(){
+			tempScrollTop = $(window).scrollTop();
+			alert(tempScrollTop);
+		});
+
 		$('#send_no').on('click', function(){
 			send_all_proce_cap(0);
 		});
@@ -443,13 +452,13 @@ $( document ).ready(function()
 			send_all_proce_cap(1);
 		});
 
-		$('#svg-id').mouseenter(function() {
-			disableScroll();
-		});
-
-		$('#svg-id').mouseleave(function() {
-			enableScroll();
-		});
+		//$('#svg-id').mouseenter(function() {
+		//	disableScroll();
+		//});
+//
+		//$('#svg-id').mouseleave(function() {
+		//	enableScroll();
+		//});
 
 		$('li:not(#map-container)').on('click', function(){
 			aktive_type = false;
@@ -1371,29 +1380,64 @@ $( document ).ready(function()
 	function send_final(r)
 	{
 		//console.log(r);
-		var content = '<form>';
+		var content = '<form><ul data-role="listview" data-inset="true" data-shadow="false" id="GreenUL" style="margin-top: 0px;">';
 		var r_arr = jQuery.parseJSON(r);
+		tmp_name ='';
+		li_bool = false;
 		$.each(r_arr, function(index, data) {
-			// file position and name: data
-				content+= '<div class="cbGroup'+data['aid']+'">';
-					content+= '<label for="checkbox-'+data['aid']+'">'+data['name']+' type: '+data['type']+'</label>';
-				content+= '</div>';
-				console.log(index + ' / ' + r_arr.length);
-				//$.mobile.loading( "option", "text", index + ' / ' + r_arr.length ).trigger('create');
+		
+			if(data['name'] != tmp_name)
+			{
+				if(li_bool) content+= '</div>';
+				if(li_bool) content+= '</li>';
+				if(li_bool) content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps">'; /*data-role="collapsible"  */ 
+				else 		content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps" style="border-top: 1px solid #dddddd !important;">'; /*data-role="collapsible"  */ 
+					content+= '<h2 style="margin: 0px;">'+data['name']+'</h2>';
+					content+= '<div id="green_div_'+data['aid']+'" style="height: 30px;">';
+					tmp_name = data['name'];
+					li_bool = true;
+			}
+				
+				if(data['type'] < 10) 
+					content+= $('#left_box_type_0'+data['type']).closest('div')[0].outerHTML;
+				else 
+					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
+				
+				//content+= '<br>'+data['type']+': <input type="checkbox" name="checkbox-'+data['aid']+'" id="checkbox-'+data['aid']+'" checked="checked" value="'+data['type']+'"/>';
 		});
-		content+= '</form>';
+		content+= '</ul></form>';
 
 		$('[type="checkbox"]').checkboxradio();
 		$('[type="checkbox"]').checkboxradio("refresh");
 
 		$('#set').append( content ).trigger('create');
 		$('#set').collapsibleset( "refresh" );
-		
+
 		$.each(r_arr, function(index, data) {
-			var newBox = '<input type="checkbox" name="checkbox-'+data['aid']+'" id="checkbox-'+data['aid']+'" checked="checked"/>';
-			$(".cbGroup"+data['aid']).append(newBox);
+			$('#green_div_'+data['aid']+' div').css('background-color', '#29d660');
+			$('#green_div_'+data['aid']+' div').css('float', 'left');
+			$('#green_div_'+data['aid']+' div').addClass('green_area_type_sel');
+			if(data['type'] < 10)
+				$('#green_div_'+data['aid']+' #left_box_type_0'+data['type']).attr('AaidTtype','a'+data['aid']+'t'+data['type']);
+			else
+				$('#green_div_'+data['aid']+' #left_box_type_'+data['type']).attr('AaidTtype','a'+data['aid']+'t'+data['type']);
 			console.log(index + ' / ' + r_arr.length);
 		});
+
+		$('.green_area_type_sel').on('click', function(){
+			if($(this).attr('no_green') != 1)
+			{
+				$(this).css('background-color', '#ffffff');
+				$(this).attr('no_green', 1);
+			}
+			else
+			{
+				$(this).css('background-color', '#29d660');
+				$(this).attr('no_green', 0);
+			}
+		});
+
+		$('.type_collaps .ui-collapsible-content').css('padding','13px');
 
 		//$('#set div').trigger('create');
 
@@ -1422,7 +1466,9 @@ $( document ).ready(function()
 				cinfo = 3;
 				//for (var ty = 1; ty <= 13; ty++) 
 				//{
-				if($('#svg-id').attr('awt_'+data['type']) == 1)
+					aaidttype="a461t1"
+
+				if($('#svg-id').attr('awt_'+data['type']) == 1 && $('[aaidttype='+'a'+data['aid']+'t'+data['type']+']').attr('no_green') != 1)
 				{
 					area_green_final[aid][data['type']] = {};
 					area_green_final[aid][data['type']]['name'] = data['name'];
@@ -1464,15 +1510,21 @@ $( document ).ready(function()
 				}
 			);
 		}
+		else if(yesno == -1)
+		{
+			$('.type_collaps').collapsible( "expand" );
+		}
 
-		$.mobile.loading( "hide" );
-		$('#CAPpopupDialog').popup( "close" );
-		setTimeout(function(){
-			$('#set').html('').trigger('create');
-        	$('#CAP_Send_popupDialog').popup();
-			$('#CAP_Send_popupDialog').popup( "open" );
-        }, 100);
-		
+		if(yesno != -1)
+		{
+			$.mobile.loading( "hide" );
+			$('#CAPpopupDialog').popup( "close" );
+			setTimeout(function(){
+				$('#set').html('').trigger('create');
+				$('#CAP_Send_popupDialog').popup();
+				$('#CAP_Send_popupDialog').popup( "open" );
+			}, 100);
+		}
 	}
 
 	function send_all_proce_cap(yesno)

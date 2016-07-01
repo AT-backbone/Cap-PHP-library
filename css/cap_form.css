@@ -119,6 +119,10 @@ textarea{
 	border-top: none !important;
 }
 
+.lang_collaps h2 a{
+	border-top: none !important;
+}
+
 .mapinfo{
   position: absolute;
   top: 15px;
