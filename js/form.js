@@ -1350,7 +1350,7 @@ $( document ).ready(function()
 		JQ_loader('Loading', 'b');
 
 		$.post(
-			"lib/cap.create.from_js_array.php",
+			"lib/cap.create.from_js_array.2.php",
 			{cap_array:jsonOb, data:data, awt:awt_ok_js},
 			function(r){
 				//your success response
@@ -1453,7 +1453,7 @@ $( document ).ready(function()
 			JQ_loader('Loading', 'b');
 			
 			$.post(
-				"lib/cap.create.from_js_array.php",
+				"lib/cap.create.from_js_array.2.php",
 				{cap_array:jsonOb, no_del:1, data:data},
 				function(r){
 					//your success response
