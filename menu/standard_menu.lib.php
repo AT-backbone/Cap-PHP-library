@@ -92,7 +92,7 @@
 			// Webservice conf
 			$type['conf'][] = "webservice_on";
 		
-				$type['conf']['detail']['value'][] = "DUMMY";
+				//$type['conf']['detail']['value'][] = "DUMMY";
 				$type['conf']['detail']['value'][] = "webservice_securitykey";
 				$type['conf']['detail']['value'][] = "webservice_sourceapplication";
 				$type['conf']['detail']['value'][] = "webservice_login";

@@ -76,7 +76,10 @@
 
 	//print 'del_caps_in_output:<br>';
 	// delete all caps in the export folder
-	$capupdater->del_caps_in_output();
+	if(empty($_POST['no_del']))
+	{
+		$capupdater->del_caps_in_output();
+	}
 
 	//print 'webservice_meteoalarm:<br>';
 	// get visio level warnings and area data from Meteoalarm webservice
@@ -84,14 +87,16 @@
 	
 	//print 'get_area_identifier:<br>';
 	// set identifier sorted in area
+	//$capupdater->debug = true;
 	$capupdater->get_area_identifier();
+	//$capupdater->debug = false;
 
 	//print 'calc_cap_update:<br>';
 	// calculate cap which should be Updated or Alerted
 	//$capupdater->debug = true;
 	$capupdater->calc_cap_update();
 	//$capupdater->debug = false;
-	
+
 	//print 'calc_cap_cancel:<br>';
 	// calculate cap which should be Cancelled (Updated as green)
 	$capupdater->calc_cap_cancel();
