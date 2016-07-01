@@ -270,7 +270,7 @@
 												$out.= '<div class="ui-block-a">';
 													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectiveDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-														$out.= '<input '.$status_theme.' id="from_0" type="time" name="effective[time]" step="1" value="00:00:00">';
+														$out.= '<input '.$status_theme.' id="from_0" type="text" name="effective[time]" step="1" value="00:00">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 															$out.= '<span class="glyphicon glyphicon-time"></span>';
 														$out.= '</span>';
@@ -280,7 +280,7 @@
 												$out.= '<div class="ui-block-b">';
 													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-														$out.= '<input '.$status_theme.' id="to_0" type="time" name="expires[time]" step="1" value="23:59:59">';
+														$out.= '<input '.$status_theme.' id="to_0" type="text" name="expires[time]" step="1" value="23:59">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 															$out.= '<span class="glyphicon glyphicon-time"></span>';
 														$out.= '</span>';
