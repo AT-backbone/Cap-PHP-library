@@ -344,7 +344,7 @@
 							print '<br>if: '.$this->cap_ident[$warning->type][$warning->eid]['from'].' == '.str_replace('&nbsp;', ' ', $warning->from);
 							print '<br>if: '.$this->cap_ident[$warning->type][$warning->eid]['to'].' == '.str_replace('&nbsp;', ' ', $warning->to);
 						}
-							
+
 						// TODO: also check from, to and desc
 						// if identifier is not empty and is the same as the proccesed warning and also the lavel is the same: (we dont need a update or alert)
 						// or if the level the from and the to value is the same: (we dont need a update or alert)
@@ -583,15 +583,17 @@
 										$post['severity'] 				= $this->severity[$data_arr[0]->level];
 										$post['certainty'] 				= 'Likely';
 
-										$post['effective']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
+										if(strtotime($data_arr[0]->from) > strtotime('now')) $data_arr[0]->from = date('Y-m-d H:i:s',strtotime($data_arr[0]->from.' - 1 days'));
+										$post['effective']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 										$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 										$post['effective']['plus'] = $timezone_date_p;
 										$post['effective']['UTC'] = $timezone_date_h;
-										$post['onset']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
+										$post['onset']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 										$post['onset']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 										$post['onset']['plus'] = $timezone_date_p;
 										$post['onset']['UTC'] = $timezone_date_h;
-										$post['expires']['date'] = date("Y-m-d", strtotime('now + '.$_POST['data'].' days'));
+										if(strtotime($data_arr[0]->to) < strtotime('now')) $data_arr[0]->to = date('Y-m-d H:i:s',strtotime($data_arr[0]->to.' + 1 days'));
+										$post['expires']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$_POST['data'].' days'))));
 										$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
 										$post['expires']['plus'] = $timezone_date_p;
 										$post['expires']['UTC'] = $timezone_date_h;
