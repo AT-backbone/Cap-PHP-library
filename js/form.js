@@ -116,7 +116,7 @@ $( document ).ready(function()
 		        success: function(datare)
 		        {
 		        	if(datare) alert(datare);
-					$( "#Saved_conf" ).popup( "open" );
+					else $( "#Saved_conf" ).popup( "open" );
 					setTimeout(function(){
 						window.location = "index.php#conf";
 					}, 1500);
