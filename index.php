@@ -76,6 +76,7 @@
 	}
 	else
 	{
+		chmod('conf', 755);
 		$capfile = fopen('conf/conf.php', "w");
 		fwrite($capfile, "
 		<?php
@@ -153,8 +154,15 @@
 		$langs->load("main");	
 		
 		// index.php#conf
-		header('Location: index.php#conf');
-		exit;
+		if(file_exists('conf/conf.php'))
+		{
+			header('Location: index.php#conf');
+			exit;
+		}
+		else
+		{
+			die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
+		}
 	}
 	
 	$conf->webservice->login = "";
@@ -410,7 +418,7 @@
 	elseif($_GET['conf'] == "1")
 	{
 		$form = new CAP_Form();		
-		$form->PostToConf($_POST['conf']);		
+		$form->PostToConf($_POST['conf']);
 		$form->WriteConf();
 		
 		if($_POST['template_on'] == 'on')

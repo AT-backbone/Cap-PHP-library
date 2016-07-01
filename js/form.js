@@ -113,15 +113,15 @@ $( document ).ready(function()
 		      	type: "POST",
 		        url: url,
 		        data: $("#capform").serialize(), // serializes the forms elements.
-		        success: function(data)
-		        {					        
-							$( "#Saved_conf" ).popup( "open" );
+		        success: function(datare)
+		        {
+		        	if(datare) alert(datare);
+					$( "#Saved_conf" ).popup( "open" );
+					setTimeout(function(){
+						window.location = "index.php#conf";
+					}, 1500);
 		        }
 		       });
-		
-		setTimeout(function(){
-			window.location = "index.php#conf";
-		}, 1500);
 		return false; // avoid to execute the actual submit of the form.
 	}
 	
@@ -1364,10 +1364,24 @@ $( document ).ready(function()
 			function(r){
 				//your success response
 				//alert('OK!');
-				area_green = jQuery.parseJSON(r);
+				if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
+				replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+				replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+				  //the json is ok
+					area_green = jQuery.parseJSON(r);
+				}else{
+				  //the json is not ok
+				  alert(r);
+				}
+				//area_green = jQuery.parseJSON(r);
 				if(area_green !== null)
 				{
-					send_final(r);
+					if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
+					replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+					replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+					  //the json is ok
+						send_final(r);
+					}
 				}
 				else
 				{
