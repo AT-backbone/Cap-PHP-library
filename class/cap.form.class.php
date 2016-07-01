@@ -1927,7 +1927,7 @@
 									$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
 									$out.= '<h1>';
 										$out.= $langs->trans('Cap Creator');
-									$out.= '</h1>'; 
+									$out.= '</h1>';
 									$out.= '<br>';
 									$out.= '<span style="font-size: 10px;">';
 										$out.= 'v'.$this->version;
