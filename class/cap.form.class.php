@@ -1560,7 +1560,7 @@
 												if(!in_array($link, $Pages_arr['popup'])) // a dialog shoud not be in the panel !
 												{
 													$data = "";
-													if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
+													if(in_array($link, $Pages_arr['noajax']) || $pagename == "conf") $data = 'data-ajax="false"';
 													if($link != 'noajax')
 													{
 														if($link == '#'.$pagename) 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
@@ -1914,10 +1914,11 @@
 			$Type_arr = Types(); // TYPES FOR PAGES
 			$Pages_arr = Pages(); // PAGES
 
-			$out.= '<body>';			
-				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
-					$out.= '<div data-role="page" id="capview">';
-					
+			$out.= '<body>';
+			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
+				$out.= '<input type="hidden" name="action" value="create">';
+						$out.= '<div data-role="page" id="'.$pagename.'">';
+
 							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
 							$out.= '<!-- panel content goes here -->';
 							$out.= '<ul data-role="listview">';
@@ -1925,27 +1926,35 @@
 								$out.= '<li style="height: 91px;">';
 									$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
 									$out.= '<h1>';
-										$out.= 'Cap Creator';
+										$out.= $langs->trans('Cap Creator');
 									$out.= '</h1>';
 									$out.= '<br>';
 									$out.= '<span style="font-size: 10px;">';
-										$out.= 'Cap v1.1';
+										$out.= 'v'.$this->version;
 									$out.= '</span>';
 								$out.= '</li>';
 								
 									foreach($Pages_arr as $link => $Page_Name)
 									{
-										if(!in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"'; // turn all links to ajax off (when not jquery can not link to the other pages)
-										if($link != 'noajax')
+										if($link != 'popup' && $link != 'next' && $link != 'notitle' && $link != 'header')
 										{
-											if($link == '?conv=1#capconv') 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.'>'.$Page_Name.'</a></li>';
-											else 														$out.= '<li><a href="'.$_SERVER[PHP_SELF].$link.'" '.$data.'>'.$Page_Name.'</a></li>';
+											if(!in_array($link, $Pages_arr['popup'])) // a dialog shoud not be in the panel !
+											{
+												$data = "";
+												if(in_array($link, $Pages_arr['noajax'])) $data = 'data-ajax="false"';
+												if($link != 'noajax')
+												{
+													if($link == '#'.$pagename) 	$out.= '<li data-theme="b"><a href="'.$link.'" '.$data.' data-ajax="false">'.$Page_Name.'</a></li>';
+													elseif($link != 'map.php') 	$out.= '<li><a href="index.php'.$link.'" '.$data.' data-ajax="false">'.$Page_Name.'</a></li>';
+													else 						$out.= '<li><a href="'.$link.'" '.$data.' data-ajax="false">'.$Page_Name.'</a></li>';
+												}
+												unset($data);
+											}
 										}
-										unset($data);
 									}
-									
+								
 								$out.= '</ul>';
-							$out.= '</div>';
+							$out.= '</div>'; // PANEL
 							
 							$out.= '<div data-theme="b" data-role="header">';								
 								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
