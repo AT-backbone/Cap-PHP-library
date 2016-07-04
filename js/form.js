@@ -110,12 +110,15 @@
 					      	type: "POST",
 					        url: url,
 					        data: $("#capform").serialize(), // serializes the forms elements.
-					        success: function(data)
-					        {					        
-										$( "#Saved_conf" ).popup( "open" );
+					        success: function(datare)
+					        {
+					        	if(datare) alert(datare);
+								else $( "#Saved_conf" ).popup( "open" );
+								setTimeout(function(){
+									window.location = "index.php#conf";
+								}, 1500);
 					        }
 					       });
-					
 					return false; // avoid to execute the actual submit of the form.
 				}
 				

@@ -76,6 +76,7 @@
 	}
 	else
 	{
+		chmod('conf', 755);
 		$capfile = fopen('conf/conf.php', "w");
 		fwrite($capfile, "
 		<?php
@@ -152,7 +153,16 @@
 		$langs->setDefaultLang($conf->user->lang);		
 		$langs->load("main");	
 		
-		header("Refresh:0");
+		// index.php#conf
+		if(file_exists('conf/conf.php'))
+		{
+			header('Location: index.php#conf');
+			exit;
+		}
+		else
+		{
+			die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
+		}
 	}
 	
 	$conf->webservice->login = "";

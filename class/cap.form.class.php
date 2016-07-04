@@ -1974,9 +1974,9 @@
 				mkdir($post['cap']['output'], 0774);				
 			}
 			
-			if(! is_dir($post['conf']['output']))
+			if(! is_dir($post['cap']['output']))
 			{
-				mkdir($post['conf']['output'], 0774);
+				die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
 			}
 			/*
 			 * Special
@@ -2100,8 +2100,9 @@
 				$conf->{$obj_name} = $obj_val;
 			}
 			
-			print_r($post);
-			print_r($conf);
+			//print_r($post);
+			//print_r($conf);
+			return true; // no error
 		}
 	
 		/**
