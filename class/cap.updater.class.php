@@ -558,10 +558,10 @@
 											$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
 										}
 										$post['sender']					= 'admin@meteoalarm.eu';
-										$post['status']['date'] 		= date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
-										$post['status']['time'] 		= date('H:i:s');
-										$post['status']['plus'] 		= $timezone_date_p;
-										$post['status']['UTC']  		= $timezone_date_h;
+										$post['sent']['date'] 		= date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
+										$post['sent']['time'] 		= date('H:i:s');
+										$post['sent']['plus'] 		= $timezone_date_p;
+										$post['sent']['UTC']  		= $timezone_date_h;
 										$post['status'] 				= 'Actual';
 										if($ref == "Update")
 										{
