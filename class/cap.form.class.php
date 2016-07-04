@@ -2538,8 +2538,8 @@
 			static $timezones = null;
 
 			if ($timezones === null) {
-				$timezones = [];
-				$offsets = [];
+				$timezones = array();
+				$offsets = array();
 				$now = new DateTime();
 
 				foreach (DateTimeZone::listIdentifiers() as $timezone) {

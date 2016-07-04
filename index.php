@@ -25,7 +25,7 @@
 /**
  * Front end of the Cap-php-library
  */
-	error_reporting(E_ERROR);
+	error_reporting(E_ERROR | E_PARSE);
 	
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
