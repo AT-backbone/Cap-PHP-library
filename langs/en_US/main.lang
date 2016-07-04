@@ -160,7 +160,7 @@ LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
 
 PaintGreen=Folgende Gebiete sind für diesen Tag noch weiß!
 DESC_PaintGreen=Sollen diese Gebiete grün gewarnt werden?
-WarnGetCalculated=(Warnungen werden bald neu Berechnet!)
+WarnGetCalculated=(meteoalarm calculates your warnings shortly)
 DelWarning=Delete Warning?
 ChangeWithoutSave=Change Warning without Saving Changes?
 Delete=Delete

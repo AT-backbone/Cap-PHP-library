@@ -160,11 +160,11 @@ LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
 
 PaintGreen=Folgende Gebiete sind für diesen Tag noch weiß!
 DESC_PaintGreen=Sollen diese Gebiete grün gewarnt werden?
-WarnGetCalculated=(Warnungen werden bald neu Berechnet!)
+WarnGetCalculated=(meteoalarm berechnet Ihre Warnungen in Kürze)
 DelWarning=Delete Warning?
 ChangeWithoutSave=Change Warning without Saving Changes?
 Delete=Löschen
 Save=Speichern
 SOAPCaps=SOAP Debug Info
-MultiAreaSelectLabel=Multiarea auswahl
+MultiAreaSelectLabel=Multiarea Auswahl
 DESC_MultiAreaSelectLabel=ON erlaubt eine mehrfach auswahl von warnungs typen mit dieser mehere warnungen gleichzeitig editiert werden können
