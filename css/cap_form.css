@@ -134,6 +134,20 @@ textarea{
 	margin-bottom: 9px;
 }
 
+.area_deaktive {
+	position: absolute;
+	top: 216px;
+	z-index: 1;
+	left: 41px;
+	padding: 25px;
+	color: white;
+	text-shadow: none;
+	font-size: 29px;
+	width: 24%;
+	border: 1px solid red;
+	background-color: rgba(0, 0, 0, 0.54);
+}
+
 .awareness_div {
 	position: absolute; 
 	top: -1px; 

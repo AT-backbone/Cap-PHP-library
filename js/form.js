@@ -353,6 +353,7 @@ $( document ).ready(function()
 					$('#AreaDetailDIV').css('background-color', '#cccccc');
 					$('#AreaDetailUL').css('pointer-events', 'none');
 					$('#AreaDetailUL').css('opacity', 0.5);
+					$('#info_text').css('display', 'inherit');
 					$('.process_toolbox_area .awareness').css('border', '');
 					//calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');
 				}
@@ -836,6 +837,7 @@ $( document ).ready(function()
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
+				$('#info_text').css('display', 'inherit');
 				aktive_warning_type = 0;
 			}
 			$(tmp_this).css('border', '');
@@ -880,6 +882,7 @@ $( document ).ready(function()
 				});
 				$('#AreaDetailDIV').css('background-color', '#ffffff');
 				$('#AreaDetailUL').css('opacity', 1);
+				$('#info_text').css('display', 'none');
 				$('#AreaDetailUL').css('pointer-events', 'auto');
 
 				//$('#left_area_name').html(tmp_area_name);
@@ -935,6 +938,7 @@ $( document ).ready(function()
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
+				$('#info_text').css('display', 'inherit');
 			}
 		}
 	}
@@ -973,6 +977,7 @@ $( document ).ready(function()
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
+				$('#info_text').css('display', 'inherit');
 				$('.process_toolbox_area .awareness').css('border', '');
 				calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');
 				warning_detail_changed = false;
@@ -1061,6 +1066,7 @@ $( document ).ready(function()
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('pointer-events', 'none');
 				$('#AreaDetailUL').css('opacity', 0.5);
+				$('#info_text').css('display', 'inherit');
 				$('.process_toolbox_area .awareness').css('border', '');
 
 				$('#emmaid_select option').prop('selected', false);
@@ -1167,6 +1173,7 @@ $( document ).ready(function()
 					//$('#inst_1').val('');
 					$('#AreaDetailDIV').css('background-color', '#cccccc');
 					$('#AreaDetailUL').css('opacity', 0.5);
+					$('#info_text').css('display', 'inherit');
 
 					//$('#left_area_name').html('');
 					calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');
@@ -1269,6 +1276,7 @@ $( document ).ready(function()
 				//$('#inst_1').val('');
 				$('#AreaDetailDIV').css('background-color', '#cccccc');
 				$('#AreaDetailUL').css('opacity', 0.5);
+				$('#info_text').css('display', 'inherit');
 
 				//$('#left_area_name').html('');
 				calc_map_aktion($('#svg-id polygon[aid='+aktive_warning_aid+']'), 'auto');

@@ -193,6 +193,7 @@
 						}
 						//$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
 						//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
+						$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('Dieser Bericht wird erst nutzbar duch das auswählen einer WARNUNG!').'</span>';
 						$out.= '<div id="map_main_div" class="ui-grid-a">';
 							$out.= '<div class="ui-block-a" style="width: 30%;">';
 								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
@@ -2419,7 +2420,6 @@
 				$conf->{$obj_name} = $obj_val;
 			}
 
-			return false; // no error
 		}
 	
 		/**
