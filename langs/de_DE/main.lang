@@ -168,3 +168,4 @@ Save=Speichern
 SOAPCaps=SOAP Debug Info
 MultiAreaSelectLabel=Multiarea Auswahl
 DESC_MultiAreaSelectLabel=ON erlaubt eine mehrfach auswahl von warnungs typen mit dieser mehere warnungen gleichzeitig editiert werden können
+DESC_EditWarningNotAktive=Dieser Bereich wird erst nutzbar durch das auswählen einer WARNUNG!
