@@ -583,7 +583,7 @@
 										$post['severity'] 				= $this->severity[$data_arr[0]->level];
 										$post['certainty'] 				= 'Likely';
 
-										if(strtotime($data_arr[0]->from) > strtotime('now')) $data_arr[0]->from = date('Y-m-d H:i:s',strtotime($data_arr[0]->from.' - 1 days'));
+										//if(strtotime($data_arr[0]->from) > strtotime('now')) $data_arr[0]->from = date('Y-m-d H:i:s',strtotime($data_arr[0]->from.' - 1 days'));
 										$post['effective']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 										$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 										$post['effective']['plus'] = $timezone_date_p;
