@@ -92,7 +92,7 @@
 		
 		function Pages()
 		{
-			global $langs;
+			global $conf, $langs;
 			//$pages['#MAIN'] 					= $langs->trans("TitleMain");
 			//$pages['next']['name']['PAGENAME'] = 'NEXT_PGAENAME';
 			
@@ -103,6 +103,7 @@
 			
 			$pages['index.php#area']  					= $langs->trans("TitleArea");
 
+			if($conf->webservice_aktive == 1)
 			$pages['map.php']  					= $langs->trans("TitleMap");
 			
 			$pages['index.php#capview'] 		 		= $langs->trans("TitleCapView");
