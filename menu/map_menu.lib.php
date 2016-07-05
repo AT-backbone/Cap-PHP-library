@@ -43,12 +43,12 @@
 
 			// Lang conf
 			$type['conf'][] = "lang_conf";
-			$type['conf'][] = "lang_conf_plus";
-			$type['conf'][] = "lang_conf_remove";
+			//$type['conf'][] = "lang_conf_plus";
+			//$type['conf'][] = "lang_conf_remove";
 
 			$type['conf'][] = "cap_save";
 			$type['conf'][] = "cap_output";
-			
+
 			$type['conf'][] = "template";
 
 			// Webservice conf
