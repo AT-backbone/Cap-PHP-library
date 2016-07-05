@@ -165,6 +165,8 @@
 			die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
 		}
 	}
+	$conf->cap->output="output";
+	$conf->cap->save = 1;
 	
 	$conf->webservice->login = "";
 	$conf->webservice->password = "";

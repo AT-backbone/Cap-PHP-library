@@ -87,10 +87,10 @@
 			//$type['conf'][] = "lang_conf_remove";
 
 
-			$type['conf'][] = "cap_save";
-			$type['conf'][] = "cap_output";
+			// $type['conf'][] = "cap_save"; // standard save = true
+			// $type['conf'][] = "cap_output"; Standard value "output"
 
-			$type['conf'][] = "template";
+			//$type['conf'][] = "template"; TODO reaktive wehn it have a function for Paint and Alert
 			
 			// Webservice conf
 			$type['conf'][] = "webservice_on";

@@ -115,7 +115,7 @@ $( document ).ready(function()
 		        data: $("#capform").serialize(), // serializes the forms elements.
 		        success: function(datare)
 		        {
-		        	if(datare != true) alert(datare);
+		        	if(datare != "") alert(datare);
 					else $( "#Saved_conf" ).popup( "open" );
 					setTimeout(function(){
 						window.location = "index.php#conf";
