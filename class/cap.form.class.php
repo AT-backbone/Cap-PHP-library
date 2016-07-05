@@ -407,11 +407,11 @@
 											$out.= $langs->trans('No');
 										$out.= '</a>';
 									$out.= '</div>';
-									$out.= '<div class="ui-block-b">';
-										$out.= '<a id="green_edit" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #fff700;color: black;text-shadow: none;border: 1px solid black;">';
-											$out.= $langs->trans('edit');
-										$out.= '</a>';
-									$out.= '</div>';
+									//$out.= '<div class="ui-block-b">';
+									//	$out.= '<a id="green_edit" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #fff700;color: black;text-shadow: none;border: 1px solid black;">';
+									//		$out.= $langs->trans('edit');
+									//	$out.= '</a>';
+									//$out.= '</div>';
 									$out.= '<div class="ui-block-c">';
 										$out.= '<a id="green_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
 											$out.= $langs->trans('Yes');
