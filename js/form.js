@@ -419,7 +419,10 @@ $( document ).ready(function()
 		});
 
 		$('#submit_cap').on('click', function(){
-			get_all_warnings();
+			if($('.problem').html() == "")
+				get_all_warnings();
+			else
+				$('#Error_popupDialog').popup('open');
 		});
 
 		$('#sav_war').on('click', function(){
