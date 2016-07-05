@@ -1546,7 +1546,8 @@
 			}
 			else
 			{
-				die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
+				die($langs->trans("standard_menuLibPhpIsCurupt"));
+				//die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
 			}
 			
 			$Type_arr = Types(); // TYPES FOR PAGES
@@ -1933,7 +1934,8 @@
 			}
 			else
 			{
-				die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
+				die($langs->trans("standard_menuLibPhpIsCurupt"));
+				//die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
 			}
 			
 			$out = $this->Header_llx();
@@ -2300,7 +2302,7 @@
 		 */	
 		function PostToConf($post)
 		{	
-			global $conf;
+			global $conf, $langs;
 			
 			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "") 
 			{
@@ -2309,7 +2311,8 @@
 			
 			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "")
 			{
-				die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
+				die($langs->trans("perm_for_output1").$post['cap']['output'].$langs->trans("perm_for_output2"));
+				//((die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
 			}
 			/*
 			 * Special
