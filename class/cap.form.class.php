@@ -2284,12 +2284,12 @@
 		{	
 			global $conf;
 			
-			if(! is_dir($post['cap']['output'])) 
+			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "") 
 			{
 				mkdir($post['cap']['output'], 0775);
 			}
 			
-			if(! is_dir($post['cap']['output']))
+			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "")
 			{
 				die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
 			}
