@@ -158,7 +158,7 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 ###Paint and Alert###
 
-	DESC_EditWarningNotAktive=This Area is only available if a warning is selescted!
+	DESC_EditWarningNotAktive=This Area is only available if a warning is selected!
 	PaintGreen=The following areas have not yet received warning for this day! Folgende Gebiete sind für diesen Tag noch weiß!
 	DESC_PaintGreen=Should this Areas get (de)warned green?
 	WarnGetCalculated=(meteoalarm calculates your warnings shortly)
