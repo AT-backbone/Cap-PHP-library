@@ -158,6 +158,9 @@ LabelAwarenessLevelWebserviceDesc=LabelAwarenessLevelWebserviceDesc
 LabelGeocodeWebservice=LabelGeocodeWebservice
 LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
 
+LabelTimezone=Zeitzone
+LabelTimezoneDesc=Die Zeitzone bestimmt in welcher UTC die CAPs gesended werden.
+
 PaintGreen=Folgende Gebiete sind für diesen Tag noch weiß!
 DESC_PaintGreen=Sollen diese Gebiete grün gewarnt werden?
 WarnGetCalculated=(meteoalarm calculates your warnings shortly)
@@ -168,4 +171,4 @@ Save=Save
 SOAPCaps=SOAP Debug Info
 MultiAreaSelectLabel=Multiarea selection
 DESC_MultiAreaSelectLabel=ON erlaubt eine mehrfach auswahl von warnungs typen mit dieser mehere warnungen gleichzeitig editiert werden können
-DESC_EditWarningNotAktive=This area is only available through the Selection of an WARNING!
+DESC_EditWarningNotAktive=Dieser Bereich wird erst durch das auswählen einer WARNUNG nutzbar!

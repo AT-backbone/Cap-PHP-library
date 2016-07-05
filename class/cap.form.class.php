@@ -956,7 +956,8 @@
 						if(!empty($conf->cap->save)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						if($conf->cap->save == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
-						$out = '<label for="identifier_time">'.$langs->trans("LabelSaveCapsInOutputFolder").':</label>';
+						//$out = '<label for="identifier_time">'.$langs->trans("LabelSaveCapsInOutputFolder").':</label>';
+						$out = '<legend>'.$langs->trans("LabelSaveCapsInOutputFolder").': '.$this->tooltip($type.'tool', $langs->trans("LabelSaveCapsInOutputFolderDesc")).'</legend>';
 						$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[cap][save]" id="cap_save" '.$onoroff.' data-theme="b">';
 						break;
 					
@@ -968,7 +969,8 @@
 
 					case 'ID_ID':
 							if(!empty($conf->identifier->ID_ID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							$out = $langs->trans("LabelIdentifierNumber").': <input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
+							$out = '<legend>'.$langs->trans("LabelIdentifierNumber").': '.$this->tooltip($type.'tool', $langs->trans("LabelIdentifierNumberDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
 						break;
 						
 					case 'WMO_OID':
@@ -979,12 +981,14 @@
 						
 					case 'ISO':
 						if(!empty($conf->identifier->ISO)) $status_theme = 'data-theme="f"';
-						$out = $langs->trans("LabelISO").': <input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
+						$out = '<legend>'.$langs->trans("LabelISO").': '.$this->tooltip($type.'tool', $langs->trans("LabelISODesc")).'</legend>';
+						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
 						break;
 
 					case 'timezone':
 							$timezone = $this->timezone_list();
 							$aktive_timezone = date_default_timezone_get();
+							$out = '<legend>'.$langs->trans("LabelTimezone").': '.$this->tooltip($type.'tool', $langs->trans("LabelTimezoneDesc")).'</legend>';
 							$out.= $this->buildSelect('conf[timezone]', $timezone, "data-native-menu=\"false\"", "timezone", $aktive_timezone );
 						break;
 
@@ -999,6 +1003,7 @@
 						
 					case 'template':
 						if(file_exists('conf/template.cap')) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+
 						foreach(scandir($conf->cap->output) as $num => $capfilename)
 						{
 							if($capfilename != '.' && $capfilename != '..' && $capfilename != '.cap' && $capfilename != '.conv.cap')
@@ -1007,9 +1012,9 @@
 							}
 						}
 						
-						$out = '<label for="Template">'.$langs->trans("Template").':</label>';
+						$out = '<legend>'.$langs->trans("LabelTemplate").': '.$this->tooltip($type.'tool', $langs->trans("LabelTemplateDesc")).'</legend>';
 						if(file_exists('conf/template.cap')) $onoroff = 'checked=""'; else $onoroff = '';
-							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="template_on" id="template_on" '.$onoroff.' data-theme="b">';
+							
 							
 							if(file_exists('conf/template.cap'))
 							{
@@ -1019,14 +1024,19 @@
 								
 								$files[$template['identifier']] = $template['identifier']; 
 							}
-		
-							$out.=  $this->buildSelect("Template", $files, "data-native-menu=\"false\"", "Template", $template['identifier'] );
+							
+							if(count($files) < 1) $cssdisable = 'disabled="disabled"';
+							else $cssdisable = '';
+
+							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="template_on" id="template_on" '.$onoroff.' data-theme="b" '.$cssdisable.'>';
+							if(count($files) > 0) $out.=  $this->buildSelect("Template", $files, "data-native-menu=\"false\"", "Template", $template['identifier'] );
 					
 						break;
 						
 					case 'lang_conf':
 						if(!empty($conf->select->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
+						//$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
+						$out = '<legend>'.$langs->trans("LabelUsableLanguages").': '.$this->tooltip($type.'tool', $langs->trans("LabelUsableLanguagesDesc")).'</legend>';
 						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
 						foreach($conf->lang as $key => $lang_name)
 						{
@@ -1045,7 +1055,8 @@
 						
 					case 'lang_conf_use':
 							if(!empty($conf->user->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
+							//$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
+							$out = '<legend>'.$langs->trans("Labellang_conf_use").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_useDesc")).'</legend>';
 							$out.= '<select name="conf[user][lang]" id="lang_conf_use" data-native-menu="false" data-iconpos="left">';
 							foreach($conf->trans as $key => $lang_name)
 							{
@@ -1098,28 +1109,34 @@
 					case 'webservice_on':
 							if($conf->webservice->on == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
-							$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
+							//$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
+							$out = '<legend>'.$langs->trans("LabelWebservice").': '.$this->tooltip($type.'tool', $langs->trans("LabelWebserviceDesc")).'</legend>';
 							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_switch" '.$onoroff.' data-theme="b">';
 						break;
 								
 					case 'webservice_password':
-							$out = $langs->trans("Labelwebservice_password").':<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_password").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_passwordDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
 						break;
 						
 					case 'webservice_securitykey':
-							$out = $langs->trans("Labelwebservice_securitykey").':<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_securitykey").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_securitykeyDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
 						break;
 						
 					case 'webservice_sourceapplication':
-							$out = $langs->trans("Labelwebservice_sourceapplication").':<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_sourceapplication").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_sourceapplicationDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
 						break;
 						
 					case 'webservice_login':
-							$out = $langs->trans("Labelwebservice_login").':<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_login").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_loginDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
 						break;
 						
 					case 'webservice_entity':
-							$out = $langs->trans("Labelwebservice_entity").':<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
+							$out = '<legend>'.$langs->trans("Labelwebservice_entity").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_entityDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
 						break;
 						
 					//case 'webservice_destination':
@@ -1128,7 +1145,8 @@
 					//	break;
 						
 					case 'webservice_WS_METHOD':
-							$out = $langs->trans("webservice_WS_METHOD").':<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
+							$out = '<legend>'.$langs->trans("webservice_WS_METHOD").': '.$this->tooltip($type.'tool', $langs->trans("webservice_WS_METHODDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
 						break;
 						
 					case 'webservice_ns':

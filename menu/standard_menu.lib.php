@@ -70,24 +70,27 @@
 			$type['area'][] = "map";			
 			
 			// Conf Page	
-			$type['conf'][] = "cap_save";
-			$type['conf'][] = "cap_output";
+			$type['conf'][] = "lang_conf_use";
+
 			
 			// $type['conf'][] = "conf_output";
 			// Identifier conf
 			$type['conf'][] = "WMO_OID";
-			$type['conf'][] = "ISO";	
-			$type['conf'][] = "timezone";			
-			$type['conf'][] = "ID_ID";
+			$type['conf'][] = "ISO";
+			$type['conf'][] = "timezone";		
 			$type['conf'][] = "identifier_time";
-			
-			$type['conf'][] = "template";
+			$type['conf'][] = "ID_ID";
 			
 			// Lang conf
-			$type['conf'][] = "lang_conf_use";
+			$type['conf'][] = "lang_conf";
 			$type['conf'][] = "lang_conf_plus";
 			$type['conf'][] = "lang_conf_remove";
-			$type['conf'][] = "lang_conf";
+
+
+			$type['conf'][] = "cap_save";
+			$type['conf'][] = "cap_output";
+			
+			$type['conf'][] = "template";
 			
 			// Webservice conf
 			$type['conf'][] = "webservice_on";
