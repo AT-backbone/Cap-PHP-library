@@ -419,7 +419,7 @@ $( document ).ready(function()
 		});
 
 		$('#submit_cap').on('click', function(){
-			if($('.problem').html() == "")
+			if($('.problem').html() == "" || $('.problem').html() === undefined)
 				get_all_warnings();
 			else
 				$('#Error_popupDialog').popup('open');
