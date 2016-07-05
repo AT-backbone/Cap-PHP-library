@@ -162,7 +162,8 @@
 		}
 		else
 		{
-			die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
+			die($langs->trans('perm_for_conf'));
+			//die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
 		}
 	}
 	$conf->cap->output="output";

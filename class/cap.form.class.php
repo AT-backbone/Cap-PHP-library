@@ -193,7 +193,7 @@
 						}
 						//$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
 						//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
-						$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('Dieser Bereich wird erst nutzbar durch das auswählen einer WARNUNG!').'</span>';
+						$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('DESC_EditWarningNotAktive').'</span>';
 						$out.= '<div id="map_main_div" class="ui-grid-a">';
 							$out.= '<div class="ui-block-a" style="width: 30%;">';
 								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
@@ -322,8 +322,11 @@
 											$out.= '<div id="awareness_toolbox" class="awareness_div">';
 												for ($ty=1; $ty <= 13; $ty++) 
 												{ 
-													if($ty < 10) $ty = '0'.$ty;
-													$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1" type="'.$ty.'"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
+													if($ty != 11) // do not support the type none
+													{
+														if($ty < 10) $ty = '0'.$ty;
+														$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1" type="'.$ty.'"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
+													}
 												}
 											$out.= '</div>';
 
@@ -343,7 +346,7 @@
 											$out.= '</div>';
 
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
-												$S_Param_AWT[0] = 'No Type';
+												$S_Param_AWT[0] = 'All Types';
 												if(is_array($ParameterArray['AWT']))
 												foreach($ParameterArray['AWT'] as $key => $area_arr)
 												{

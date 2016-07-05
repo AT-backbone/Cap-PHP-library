@@ -369,12 +369,14 @@ $( document ).ready(function()
 
 			$('#svg-id polygon').css('stroke-width', '1');
 			$('#svg-id polygon').css('stroke', 'black');
+			$('#svg-id polygon').css('stroke-dasharray', '0,0');
 			$('#svg-id polygon').css('fill-opacity', 1);
 			$('#svg-id polygon'+'[main=1]').attr('sel', 0);
 
 			$.each($(this).val(), function(index, data){
 				$('#svg-id polygon[aid='+data+']').css('stroke-width', '3px');
 				$('#svg-id polygon[aid='+data+']').css('stroke', 'blue');
+				$('#svg-id polygon').css('stroke-dasharray', '0,0');
 				$('#svg-id polygon[aid='+data+']').css('fill-opacity', 0.6);
 				$('#svg-id polygon[aid='+data+']'+'[main=1]').attr('sel', 1);
 				calc_map_aktion($('#svg-id polygon[aid='+data+']'), 'auto');
@@ -688,19 +690,56 @@ $( document ).ready(function()
 			{
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '1');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'black');
+				$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 1);
 				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 0);
 				area_arr[aid].pop();
 				delete(area_arr[aid]);
+
+				$('#emmaid_select option[value=' + aid + ']').prop('selected', false);
+				$('#emmaid_select').selectmenu( "refresh" );
+				if($('#emmaid_select option:selected').val() == undefined)
+				{
+					$('#right_area_type').html('');
+					$.each(lang, function(lindex, ldata){
+						$('#desc_' + lindex).val('').trigger('input');
+						$('#inst_' + lindex).val('').trigger('input');
+					});
+					//$('#desc_1').val('').trigger('input');
+					//$('#inst_1').val('').trigger('input');
+					$('#from_0').val('00:00').trigger('input');
+					$('#to_0').val('00:00').trigger('input');
+					tmp_area_name = $('#svg-id polygon[aid='+aid+']').attr('area_name');
+					//$('#left_area_name').html(tmp_area_name).trigger('input');
+					$('#AreaDetailDIV').css('background-color', '#cccccc');
+					$('#AreaDetailUL').css('pointer-events', 'none');
+					$('#AreaDetailUL').css('opacity', 0.5);
+					$('#info_text').css('display', 'inherit');
+				}
+				//$(tmp_this).css('border', '');
 			}
 			else
 			{
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '3px');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'blue');
+				$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 0.6);
 				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 1);
 			}
 		}
+
+		tmp_awt_sel = [];
+		$('.process_toolbox_area').each(function(index, data){
+			tmp_this = this;
+			$('#'+$(tmp_this).attr('id')+' div').each(function(index2, data2){
+				if($(this).css('border-width') == "3px")
+				{
+					if(tmp_awt_sel[$(tmp_this).attr('id')] === undefined) tmp_awt_sel[$(tmp_this).attr('id')] = [];
+					tmp_awt_sel[$(tmp_this).attr('id')][index2] = 1;
+				}
+			});
+		});
+		//alert(tmp_awt_sel);
 		// show Area in Proccess list
 		out = "";
 		area_real_len = 0;
@@ -741,6 +780,7 @@ $( document ).ready(function()
 							coun++;
 							problem = 0;
 							// Warnungen
+							tmp_level = 0;
 							tmp_level = parseInt(data['level']);
 							tmp_type = parseInt(data['type']);
 							tmp_text = [];
@@ -763,8 +803,19 @@ $( document ).ready(function()
 							//out+= ' ' + tmp_level + ' ' + tmp_type + ' ';
 							if(tmp_level > 1) // zeige keine level 1 oder 0
 							{
-								if(problem)	out+= '<div class="problem awareness level_'+tmp_level+'" ktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"><span class="problem_callsign">!</span></div>';
-								else 		out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)"><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
+								if(tmp_awt_sel['aid_'+key] !== undefined) 
+								{
+									if(tmp_awt_sel['aid_'+key][(key2 + noty_i + 1)] !== undefined ) 
+									{
+										if(tmp_awt_sel['aid_'+key][(key2 + noty_i + 1)] == 1) css_selected='style="border: 3px solid rgb(0, 0, 255)"';
+										else css_selected = '';
+									}
+									else css_selected = '';
+								}
+								else css_selected = '';
+
+								if(problem)	out+= '<div class="problem awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)" '+css_selected+'><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"><span class="problem_callsign">!</span></div>';
+								else 		out+= '<div class="awareness level_'+tmp_level+'" aktive="1" onclick="area_warning_detail('+key+', '+key2+', this)" '+css_selected+'><img src="includes/meteoalarm/warn-typs_'+tmp_type_f+'.png"></div>';
 								if(problem) tmp_problem = 1;
 							}
 							else
@@ -845,7 +896,16 @@ $( document ).ready(function()
 		}
 		else if($('input[name=multisel_area_name_bool]:checked').val() == "1" && aktive_warning_type !== undefined && aktive_warning_type != 0 && aktive_warning_type != "" && aktive_warning_type !=  $('#svg-id polygon[aid='+aid+']').attr('area_type_'+key_type))
 		{
-			multi = false;
+			multi = true;
+			aktive_warning_type = undefined;
+			if($('#emmaid_select option:selected').val() != undefined)
+			{
+				$('#emmaid_select option:selected').each(function(index, data){
+					$(data).prop('selected', false);
+				});
+				$('#emmaid_select').selectmenu( "refresh" );
+			}
+			$('.process_toolbox_area .awareness').css('border', '');
 		}
 		else
 		{
@@ -860,7 +920,7 @@ $( document ).ready(function()
 			aktive_warning_type =  $('#svg-id polygon[aid='+aid+']').attr('area_type_'+key_type);
 			aktive_warning_level =  $('#svg-id polygon[aid='+aid+']').attr('area_level_'+key_type);
 			if( $('input[name=multisel_area_name_bool]:checked').val() == "0") $('.process_toolbox_area .awareness').css('border', '');
-			$(tmp_this).css('border', '1px solid #0000ff');
+			$(tmp_this).css('border', '3px solid #0000ff');
 			tmp_area_text = [];
 			tmp_area_inst = [];
 			if(key_type > -1)
@@ -1604,9 +1664,11 @@ $( document ).ready(function()
 	{
 		$('[sel=0]').css('stroke', 'black');
 		$('[sel=0]').css('stroke-width', '1');
+		$('[sel=0]').css('stroke-dasharray', '0,0');
 
-		$('.pol_'+aid).css('stroke-width', '3px');
 		$('.pol_'+aid).css('stroke', 'blue');
+		$('.pol_'+aid).css('stroke-width', '3px');
+		$('.pol_'+aid).css('stroke-dasharray', '0,0');
 	}
 
 	function poliaway(aid)
@@ -1615,6 +1677,7 @@ $( document ).ready(function()
 		{
 			$('.pol_'+aid).css('stroke', 'black');
 			$('.pol_'+aid).css('stroke-width', '1');
+			$('.pol_'+aid).css('stroke-dasharray', '0,0');
 		}
 	}
 
