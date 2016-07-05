@@ -233,4 +233,4 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	perm_for_output1=Permision problems detectet pleas fix this: Can\'t create the folder ("
 	perm_for_output2=") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! 
 	perm_for_conf=Error! Could not write to folder conf. Please make sure your Webserver has permission to write to this folder.
-	err_cap_not_complete01=The CAP you are trying to send is not comnplete! Please check your entered information again.
+	err_cap_not_complete01=The CAP you are trying to send is not complete! Please check your entered information again.
