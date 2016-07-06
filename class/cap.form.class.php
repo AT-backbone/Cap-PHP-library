@@ -350,7 +350,7 @@
 											$out.= '</div>';
 
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
-												$S_Param_AWT[0] = 'All Types';
+												$S_Param_AWT[0] = $langs->trans("All Types");
 												if(is_array($ParameterArray['AWT']))
 												foreach($ParameterArray['AWT'] as $key => $area_arr)
 												{

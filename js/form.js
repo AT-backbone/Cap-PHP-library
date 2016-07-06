@@ -1572,8 +1572,8 @@ $( document ).ready(function()
 						offset = $('#timezone_h').html();
 
 						area_green_final[aid][data['type']]['exutc'] 	= '+00:00';
-						area_green_final[aid][data['type']]['from'] 	= date.yyyymmdd() + ' 00:00:00';
-						area_green_final[aid][data['type']]['to'] 	= date.yyyymmdd() + ' 23:59:59';
+						area_green_final[aid][data['type']]['from'] 	= date.yyyymmdd() + ' 23:00:00';
+						area_green_final[aid][data['type']]['to'] 	= date.yyyymmdd() + ' 22:59:59';
 					}
 				}
 				//}
