@@ -441,6 +441,9 @@
 			$capfile = fopen($this->destination.'/'.$this->identifier.$end_type, "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.$end_type);
 			fwrite($capfile, $this->cap);
 			fclose($capfile);
+
+			chmod($this->destination.'/'.$this->identifier.$end_type, 0660);  // octal; correct value of mode
+			chgrp($this->destination.'/'.$this->identifier.$end_type, filegroup($this->destination)); 
 			
 			// convert in UTF-8
 			$data = file_get_contents($this->destination.'/'.$this->identifier.$end_type);
