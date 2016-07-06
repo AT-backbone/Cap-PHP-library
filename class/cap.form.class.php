@@ -363,11 +363,12 @@
 												$out.= '<div class="awareness" id="reload" aktive="1"><img src="includes/meteoalarm/reload.png"></div>';
 											$out.= '</div>';
 
-											$out.= '<div id="work_toolbox" class="work_toolbox_div">';
-												$out.= '<div class="awareness" id="Undo"><img src="includes/meteoalarm/undo.png"></div>';
-												$out.= '<div class="awareness" id="Redo" aktive="0"><img src="includes/meteoalarm/redo.png"></div>';
-												$out.= '<div class="awareness" id="Reset"><img src="includes/meteoalarm/reset.png"></div>';
-											$out.= '</div>';
+											// TODO:
+											//$out.= '<div id="work_toolbox" class="work_toolbox_div">';
+											//	$out.= '<div class="awareness" id="Undo"><img src="includes/meteoalarm/undo.png"></div>';
+											//	$out.= '<div class="awareness" id="Redo" aktive="0"><img src="includes/meteoalarm/redo.png"></div>';
+											//	$out.= '<div class="awareness" id="Reset"><img src="includes/meteoalarm/reset.png"></div>';
+											//$out.= '</div>';
 
 											$out.= '<div id="process_toolbox" class="process_toolbox_div"></div>';
 
