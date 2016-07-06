@@ -369,14 +369,14 @@ $( document ).ready(function()
 
 			$('#svg-id polygon').css('stroke-width', '1');
 			$('#svg-id polygon').css('stroke', 'black');
-			$('#svg-id polygon').css('stroke-dasharray', '0,0');
+			//$('#svg-id polygon').css('stroke-dasharray', '0,0');
 			$('#svg-id polygon').css('fill-opacity', 1);
 			$('#svg-id polygon'+'[main=1]').attr('sel', 0);
 
 			$.each($(this).val(), function(index, data){
 				$('#svg-id polygon[aid='+data+']').css('stroke-width', '3px');
 				$('#svg-id polygon[aid='+data+']').css('stroke', 'blue');
-				$('#svg-id polygon').css('stroke-dasharray', '0,0');
+				//$('#svg-id polygon').css('stroke-dasharray', '0,0');
 				$('#svg-id polygon[aid='+data+']').css('fill-opacity', 0.6);
 				$('#svg-id polygon[aid='+data+']'+'[main=1]').attr('sel', 1);
 				calc_map_aktion($('#svg-id polygon[aid='+data+']'), 'auto');
@@ -693,7 +693,7 @@ $( document ).ready(function()
 			{
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '1');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'black');
-				$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
+				//$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 1);
 				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 0);
 				area_arr[aid].pop();
@@ -725,7 +725,7 @@ $( document ).ready(function()
 			{
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '3px');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'blue');
-				$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
+				//$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
 				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 0.6);
 				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 1);
 			}
@@ -1670,11 +1670,11 @@ $( document ).ready(function()
 	{
 		$('[sel=0]').css('stroke', 'black');
 		$('[sel=0]').css('stroke-width', '1');
-		$('[sel=0]').css('stroke-dasharray', '0,0');
+		//$('[sel=0]').css('stroke-dasharray', '0,0');
 
 		$('.pol_'+aid).css('stroke', 'blue');
 		$('.pol_'+aid).css('stroke-width', '3px');
-		$('.pol_'+aid).css('stroke-dasharray', '0,0');
+		//$('.pol_'+aid).css('stroke-dasharray', '0,0');
 	}
 
 	function poliaway(aid)
@@ -1683,7 +1683,7 @@ $( document ).ready(function()
 		{
 			$('.pol_'+aid).css('stroke', 'black');
 			$('.pol_'+aid).css('stroke-width', '1');
-			$('.pol_'+aid).css('stroke-dasharray', '0,0');
+			//$('.pol_'+aid).css('stroke-dasharray', '0,0');
 		}
 	}
 
