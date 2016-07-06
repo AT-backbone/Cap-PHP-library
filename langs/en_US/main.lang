@@ -110,7 +110,7 @@ Labelpolygon=Polygon
 Labelcircle=Circles (circle)
 LabelareaDesc=Area Description (areaDesc)
 LabelareaDescDesc=(REQUIRED)<br>A text description of the affected area.
-LabelpolygonDesc=(OPTIONAL) <br>(1) Code Values: The geographic polygon is represented by a whitespace-delimited list of [WGS 84] coordinate pairs.<br>(2) A minimum of 4 coordinate pairs MUST be present and the first and last pairs of coordinates MUST be the same.<br>(3) Multiple instances MAY occur within an <area> block.<br><br>As soon as you enable this feature you can link multiple points on the map to generate an area
+LabelpolygonDesc=(OPTIONAL) <br>(1) Code Values: The geographic polygon is represented by a whitespace-delimited list of [WGS 84] coordinate pairs.<br>(2) A minimum of 4 coordinate pairs MUST be present and the first and last pairs of coordinates MUST be the same.<br>(3) Multiple instances MAY occur within an area block.<br><br>As soon as you enable this feature you can link multiple points on the map to generate an area
 LabelcircleDesc=As soon as you enable this feature you can generate circles on the map
 LabelGeocodeDesc=Valuename: for instance: "EMMAID", "NUTS1", "NUTS2", "NUTS3" etc. <br> Value: for instance: "AT22"
 Next=Next
@@ -158,7 +158,7 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 ###Paint and Alert###
 
-	DESC_EditWarningNotAktive=This Area is only available if a warning is selected!
+	DESC_EditWarningNotAktive=This form is only available if a warning is selected!
 	PaintGreen=The following areas have not yet received warning for this day! Folgende Gebiete sind für diesen Tag noch weiß!
 	DESC_PaintGreen=Should this Areas get (de)warned green?
 	WarnGetCalculated=(meteoalarm calculates your warnings shortly)

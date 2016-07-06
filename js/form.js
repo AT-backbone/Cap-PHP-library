@@ -1569,6 +1569,9 @@ $( document ).ready(function()
 						area_green_final[aid][data['type']]['level'] 	= level;
 						area_green_final[aid][data['type']]['type'] 	= type;
 						area_green_final[aid][data['type']]['text_0']	= 'no warning';
+						offset = $('#timezone_h').html();
+
+						area_green_final[aid][data['type']]['exutc'] 	= '+00:00';
 						area_green_final[aid][data['type']]['from'] 	= date.yyyymmdd() + ' 00:00:00';
 						area_green_final[aid][data['type']]['to'] 	= date.yyyymmdd() + ' 23:59:59';
 					}

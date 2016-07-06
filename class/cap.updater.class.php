@@ -213,7 +213,7 @@
 			// $conf->cap->output the dir of the caps
 			$files = glob($conf->cap->output.'/*'); // get all file names
 			foreach($files as $file){ // iterate files
-				if(is_file($file)) unlink($file); // delete file
+				if(is_file($file) && $file != 'COPYING') unlink($file); // delete file
 			}
 
 			return true;
@@ -546,7 +546,9 @@
 									//print '</pre>';
 									if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $data_arr[0]->eid != "")
 									{
-										$timezone_date = date('P');
+										if($data_arr[0]->exutc != "") $timezone_date = $data_arr[0]->exutc;
+										else $timezone_date = date('P');
+
 										$timezone_date_p = $timezone_date[0];
 										$timezone_date_h = substr($timezone_date, 1);
 

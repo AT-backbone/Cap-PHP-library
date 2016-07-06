@@ -186,7 +186,11 @@
 						$out.= '<input type="hidden" value="MD" id="iso">';
 						$out.= '<input type="hidden" value="2" id="green">';
 						$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
+						
+						$timezone_h =  date('P');
+						$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';
 						$timezone_name =  date('P').' '.date('T').' '.date_default_timezone_get();
+						
 						foreach($langs_keys as $key => $lang_val)
 						{
 							$out.= '<input name="langs" type="hidden" value="'.$lang_val.'" id="lang_'.$key.'">';
@@ -401,7 +405,7 @@
 								$out.= '</div>';
 
 								// Dissmis or OK
-								$out.= '<div class="ui-grid-b">';
+								$out.= '<div class="ui-grid-a">';
 									$out.= '<div class="ui-block-a">';
 										$out.= '<a id="green_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
 											$out.= $langs->trans('No');
@@ -412,7 +416,7 @@
 									//		$out.= $langs->trans('edit');
 									//	$out.= '</a>';
 									//$out.= '</div>';
-									$out.= '<div class="ui-block-c">';
+									$out.= '<div class="ui-block-b">';
 										$out.= '<a id="green_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
 											$out.= $langs->trans('Yes');
 										$out.= '</a>';
