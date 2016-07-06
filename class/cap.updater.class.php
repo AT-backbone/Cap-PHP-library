@@ -213,7 +213,7 @@
 			// $conf->cap->output the dir of the caps
 			$files = glob($conf->cap->output.'/*'); // get all file names
 			foreach($files as $file){ // iterate files
-				if(is_file($file) && $file != 'COPYING') unlink($file); // delete file
+				if(is_file($file) && $file != $conf->cap->output.'/COPYING') unlink($file); // delete file
 			}
 
 			return true;
@@ -544,6 +544,19 @@
 									//print '<pre>data_arr data: ';
 									//	print_r($data_arr);
 									//print '</pre>';
+
+									if(file_exists('conf/template.cap'))
+									{
+										require_once 'lib/cap.read.template.class.php';
+										$alert = new alert_template('conf/template.cap');
+										$post = $alert->output_template();
+										//print '<pre>';
+										//	print_r($post);
+										//print '</pre>';
+										unset($alert);
+									}
+
+
 									if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $data_arr[0]->eid != "")
 									{
 										if($data_arr[0]->exutc != "") $timezone_date = $data_arr[0]->exutc;
@@ -559,48 +572,93 @@
 											if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 											$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
 										}
+
+										// Template
+										if($post['sender'] == "") 
 										$post['sender']					= 'admin@meteoalarm.eu';
-										$post['sent']['date'] 		= date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
-										$post['sent']['time'] 		= date('H:i:s');
-										$post['sent']['plus'] 		= $timezone_date_p;
-										$post['sent']['UTC']  		= $timezone_date_h;
-										$post['status'] 				= 'Actual';
+
+										$post['sent'] 					= array();
+										$post['sent']['date'] 			= date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
+										$post['sent']['time'] 			= date('H:i:s');
+										$post['sent']['plus'] 			= $timezone_date_p;
+										$post['sent']['UTC']  			= $timezone_date_h;
+
+										// Template
+										if($post['status'] != "") 
+											$post['status'] 			= $post['status'];
+										else
+											$post['status'] 			= 'Actual';
+
 										if($ref == "Update")
 										{
-											$post['msgType'] 				= 'Update'; // Or Update / Cancel
+											$post['msgType'] 			= 'Update'; // Or Update / Cancel
 										}
 										else
 										{
-											$post['msgType'] 				= 'Alert'; // Or Update / Cancel
+											$post['msgType'] 			= 'Alert'; // Or Update / Cancel
 										}
-										$post['scope'] 					= 'Public';
+
+										// Template
+										if($post['scope'] != "") 
+											$post['scope'] 				= $post['scope'];
+										else
+											$post['scope'] 				= 'Public';
+
 										foreach($langs_keys as $key => $lang_val)
 										{
 											$post['event'][$lang_val]	= $this->severity[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' warning';
 										}
-										//$post['event'][$langs_keys[1]]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
-										$post['category'] 				= 'Met';				
-										$post['responseType']			= 'Monitor';
-										$post['urgency'] 				= 'Immediate';
-										$post['severity'] 				= $this->severity[$data_arr[0]->level];
-										$post['certainty'] 				= 'Likely';
 
-										//if(strtotime($data_arr[0]->from) > strtotime('now')) $data_arr[0]->from = date('Y-m-d H:i:s',strtotime($data_arr[0]->from.' - 1 days'));
+										// Template
+										if($post['info'][0]['category'] != "") 
+											$post['category'] 			= $post['info'][0]['category'];
+										else
+											$post['category'] 			= 'Met';		
+
+										// Template
+										if($post['info'][0]['responseType'] != "") 
+											$post['responseType'] 		= $post['info'][0]['responseType'][0];
+										else
+											$post['responseType']		= 'Monitor';
+
+										// Template
+										if($post['info'][0]['urgency'] != "") 
+											$post['urgency'] 			= $post['info'][0]['urgency'];
+										else
+											$post['urgency'] 			= 'Immediate';
+
+										$post['severity'] 				= $this->severity[$data_arr[0]->level];
+										
+										// Template
+										if($post['info'][0]['certainty'] != "") 
+											$post['certainty'] 			= $post['info'][0]['certainty'];
+										else
+											$post['certainty'] 			= 'Likely';
+
+										if($post['info'][0]['audience'] != "") 
+											$post['audience'] = $post['info'][0]['audience'];
+
 										$post['effective']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 										$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 										$post['effective']['plus'] = $timezone_date_p;
 										$post['effective']['UTC'] = $timezone_date_h;
+
 										$post['onset']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 										$post['onset']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 										$post['onset']['plus'] = $timezone_date_p;
 										$post['onset']['UTC'] = $timezone_date_h;
+
 										if(strtotime($data_arr[0]->to) < strtotime('now')) $data_arr[0]->to = date('Y-m-d H:i:s',strtotime($data_arr[0]->to.' + 1 days'));
 										$post['expires']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$_POST['data'].' days'))));
 										$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
 										$post['expires']['plus'] = $timezone_date_p;
 										$post['expires']['UTC'] = $timezone_date_h;
 
-										$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
+										// Template
+										if($post['info'][0]['senderName'] != "") 
+											$post['senderName'] = $post['info'][0]['senderName'];
+										else
+											$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
 
 										foreach($langs_keys as $key => $lang_val)
 										{
@@ -626,11 +684,14 @@
 										{
 											$post['geocode']['value'][] = $data->eid.'<|>emma_id';
 										}
-										//print_r($post);
+										
 										$cap = new CAP_Class($post);
 										$cap->buildCap();
 										$cap->destination = $conf->cap->output;
 										$path = $cap->createFile();
+										//print '<pre>';
+										//	print_r($post);
+										//print '</pre>';
 										unset($post);
 									}
 								}

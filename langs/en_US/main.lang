@@ -157,6 +157,9 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 
 ###Paint and Alert###
+	
+	LabelEffectivePaintAndAlertDesc=The effective time of the information of the alert message.
+	LabelExpiresPaintAndAlertDesc=The expiry time of the information of the alert message.
 
 	DESC_EditWarningNotAktive=This form is only available if a warning is selected!
 	PaintGreen=The following areas have not yet received warning for this day! Folgende Gebiete sind für diesen Tag noch weiß!

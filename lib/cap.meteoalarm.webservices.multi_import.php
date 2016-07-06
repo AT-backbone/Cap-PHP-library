@@ -120,7 +120,7 @@
 		$files2 = scandir($conf->cap->output, 1);
 		foreach($files2 as $file)
 		{
-			if($file != "." && $file != ".." && $file != "ftp_prc" && $file != "skeleton_green")
+			if($file != "." && $file != ".." && $file != "ftp_prc" && $file != "skeleton_green" && $file != "COPYING")
 			{
 				$out = "";
 				// lege das output verzeichnis fest

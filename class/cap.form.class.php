@@ -273,7 +273,7 @@
 										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;border-top: none; border-right: none;">';
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
-													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectiveDesc")).'</legend>';
+													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectivePaintAndAlertDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
 														$out.= '<input '.$status_theme.' id="from_0" type="text" name="effective[time]" step="1" value="00:00">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
@@ -283,7 +283,7 @@
 													$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 												$out.= '</div>';
 												$out.= '<div class="ui-block-b">';
-													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresDesc")).'</legend>';
+													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresPaintAndAlertDesc")).'</legend>';
 													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
 														$out.= '<input '.$status_theme.' id="to_0" type="text" name="expires[time]" step="1" value="23:59">';
 														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';

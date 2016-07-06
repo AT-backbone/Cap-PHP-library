@@ -140,6 +140,9 @@ LabelOnsetDesc=(OPTIONAL)<br>Der erwartete Beginn des in der Warnung beschrieben
 LabelExpiresDesc=(OPTIONAL)<br>Der Zeitpunkt an welchem die Warnung ausläuft.
 LabelParameterDesc=(OPTIONAL)<br>System-spezifische weitere Parameter im Zusammenhang mit der Warnung.
 
+LabelEffectivePaintAndAlertDesc=Der Zeitpunkt des Inkrafttreten der Warnung
+LabelExpiresPaintAndAlertDesc=Der Zeitpunkt an welchem die Warnung ausläuft.
+
 ###Login###
 TitleLogin=Login
 Service=Service
