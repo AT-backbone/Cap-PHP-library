@@ -260,7 +260,7 @@ $( document ).ready(function()
 			$('#mk_process_info').html($('#mk_process_lang').val());
 
 			loading_dots();
-
+			$("#submit_cap").addClass('ui-disabled');
 			mk_pro_interval = setInterval(function(){ 
 				$.ajax({
 					type: "POST",
@@ -274,6 +274,7 @@ $( document ).ready(function()
 						}
 						else
 						{
+							$( "#submit_cap" ).removeClass('ui-disabled');
 							location.reload();	
 						}
 					}
@@ -1639,6 +1640,7 @@ $( document ).ready(function()
 						$('#mk_process_info').html($('#mk_process_lang').val());
 
 						loading_dots();
+						$("#submit_cap").addClass('ui-disabled');
 
 						mk_pro_interval = setInterval(function(){ 
 							$.ajax({
@@ -1653,7 +1655,8 @@ $( document ).ready(function()
 									}
 									else
 									{
-										location.reload();	
+										$( "#submit_cap" ).removeClass('ui-disabled');
+										location.reload();
 									}
 								}
 							});
