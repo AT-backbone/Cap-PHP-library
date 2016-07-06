@@ -1572,7 +1572,7 @@ $( document ).ready(function()
 						offset = $('#timezone_h').html();
 
 						area_green_final[aid][data['type']]['exutc'] 	= '+00:00';
-						area_green_final[aid][data['type']]['from'] 	= date.yyyymmdd() + ' 23:00:00';
+						area_green_final[aid][data['type']]['from'] 	= date.yyyymmddH() + ' 23:00:00';
 						area_green_final[aid][data['type']]['to'] 	= date.yyyymmdd() + ' 22:59:59';
 					}
 				}
@@ -1731,6 +1731,13 @@ $( document ).ready(function()
 		var yyyy = this.getFullYear().toString();
 		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
 		var dd  = this.getDate().toString();
+		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+	};
+
+		Date.prototype.yyyymmddH = function() {
+		var yyyy = this.getFullYear().toString();
+		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+		var dd  = (this.getDate() - 1).toString();
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 
