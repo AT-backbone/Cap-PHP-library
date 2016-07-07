@@ -143,18 +143,14 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	SaveWebservicePass=Save password?
 	
 	###Meteoalarm Webservice###
-	LabelAwarenessTypeWebservice=LabelAwarenessTypeWebservice
-	LabelAwarenessTypeWebserviceDesc=LabelAwarenessTypeWebserviceDesc
+	LabelAwarenessTypeWebservice=type of hazard (mws)
+	LabelAwarenessTypeWebserviceDesc=meteoalarm awareness-type (rain, tunderstorm, wind, hot-temperature, low-temperature ...)
 	
-	LabelAwarenessLevelWebservice=LabelAwarenessLevelWebservice
-	LabelAwarenessLevelWebserviceDesc=LabelAwarenessLevelWebserviceDesc
+	LabelAwarenessLevelWebservice=level of hazard (mws)
+	LabelAwarenessLevelWebserviceDesc=meteoalarm awareness-level (green, yellow, orange, red)
 	
-	LabelGeocodeWebservice=LabelGeocodeWebservice
-	LabelGeocodeWebserviceDesc=LabelGeocodeWebserviceDesc
-
-
-
-
+	LabelGeocodeWebservice=Area  (mws)
+	LabelGeocodeWebserviceDesc=meteoalarm area (i.E. EMMAID)
 
 ###Paint and Alert###
 	
@@ -208,6 +204,11 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 	WebserviceConfiguration=Webservice Configuration
 	
+=======
+	
+	LabelTemplate=Cap-Template
+	LabelTemplateDesc=In a template values can be stored, which can be used for new CAP files if no input by the creation was made.
+  
 ###Webservice Configuration###
 
 	Labelwebservice_securitykey=<b>Webservice Security Key</b>
