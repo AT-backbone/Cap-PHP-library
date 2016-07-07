@@ -203,8 +203,11 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	LabelWebservice=<b>Webservice</b>
 	LabelWebserviceDesc=If you want to use a SOAP Webservice enable it here and additional options will become available.
 
-	WebserviceConfiguration=Webservice Configuration
+	LabelTemplate=Cap-Template
+	LabelTemplateDesc=In a template values can be stored, which can be used for new CAP files if no input by the creation was made.
 
+	WebserviceConfiguration=Webservice Configuration
+	
 ###Webservice Configuration###
 
 	Labelwebservice_securitykey=<b>Webservice Security Key</b>
