@@ -23,7 +23,7 @@
  */
  
 /**
- * Front end of the Cap-php-library
+ * Front end of the Cap-php-library cap 1.3
  */
 	error_reporting(E_ERROR | E_PARSE);
 	
