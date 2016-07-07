@@ -97,12 +97,12 @@
 		
 				//$type['conf']['detail']['value'][] = "DUMMY";
 				$type['conf']['detail']['value'][] = "webservice_securitykey";
-				$type['conf']['detail']['value'][] = "webservice_sourceapplication";
-				$type['conf']['detail']['value'][] = "webservice_login";
-				$type['conf']['detail']['value'][] = "webservice_password";
-				$type['conf']['detail']['value'][] = "webservice_entity";
+				//$type['conf']['detail']['value'][] = "webservice_sourceapplication";
+				//$type['conf']['detail']['value'][] = "webservice_login";
+				//$type['conf']['detail']['value'][] = "webservice_password";
+				//$type['conf']['detail']['value'][] = "webservice_entity";
 				$type['conf']['detail']['value'][] = "webservice_WS_METHOD";
-				$type['conf']['detail']['value'][] = "webservice_ns";
+				//$type['conf']['detail']['value'][] = "webservice_ns";
 				$type['conf']['detail']['value'][] = "webservice_WS_DOL_URL";
 				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
 				

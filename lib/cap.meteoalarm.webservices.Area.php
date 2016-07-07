@@ -8,11 +8,12 @@ $conf->meteoalarm = 1;
 if($conf->meteoalarm == 1)
 {
 	global $out;
+
 	$conf->webservice->password = encrypt_decrypt(2, $conf->webservice->password);
 	ini_set("default_socket_timeout", 60000);
 	require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 	
-	$ns='http://www.meteoalarm.eu:8080/functions/webservices/';
+	$ns=$conf->webservice->ns;
 	$WS_DOL_URL = $ns.'CapAreaInfo.php';
 
 	$filename = $_POST[filename];
@@ -31,43 +32,47 @@ if($conf->meteoalarm == 1)
 		
 		// Call the WebService method and store its result in $result.
 		$authentication=array(
-		    'dolibarrkey'=>$conf->webservice->securitykey,
-		    'sourceapplication'=>'getAreaInfo',
-		  	'login'=> $conf->webservice->login,
-	  	  'password'=> $conf->webservice->password);
+			'dolibarrkey'=>$conf->webservice->securitykey,
+			'sourceapplication'=>'getAreaInfo',
+			'login'=> $conf->webservice->login,
+			'password'=> $conf->webservice->password
+		);
 
 		if(!empty($conf->identifier->ISO)) $iso = $conf->identifier->ISO;
 		if(!empty($_GET['iso'])) $iso = $_GET['iso'];
 		
 		$GenInsInput=array(
-    'iso'=>$iso,
-    'EMMA_ID'=>$_GET["EMMA_ID"]);
+    		'iso'=>$iso,
+   			'EMMA_ID'=>$_GET["EMMA_ID"]
+		);
 		    	
 		
-			$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);
-			
-			$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
-			
-			if ($soapclient->fault) 
-			{
-		    $out.= '<h2>Fault</h2><pre>';
-		    $out.=var_dump($result);
-		    $out.= '</pre>';
-			} else 
-			{
-				    // Check for errors
-				$err = $soapclient->getError();
-				
-				if ($err) 
-				{
-				  // Display the error
-				  $out.= '<h2>Error</h2><pre>' . $err . '</pre>';
-		    } 
-		    else 
-		    {
+		$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);
+		
+		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
+		
+		if ($soapclient->fault) 
+		{
+			$out.= '<h2>Fault</h2><pre>';
+			$out.=var_dump($result);
+			$out.= '</pre>';
+		} 
+		else 
+		{
+			// Check for errors
+			$err = $soapclient->getError();
 
-		    }
-			}
+			if ($err) 
+			{
+				// Display the error
+				$out.= '<h2>Error</h2><pre>' . $err . '</pre>';
+	    	} 
+	   	 	else 
+	    	{
+
+	    	}
+		}
+		
 		$conf->webservice->password = encrypt_decrypt(1, $conf->webservice->password);	
 }
 ?>

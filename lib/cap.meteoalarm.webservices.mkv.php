@@ -119,7 +119,7 @@
 		ini_set("default_socket_timeout", 60000);
 		require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 		
-		$ns='http://www.meteoalarm.eu:8080/functions/webservices/';
+		$ns=$conf->webservice->ns;
 		$WS_DOL_URL = $ns.'SvgAreaInfo.php';
 
 		$filename = $_POST[filename];

@@ -232,6 +232,19 @@
 		$conf->webservice->login = $_SESSION['Session_login_name'];
 		$conf->webservice->password = $_SESSION['Session_login_pass'];
 	}
+
+	// build service url
+	$service_arr = explode('/', $conf->webservice->WS_DOL_URL);
+	end($service_arr);
+	$key = key($service_arr);
+
+	$conf->webservice->ns = str_replace($service_arr[$key],'',$conf->webservice->WS_DOL_URL);
+	$conf->webservice->sourceapplication = $conf->webservice->WS_METHOD;
+	//webservice_sourceapplication
+	//webservice_login
+	//webservice_password
+	//webservice_entity
+	//webservice_ns
 	
 	// METEOALARM WEBSERVICE ---
 	$conf->meteoalarm = 1;

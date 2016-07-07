@@ -169,8 +169,6 @@
 			if(!empty($cap_array)) $this->cap_array = $cap_array;
 			if(!empty($awt)) $this->awt_arr = $awt;
 			if(!empty($langs)) $this->language = $langs;
-			// $this->cap_array = json_decode($cap_array_tmp);
-			// $this->awt_arr 	= json_decode($awt_arr_tmp);
 		}
 
 		/**
@@ -248,6 +246,11 @@
 							$res = -2; // Can't fetch Area Data
 						}
 					}
+					else
+					{
+						print 'file do not exists: lib/cap.meteoalarm.webservices.Area.php';
+					}
+					//print_r($AreaCodesArray);
 					if(file_exists('lib/cap.meteoalarm.webservices.vl.php'))  // test if the lib exists
 					{
 						// Contains the warnings sorted to areas
@@ -261,7 +264,11 @@
 							$res = -3;  // Can't fetch VL Data
 						}
 					}
-
+					else
+					{
+						print 'file do not exists: lib/cap.meteoalarm.webservices.vl.php';
+					}
+					//print_r($AreaCodesArray);
 					return $res; // return res !
 				}
 				return false; // no webservice

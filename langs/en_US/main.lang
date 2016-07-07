@@ -203,6 +203,8 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	LabelWebservice=<b>Webservice</b>
 	LabelWebserviceDesc=If you want to use a SOAP Webservice enable it here and additional options will become available.
 
+	WebserviceConfiguration=Webservice Configuration
+
 ###Webservice Configuration###
 
 	Labelwebservice_securitykey=<b>Webservice Security Key</b>

@@ -12,8 +12,8 @@ if($conf->meteoalarm == 1)
 	ini_set("default_socket_timeout", 60000);
 	require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 	
-	$ns='http://www.meteoalarm.eu:8080/functions/webservices/';
-	$WS_DOL_URL = $ns.'CapAreaInfo.php';
+	$ns=$conf->webservice->ns;
+	$WS_DOL_URL = $ns.'CapAreaInfo.php'; // EXTRA
 
 	$filename = $_POST[filename];
 	if($_POST['import']==1) $import = true; else $import = false;

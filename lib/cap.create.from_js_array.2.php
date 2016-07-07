@@ -55,6 +55,78 @@
 	$cap_array = json_decode($cap_array_tmp);
 	$awt_arr = json_decode($awt_arr_tmp);
 
+		$conf->webservice->login = "";
+	$conf->webservice->password = "";
+	session_name(encrypt_decrypt(1, getcwd()));
+	session_start();
+	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
+	{
+		if(!is_array($_POST['send-logout']))
+		{
+			end($_POST['send-login']);
+			$key = key($_POST['send-login']);
+
+			if(!empty($_POST['savepass'][$key]))
+			{		
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				
+				session_unset();
+				session_start();
+
+				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
+				setcookie('ServiceHost', $Webservicename[1], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
+				setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
+				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
+				setcookie("Session_login_pass", encrypt_decrypt(1,$_POST['Session_login_pass'][$key]), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
+			}
+			else
+			{
+				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				
+				session_unset();
+				session_start();
+				
+				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
+				$_SESSION['ServiceHost'] = $Webservicename[1];
+				$_SESSION['timestamp'] = strtotime('now');
+				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
+				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
+			}
+			unset($_POST);
+		}
+		else
+		{
+			session_unset();
+			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
+			unset($_POST);
+		}
+	}
+	
+	if($_COOKIE['Session_login_name'])
+	{
+		$conf->webservice->login = $_COOKIE['Session_login_name'];
+		$conf->webservice->password =  $_COOKIE['Session_login_pass'];
+	}
+	
+	if($_SESSION['Session_login_name'])
+	{
+		$conf->webservice->login = $_SESSION['Session_login_name'];
+		$conf->webservice->password = $_SESSION['Session_login_pass'];
+	}
+
+	$service_arr = explode('/', $conf->webservice->WS_DOL_URL);
+	end($service_arr);
+	$key = key($service_arr);
+
+	$conf->webservice->ns = str_replace($service_arr[$key],'',$conf->webservice->WS_DOL_URL);
+	$conf->webservice->sourceapplication = $conf->webservice->WS_METHOD;
+
+	//print_r($conf);
+
 	//print '<br>Start:<br>';
 
 	// $conf->webservice
@@ -66,6 +138,7 @@
 	// $conf->identifier->WMO_OID
 	// $conf->identifier->ISO
 	// $conf->cap->output
+	
 	$capupdater = new CAP_Updater($cap_array, $awt_arr);
 
 	$capupdater->debug = false;
