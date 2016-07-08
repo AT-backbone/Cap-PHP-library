@@ -341,12 +341,20 @@
 												}
 											$out.= '</div>';
 
-											$out.= '<div id="awareness_color_toolbox" class="awareness_color_div">';
+											$size = '';
+											if(is_array($ParameterArray['AWL']))
+											{
+												if(count($ParameterArray['AWL']) > 5) $size = 'style="width:160px;"';
+											}
+
+											$out.= '<div id="awareness_color_toolbox" class="awareness_color_div" '.$size.'>';
 												// 29d660, ffff00, fecb31, fe0104
-												$out.= '<div class="awareness" id="left_box_level_1" aktive="1" level="1"></div>';
-												$out.= '<div class="awareness" id="left_box_level_2" aktive="1" level="2"></div>';
-												$out.= '<div class="awareness" id="left_box_level_3" aktive="1" level="3"></div>';
-												$out.= '<div class="awareness" id="left_box_level_4" aktive="1" level="4"></div>';
+												if(is_array($ParameterArray['AWL']))
+												foreach($ParameterArray['AWL'] as $key => $level_arr)
+												{
+													if($level_arr['id'] > 0) $out.= '<div class="awareness" style="background-color: '.$level_arr['hazard_level'].';" id="left_box_level_'.$level_arr['id'].'" aktive="1" level="'.$level_arr['id'].'"></div>';
+												}
+
 											$out.= '</div>';
 											
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_1">';
