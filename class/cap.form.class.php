@@ -145,8 +145,9 @@
 			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG;
 			
 			$st['date'] = date('Y-m-d');
-			$st['time'] = date('H:i:s');
+			$st['time'] = date('H:i');
 			$st['zone'] = substr(date('P'), 1);
+			$timezone_name =  date('P').' '.date('T').' '.date_default_timezone_get();
 			
 			/*
 			Requirenes level
@@ -189,7 +190,6 @@
 						
 						$timezone_h =  date('P');
 						$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';
-						$timezone_name =  date('P').' '.date('T').' '.date_default_timezone_get();
 						
 						foreach($langs_keys as $key => $lang_val)
 						{
@@ -538,11 +538,11 @@
 						$out.= '<label>'.$langs->trans("LabelSent").': '.$this->tooltip($type, $langs->trans("LabelSentDesc")).'</label>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input '.$status_theme.' type="date" name="sent[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.' type="text" name="sent[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input '.$status_theme.'  type="time" name="sent[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="text" name="sent[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
@@ -552,9 +552,10 @@
 								$out.= '<input type="text" max-size="1" value="+" name="sent[plus]" style="height: 37px;">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-c" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="time" name="sent[UTC]" value="'.$st['zone'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="sent[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
+						$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 					$out.= '</div>';
 					break;
 				
@@ -663,7 +664,7 @@
 				
 				case 'effective-Clock':
 						$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-							$out.= '<input type="time" class="form-control" value="09:30" step="2">';
+							$out.= '<input type="text" class="form-control" value="09:30" step="2">';
 							$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 								$out.= '<span class="glyphicon glyphicon-time"></span>';
 							$out.= '</span>';
@@ -677,11 +678,11 @@
 						$out.= '<legend>'.$langs->trans("LabelEffective").': '.$this->tooltip($type, $langs->trans("LabelEffectiveDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="date" name="effective[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="effective[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input '.$status_theme.'  type="time" name="effective[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="text" name="effective[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
@@ -691,9 +692,10 @@
 								$out.= '<input type="text" max-size="1" value="+" name="effective[plus]" style="height: 37px;">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-d" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="time" name="effective[UTC]" value="'.$st['zone'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="effective[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
+						$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 					$out.= '</div>';
 					break;
 
@@ -704,11 +706,11 @@
 						$out.= '<legend>'.$langs->trans("LabelOnset").': '.$this->tooltip($type, $langs->trans("LabelOnsetDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="date" name="onset[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="onset[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input '.$status_theme.'  type="time" name="onset[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="text" name="onset[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
@@ -718,9 +720,10 @@
 								$out.= '<input type="text" max-size="1" value="+" name="onset[plus]" style="height: 37px;">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-d" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="time" name="onset[UTC]" value="'.$st['zone'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="onset[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
+						$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 					$out.= '</div>';
 					break;
 					
@@ -731,11 +734,11 @@
 						$out.= '<legend>'.$langs->trans("LabelExpires").': '.$this->tooltip($type, $langs->trans("LabelExpiresDesc")).'</legend>';
 						$out.= '<div class="ui-grid-b">';
 							$out.= '<div class="ui-block-a" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="date" name="expires[date]" value="'.$st['date'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="expires[date]" value="'.$st['date'].'">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-b" style="width: 155px;">';
 								$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-									$out.= '<input '.$status_theme.'  type="time" name="expires[time]" step="1" value="'.$st['time'].'">';
+									$out.= '<input '.$status_theme.'  type="text" name="expires[time]" step="1" value="'.$st['time'].'">';
 									$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
 										$out.= '<span class="glyphicon glyphicon-time"></span>';
 									$out.= '</span>';
@@ -745,9 +748,10 @@
 								$out.= '<input type="text" max-size="1" value="+" name="expires[plus]" style="height: 37px;">';
 							$out.= '</div>';
 							$out.= '<div class="ui-block-d" style="width: 155px;">';
-								$out.= '<input '.$status_theme.'  type="time" name="expires[UTC]" value="'.$st['zone'].'">';
+								$out.= '<input '.$status_theme.'  type="text" name="expires[UTC]" value="'.$st['zone'].'">';
 							$out.= '</div>'; // <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min>
 						$out.= '</div>';
+						$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 					$out.= '</div>';
 					break;
 
