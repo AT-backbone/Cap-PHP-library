@@ -676,8 +676,17 @@
 												$post['description'][$lang_val] = $data_arr[0]->{'text_'.$key};
 												if($data_arr[0]->inst_0 != "") $post['instruction'][$lang_val] = $data_arr[0]->{'inst_'.$key};
 											}
-
+											else
+											{
+												if($data_arr[0]->level == 1)
+												{
+													$post['language'][] = $lang_val;
+													$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
+													$post['description'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
+												}
+											}
 										}
+
 
 										$post['areaDesc'] = $data_arr[0]->name;
 
