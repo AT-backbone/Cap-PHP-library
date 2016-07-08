@@ -117,20 +117,20 @@
 			$type['Login'][] 		= 'login_popup';
 			
 			// PAGES WOH DO NOT USE DETAIL FUNKTION
-			$type['info']['detail']['value'] 		= ""; // no detail
-			$type['info']['detail']['name']  		= ""; // no detail
+			$type['info']['detail']['value'] 		= -1; // no detail
+			$type['info']['detail']['name']  		= -1; // no detail
 			
-			$type['area']['detail']['value'] 		= ""; // no detail			
-			$type['area']['detail']['name']  		= ""; // no detail
+			$type['area']['detail']['value'] 		= -1; // no detail			
+			$type['area']['detail']['name']  		= -1; // no detail
 			
-			$type['read']['detail']['value'] 		= ""; // no detail
-			$type['read']['detail']['name']  		= ""; // no detail
+			$type['read']['detail']['value'] 		= -1; // no detail
+			$type['read']['detail']['name']  		= -1; // no detail
 				
-			$type['Login']['detail']['value'] 	= ""; // no detail
-			$type['Login']['detail']['name']  	= ""; // no detail
+			$type['Login']['detail']['value'] 		= -1; // no detail
+			$type['Login']['detail']['name']  		= -1; // no detail
 			
-			$type['capview']['detail']['value'] = ""; // no detail
-			$type['capview']['detail']['name']  = ""; // no detail
+			$type['capview']['detail']['value'] 	= -1; // no detail
+			$type['capview']['detail']['name']  	= -1; // no detail
 
       return $type;
 		}

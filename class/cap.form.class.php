@@ -1659,7 +1659,7 @@
 									$out.= '</div>';	 // UI_BODY_A
 									
 									// DETAILS
-									if(count ($TypePage['detail']['value']) >= 1)
+									if(count ($TypePage['detail']['value']) >= 1 && $TypePage['detail']['value'] != -1)
 									{
 										$visibl = "";
 										if($conf->webservice->on == 0 && $pagename == "conf") $visibl = 'style="display:none;"'; 
