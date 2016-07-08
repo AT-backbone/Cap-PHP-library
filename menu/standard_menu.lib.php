@@ -147,10 +147,10 @@
 			
 			$pages['#area']  					= $langs->trans("TitleArea");
 
+			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
+
 			if($conf->webservice_aktive == 1)
 			$pages['map.php']  					= $langs->trans("TitleMap");
-			
-			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
 			
 			$pages['#read'] 		 		= $langs->trans("TitleCapList");
 			
@@ -164,7 +164,7 @@
 			$pages['next']['name']['area'] 	= 'capview';
 			
 			// Input or else
-			$pages['next']['nolink']['capview'] = '<input type="submit" value="'.$langs->trans("Submit").'" data-ajax="false">';
+			$pages['next']['nolink']['capview'] = '<input type="submit" value="'.$langs->trans("Save").'" data-ajax="false">';
 			
 			$pages['next']['nolink']['conf'] 		= '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
 			$pages['next']['nolink']['conf'] 	 .= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';

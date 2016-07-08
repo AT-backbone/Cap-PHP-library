@@ -102,12 +102,12 @@
 			$pages['index.php#info']  					= $langs->trans("TitleInfo");
 			
 			$pages['index.php#area']  					= $langs->trans("TitleArea");
+			
+			$pages['index.php#capview'] 		 		= $langs->trans("TitleCapView");
 
 			if($conf->webservice_aktive == 1)
 			$pages['map.php']  					= $langs->trans("TitleMap");
-			
-			$pages['index.php#capview'] 		 		= $langs->trans("TitleCapView");
-			
+							
 			$pages['index.php#read'] 		 		= $langs->trans("TitleCapList");
 			
 			$pages['index.php?conv=1#capconv']	= $langs->trans("TitleCapConv");
