@@ -81,44 +81,44 @@
 			if(is_array($post) && $class == false)
 			{
 				$this->output 			= $post['output'];
-				$this->identifier 	= $post['identifier'];
-				$this->sender				= $post['sender'];
-				$this->sent					= $post['sent'];
-				$this->status				= $post['status'];
+				$this->identifier 		= $post['identifier'];
+				$this->sender			= $post['sender'];
+				$this->sent				= $post['sent'];
+				$this->status			= $post['status'];
 				$this->msgType			= $post['msgType'];
 				$this->references		= $post['references'];
-				$this->scope				= $post['scope'];
+				$this->scope			= $post['scope'];
 				
-				$this->source					= $post['source'];
+				$this->source			= $post['source'];
 				$this->restriction		= $post['restriction'];
-				$this->addresses			= $post['addresses'];
-				$this->code						= $post['code'];
-				$this->note						= $post['note'];
-				$this->incidents			= $post['incidents'];
+				$this->addresses		= $post['addresses'];
+				$this->code				= $post['code'];
+				$this->note				= $post['note'];
+				$this->incidents		= $post['incidents'];
 				
 				$this->language			= array_unique($post['language']);
 				$this->category			= $post['category'];
-				$this->event				= $post['event'];
-				$this->responseType	= $post['responseType'];
+				$this->event			= $post['event'];
+				$this->responseType		= $post['responseType'];
 				$this->urgency			= $post['urgency'];
 				$this->severity			= $post['severity'];
 				$this->certainty		= $post['certainty'];
 				$this->audience			= $post['audience'];
 				$this->eventCode		= $post['eventCode'];
 				$this->effective		= $post['effective'];
-				$this->onset				= $post['onset'];
+				$this->onset			= $post['onset'];
 				$this->expires			= $post['expires'];
 				$this->senderName		= $post['senderName'];
 				$this->headline			= $post['headline'];
-				$this->description	= $post['description'];
-				$this->instruction	= $post['instruction'];
-				$this->web					= $post['web'];
+				$this->description		= $post['description'];
+				$this->instruction		= $post['instruction'];
+				$this->web				= $post['web'];
 				$this->contact			= $post['contact'];
 				$this->parameter		= $post['parameter'];
 
 				$this->areaDesc			= $post['areaDesc'];
 				$this->polygon			= $post['polygon'];
-				$this->circle				= $post['circle'];
+				$this->circle			= $post['circle'];
 				$this->geocode			= $post['geocode'];
 
 			}
@@ -134,12 +134,12 @@
 				$this->references		= $post->references;
 				$this->scope			= $post->scope;
 				
-				$this->source					= $post->source;
+				$this->source			= $post->source;
 				$this->restriction		= $post->restriction;
-				$this->addresses			= $post->addresses;
-				$this->code						= $post->code;
-				$this->note						= $post->note;
-				$this->incidents			= $post->incidents;
+				$this->addresses		= $post->addresses;
+				$this->code				= $post->code;
+				$this->note				= $post->note;
+				$this->incidents		= $post->incidents;
 				
 				$this->language			= $post->language;
 				$this->category			= $post->category;

@@ -221,7 +221,7 @@
 
 			$status['sender'] 			= "R";
 			$status['areaDesc'] 		= "R";
-			$status['geocode'] 			= "R";
+			$status['geocode'] 			= "O";
 
 			$status['restriction'] 	= "C"; // required when Scope is = Restricted
 			$status['required']['restriction']['Scope'] = 'Restricted'; // restriction is required when Scope is Restricted
