@@ -208,7 +208,7 @@
 				if($result["syntaxcheck"]["warning_import"] < 1) 	$icon = 'alert';
 				print '<li data-role="collapsible" data-icon="'.$icon.'" data-iconpos="right" data-inset="false" class="ui-icon-alert '.$icon.'">';
 					print '<h2>'.$file.'</h2>';
-					print '<a href="'.$conf->cap->output.'/'.$file.'" data-ajax="false" target="_blank">'.$file.'</a><br>';
+					print '<a href="index.php?read=1&location='.$file.'#capview" data-ajax="false" target="_blank">'.$file.'</a><br>';
 					print $out;
 				print '</li>';
 			}

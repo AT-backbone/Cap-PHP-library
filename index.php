@@ -322,11 +322,7 @@
 		{
 			if(! empty($_FILES["uploadfile"]["name"]))
 			{
-				// Get TEST Cap
-				if(! empty($_FILES["uploadfile"]["name"]))
-				{
-					$location = $_FILES["uploadfile"]["tmp_name"];
-				}
+				$location = $_FILES["uploadfile"]["tmp_name"];
 			}
 			
 			$alert = new alert($location);
@@ -344,19 +340,18 @@
 		
 		if(! empty($_FILES["uploadfile"]["name"]))
 		{
-			// Get TEST Cap
-			if(! empty($_FILES["uploadfile"]["name"]))
-			{
-				$location = $_FILES["uploadfile"]["tmp_name"];
-			}
-			else
-			{
-				$location = $conf->cap->output.'/'.urldecode($_POST['location']);
-			}
+			$location = $_FILES["uploadfile"]["tmp_name"];
 		}
 		else
 		{
-			$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			if(! empty($_POST['location']))
+			{
+				$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			}
+			else if(! empty($_GET['location']))
+			{
+				$location = $conf->cap->output.'/'.urldecode($_GET['location']);
+			}
 		}
 		
 		$alert = new alert($location);

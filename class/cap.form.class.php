@@ -1177,7 +1177,7 @@
 						break;
 						
 					case 'capview':
-							$out = '<textarea id="capviewtextarea"></textarea>';
+							$out = '<textarea id="capviewtextarea" readonly></textarea>';
 						break;
 						
 					case 'caplist':

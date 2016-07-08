@@ -5,13 +5,19 @@ $( document ).ready(function()
 		//console.log(this.value);
 	});
 	
-	updateCapXML();
-					
-	$( "input, select" ).change(function() {
+	if($('#init_map').val() != 1)
+	{
 		updateCapXML();
-		updateColor(this);
-		dependencies_js();
-	});
+	}
+		
+	if($('#init_map').val() != 1)
+	{
+		$( "input, select" ).change(function() {
+			updateCapXML();
+			updateColor(this);
+			dependencies_js();
+		});
+	}
 	
 	
 	$( "#webservice_switch" ).change(function() {
@@ -96,6 +102,7 @@ $( document ).ready(function()
 		        success: function(data)
 		        {			
 		        	$("#capviewtextarea").val(data);
+		        	$("#capviewtextarea").textinput( "refresh" );
 		        },
 				error: function(errorThrown){
 					console.log( errorThrown);
@@ -1728,6 +1735,11 @@ $( document ).ready(function()
 			theme: theme_tmp,
 			html: html_tmp
 		});
+	}
+
+	function JQ_loader_off()
+	{
+		$.mobile.loading( "hide" );
 	}
 
 	Date.prototype.yyyymmdd = function() {
