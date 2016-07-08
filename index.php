@@ -383,10 +383,10 @@
 			$cap = $alert->output_template();
 			unset($alert);
 		}
-		
-			$form = new CAP_Form($cap);
+			
+		$form = new CAP_Form($cap);
 
-			print $form->Form();
+		print $form->Form();
 	}
 	elseif($_POST['action'] == "create" && $_GET['conf'] != 1)
 	{

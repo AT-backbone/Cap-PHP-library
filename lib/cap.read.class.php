@@ -269,9 +269,6 @@
 				$this->info[$this->infoIndex] = $str;
 				$this->infoIndex++;
 			}
-	
-	
-			
 		}
 	
 	

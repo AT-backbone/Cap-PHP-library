@@ -44,37 +44,44 @@
 		{
 			if(is_array($post))
 			{
-				$this->output[] 			= $post['output'];
-				$this->identifier[] 	= $post['identifier'];
-				$this->sender[]				= $post['sender'];
+				$this->output[] 				= $post['output'];
+				$this->identifier[] 			= $post['identifier'];
+				$this->sender[]					= $post['sender'];
 				$this->sent[]					= $post['sent'];
-				$this->status[]				= $post['status'];
-				$this->msgType[]			= $post['msgType'];
-				$this->references[]		= $post['references'];
-				$this->scope[]				= $post['scope'];
+				$this->status[]					= $post['status'];
+				$this->msgType[]				= $post['msgType'];
+				$this->references[]				= $post['references'];
+				$this->scope[]					= $post['scope'];
 				
+				$this->source[]					= $post['source'];
+				$this->restriction[]			= $post['restriction'];
+				$this->addresses[]				= $post['addresses'];
+				$this->code[]					= $post['code'];
+				$this->note[]					= $post['note'];
+				$this->incidents[]				= $post['incidents'];
+
 				foreach($post['info'] as $key => $info)
 				{
 					
 					$this->language[]			= $info['language'];
 					$this->category[]			= $info['category'];
 					$this->event[]				= $info['event'];
-					$this->responseType[]	= $info['responseType'];
+					$this->responseType[]		= $info['responseType'];
 					$this->urgency[]			= $info['urgency'];
 					$this->severity[]			= $info['severity'];
-					$this->certainty[]		= $info['certainty'];
+					$this->certainty[]			= $info['certainty'];
 					$this->audience[]			= $info['audience'];
-					$this->eventCode[]		= $info['eventCode'];
-					$this->effective[]		= $info['effective'];
+					$this->eventCode[]			= $info['eventCode'];
+					$this->effective[]			= $info['effective'];
 					$this->onset[]				= $info['onset'];
 					$this->expires[]			= $info['expires'];
-					$this->senderName[]		= $info['senderName'];
+					$this->senderName[]			= $info['senderName'];
 					$this->headline[]			= $info['headline'];
-					$this->description[]	= $info['description'];
-					$this->instruction[]	= $info['instruction'];
-					$this->web[]					= $info['web'];
+					$this->description[]		= $info['description'];
+					$this->instruction[]		= $info['instruction'];
+					$this->web[]				= $info['web'];
 					$this->contact[]			= $info['contact'];
-					$this->parameter[]		= $info['parameter'];
+					$this->parameter[]			= $info['parameter'];
 					
 					foreach($info['area'] as $key2 => $area)
 					{					
@@ -1257,8 +1264,8 @@
 														
 														$(document).on("pageshow", "#alert" ,function ()
 														{
-										  $( "#Login-alert" ).popup();
-															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 100 );
+									  						$( "#Login-alert" ).popup();
+															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
 														});
 													</script>
 														';
@@ -1272,7 +1279,8 @@
 							
 							$out = '<div>';
 								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Info".$type)).'</label>';
-								$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'">';
+								$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'" value="'.$this->{$type}[0].'">';
+								//$out.= print_r($this, true);
 							$out.= '</div>';
 						break;
 			}

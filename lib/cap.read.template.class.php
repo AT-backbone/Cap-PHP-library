@@ -29,15 +29,13 @@
 	{
 		
 		function output_template(){
-		
 			$error = array();
 			$r = array();
-	
+			//print_r($this->required);
 			
 			foreach($this as $key => $val){
-				if($key == 'required') continue;
 				if($key == 'subclass') continue;
-				//if(!in_array($key,$this->required) && empty($val)) continue;
+				if(!in_array($key,$this->required) && empty($val)) continue;
 					if(is_object($val)){
 						$r[$key] = $val->output_template();
 					}elseif(is_array($val)){
@@ -51,6 +49,7 @@
 					}else
 						$r[$key] = $val;
 			}
+
 			return $r;
 		}
 		
@@ -81,23 +80,26 @@
 		}
 		
 		function buildFromArray_template($a,$key=''){
-			foreach($a as $k => $v){
-			if($key) $k = $key;
-				
-				if(is_array($v) ){
+			foreach($a as $k => $v)
+			{
+				if($key) $k = $key;
+				if(is_array($v) )
+				{
 					$this->buildFromArray_template($v,$k);
-				}elseif(isset($this->subclass[$k])){
+				}
+				elseif(isset($this->subclass[$k]))
+				{
 					$class = $this->subclass[$k];
 					$nc = new $class();
 					
 					$nc->buildFromArray_template($v);
 				
 					$this->{'_set'.ucfirst($k)}( $nc );
-				}else{
-					$this->{'_set'.ucfirst($k)}( trim((string) $v) );
 				}
-		
-					
+				else
+				{
+					$this->{'_set'.ucfirst($k)}( trim((string) $v) );
+				}	
 			}
 		}
 		
