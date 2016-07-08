@@ -129,6 +129,7 @@
 					
 					// setze den timeout
 					ini_set("default_socket_timeout", 60000);
+					set_time_limit ( 240 );
 					require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 					
 					$filename = $_POST[filename];

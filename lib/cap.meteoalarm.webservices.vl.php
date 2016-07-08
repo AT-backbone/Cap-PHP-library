@@ -10,6 +10,7 @@ if($conf->meteoalarm == 1)
 
 	$conf->webservice->password = encrypt_decrypt(2, $conf->webservice->password);
 	ini_set("default_socket_timeout", 60000);
+	set_time_limit ( 240 );
 	
 	$ns=$conf->webservice->ns;
 	$WS_DOL_URL = $ns.'CapAreaInfo.php';
