@@ -33,6 +33,7 @@
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
+	require_once 'class/plugin.install.class.php';
 	
 	$langs = new Translate();
 	
@@ -273,11 +274,24 @@
 			if(file_exists('lib/cap.meteoalarm.webservices.svg.php'))
 			{
 				include 'lib/cap.meteoalarm.webservices.svg.php';		
-				if($_GET['web_test'] == 3) die(var_dump($svgArray)); // Array ( [result] => Array ( [result_code] => OK [result_label] => Array ( [iso] => AT [EMMA_ID] => ) ) [document] => Array ( [SvgInfo] => /*SVG*/ [Error] => )) 1
+				if($_GET['web_test'] == 3) die(print_r($svgArray)); // Array ( [result] => Array ( [result_code] => OK [result_label] => Array ( [iso] => AT [EMMA_ID] => ) ) [document] => Array ( [SvgInfo] => /*SVG*/ [Error] => )) 1
 				if(!empty($svgArray['document']['SvgInfo']))
 				{
 					$soap_SVG = $svgArray['document']['SvgInfo'];
 				}
+			}
+			if(file_exists('lib/cap.meteoalarm.webservices.vl.php'))  // test if the lib exists
+			{
+				// Contains the warnings sorted to areas
+				$mapphp = true; // to change variable name to: AreaVLArray
+				include 'lib/cap.meteoalarm.webservices.vl.php'; // get data through the meteoalarm lib (vl - Visio Level)
+				if($_GET['web_test'] == 4) die(print_r($AreaVLArray));
+				if(!empty($AreaVLArray['document']['AreaInfo']))
+				{
+					$AreaVLArray = $AreaVLArray['document']['AreaInfo'];
+				}
+				// put Area VL details in a js variable named (area_vl )
+				$SVLdetail = '<script>'."\n".'var area_vl = '.json_encode($AreaVLArray).';'."\n".'</script>';
 			}
 			
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
@@ -404,6 +418,19 @@
 			$alert = new alert_template('conf/template.cap');
 			$cap = $alert->output_template();
 			unset($alert);
+		}
+
+		if(! empty($_FILES["pluginZIP"]["name"]))
+		{
+			$pluginZIPlocation = $_FILES["pluginZIP"]["tmp_name"];
+			$plugin = new Plugin();
+			$plugin->install_plugin($pluginZIPlocation);
+		}
+
+		if(! empty($_POST['use_plugin']))
+		{
+			$plugin = new Plugin();
+			$plugin->fetch($_POST['use_plugin']);
 		}
 		
 			$conf->optional_menu = "menu/map_menu.lib.php";

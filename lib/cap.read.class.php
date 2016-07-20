@@ -96,7 +96,8 @@
 			return $rückgabe;
 		}
 		
-		function buildFromArray($a,$key=''){
+		function buildFromArray($a,$key='')
+		{
 			foreach($a as $k => $v){
 			if($key) $k = $key;
 				
@@ -107,10 +108,23 @@
 					$nc = new $class();
 					
 					$nc->buildFromArray($v);
-				
-					$this->{'_set'.ucfirst($k)}( $nc );
+					if(method_exists($this,'_set'.ucfirst($k)))
+					{
+						$this->{'_set'.ucfirst($k)}( $nc );
+					}
+					else
+					{
+						$this->{strtolower($k)} = $nc;
+					}
 				}else{
-					$this->{'_set'.ucfirst($k)}( trim((string) $v) );
+					if(method_exists($this,'_set'.ucfirst($k)))
+					{
+						$this->{'_set'.ucfirst($k)}( trim((string) $v) );
+					}
+					else
+					{
+						$this->{strtolower($k)} = $nc;
+					}
 				}
 		
 					

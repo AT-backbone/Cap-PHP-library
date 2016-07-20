@@ -21,57 +21,65 @@ if($conf->meteoalarm == 1)
 	$debug = true;
 	if($import == "") $import = true;
 
-		// Set the WebService URL
-		$soapclient = new nusoap_client($WS_DOL_URL); // <-- set the Timeout above 300 Sec.
-		if ($soapclient)
+	// Set the WebService URL
+	$soapclient = new nusoap_client($WS_DOL_URL); // <-- set the Timeout above 300 Sec.
+	if ($soapclient)
+	{
+		$soapclient->soap_defencoding='UTF-8';
+		$soapclient->decodeUTF8(false);
+	}
+	
+	// Call the WebService method and store its result in $result.
+	$authentication=array(
+		'dolibarrkey'=>$conf->webservice->securitykey,
+		'sourceapplication'=>'getAreaInfo',
+		'login'=> $conf->webservice->login,
+		'password'=> $conf->webservice->password);
+
+	if(!empty($conf->identifier->ISO)) $iso = $conf->identifier->ISO;
+	if(!empty($_GET['iso'])) $iso = $_GET['iso'];
+	
+	$GenInsInput=array(
+		'iso'=>$iso,
+		'show_warnings'=> 1,
+		'view_type'=>2,
+		'date_b'=> $_POST['data'],
+		'use_warntable'=>1
+	);
+
+	$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);
+	
+	if($mapphp == true)
+	{
+		$AreaVLArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
+	}
+	else
+	{
+		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');	
+	}
+	
+	if ($soapclient->fault) 
+	{
+		$out.= '<h2>Fault</h2><pre>';
+		$out.=var_dump($result);
+		$out.= '</pre>';
+	} 
+	else 
+	{
+		    // Check for errors
+		$err = $soapclient->getError();
+		
+		if ($err) 
 		{
-			$soapclient->soap_defencoding='UTF-8';
-			$soapclient->decodeUTF8(false);
+		  // Display the error
+		  $out.= '<h2>Error</h2><pre>' . $err . '</pre>';
+		} 
+		else 
+		{
+
 		}
-		
-		// Call the WebService method and store its result in $result.
-		$authentication=array(
-		    'dolibarrkey'=>$conf->webservice->securitykey,
-		    'sourceapplication'=>'getAreaInfo',
-		  	'login'=> $conf->webservice->login,
-	  	  'password'=> $conf->webservice->password);
+	}
 
-		if(!empty($conf->identifier->ISO)) $iso = $conf->identifier->ISO;
-		if(!empty($_GET['iso'])) $iso = $_GET['iso'];
-		
-		$GenInsInput=array(
-    		'iso'=>$iso,
-    		'show_warnings'=> 1,
-    		'view_type'=>2,
-    		'date_b'=> $_POST['data'],
-    		'use_warntable'=>1
-    	);
-		    	
-		
-			$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);
-			
-			$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
-			
-			if ($soapclient->fault) 
-			{
-		    $out.= '<h2>Fault</h2><pre>';
-		    $out.=var_dump($result);
-		    $out.= '</pre>';
-			} else 
-			{
-				    // Check for errors
-				$err = $soapclient->getError();
-				
-				if ($err) 
-				{
-				  // Display the error
-				  $out.= '<h2>Error</h2><pre>' . $err . '</pre>';
-		    } 
-		    else 
-		    {
-
-		    }
-			}
-		$conf->webservice->password = encrypt_decrypt(1, $conf->webservice->password);	
+	$conf->webservice->password = encrypt_decrypt(1, $conf->webservice->password);	
 }
 ?>

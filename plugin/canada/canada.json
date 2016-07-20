@@ -1,0 +1,50 @@
+{
+	"_comment": "Information about SVG files",
+	"SVG":
+		{"info":
+			{
+				"id":"svg4468", 
+				"name":"Canada", 
+				"desc":"A SVG map of Candaa", 
+				"svgsrc":"resources/canada.svg"
+			}
+		}
+	,
+	"_comment": "AreaCodesArray: 'CA-AB' = Washington, D.C.' (this codes must be the same as in the svg)", 
+	"AreaCodesArray":{
+		"CA-AB": {"AreaCaption":"Alberta"},
+		"CA-BC": {"AreaCaption":"British Columbia"},
+		"CA-MB": {"AreaCaption":"Manitoba"},
+		"CA-NB": {"AreaCaption":"New Brunswick"},
+		"CA-NL": {"AreaCaption":"Newfoundland and Labrador"},
+		"CA-NS": {"AreaCaption":"Nova Scotia"},
+		"CA-NT": {"AreaCaption":"Northwest Territories"},
+		"CA-NU": {"AreaCaption":"Nunavut"},
+		"CA-ON": {"AreaCaption":"Ontaria"},
+		"CA-PE": {"AreaCaption":"Prince Edward Island"},
+		"CA-QC": {"AreaCaption":"Quebec"},
+		"CA-SK": {"AreaCaption":"Saskatchewan"},
+		"CA-YT": {"AreaCaption":"Yukon"}
+	},
+	"_comment": "Parameter used to define posible",
+	"_comment": "Awarness Type  like (Wind, Fire)",
+	"_comment": "Awarness Level like (green, 2, level-3, extrem)",
+	"ParameterArray":{
+		"_comment": "Awarness Type:",
+		"AWT":{
+			"_comment": "imgsrc (from the root folder of the cap-php-library), hazard_type_DESC (name of the type) ",
+			"1": {"imgsrc":"resources/warn-typs_01.png", "hazard_type_DESC":"Wind"},
+			"2": {"imgsrc":"resources/warn-typs_02.png", "hazard_type_DESC":"Fire"},
+			"3": {"imgsrc":"resources/warn-typs_03.png", "hazard_type_DESC":"Tornado"}
+		},
+		"_comment": "Awarness Level:",
+		"AWL":{
+			"_comment": "id, name, hazard_level (color of level)",
+			"1": {"name":"green", 	"hazard_level":"Minor", 	"hazard_level_color":"#00ff00"},
+			"2": {"name":"dark-y",  "hazard_level":"Moderate",	"hazard_level_color":"#888800"},
+			"3": {"name":"yellow",  "hazard_level":"Moderate", 	"hazard_level_color":"#ffff00"},
+			"4": {"name":"orange",  "hazard_level":"Severe", 	"hazard_level_color":"#ffaa00"},
+			"5": {"name":"red", 	"hazard_level":"Extreme", 	"hazard_level_color":"#ff0000"}
+		}
+	}
+}

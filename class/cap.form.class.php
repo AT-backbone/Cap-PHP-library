@@ -29,6 +29,7 @@
  *	Only common components must be here.
  *
  */
+	require_once 'class/plugin.install.class.php';
 
 	class CAP_Form{
 		
@@ -149,7 +150,7 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG;
+			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $AreaVLArray, $plugin;
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
@@ -173,172 +174,192 @@
 			switch($type)
 			{
 				case 'meteo_map':
-					//print_r($svgArray);
-						if(!isset($_GET['data'])) $_GET['data'] = 0;
-						$langs_arr = $this->getlang();	
-							
-						foreach($langs_arr as $key_l => $val_l)
-						{
-							if(in_array($key,$this->language)) unset($langs_arr[$key]);
-						}
-						foreach ($langs_arr as $key_l => $val_l) 
-						{
-							$langs_keys[] = $key_l;
-						}
 
-						$out = '<style>.ui-footer {display:none !important;}</style>';
-						if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<input type="hidden" value="1" id="init_map">';
-						$out.= '<input type="hidden" value="'.$langs->trans('WarnGetCalculated').'" id="mk_process_lang">';
-						$out.= '<input type="hidden" value="'.$langs->trans('DelWarning').'" id="del_warn_lang">';
-						$out.= '<input type="hidden" value="'.$langs->trans('ChangeWithoutSave').'" id="chang_without_save">';
-						$out.= '<input type="hidden" value="MD" id="iso">';
-						$out.= '<input type="hidden" value="2" id="green">';
-						$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
+					if(!empty($plugin->name))
+					{
+						//print '<pre>Plugin: ';
+						//print_r($plugin);
+						//print '</pre>';
+						//exit;
+						$out.= '<input type="hidden" id="plugin" value="1">';
+						$soap_SVG = $plugin->svg_val;
+						$AreaCodesArray = $plugin->area_codes;
+						$ParameterArray['AWT'] = $plugin->AWT;
+						$ParameterArray['AWL'] = $plugin->AWL;
+					}
+
+					if(!isset($_GET['data'])) $_GET['data'] = 0;
+					$langs_arr = $this->getlang();	
 						
-						$timezone_h =  date('P');
-						$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';
-						
-						foreach($langs_keys as $key => $lang_val)
-						{
-							$out.= '<input name="langs" type="hidden" value="'.$lang_val.'" id="lang_'.$key.'">';
-						}
-						//$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
-						//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
-						$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('DESC_EditWarningNotAktive').'</span>';
-						$out.= '<div id="map_main_div" class="ui-grid-a">';
-							$out.= '<div class="ui-block-a" style="width: 30%;">';
-								$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
-									// Info
-									$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
-										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">';
-											$out.= 'Area: ';
-											$out.= '<span id="left_area_name"></span>';
-											$out.= '<span id="select_area_name" style="position: absolute;top: 10px;width: 43%;margin-left: 10px;">';
-											//$out.= 'None';
-												foreach($AreaCodesArray as $key => $area_arr)
-												{
-													$S_Area[$area_arr['aid']] = $area_arr['AreaCaption'];
-												}
-												
-												if(is_array($S_Area))
-												{
-													$out.= '<select name="emmaid" id="emmaid_select" data-native-menu="false" multiple="multiple" class="" tabindex="-1" data-mini="true">';
-														$out.= '<option data-placeholder="true"></option>';
-														foreach($S_Area as $eid => $areaname)
-														{
-															$out.= '<option value="'.$eid.'">'.$areaname.'</option>';
-														}
-													$out.= '</select>';
-												}
+					foreach($langs_arr as $key_l => $val_l)
+					{
+						if(in_array($key,$this->language)) unset($langs_arr[$key]);
+					}
+					foreach ($langs_arr as $key_l => $val_l) 
+					{
+						$langs_keys[] = $key_l;
+					}
 
-											$out.= '</span>';
-											$out.= '<span id="right_area_type"></span>';
-											$out.= '</h1>';
-										$out.= '</li>';
-										$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
-											$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
-											$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
-												$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
-													$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
-													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
-													$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
-												$out.= '</fieldset>';
-											$out.= '</span>';
-										$out.= '</li>';
-
-										$i = 0;
-										foreach($langs_keys as $key => $lang_val)
-										{
-											//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-											$not_collaps = '';
-											if($i <= 1) $not_collaps = 'data-collapsed="false"';
-											$out.= '<li data-role="collapsible" '.$not_collaps.' data-iconpos="right" data-inset="false" class="lang_collaps">';
-												$out.= '<legend>'.$langs->trans($langs_arr[$lang_val]).': </legend>';
-											//$out.= '</li>';
-											//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-												//$out.= $this->tooltip($lang_val, $langs->trans("LabelLanguage"));
-												$out.= '<div class="lang_input" id="'.$lang_val.'">';
-														$out.= '<textarea id="desc_'.$key.'" placeholder="description" name="description['.$lang_val.']"></textarea>';
-														$out.= '<textarea id="inst_'.$key.'" placeholder="instruction" name="instruction['.$lang_val.']"></textarea>';
-												$out.= '</div>';
-											$out.= '</li>';
-											$i++;
-										}
-										/*
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-											$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[1]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
-										$out.= '</li>';
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+					$out.= '<style>.ui-footer {display:none !important;}</style>';
+					if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<input type="hidden" value="1" id="init_map">';
+					$out.= '<input type="hidden" value="'.$langs->trans('WarnGetCalculated').'" id="mk_process_lang">';
+					$out.= '<input type="hidden" value="'.$langs->trans('DelWarning').'" id="del_warn_lang">';
+					$out.= '<input type="hidden" value="'.$langs->trans('ChangeWithoutSave').'" id="chang_without_save">';
+					$out.= '<input type="hidden" value="MD" id="iso">';
+					$out.= '<input type="hidden" value="2" id="green">';
+					$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
+					
+					$timezone_h =  date('P');
+					$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';
+					
+					foreach($langs_keys as $key => $lang_val)
+					{
+						$out.= '<input name="langs" type="hidden" value="'.$lang_val.'" id="lang_'.$key.'">';
+					}
+					//$out.= '<input type="hidden" value="'.$langs_keys[0].'" id="lang_0">';
+					//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
+					$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('DESC_EditWarningNotAktive').'</span>';
+					$out.= '<div id="map_main_div" class="ui-grid-a">';
+						$out.= '<div class="ui-block-a" style="width: 30%;">';
+							$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
+								// Info
+								$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">';
+										$out.= 'Area: ';
+										$out.= '<span id="left_area_name"></span>';
+										$out.= '<span id="select_area_name" style="position: absolute;top: 10px;width: 43%;margin-left: 10px;">';
+										//$out.= 'None';
+											foreach($AreaCodesArray as $key => $area_arr)
+											{
+												$S_Area[$area_arr['aid']] = $area_arr['AreaCaption'];
+											}
 											
-											$out.= '<div class="lang_input" id="'.$langs_keys[1].'">';
-													$out.= '<textarea id="desc_1" placeholder="description" name="description['.$langs_keys[1].']">'.$this->description[$i].'</textarea>';
-													$out.= '<textarea id="inst_1" placeholder="instruction" name="instruction['.$langs_keys[1].']">'.$this->instruction[$i].'</textarea>';
+											if(is_array($S_Area))
+											{
+												$out.= '<select name="emmaid" id="emmaid_select" data-native-menu="false" multiple="multiple" class="" tabindex="-1" data-mini="true">';
+													$out.= '<option data-placeholder="true"></option>';
+													foreach($S_Area as $eid => $areaname)
+													{
+														$out.= '<option value="'.$eid.'">'.$areaname.'</option>';
+													}
+												$out.= '</select>';
+											}
+
+										$out.= '</span>';
+										$out.= '<span id="right_area_type"></span>';
+										$out.= '</h1>';
+									$out.= '</li>';
+									$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
+										$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
+										$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
+											$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
+												$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
+												$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
+												$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
+												$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
+											$out.= '</fieldset>';
+										$out.= '</span>';
+									$out.= '</li>';
+
+									$i = 0;
+									foreach($langs_keys as $key => $lang_val)
+									{
+										//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+										$not_collaps = '';
+										if($i <= 1) $not_collaps = 'data-collapsed="false"';
+										$out.= '<li data-role="collapsible" '.$not_collaps.' data-iconpos="right" data-inset="false" class="lang_collaps">';
+											$out.= '<legend>'.$langs->trans($langs_arr[$lang_val]).': </legend>';
+										//$out.= '</li>';
+										//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+											//$out.= $this->tooltip($lang_val, $langs->trans("LabelLanguage"));
+											$out.= '<div class="lang_input" id="'.$lang_val.'">';
+													$out.= '<textarea id="desc_'.$key.'" placeholder="description" name="description['.$lang_val.']"></textarea>';
+													$out.= '<textarea id="inst_'.$key.'" placeholder="instruction" name="instruction['.$lang_val.']"></textarea>';
 											$out.= '</div>';
 										$out.= '</li>';
-										*/
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;border-top: none; border-right: none;">';
-											$out.= '<div class="ui-grid-a">';
-												$out.= '<div class="ui-block-a">';
-													$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectivePaintAndAlertDesc")).'</legend>';
-													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-														$out.= '<input '.$status_theme.' id="from_0" type="text" name="effective[time]" step="1" value="00:00">';
-														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
-															$out.= '<span class="glyphicon glyphicon-time"></span>';
-														$out.= '</span>';
-													$out.= '</div>';
-													$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
-												$out.= '</div>';
-												$out.= '<div class="ui-block-b">';
-													$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresPaintAndAlertDesc")).'</legend>';
-													$out.= '<div class="input-group clockpicker" data-autoclose="true">';
-														$out.= '<input '.$status_theme.' id="to_0" type="text" name="expires[time]" step="1" value="23:59">';
-														$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
-															$out.= '<span class="glyphicon glyphicon-time"></span>';
-														$out.= '</span>';
-													$out.= '</div>';
-												$out.= '</div>';
-											$out.= '</div><!-- /grid-a -->';
-										$out.= '</li>';
-
-										$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px; border-right: none;">'; // solfe border problem: margin-bottom:10px;
-											$out.= '<div class="ui-grid-a">';
-												$out.= '<div class="ui-block-a">';
-													$out.= '<a id="del_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
-														$out.= $langs->trans('Delete');
-													$out.= '</a>';
-												$out.= '</div>';
-												$out.= '<div class="ui-block-b">';
-													$out.= '<a id="sav_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-														$out.= $langs->trans('Save');
-													$out.= '</a>';
-												$out.= '</div>';
-											$out.= '</div><!-- /grid-a -->';
-										$out.= '</li>';
-
-									$out.= '</ul>';
-								$out.= '</div>';
-							$out.= '</div>';
-							$out.= '<div class="ui-block-b" style="width: 70%;">';
-								$out.= '<div class="ui-bar noselect">';
-									// Map
-									$out.= '<ul data-role="listview" data-divider-theme="b">';
-										$out.= '<li data-role="list-divider" data-theme="b">';
-											$out.= '<h1 style="font-size:22px;float:left;"><span id="CountryInfo"></span> '.date('Y-m-d', strtotime('now + '.$_GET['data'].' days')).' <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
-										$out.= '</li>';
+										$i++;
+									}
+									/*
+									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
+										$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[1]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
+									$out.= '</li>';
+									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 										
-										$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';
+										$out.= '<div class="lang_input" id="'.$langs_keys[1].'">';
+												$out.= '<textarea id="desc_1" placeholder="description" name="description['.$langs_keys[1].']">'.$this->description[$i].'</textarea>';
+												$out.= '<textarea id="inst_1" placeholder="instruction" name="instruction['.$langs_keys[1].']">'.$this->instruction[$i].'</textarea>';
+										$out.= '</div>';
+									$out.= '</li>';
+									*/
+									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;border-top: none; border-right: none;">';
+										$out.= '<div class="ui-grid-a">';
+											$out.= '<div class="ui-block-a">';
+												$out.= '<legend>'.$langs->trans("From").': '.$this->tooltip('From', $langs->trans("LabelEffectivePaintAndAlertDesc")).'</legend>';
+												$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+													$out.= '<input '.$status_theme.' id="from_0" type="text" name="effective[time]" step="1" value="00:00">';
+													$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+														$out.= '<span class="glyphicon glyphicon-time"></span>';
+													$out.= '</span>';
+												$out.= '</div>';
+												$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
+											$out.= '</div>';
+											$out.= '<div class="ui-block-b">';
+												$out.= '<legend>'.$langs->trans("To").': '.$this->tooltip('To', $langs->trans("LabelExpiresPaintAndAlertDesc")).'</legend>';
+												$out.= '<div class="input-group clockpicker" data-autoclose="true">';
+													$out.= '<input '.$status_theme.' id="to_0" type="text" name="expires[time]" step="1" value="23:59">';
+													$out.= '<span class="input-group-addon" style="font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 14px;">';
+														$out.= '<span class="glyphicon glyphicon-time"></span>';
+													$out.= '</span>';
+												$out.= '</div>';
+											$out.= '</div>';
+										$out.= '</div><!-- /grid-a -->';
+									$out.= '</li>';
 
+									$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px; border-right: none;">'; // solfe border problem: margin-bottom:10px;
+										$out.= '<div class="ui-grid-a">';
+											$out.= '<div class="ui-block-a">';
+												$out.= '<a id="del_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
+													$out.= $langs->trans('Delete');
+												$out.= '</a>';
+											$out.= '</div>';
+											$out.= '<div class="ui-block-b">';
+												$out.= '<a id="sav_war" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+													$out.= $langs->trans('Save');
+												$out.= '</a>';
+											$out.= '</div>';
+										$out.= '</div><!-- /grid-a -->';
+									$out.= '</li>';
+
+								$out.= '</ul>';
+							$out.= '</div>';
+						$out.= '</div>';
+						$out.= '<div class="ui-block-b" style="width: 70%;">';
+							$out.= '<div class="ui-bar noselect">';
+								// Map
+								$out.= '<ul data-role="listview" data-divider-theme="b">';
+									$out.= '<li data-role="list-divider" data-theme="b">';
+										$out.= '<h1 style="font-size:22px;float:left;"><span id="CountryInfo"></span> '.date('Y-m-d', strtotime('now + '.$_GET['data'].' days')).' <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
+									$out.= '</li>';
+									
+									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';
+										if(!empty($soap_SVG))
+										{
 											// dddddd, a4a4a4, 878787
 											$out.= '<div id="awareness_toolbox" class="awareness_div">';
-												for ($ty=1; $ty <= 13; $ty++) 
-												{ 
-													if($ty != 11) // do not support the type none
-													{
-														if($ty < 10) $ty = '0'.$ty;
-														$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1" type="'.$ty.'"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
+												if(!is_array($ParameterArray['AWT']))
+													for ($ty=1; $ty <= 13; $ty++) 
+													{ 
+														if($ty != 11) // do not support the type none
+														{
+															if($ty < 10) $ty = '0'.$ty;
+															$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1" type="'.$ty.'"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
+														}
 													}
-												}
+												if(is_array($ParameterArray['AWT']))
+													foreach($ParameterArray['AWT'] as $id => $type_arr)
+													{ 
+														$out.= '<div class="awareness" id="left_box_type_'.$id.'" aktive="1" type="'.$id.'"><img src="'.$type_arr['img_src'].'"></div>';
+													}
 											$out.= '</div>';
 
 											$size = '';
@@ -387,103 +408,121 @@
 
 											$out.= '<div id="process_toolbox" class="process_toolbox_div"></div>';
 
+											
 											$out.= $soap_SVG; // SVG from the SOAP
+										}
+										else
+										{
+											$out.= '</form><form action="#" method="post" enctype="multipart/form-data" name="pluginZIPForm" style="padding: 15px;">';
+												$out.= '<legend>'.$langs->trans("WebserviceNotConnectedReconnectOrUsePluginZIP").': '.$this->tooltip('jsonDESC', $langs->trans("WebserviceNotConnectedReconnectOrUsePluginZIPDESC")).'</legend>';
+												$out.= '<input type="file" name="pluginZIP" id="pluginZIP" accept=".zip">';
+												$out.= '<input type="submit" name="submitplugin" value="'.$langs->trans("Upload").'">';
+											$out.= '</form><form action="#" method="post" name="pluginForm" style="padding: 15px;">';
 
-										$out.= '</li>';
+												$plugin = new Plugin();
+												$plugin->get_all_plugin();
+												$out.= '<legend>'.$langs->trans("UsePlugin").': '.$this->tooltip('Plugin', $langs->trans("UsePluginDESC")).'</legend>';
+												$out.= $this->buildSelect("use_plugin", $plugin->plugin_folder, "data-native-menu=\"false\" id=\"use_plugin\"", $langs->trans("Plugin"), $_GET['use_plugin']);
+												$out.= '<input type="submit" name="use_plugin_submit" value="'.$langs->trans("Use").'">';
 
-										//$out.= '<li style="border: 1px solid #dddddd; border-left: none; border-right: none;">';
-										//$out.= '</li>';
+											$out.= '</form>';
+										}
 
-									$out.= '</ul>';
+									$out.= '</li>';
 
-								$out.= '</div>';
+									//$out.= '<li style="border: 1px solid #dddddd; border-left: none; border-right: none;">';
+									//$out.= '</li>';
+
+								$out.= '</ul>';
+
 							$out.= '</div>';
-						$out.= '</div><!-- /grid-a -->';
+						$out.= '</div>';
+					$out.= '</div><!-- /grid-a -->';
 
-						$out.= '<div class="ui-bar">';
-							$out.= '<ul data-role="listview" data-divider-theme="b">'; // as long as it is without Area show 50% alpha
-								$out.= '<li data-role="list-divider" data-theme="b" style="padding: 15px;">';
-									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-										$out.= 'Submit';
+					$out.= '<div class="ui-bar">';
+						$out.= '<ul data-role="listview" data-divider-theme="b">'; // as long as it is without Area show 50% alpha
+							$out.= '<li data-role="list-divider" data-theme="b" style="padding: 15px;">';
+								$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+									$out.= 'Submit';
+								$out.= '</a>';
+							$out.= '</li>';
+						$out.= '</ul>';
+					$out.= '</div>';
+
+					
+					$out.= '<div data-role="popup" id="CAPpopupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
+						$out.= '<div data-role="header" id="CAPpopupDialog_header" data-theme="a">';
+							$out.= '<h2>'.$langs->trans('PaintGreen').'</h2>';
+						$out.= '</div>';
+						$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content">';
+							$out.= $langs->trans('DESC_PaintGreen');
+							$out.= '<div data-role="collapsibleset" data-content-theme="a" data-iconpos="right" id="set" style="max-height: 500px; overflow: auto;">';
+							$out.= '</div>';
+
+							// Dissmis or OK
+							$out.= '<div class="ui-grid-a">';
+								$out.= '<div class="ui-block-a">';
+									$out.= '<a id="green_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
+										$out.= $langs->trans('No');
 									$out.= '</a>';
-								$out.= '</li>';
+								$out.= '</div>';
+								//$out.= '<div class="ui-block-b">';
+								//	$out.= '<a id="green_edit" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #fff700;color: black;text-shadow: none;border: 1px solid black;">';
+								//		$out.= $langs->trans('edit');
+								//	$out.= '</a>';
+								//$out.= '</div>';
+								$out.= '<div class="ui-block-b">';
+									$out.= '<a id="green_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+										$out.= $langs->trans('Yes');
+									$out.= '</a>';
+								$out.= '</div>';
+
+							$out.= '</div><!-- /grid-a -->';
+						$out.= '</div>';
+					$out.= '</div>';
+
+					$out.= '<div data-role="popup" id="CAP_Send_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
+						$out.= '<div data-role="header" id="CAP_Send_popupDialog_header" data-theme="a">';
+							$out.= '<h2>'.$langs->trans('SendCaps').'</h2>';
+						$out.= '</div>';
+						$out.= '<div role="main" id="CAP_Send_popupDialog_main" class="ui-content">';
+							$out.= $langs->trans('Send Caps to Meteoalarm?');
+							// Dissmis or OK
+							$out.= '<div class="ui-grid-a">';
+								$out.= '<div class="ui-block-a">';
+									$out.= '<a id="send_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
+										$out.= $langs->trans('No');
+									$out.= '</a>';
+								$out.= '</div>';
+								$out.= '<div class="ui-block-b">';
+									$out.= '<a id="send_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+										$out.= $langs->trans('Yes');
+									$out.= '</a>';
+								$out.= '</div>';
+							$out.= '</div><!-- /grid-a -->';
+						$out.= '</div>';
+					$out.= '</div>';
+
+					$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
+						$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
+						$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
+							$out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
+						$out.= '</div>';
+						$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
+							$out.= '<ul data-role="listview" data-inset="true" data-shadow="false" id="SOAPUL">';
 							$out.= '</ul>';
 						$out.= '</div>';
+					$out.= '</div>';
 
-						
-						$out.= '<div data-role="popup" id="CAPpopupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
-							$out.= '<div data-role="header" id="CAPpopupDialog_header" data-theme="a">';
-								$out.= '<h2>'.$langs->trans('PaintGreen').'</h2>';
-							$out.= '</div>';
-							$out.= '<div role="main" id="CAPpopupDialog_main" class="ui-content">';
-								$out.= $langs->trans('DESC_PaintGreen');
-								$out.= '<div data-role="collapsibleset" data-content-theme="a" data-iconpos="right" id="set" style="max-height: 500px; overflow: auto;">';
-								$out.= '</div>';
-
-								// Dissmis or OK
-								$out.= '<div class="ui-grid-a">';
-									$out.= '<div class="ui-block-a">';
-										$out.= '<a id="green_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
-											$out.= $langs->trans('No');
-										$out.= '</a>';
-									$out.= '</div>';
-									//$out.= '<div class="ui-block-b">';
-									//	$out.= '<a id="green_edit" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #fff700;color: black;text-shadow: none;border: 1px solid black;">';
-									//		$out.= $langs->trans('edit');
-									//	$out.= '</a>';
-									//$out.= '</div>';
-									$out.= '<div class="ui-block-b">';
-										$out.= '<a id="green_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-											$out.= $langs->trans('Yes');
-										$out.= '</a>';
-									$out.= '</div>';
-
-								$out.= '</div><!-- /grid-a -->';
-							$out.= '</div>';
+					$out.= '<div data-role="popup" id="Error_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
+						$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
+						$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
+							$out.= '<h2 style="background-color: red;">'.$langs->trans('Error').'</h2>';
 						$out.= '</div>';
-
-						$out.= '<div data-role="popup" id="CAP_Send_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
-							$out.= '<div data-role="header" id="CAP_Send_popupDialog_header" data-theme="a">';
-								$out.= '<h2>'.$langs->trans('SendCaps').'</h2>';
-							$out.= '</div>';
-							$out.= '<div role="main" id="CAP_Send_popupDialog_main" class="ui-content">';
-								$out.= $langs->trans('Send Caps to Meteoalarm?');
-								// Dissmis or OK
-								$out.= '<div class="ui-grid-a">';
-									$out.= '<div class="ui-block-a">';
-										$out.= '<a id="send_no" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #ff3f3f;color: black;text-shadow: none;border: 1px solid black;">';
-											$out.= $langs->trans('No');
-										$out.= '</a>';
-									$out.= '</div>';
-									$out.= '<div class="ui-block-b">';
-										$out.= '<a id="send_yes" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-											$out.= $langs->trans('Yes');
-										$out.= '</a>';
-									$out.= '</div>';
-								$out.= '</div><!-- /grid-a -->';
-							$out.= '</div>';
+						$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
+							$out.= $langs->trans('err_cap_not_complete01');
 						$out.= '</div>';
-
-						$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
-							$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
-							$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
-								$out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
-							$out.= '</div>';
-							$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
-								$out.= '<ul data-role="listview" data-inset="true" data-shadow="false" id="SOAPUL">';
-								$out.= '</ul>';
-							$out.= '</div>';
-						$out.= '</div>';
-
-						$out.= '<div data-role="popup" id="Error_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
-							$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
-							$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
-								$out.= '<h2 style="background-color: red;">'.$langs->trans('Error').'</h2>';
-							$out.= '</div>';
-							$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
-								$out.= $langs->trans('err_cap_not_complete01');
-							$out.= '</div>';
-						$out.= '</div>';
+					$out.= '</div>';
 					break;
 
 				case 'CapButton':
@@ -1516,7 +1555,7 @@
 	 */
 		function Header_llx()
 		{			
-			global $conf;
+			global $conf, $SVLdetail;
 			
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
@@ -1530,6 +1569,8 @@
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
 				
 				$out.= '<link rel="icon" type="image/png" href="conf/logo.jpg">';
+
+				if(!empty($SVLdetail)) $out.= $SVLdetail;
 				
 				$out.= '<script type="text/javascript" src="js/form.js"></script>';
 				$out.= '<script type="text/javascript" src="js/map.js"></script>';
@@ -1540,12 +1581,13 @@
 				if( $conf->webservice_aktive == 1 )
 				{
 					$out.= '<link rel="stylesheet" href="css/MeteoalarmMobile.css" />';
-					if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
 				}
 				else
 				{
 					$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
 				}
+
+				if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
 				
 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
 				// OpenStreetMap
