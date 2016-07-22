@@ -37,6 +37,8 @@
 		var $name;
 		var $json_array;
 
+		var $cap_engine;
+
 		var $svg_id;
 		var $svg_name;
 		var $svg_src;
@@ -57,6 +59,8 @@
 
 					$json_string = file_get_contents('plugin/'.$name.'/'.$name.'.json');
 					$this->json_array = json_decode($json_string);
+
+					$this->cap_engine = 'plugin/'.$name.'/'.$this->json_array->CAP->engine->src;
 
 					$this->svg_id = $this->json_array->SVG->info->id;
 					$this->svg_name = $this->json_array->SVG->info->name;
@@ -82,7 +86,10 @@
 					{
 						if($id == '_comment') continue 1;
 						$this->AWL[$id]['id'] = $id;
+						$this->AWL[$id]['name'] = $awt_data->name;
+						$this->AWL[$id]['level'] = $awt_data->hazard_level;
 						$this->AWL[$id]['hazard_level'] = $awt_data->hazard_level_color;
+						$this->AWL[$id]['hazard_level_color'] = $awt_data->hazard_level_color;
 					}
 
 					unset($this->json_array);

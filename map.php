@@ -432,6 +432,12 @@
 			$plugin = new Plugin();
 			$plugin->fetch($_POST['use_plugin']);
 		}
+
+		if(! empty($_GET['use_plugin']))
+		{
+			$plugin = new Plugin();
+			$plugin->fetch($_GET['use_plugin']);
+		}
 		
 			$conf->optional_menu = "menu/map_menu.lib.php";
 

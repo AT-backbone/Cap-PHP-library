@@ -182,7 +182,10 @@
 						//print '</pre>';
 						//exit;
 						$out.= '<input type="hidden" id="plugin" value="1">';
+						$out.= '<input type="hidden" id="plugin_name" value="'.$plugin->name.'">';
+						$out.= '<input type="hidden" id="cap_engine" value="'.$plugin->cap_engine.'">';
 						$soap_SVG = $plugin->svg_val;
+						$countryName = $plugin->svg_name;
 						$AreaCodesArray = $plugin->area_codes;
 						$ParameterArray['AWT'] = $plugin->AWT;
 						$ParameterArray['AWL'] = $plugin->AWL;
@@ -200,7 +203,7 @@
 						$langs_keys[] = $key_l;
 					}
 
-					$out.= '<style>.ui-footer {display:none !important;}</style>';
+					$out.= '<style>.ui-footer {display:none !important;} .svg_darker{filter:url(#css_brightness);}</style>';
 					if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<input type="hidden" value="1" id="init_map">';
 					$out.= '<input type="hidden" value="'.$langs->trans('WarnGetCalculated').'" id="mk_process_lang">';
 					$out.= '<input type="hidden" value="'.$langs->trans('DelWarning').'" id="del_warn_lang">';
@@ -249,18 +252,20 @@
 										$out.= '<span id="right_area_type"></span>';
 										$out.= '</h1>';
 									$out.= '</li>';
-									$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
-										$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
-										$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
-											$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-												$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
-												$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
-												$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
-												$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
-											$out.= '</fieldset>';
-										$out.= '</span>';
-									$out.= '</li>';
-
+									if(empty($plugin->name))
+									{
+										$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
+											$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
+											$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
+												$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
+													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
+													$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
+													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
+													$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
+												$out.= '</fieldset>';
+											$out.= '</span>';
+										$out.= '</li>';
+									}
 									$i = 0;
 									foreach($langs_keys as $key => $lang_val)
 									{
@@ -338,7 +343,8 @@
 								// Map
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
 									$out.= '<li data-role="list-divider" data-theme="b">';
-										$out.= '<h1 style="font-size:22px;float:left;"><span id="CountryInfo"></span> '.date('Y-m-d', strtotime('now + '.$_GET['data'].' days')).' <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
+										if(empty($plugin->name)) $countryName = '';
+										$out.= '<h1 style="font-size:22px;float:left;"><span id="CountryInfo">'.$countryName.'</span> '.date('Y-m-d', strtotime('now + '.$_GET['data'].' days')).' <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
 									$out.= '</li>';
 									
 									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';
@@ -346,27 +352,22 @@
 										{
 											// dddddd, a4a4a4, 878787
 											$out.= '<div id="awareness_toolbox" class="awareness_div">';
-												if(!is_array($ParameterArray['AWT']))
-													for ($ty=1; $ty <= 13; $ty++) 
-													{ 
-														if($ty != 11) // do not support the type none
-														{
-															if($ty < 10) $ty = '0'.$ty;
-															$out.= '<div class="awareness" id="left_box_type_'.$ty.'" aktive="1" type="'.$ty.'"><img src="includes/meteoalarm/warn-typs_'.$ty.'.png"></div>';
-														}
-													}
 												if(is_array($ParameterArray['AWT']))
-													foreach($ParameterArray['AWT'] as $id => $type_arr)
-													{ 
+												foreach($ParameterArray['AWT'] as $id => $type_arr)
+												{ 
+													if(!empty($type_arr['img_src']))
+													{
 														$out.= '<div class="awareness" id="left_box_type_'.$id.'" aktive="1" type="'.$id.'"><img src="'.$type_arr['img_src'].'"></div>';
 													}
+													else
+													{
+														if($type_arr['id'] < 10) $type_arr['id'] = '0'.$type_arr['id'];
+														$out.= '<div class="awareness" id="left_box_type_'.$type_arr['id'].'" aktive="1" type="'.$type_arr['id'].'"><img src="includes/meteoalarm/warn-typs_'.$type_arr['id'].'.png"></div>';
+													}
+												}
 											$out.= '</div>';
 
 											$size = '';
-											if(is_array($ParameterArray['AWL']))
-											{
-												if(count($ParameterArray['AWL']) > 5) $size = 'style="width:160px;"';
-											}
 
 											$out.= '<div id="awareness_color_toolbox" class="awareness_color_div" '.$size.'>';
 												// 29d660, ffff00, fecb31, fe0104
@@ -378,26 +379,31 @@
 
 											$out.= '</div>';
 											
-											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_1">';
+											$exstyle = '';
+											if(!empty($plugin->name)) $exstyle = 'style="padding-right: 15px;"';
+											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_1" '.$exstyle.'>';
 												$day_text[0] = date('d.m.Y', strtotime('now'));
 												$day_text[1] = date('d.m.Y', strtotime('now + 1 day'));
 												$day_text[2] = date('d.m.Y', strtotime('now + 2 day'));
 												$out.= $this->buildSelect("day", $day_text, "data-native-menu=\"false\" id=\"day\"", $langs->trans("Day"), $_GET['data']);
 											$out.= '</div>';
 
-											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
-												$S_Param_AWT[0] = $langs->trans("All Types");
-												if(is_array($ParameterArray['AWT']))
-												foreach($ParameterArray['AWT'] as $key => $area_arr)
-												{
-													$S_Param_AWT[$area_arr['id']] = $area_arr['hazard_type_DESC'];
-												}
-												$out.= $this->buildSelect("type", $S_Param_AWT, "data-native-menu=\"false\" id=\"type\"", $langs->trans("Type"), $_GET['type']);
-											$out.= '</div>';
+											if(empty($plugin->name))
+											{
+												$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
+													$S_Param_AWT[0] = $langs->trans("All Types");
+													if(is_array($ParameterArray['AWT']))
+													foreach($ParameterArray['AWT'] as $key => $area_arr)
+													{
+														$S_Param_AWT[$area_arr['id']] = $area_arr['hazard_type_DESC'];
+													}
+													$out.= $this->buildSelect("type", $S_Param_AWT, "data-native-menu=\"false\" id=\"type\"", $langs->trans("Type"), $_GET['type']);
+												$out.= '</div>';
 
-											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_3">';
-												$out.= '<div class="awareness" id="reload" aktive="1"><img src="includes/meteoalarm/reload.png"></div>';
-											$out.= '</div>';
+												$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_3">';
+													$out.= '<div class="awareness" id="reload" aktive="1"><img src="includes/meteoalarm/reload.png"></div>';
+												$out.= '</div>';
+											}
 
 											// TODO:
 											//$out.= '<div id="work_toolbox" class="work_toolbox_div">';
@@ -408,8 +414,33 @@
 
 											$out.= '<div id="process_toolbox" class="process_toolbox_div"></div>';
 
-											
 											$out.= $soap_SVG; // SVG from the SOAP
+											$out.= '<svg id="notme">';
+											$out.= '<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>';
+											if(is_array($ParameterArray['AWT']))
+											foreach($ParameterArray['AWT'] as $id => $type_arr)
+											{
+												if(!empty($type_arr['img_src']))
+												{
+													
+													if(is_array($ParameterArray['AWL']))
+													foreach($ParameterArray['AWL'] as $key => $level_arr)
+													{
+														if($level_arr['id'] > 0)
+														{
+															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="100" height="100" patternUnits="userSpaceOnUse">';
+																$out.= '<rect x="0" y="0" width="100" height="100" fill="'.$level_arr['hazard_level'].'"/>';
+																$out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="40" height="40" transform="scale(1, 1)"/>';
+															$out.= '</pattern>';
+														}
+													}
+												}
+											}
+											//$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_regen_3" width="93.33333333333333" height="93.33333333333333" patternUnits="userSpaceOnUse">';
+											//	$out.= '<rect x="0" y="0" width="93.33333333333333" height="93.33333333333333" fill="#fb8c00"/>';
+											//	$out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.dwd.de/DWD/warnungen/warnapp/viewer/img/warn_icons_pattern_regen.png" id="pattern_regen_3_img" x="0" y="0" width="66.66666666666667" height="66.66666666666667" transform="scale(1, 1)"/>';
+											//$out.= '</pattern>';
+											$out.= '</svg>';
 										}
 										else
 										{
@@ -1587,7 +1618,10 @@
 					$out.= '<link rel="stylesheet" href="css/BackboneMobile.css" />';
 				}
 
-				if(basename($_SERVER['PHP_SELF']) == "map.php") $out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
+				if(basename($_SERVER['PHP_SELF']) == "map.php")
+				{
+					$out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
+				}
 				
 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
 				// OpenStreetMap

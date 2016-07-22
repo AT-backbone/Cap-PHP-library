@@ -83,7 +83,14 @@ $( document ).ready(function()
 		
 	});
 
-	if($('#init_map').val() == 1) ini_meteo_map();
+	if($('#init_map').val() == 1 && $('#plugin').val() != 1)
+	{
+		ini_meteo_map();
+	}
+	else if($('#init_map').val() == 1 && $('#plugin').val() == 1)
+	{
+		init_plugin_map();
+	}
 
 });
 
@@ -245,27 +252,8 @@ $( document ).ready(function()
 	var warning_detail_changed = false;
 	var mk_pro_interval;
 	var aktive_types;
-	var aktive_plugin = false;
 	function ini_meteo_map()
 	{
-		set_svg_area_info();
-		if($('#plugin').val() == 1) 
-		{
-			if($('#map_main_div svg').html())
-			{
-				aktive_plugin = true;
-				$('#map_main_div svg g[id]').each(function( index, value ) {
-					$(this).children().attr('class', 'pol_'+$(this).attr('id'));
-				});
-				$('#map_main_div svg path[id]').each(function( index, value ) {
-					$(this).attr('class', 'pol_'+$(this).attr('id'));
-				});
-				$('#map_main_div svg polygon[id]').each(function( index, value ) {
-					$(this).attr('class', 'pol_'+$(this).attr('id'));
-				});
-			}
-		}
-
 		$('div').on('pageshow',function(event, ui){
 			if($('#map_main_div svg').html())
 			{
@@ -400,14 +388,14 @@ $( document ).ready(function()
 			$('#map_main_div svg polygon').css('stroke-width', '1');
 			$('#map_main_div svg polygon').css('stroke', 'black');
 			//$('#map_main_div svg polygon').css('stroke-dasharray', '0,0');
-			$('#map_main_div svg polygon').css('fill-opacity', 1);
+			$('#map_main_div svg polygon').css('filter', '');
 			$('#map_main_div svg polygon'+'[main=1]').attr('sel', 0);
 
 			$.each($(this).val(), function(index, data){
 				$('#map_main_div svg polygon[aid='+data+']').css('stroke-width', '3px');
 				$('#map_main_div svg polygon[aid='+data+']').css('stroke', 'blue');
 				//$('#map_main_div svg polygon').css('stroke-dasharray', '0,0');
-				$('#map_main_div svg polygon[aid='+data+']').css('fill-opacity', 0.6);
+				$('#map_main_div svg polygon[aid='+data+']').css('filter', 'url(#css_brightness)');
 				$('#map_main_div svg polygon[aid='+data+']'+'[main=1]').attr('sel', 1);
 				calc_map_aktion($('#map_main_div svg polygon[aid='+data+']'), 'auto');
 			});
@@ -488,26 +476,6 @@ $( document ).ready(function()
 			send_all_proce_cap(1);
 		});
 
-		$('#map_main_div svg g').mouseover(function(){
-			if($(this).attr('id') !== undefined) policlick($(this).attr('id'));
-		});
-		$('#map_main_div svg g').mouseleave(function(){
-			if($(this).attr('id') !== undefined) poliaway($(this).attr('id'));
-		});
-
-		$('#map_main_div svg path').mouseover(function(){
-			if($(this).attr('id') !== undefined) policlick($(this).attr('id'));
-		});
-		$('#map_main_div svg path').mouseleave(function(){
-			if($(this).attr('id') !== undefined) poliaway($(this).attr('id'));
-		});
-
-		$('#map_main_div svg polygon').mouseover(function(){
-			if($(this).attr('id') !== undefined) policlick($(this).attr('id'));
-		});
-		$('#map_main_div svg polygon').mouseleave(function(){
-			if($(this).attr('id') !== undefined) poliaway($(this).attr('id'));
-		});
 		//$('#map_main_div svg').mouseenter(function() {
 		//	disableScroll();
 		//});
@@ -581,14 +549,8 @@ $( document ).ready(function()
 
 
 		svg = d3.select("#map_main_div svg");
-		$('#map_main_div svg g').on('click', function(){
-			if($(this).attr('id') !== undefined) calc_map_aktion(this, 'user');
-		});
-		$('#map_main_div svg path').on('click', function(){
-			if($(this).attr('id') !== undefined) calc_map_aktion(this, 'user');
-		});
 		$('#map_main_div svg polygon').on('click', function(){
-			if($(this).attr('id') !== undefined) calc_map_aktion(this, 'user');
+			calc_map_aktion(this, 'user');
 		});
 	}
 	var level_c = [];
@@ -750,7 +712,7 @@ $( document ).ready(function()
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '1');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'black');
 				//$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
-				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 1);
+				$('.'+$(tmp_this).attr('class')).css('filter', '');
 				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 0);
 				area_arr[aid].pop();
 				delete(area_arr[aid]);
@@ -782,7 +744,7 @@ $( document ).ready(function()
 				$('.'+$(tmp_this).attr('class')).css('stroke-width', '3px');
 				$('.'+$(tmp_this).attr('class')).css('stroke', 'blue');
 				//$('.'+$(tmp_this).attr('class')).css('stroke-dasharray', '0,0');
-				$('.'+$(tmp_this).attr('class')).css('fill-opacity', 0.6);
+				$('.'+$(tmp_this).attr('class')).css('filter', 'url(#css_brightness)');
 				$('.'+$(tmp_this).attr('class')+'[main=1]').attr('sel', 1);
 			}
 		}
@@ -1724,26 +1686,14 @@ $( document ).ready(function()
 		$('#CAP_Send_popupDialog').popup( "close" );
 	}
 
-	function set_svg_area_info()
-	{
-		//$.each(area_vl, function(index, data){
-		//	console.log(data['EMMA_ID']);
-		//	work_aid = $('[eid='+data['EMMA_ID']+']').attr('aid');
-		//	$('.pol_'+work_aid).css('fill', 'blue');
-		//});
-	}
-
 	function policlick(aid)
 	{
 		$('[sel=0]').css('stroke', 'black');
 		$('[sel=0]').css('stroke-width', '1');
-		$('[sel!=1]').css('stroke', 'black');
-		$('[sel!=1]').css('stroke-width', '1');
 		//$('[sel=0]').css('stroke-dasharray', '0,0');
 
 		$('.pol_'+aid).css('stroke', 'blue');
 		$('.pol_'+aid).css('stroke-width', '3px');
-
 		//$('.pol_'+aid).css('stroke-dasharray', '0,0');
 	}
 
@@ -1755,6 +1705,625 @@ $( document ).ready(function()
 			$('.pol_'+aid).css('stroke-width', '1');
 			//$('.pol_'+aid).css('stroke-dasharray', '0,0');
 		}
+	}
+
+	/**
+	 *   Plugin init
+	 */
+	var area_data = {};
+	var area_info = {};
+	function init_plugin_map()
+	{
+		//$('#map_main_div svg g').first().prepend('<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>').trigger('create');
+
+		$('div').on('pageshow',function(event, ui){
+			if($('#map_main_div svg').html())
+			{
+				panZoomInstance = svgPanZoom('#map_main_div svg', {
+					zoomEnabled: true,
+					zoomScaleSensitivity: 0.5,
+					dblClickZoomEnabled: false,
+					preventMouseEventsDefault: false, 
+					controlIconsEnabled: true,
+					fit: true,
+					center: true,
+					minZoom: 0.5,
+					onZoom: function(){
+						zoomscal = (1 / panZoomInstance.getZoom());
+						$('pattern image').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
+					}
+				});
+			}
+		});
+
+		lang_1 = $('#lang_1').val();
+		$('input[name=langs]').each(function(index, data){
+			lang[index] = $(data).val();
+		});
+
+		area_info['sel_type'] = 0;
+		area_info['problem'] = true;
+		$('#map_main_div svg g, path, polygon').each(function(index){
+			id = $(this).attr('id');
+			if(id !== undefined)
+			{
+				$(this).css('stroke', 'black');
+				$(this).css('stroke-width', '1');
+				$(this).css('fill', 'lightgrey');
+
+				area_data[id] = {};
+				area_data[id]['eid'] = id;
+				area_data[id]['sel'] = 0;
+				area_data[id]['sel_type'] = 0;
+				area_data[id]['type'] = {};
+				area_data[id]['level'] = {};
+				area_data[id]['desc'] = {};
+				area_data[id]['inst'] = {};
+				area_data[id]['from'] = {};
+				area_data[id]['to'] = {};
+			}
+			delete(id);
+		});
+
+		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) { 
+			$("#CAP_SOAP_popupDialog").popup("reposition", {positionTo: 'origin'});
+			$('#CAP_SOAP_popupDialog').resize();
+		});
+
+		$( "#CAP_SOAP_popupDialog" ).on( "collapsiblecollapse", function( event, ui ) {
+			$("#CAP_SOAP_popupDialog").popup("reposition", {positionTo: 'origin'});
+			$('#CAP_SOAP_popupDialog').resize();
+		});
+
+		$('#reload').click(function() {
+			data = $('#day').val();
+			if(data == "" || data === undefined) data = 0;
+			type = $('#type').val();
+			if(type == "" || type === undefined || type == 0) type = "";
+			window.location = "map.php?data="+data+'&type='+type;
+		});
+
+		$('#Undo').click(function() {
+			document.execCommand('undo', false, null);
+		});
+
+		$('#Redo').click(function() {
+			document.execCommand('redo', false, null);
+		});
+
+		$('#emmaid_select').change(function(r) {
+			$.each(area_data, function(id, data){
+				area_data[id]['sel_type'] = 0;
+				$('#'+id).css('fill', 'lightgrey');
+			});
+			$.each($(this).val(), function(index, id){
+				if(area_data[id]['type'][area_info['sel_type']] < 1 || area_data[id]['type'][area_info['sel_type']] == undefined) 
+				{
+					area_data[id]['type'][area_info['sel_type']] = area_data[area_info['last_area']]['type'][area_info['sel_type']];
+				}
+				area_data[id]['sel_type'] = area_info['sel_type'];
+				//area_data[id]['sel_type'] = area_info['sel_type'];
+
+				area_data[id]['sel'] = 1;
+				$('#'+id).css('filter', 'url(#css_brightness)');
+				$('#'+id).css('stroke', 'blue');
+				$('#'+id).css('stroke-width', '3px');
+				$('#'+id).css('fill', 'url(#pattern_l'+area_data[id]['type'][area_info['sel_type']]+'t'+area_info['sel_type']+')');
+			});
+			plugin_calc_map();
+			//console.log(r);
+			//area_warning_detail(aid, key_type, tmp_this);
+		});
+
+
+		$(document).on('popupafterclose', '#emmaid_select-listbox-popup', function () {
+			plugin_show_type(false);
+		});
+		
+		$('#submit_cap').on('click', function(){
+			if(area_info['problem'] == true)
+				plugin_get_all_warnings();
+			else
+				$('#Error_popupDialog').popup('open');
+		});
+
+		$('#sav_war').on('click', function(){
+			plugin_save_warning_detail();
+		});	
+		$('#del_war').on('click', function(){
+			plugin_delete_warning_detail();
+		});
+
+		$('#green_no').on('click', function(){
+			make_white_areas_green(0);
+		});
+
+		$('#green_yes').on('click', function(){
+			make_white_areas_green(1);
+		});
+
+		$('#green_edit').on('click', function(){
+			make_white_areas_green(-1);
+		});
+
+		$('.ui-collapsible-set').on('click', function(){
+			tempScrollTop = $(window).scrollTop();
+			alert(tempScrollTop);
+		});
+
+		$('#send_no').on('click', function(){
+			send_all_proce_cap(0);
+		});
+
+		$('#send_yes').on('click', function(){
+			send_all_proce_cap(1);
+		});
+
+		//$('#map_main_div svg').mouseenter(function() {
+		//	disableScroll();
+		//});
+//
+		//$('#map_main_div svg').mouseleave(function() {
+		//	enableScroll();
+		//});
+
+		$('li:not(#map-container)').on('click', function(){
+			aktive_type = false;
+			$('#awareness_toolbox .awareness').css('border', '');
+			$('#awareness_toolbox .awareness[aktive=1]').css('opacity', 1);
+			aktive_level = false;
+			$('#awareness_color_toolbox .awareness').css('border', '');
+			$('#awareness_color_toolbox .awareness').css('opacity', 1);
+			$('#map_main_div svg').css('cursor', 'auto');
+			$('#awareness_color_toolbox').css('display', '');
+		});
+		$('#awareness_toolbox .awareness[aktive=1]').on('click', function(){
+			if(aktive_type != $(this).attr('type'))
+			{
+				$('#awareness_toolbox .awareness').css('opacity', 0.5);
+				$(this).css('opacity', 1);
+				$('#awareness_toolbox .awareness').css('border', '');
+				$(this).css('border', '1px solid #0000ff');
+				var position = $(this).position();
+				$('#awareness_color_toolbox').css('top', (position.top - 16));
+				$('#awareness_color_toolbox').css('display', 'block');
+				aktive_type = parseInt($(this).attr('type'));
+			}
+			else
+			{
+				aktive_type = false;
+				$('#awareness_toolbox .awareness').css('border', '');
+				$('#awareness_toolbox .awareness[aktive=1]').css('opacity', 1);
+				aktive_level = false;
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$('#awareness_color_toolbox .awareness').css('opacity', 1);
+				$('#map_main_div svg').css('cursor', 'auto');
+				$('#awareness_color_toolbox').css('display', '');
+			}
+
+			plugin_show_type(aktive_type);
+		});
+
+		$('#awareness_color_toolbox .awareness').on('click', function(){
+			if(aktive_level != $(this).attr('level'))
+			{
+				$('#awareness_color_toolbox .awareness').css('opacity', 0.5);
+				$(this).css('opacity', 1);
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$(this).css('border', '1px solid #0000ff');
+				aktive_level = parseInt($(this).attr('level'));
+				$('#map_main_div svg').css('cursor', 'url(includes/meteoalarm/fill.png), auto');
+			}
+			else
+			{
+				aktive_level = false;
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$('#awareness_color_toolbox .awareness').css('opacity', 1);
+				$('#map_main_div svg').css('cursor', 'auto');
+			}
+		});
+
+		$('#map_main_div svg g, path, polygon').mouseover(function() {
+			id = $(this).attr('id');
+			if(id !== undefined)
+			{
+				$.each(area_data, function(index, data){
+					if(data['sel'] != 1) 
+					{
+						$('#'+index).css('stroke', 'black');
+						$('#'+index).css('stroke-width', '1');
+					}
+				});
+
+				$(this).css('stroke', 'blue');
+				$(this).css('stroke-width', '3px');
+			}
+		});
+
+		$('#map_main_div svg g, path, polygon').mouseleave(function() {
+			id = $(this).attr('id');
+			if(id !== undefined)
+			{
+				if(area_data[id]['sel'] == 0)
+				{
+					$(this).css('stroke', 'black');
+					$(this).css('stroke-width', '1');
+				}
+			}
+		});
+
+		$('#map_main_div svg g, path, polygon').on('click', function() {
+			id = $(this).attr('id');
+			if(id !== undefined)
+			{
+				if(aktive_type == false || aktive_level == false)
+				{
+					if(area_data[id]['sel'] == 0)
+					{
+						area_data[id]['sel'] = 1;
+						$(this).css('filter', 'url(#css_brightness)');
+						$(this).css('stroke', 'blue');
+						$(this).css('stroke-width', '3px');
+					}
+					else
+					{
+						area_data[id]['sel'] = 0;
+						$(this).css('filter', '');
+					}
+				}
+				else
+				{
+					area_data[id]['type'][aktive_type] = aktive_level;
+					$(this).css('fill', 'url(#pattern_l'+aktive_level+'t'+aktive_type+')');
+				}
+				plugin_calc_map();
+			}
+		});
+	}
+
+	function plugin_calc_map()
+	{
+		keepopen = false;
+		out = '';
+		area_info['problem'] = false;
+		$.each(area_data, function(index, data){
+			id = index;
+			if(data['sel'] == 1)
+			{
+				keepopen = true;
+				noty_i = 0;
+				$.each(data['type'], function (type, level) {
+					if(level !== undefined) noty_i++;
+				});
+				sel_type = data['sel_type'];
+
+				out+= '<div class="process_toolbox_area" id="aid_'+id+'" style="padding-right: 0px;padding-left: 0px;width: 300px; background-color: silver;">';
+					//out+= '<div class="awareness" aktive="2" onclick="area_warning_detail('+id+', -1, this)">';
+					//	out+= '<img src="includes/meteoalarm/warn-typs_11.png">';
+					//out+= '</div>';
+					out+= '<div class="proccess_type_area" style="width: 127px;height: 45px;float: left;overflow-y: hidden; pointer-events: all;">';
+						if(noty_i > 3) size =  (noty_i * 40);
+						else size = 121;
+						out+= '<div class="proccess_type_area_scroll" style="position: relative;padding-left: 6px;width: '+size+'px;">';
+							
+							for (noty=1; noty <= (3 - noty_i); noty++) 
+							{
+								out+= '<div class="awareness" aktive="2" onclick="plugin_area_warning_detail(\''+id+'\', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
+							}
+
+							$.each(data['type'], function(type, level){
+								css_selected = ''; // when selelcted type border
+								if(sel_type == type) css_selected='border: 3px solid rgb(0, 0, 255);';
+								imgsrc = $('#left_box_type_'+type+' img').attr('src');
+								levelc = $('div[level='+level+']').css('background-color');
+								not_sel_able = '';
+								if(area_info['sel_type'] > 0 && area_info['sel_type'] != type) not_sel_able = 'opacity: 0.5;';
+								//out+= '<div class="problem awareness" style="background-color:'+levelc+';" aktive="1" onclick="area_warning_detail('+id+', '+type+', this)" '+css_selected+'>';
+								//	out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
+								//out+= '</div>';
+								if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined) 
+								{
+									out+= '<div class="problem awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
+									out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
+								}
+								else 
+								{
+									out+= '<div class="awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
+									out+= '<img src="'+imgsrc+'">';
+									area_info['problem'] = true;
+								}
+								out+= '</div>';
+							});
+						out+= '</div>';
+					out+= '</div>';
+				
+					//out=+ '<div class="awareness" aktive="2" onclick="area_warning_detail('+key2+', -1, this)">';
+					//	out=+ '<img src="includes/meteoalarm/warn-typs_11.png">';
+					//out=+ '</div>';
+					aname=$('option[value='+id+']').text();
+					//out+= '<div class="divtextscroll problem_text">' + aname + '</div>';
+					out+= '<div class="divtextscroll" style="pointer-events: all;">' + aname + '</div>';
+				out+= '</div>';
+			}
+		});
+		$('#process_toolbox').html(out);
+
+		// Open Area List
+		if(area_list_on == false)
+		{
+			if(keepopen == true)
+			{
+				$('#work_toolbox').animate({
+					right: ($('#process_toolbox').width())+"px"
+				}, 500);
+				$('#process_toolbox').finish();
+				$('#process_toolbox').animate({
+					right: "-1px"
+				}, 500);
+				area_list_on = true;
+			}
+		}
+		else
+		{
+			// cLose Area List
+			if(keepopen == false)
+			{
+				$('#work_toolbox').animate({
+					right: "-1px"
+				}, 500);
+				$('#process_toolbox').finish();
+				$('#process_toolbox').animate({
+					right: "-"+($('#process_toolbox').width() + 2)+"px"
+				}, 500);
+				area_list_on = false;
+			}
+		}
+		
+	}
+
+	function plugin_show_type(type)
+	{
+		$.each(area_data, function(index, data){
+			id = index;
+			if(id !== undefined)
+			{
+				if(type != false)
+				{
+					level = data['type'][type];
+					if(level !== undefined)
+					{
+						$('#'+id).css('fill', 'url(#pattern_l'+level+'t'+type+')');
+					}
+					else
+					{
+						$('#'+id).css('fill', 'lightgrey');
+					}
+				}
+				else
+				{
+					level_tmp = 0;
+					if(data['type'].length < 1 || data['type'].length === undefined)
+					{
+						$('#'+id).css('fill', 'lightgrey');
+					}
+					$.each(data['type'], function(type2, level2){
+						if(level_tmp < level2)
+						{
+							if(level2 !== undefined)
+							{
+								$('#'+id).css('fill', 'url(#pattern_l'+level2+'t'+type2+')');
+							}
+							else
+							{
+								$('#'+id).css('fill', 'lightgrey');
+							}
+							level_tmp = level2;
+						}
+					});
+				}
+			}
+		});
+	}
+
+	function plugin_area_warning_detail(id, type, tmp_this)
+	{
+		if(area_data[id]['type'][type] > 0)
+		{
+			area_info['last_area'] = id;
+			if(area_data[id]['sel_type'] == type)
+			{
+				$('#emmaid_select option[value=' + id + ']').prop('selected', false);
+				$('#emmaid_select').selectmenu( "refresh" );
+				if($('#emmaid_select option:selected').val() == undefined)
+				{
+					$('#right_area_type').html('');
+					$.each(lang, function(lindex, ldata){
+						$('#desc_' + lindex).val('').trigger('input');
+						$('#inst_' + lindex).val('').trigger('input');
+					});
+					//$('#desc_1').val('').trigger('input');
+					//$('#inst_1').val('').trigger('input');
+					$('#from_0').val('00:00').trigger('input');
+					$('#to_0').val('23:59').trigger('input');
+					//$('#left_area_name').html(tmp_area_name).trigger('input');
+					$('#AreaDetailDIV').css('background-color', '#cccccc');
+					$('#AreaDetailUL').css('pointer-events', 'none');
+					$('#AreaDetailUL').css('opacity', 0.5);
+					$('#info_text').css('display', 'inherit');
+					aktive_warning_type = 0;
+				}
+				$(tmp_this).css('border', '');
+				area_data[id]['sel_type'] = 0;
+				seltypereset = true;
+				$.each(area_data, function(id, data){
+					if(data['sel_type'] == area_info['sel_type'])
+					{
+						seltypereset = false;
+					}
+				});
+				if(seltypereset)
+				{
+					area_info['sel_type'] = 0;
+				}
+			}
+			else if(area_info['sel_type'] == type || area_info['sel_type'] == 0)
+			{
+				area_info['sel_type'] = type;
+				area_data[id]['sel_type'] = type;
+				$(tmp_this).css('border', '3px solid blue');
+				$.each(lang, function(lindex, ldata){
+					$('#desc_'+lindex).val('');
+					$('#inst_'+lindex).val('');
+				});
+				$('#AreaDetailDIV').css('background-color', '#ffffff');
+				$('#AreaDetailUL').css('opacity', 1);
+				$('#info_text').css('display', 'none');
+				$('#AreaDetailUL').css('pointer-events', 'auto');
+
+				//$('#left_area_name').html(tmp_area_name);
+				//console.log( $('input[name=multisel_area_name_bool]:checked').val());
+				if( $('input[name=multisel_area_name_bool]:checked').val() == "1") // aktive_warning_key
+				{
+					$('#emmaid_select option[value=' + id + ']').prop('selected', true);
+				}
+				else
+				{
+					$('#emmaid_select option').prop('selected', false);
+					$('#emmaid_select option[value=' + id + ']').prop('selected', true);
+				}
+
+				$('#emmaid_select').selectmenu( "refresh" );
+				$('#right_area_type').html('');
+				$('#right_area_type').append($(tmp_this).clone());
+
+				$.each(lang, function(lindex, ldata){
+					if(area_data[id]['desc'][type] !== undefined) if(area_data[id]['desc'][type][lindex] !== undefined) $('#desc_' + lindex).val((area_data[id]['desc'][type][lindex])).trigger('input');
+					if(area_data[id]['inst'][type] !== undefined) if(area_data[id]['inst'][type][lindex] !== undefined) $('#inst_' + lindex).val((area_data[id]['inst'][type][lindex])).trigger('input');
+				});
+				//$('#desc_1').val((tmp_area_text_1)).trigger('input');
+				//$('#inst_1').val((tmp_area_inst_1)).trigger('input');
+
+				if(area_data[id]['from'][type] !== undefined)
+				{
+					$('#from_0').val(area_data[id]['from'][type]).trigger('input');
+				}
+				else
+				{
+					$('#from_0').val('00:00').trigger('input');
+				}
+				if(area_data[id]['to'][type] !== undefined)
+				{
+					$('#to_0').val(area_data[id]['to'][type]).trigger('input');
+				}
+				else
+				{
+					$('#to_0').val('23:59').trigger('input');
+				}
+			}
+			if(area_info['sel_type'] != 0) 
+			{
+				$('.awareness[type!='+area_info['sel_type']+']').css('opacity', '0.5');
+				$('.awareness[type='+area_info['sel_type']+']').css('opacity', '1');
+			}
+			else
+			{
+				$('.awareness[aktive!=2]').css('opacity', '1');
+			}
+		}
+	}
+
+	function plugin_save_warning_detail()
+	{
+		$.each(area_data, function(id, data){
+			if(data['sel_type'] == area_info['sel_type'])
+			{
+				area_data[id]['level'][data['sel_type']] = area_data[id]['type'][data['sel_type']];
+
+				area_data[id]['desc'][data['sel_type']] = {};
+				area_data[id]['inst'][data['sel_type']] = {};
+				$.each(lang, function(lindex, ldata){
+					area_data[id]['desc'][data['sel_type']][lindex] = $('#desc_' + lindex).val();
+					area_data[id]['inst'][data['sel_type']][lindex] = $('#inst_' + lindex).val();
+				});
+
+				area_data[id]['from'][data['sel_type']] = $('#from_0').val();
+				area_data[id]['to'][data['sel_type']] = $('#to_0').val();
+				area_data[id]['sel_type'] = 0;
+			}
+		});
+		area_info['sel_type'] = 0;
+
+		$('#right_area_type').html('');
+		$.each(lang, function(lindex, ldata){
+			$('#desc_' + lindex).val('').trigger('input');
+			$('#inst_' + lindex).val('').trigger('input');
+		});
+		//$('#desc_1').val('').trigger('input');
+		//$('#inst_1').val('').trigger('input');
+		$('#from_0').val('00:00').trigger('input');
+		$('#to_0').val('23:59').trigger('input');
+		//$('#left_area_name').html(tmp_area_name).trigger('input');
+		$('#AreaDetailDIV').css('background-color', '#cccccc');
+		$('#AreaDetailUL').css('pointer-events', 'none');
+		$('#AreaDetailUL').css('opacity', 0.5);
+		$('#info_text').css('display', 'inherit');
+
+		plugin_show_type(false);
+		plugin_calc_map()
+	}
+
+	function plugin_delete_warning_detail()
+	{
+		if(confirm($('#del_warn_lang').val()))
+		{
+			$.each(area_data, function(id, data){
+				if(data['sel_type'] == area_info['sel_type'])
+				{
+					delete(area_data[id]['type'][data['sel_type']]);
+					area_data[id]['desc'][area_data[id]['sel_type']] = {};
+					area_data[id]['inst'][area_data[id]['sel_type']] = {};
+					area_data[id]['from'][area_data[id]['sel_type']] = '00:00';
+					area_data[id]['to'][area_data[id]['sel_type']] = '00:00';
+					area_data[id]['sel_type'] = 0;
+				}
+			});
+			area_info['sel_type'] = 0;
+			$('#right_area_type').html('');
+			$.each(lang, function(lindex, ldata){
+				$('#desc_' + lindex).val('').trigger('input');
+				$('#inst_' + lindex).val('').trigger('input');
+			});
+			//$('#desc_1').val('').trigger('input');
+			//$('#inst_1').val('').trigger('input');
+			$('#from_0').val('00:00').trigger('input');
+			$('#to_0').val('00:00').trigger('input');
+			//$('#left_area_name').html(tmp_area_name).trigger('input');
+			$('#AreaDetailDIV').css('background-color', '#cccccc');
+			$('#AreaDetailUL').css('pointer-events', 'none');
+			$('#AreaDetailUL').css('opacity', 0.5);
+			$('#info_text').css('display', 'inherit');
+
+			plugin_show_type(false);
+			plugin_calc_map();
+		}
+	}
+
+	function plugin_get_all_warnings()
+	{
+		console.log(area_data);
+		cap_engine = $('#cap_engine').val();
+		plugin_name = $('#plugin_name').val();
+		data = $('#day').val();
+		if(data == "" || data === undefined) data = 0;
+		var jsonOb = JSON.stringify(area_data);
+		$.post(
+			cap_engine,
+			{cap_array:jsonOb, data:data, use_plugin: plugin_name},
+			function(r){
+				//your success response
+				alert(r);
+			}
+		);
 	}
 
 	var mk_pro_dot_interval;

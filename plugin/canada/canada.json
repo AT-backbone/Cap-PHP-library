@@ -1,5 +1,13 @@
 {
 	"_comment": "Information about SVG files",
+	"CAP":
+		{"engine":
+			{
+				"src":"cap_engine/cap.producer.php"
+			}
+		}
+	,
+	"_comment": "Information about SVG files",
 	"SVG":
 		{"info":
 			{
@@ -35,16 +43,31 @@
 			"_comment": "imgsrc (from the root folder of the cap-php-library), hazard_type_DESC (name of the type) ",
 			"1": {"imgsrc":"resources/warn-typs_01.png", "hazard_type_DESC":"Wind"},
 			"2": {"imgsrc":"resources/warn-typs_02.png", "hazard_type_DESC":"Fire"},
-			"3": {"imgsrc":"resources/warn-typs_03.png", "hazard_type_DESC":"Tornado"}
+			"3": {"imgsrc":"resources/warn-typs_03.png", "hazard_type_DESC":"test1"},
+			"4": {"imgsrc":"resources/warn-typs_04.png", "hazard_type_DESC":"test2"},
+			"5": {"imgsrc":"resources/warn-typs_05.png", "hazard_type_DESC":"test3"},
+			"6": {"imgsrc":"resources/test.svg", "hazard_type_DESC":"Tornado"}
 		},
 		"_comment": "Awarness Level:",
 		"AWL":{
 			"_comment": "id, name, hazard_level (color of level)",
-			"1": {"name":"green", 	"hazard_level":"Minor", 	"hazard_level_color":"#00ff00"},
-			"2": {"name":"dark-y",  "hazard_level":"Moderate",	"hazard_level_color":"#888800"},
-			"3": {"name":"yellow",  "hazard_level":"Moderate", 	"hazard_level_color":"#ffff00"},
-			"4": {"name":"orange",  "hazard_level":"Severe", 	"hazard_level_color":"#ffaa00"},
-			"5": {"name":"red", 	"hazard_level":"Extreme", 	"hazard_level_color":"#ff0000"}
+			"1":  {"name":"green",		"hazard_level":"Minor", 	"hazard_level_color":"green"},
+			"2":  {"name":"yellow1",	"hazard_level":"Moderate", 	"hazard_level_color":"#ffff00"},
+			"3":  {"name":"yellow2",	"hazard_level":"Moderate", 	"hazard_level_color":"#ffee00"},
+			"4":  {"name":"yellow3",	"hazard_level":"Moderate", 	"hazard_level_color":"#ffdd00"},
+			"5":  {"name":"yellow4",	"hazard_level":"Moderate", 	"hazard_level_color":"#ffcc00"},
+			"6":  {"name":"yellow5",	"hazard_level":"Moderate", 	"hazard_level_color":"#ffbb00"},
+			"7":  {"name":"orange1",	"hazard_level":"Severe", 	"hazard_level_color":"#ffaa00"},
+			"8":  {"name":"orange2",	"hazard_level":"Severe", 	"hazard_level_color":"#ff9900"},
+			"9":  {"name":"orange3",	"hazard_level":"Severe", 	"hazard_level_color":"#ff8800"},
+			"10": {"name":"orange4",	"hazard_level":"Severe", 	"hazard_level_color":"#ff7700"},
+			"11": {"name":"orange5",	"hazard_level":"Severe", 	"hazard_level_color":"#ff6600"},
+			"12": {"name":"red1",		"hazard_level":"Extreme", 	"hazard_level_color":"#ff5500"},
+			"13": {"name":"red2",		"hazard_level":"Extreme", 	"hazard_level_color":"#ff4400"},
+			"14": {"name":"red3",		"hazard_level":"Extreme", 	"hazard_level_color":"#ff3300"},
+			"15": {"name":"red4",		"hazard_level":"Extreme", 	"hazard_level_color":"#ff2200"},
+			"16": {"name":"red5",		"hazard_level":"Extreme", 	"hazard_level_color":"#ff1100"},
+			"17": {"name":"red6",		"hazard_level":"Extreme", 	"hazard_level_color":"#ff0000"}
 		}
 	}
 }
