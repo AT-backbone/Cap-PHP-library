@@ -82,6 +82,18 @@
 				print $lang_val.': '.$data['desc'][$type][$key]."\n";
 				if($type > 0 && $level > 0 && $id != "")
 				{
+
+					if(file_exists('conf/template.cap'))
+					{
+						require_once 'lib/cap.read.template.class.php';
+						$alert = new alert_template('conf/template.cap');
+						$post = $alert->output_template();
+						//print '<pre>';
+						//	print_r($post);
+						//print '</pre>';
+						unset($alert);
+					}
+
 					if($data_arr[0]->exutc != "") $timezone_date = $data_arr[0]->exutc;
 					else $timezone_date = date('P');
 
