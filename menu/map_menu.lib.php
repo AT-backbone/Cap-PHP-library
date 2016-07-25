@@ -105,7 +105,7 @@
 			
 			$pages['index.php#capview'] 		 		= $langs->trans("TitleCapView");
 
-			if($conf->webservice_aktive == 1)
+			//if($conf->webservice_aktive == 1)
 			$pages['map.php']  					= $langs->trans("TitleMap");
 							
 			$pages['index.php#read'] 		 		= $langs->trans("TitleCapList");
