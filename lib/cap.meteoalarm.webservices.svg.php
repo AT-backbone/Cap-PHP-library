@@ -19,7 +19,7 @@ if($conf->meteoalarm == 1)
 	require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 	
 	$ns=$conf->webservice->ns;
-	$WS_DOL_URL = $ns.'SvgAreaInfo.php';
+	$WS_DOL_URL = $ns.'SvgAreaInfo.0.php';
 
 	$filename = $_POST[filename];
 	if($_POST['import']==1) $import = true; else $import = false;

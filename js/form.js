@@ -1707,6 +1707,31 @@ $( document ).ready(function()
 		}
 	}
 
+	function init_svg()
+	{
+		svghtml = $('#map_main_div svg').children();
+		console.log(svghtml);
+		if(svghtml)
+		{
+			panZoomInstance = svgPanZoom('#map_main_div svg', {
+				zoomEnabled: true,
+				zoomScaleSensitivity: 0.5,
+				dblClickZoomEnabled: false,
+				preventMouseEventsDefault: false, 
+				controlIconsEnabled: true,
+				fit: true,
+				center: true,
+				minZoom: 0.5,
+				onZoom: function(){
+					zoomscal = (1 / panZoomInstance.getZoom());
+					$('pattern').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
+					$('pattern image').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
+				}
+			});
+			clearInterval(svg_intervall);
+		}
+	}
+
 	/**
 	 *   Plugin init
 	 */
@@ -1714,28 +1739,29 @@ $( document ).ready(function()
 	var area_info = {};
 	function init_plugin_map()
 	{
-		//$('#map_main_div svg g').first().prepend('<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>').trigger('create');
-
-		$('div').on('pageshow',function(event, ui){
-			if($('#map_main_div svg').html())
-			{
-				panZoomInstance = svgPanZoom('#map_main_div svg', {
-					zoomEnabled: true,
-					zoomScaleSensitivity: 0.5,
-					dblClickZoomEnabled: false,
-					preventMouseEventsDefault: false, 
-					controlIconsEnabled: true,
-					fit: true,
-					center: true,
-					minZoom: 0.5,
-					onZoom: function(){
-						zoomscal = (1 / panZoomInstance.getZoom());
-						$('pattern').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
-						$('pattern image').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
-					}
-				});
-			}
-		});
+		var svg_intervall = setInterval(function(){ init_svg() }, 500);
+		//$('#map_main_div svg').prepend('<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>').trigger('create');
+		$('#map_main_div svg').css('min-height', '645px');
+		//$('div').on('pageshow',function(event, ui){
+		//	if($('#map_main_div svg g').html())
+		//	{
+		//		panZoomInstance = svgPanZoom('#map_main_div svg', {
+		//			zoomEnabled: true,
+		//			zoomScaleSensitivity: 0.5,
+		//			dblClickZoomEnabled: false,
+		//			preventMouseEventsDefault: false, 
+		//			controlIconsEnabled: true,
+		//			fit: true,
+		//			center: true,
+		//			minZoom: 0.5,
+		//			onZoom: function(){
+		//				zoomscal = (1 / panZoomInstance.getZoom());
+		//				$('pattern').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
+		//				$('pattern image').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
+		//			}
+		//		});
+		//	}
+		//});
 
 		lang_1 = $('#lang_1').val();
 		$('input[name=langs]').each(function(index, data){
@@ -1753,6 +1779,7 @@ $( document ).ready(function()
 				$(this).css('fill', 'lightgrey');
 
 				area_data[id] = {};
+				area_data[id]['name'] = $('#emmaid_select option[value='+id+']').text();
 				area_data[id]['eid'] = id;
 				area_data[id]['sel'] = 0;
 				area_data[id]['sel_type'] = 0;

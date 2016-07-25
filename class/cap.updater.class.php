@@ -169,6 +169,7 @@
 			if(!empty($cap_array)) $this->cap_array = $cap_array;
 			if(!empty($awt)) $this->awt_arr = $awt;
 			if(!empty($langs)) $this->language = $langs;
+			//die(print_r($this));
 		}
 
 		/**
@@ -268,7 +269,7 @@
 					{
 						print 'file do not exists: lib/cap.meteoalarm.webservices.vl.php';
 					}
-					//print_r($AreaCodesArray);
+					//if($this->debug == true) print_r($AreaCodesArray);
 					return $res; // return res !
 				}
 				return false; // no webservice
@@ -291,7 +292,8 @@
 			unset($this->AreaArray);
 
 			// Output Debug values
-			if($this->debug)
+			//print "d:".$this->debug;
+			if($this->debug == true)
 			{
 				print '<pre>AreaCodesArray(VL): ';
 					print_r($this->AreaCodesArray);
@@ -314,7 +316,7 @@
 			}
 			
 			// Output Debug values
-			if($this->debug)
+			if($this->debug == true)
 			{
 				print '<pre>cap_ident(identifier): ';
 					print_r($this->cap_ident);
@@ -331,9 +333,10 @@
 		*/
 		function calc_cap_update()
 		{
+			if($this->debug == true) print_r($this->cap_array);
 			foreach($this->cap_array as $aid => $warr)
 			{
-				if($this->debug) print '<p>'.$warr->name.'<br>'; // Output Debug values
+				if($this->debug == true) print '<p>'.$warr->name.'<br>'; // Output Debug values
 				
 				foreach($warr as $key => $warning)
 				{
@@ -343,7 +346,7 @@
 						$ident = $this->cap_ident[$warning->type][$warning->eid]['id'];
 						// set 'aid' also in the $warning string Array()
 						$warning->aid = $aid; 
-						if($this->debug)
+						if($this->debug == true)
 						{
 							print '<br>if: '.$ident.'!= ""';
 							print '<br>if: '.$ident.' == '.$warning->ident;
@@ -401,7 +404,7 @@
 			} // foreach cap_array exit
 
 			// Output Debug values
-			if($this->debug)
+			if($this->debug == true)
 			{
 				print '<pre>cap data: ';
 					print_r($this->cap_data);
@@ -457,7 +460,7 @@
 						$this->cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning'][] = $warning;
 						
 						// Output Debug values
-						if($this->debug)
+						if($this->debug == true)
 						{
 							print '<pre> cap data Cancel / Update Green:';
 								print_r($this->cap_data['Update'][$vl_warning['type']][1]);
@@ -491,7 +494,7 @@
 
 			// Output Debug values
 			//$this->debug = 1;
-			if($this->debug)
+			if($this->debug == true)
 			{
 				print '<pre> cap data Cancel / Update Green:';
 					print_r($this->white_data['Update'][$vl_warning['type']][1]);

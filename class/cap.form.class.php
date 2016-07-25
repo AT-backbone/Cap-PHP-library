@@ -192,7 +192,9 @@
 					}
 					else
 					{
-						//$out.= '<input type="hidden" id="plugin" value="1">';
+						$out.= '<input type="hidden" id="plugin_name" value="webservice">';
+						$out.= '<input type="hidden" id="cap_engine" value="lib/cap.create.from_js_array.2.php">';
+						$out.= '<input type="hidden" id="plugin" value="1">';
 					}
 
 					if(!isset($_GET['data'])) $_GET['data'] = 0;
@@ -365,8 +367,9 @@
 													}
 													else
 													{
-														if($type_arr['id'] < 10) $type_arr['id'] = '0'.$type_arr['id'];
-														$out.= '<div class="awareness" id="left_box_type_'.$type_arr['id'].'" aktive="1" type="'.$type_arr['id'].'"><img src="includes/meteoalarm/warn-typs_'.$type_arr['id'].'.png"></div>';
+														if($type_arr['id'] < 10) $tmpTID = '0'.$type_arr['id'];
+														else $tmpTID = $type_arr['id'];
+														$out.= '<div class="awareness" id="left_box_type_'.$type_arr['id'].'" aktive="1" type="'.$type_arr['id'].'"><img src="includes/meteoalarm/warn-typs_'.$tmpTID.'.png"></div>';
 													}
 												}
 											$out.= '</div>';
@@ -418,15 +421,17 @@
 
 											$out.= '<div id="process_toolbox" class="process_toolbox_div"></div>';
 
-											$out.= $soap_SVG; // SVG from the SOAP
-											$out.= '<svg id="notme">';
-											$out.= '<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>';
+											$out.= substr($soap_SVG, 0, -6); // SVG from the SOAP
+											//$out.= '<svg id="notme">';
+											$out.= '<defs><filter id="css_brightness"><feComponentTransfer id="css_brightness"><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter></defs>';
 											if(is_array($ParameterArray['AWT']))
 											foreach($ParameterArray['AWT'] as $id => $type_arr)
 											{
-												if(!empty($type_arr['img_src']))
+												$tmpID = intval($type_arr['id']);
+												if($tmpID < 10) $tmpID = '0'.$tmpID;
+												if(!empty($type_arr['img_src']) || file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png'))
 												{
-													
+													if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $id = $type_arr['id'];
 													if(is_array($ParameterArray['AWL']))
 													foreach($ParameterArray['AWL'] as $key => $level_arr)
 													{
@@ -434,7 +439,8 @@
 														{
 															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="100" height="100" patternUnits="userSpaceOnUse">';
 																$out.= '<rect x="0" y="0" width="100" height="100" fill="'.$level_arr['hazard_level'].'"/>';
-																$out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="40" height="40" transform="scale(1, 1)"/>';
+																 if(!empty($type_arr['img_src'])) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="40" height="40" transform="scale(1, 1)"/>';
+																 else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="includes/meteoalarm/warn-typs_'.$tmpID.'.png" id="pattern_regen_3_img" x="0" y="0" width="40" height="40" transform="scale(1, 1)"/>';
 															$out.= '</pattern>';
 														}
 													}
@@ -448,7 +454,7 @@
 										}
 										else
 										{
-											$out.= '</form><form action="#" method="post" enctype="multipart/form-data" name="pluginZIPForm" style="padding: 15px;">';
+											$out.= '</form><form action="#" data-ajax="false" method="post" enctype="multipart/form-data" name="pluginZIPForm" style="padding: 15px;">';
 												$out.= '<legend>'.$langs->trans("WebserviceNotConnectedReconnectOrUsePluginZIP").': '.$this->tooltip('jsonDESC', $langs->trans("WebserviceNotConnectedReconnectOrUsePluginZIPDESC")).'</legend>';
 												$out.= '<input type="file" name="pluginZIP" id="pluginZIP" accept=".zip">';
 												$out.= '<input type="submit" name="submitplugin" value="'.$langs->trans("Upload").'">';
@@ -458,7 +464,7 @@
 												$plugin->get_all_plugin();
 												$out.= '<legend>'.$langs->trans("UsePlugin").': '.$this->tooltip('Plugin', $langs->trans("UsePluginDESC")).'</legend>';
 												$out.= $this->buildSelect("use_plugin", $plugin->plugin_folder, "data-native-menu=\"false\" id=\"use_plugin\"", $langs->trans("Plugin"), $_GET['use_plugin']);
-												$out.= '<input type="submit" name="use_plugin_submit" value="'.$langs->trans("Use").'">';
+												$out.= '<input type="submit" name="use_plugin_submit" value="'.$langs->trans("Use").'" data-ajax="false">';
 
 											$out.= '</form>';
 										}
