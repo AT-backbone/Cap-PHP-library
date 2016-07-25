@@ -60,7 +60,8 @@
 					$json_string = file_get_contents('plugin/'.$name.'/'.$name.'.json');
 					$this->json_array = json_decode($json_string);
 
-					$this->cap_engine = 'plugin/'.$name.'/'.$this->json_array->CAP->engine->src;
+					if(!empty($this->json_array->CAP->engine->src)) $this->cap_engine = 'plugin/'.$name.'/'.$this->json_array->CAP->engine->src;
+					else  $this->cap_engine = 'lib/cap.standard.producer.php';
 
 					$this->svg_id = $this->json_array->SVG->info->id;
 					$this->svg_name = $this->json_array->SVG->info->name;

@@ -1730,6 +1730,7 @@ $( document ).ready(function()
 					minZoom: 0.5,
 					onZoom: function(){
 						zoomscal = (1 / panZoomInstance.getZoom());
+						$('pattern').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
 						$('pattern image').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
 					}
 				});
