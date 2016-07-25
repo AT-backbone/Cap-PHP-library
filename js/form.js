@@ -1707,6 +1707,7 @@ $( document ).ready(function()
 		}
 	}
 
+	var svg_intervall;
 	function init_svg()
 	{
 		svghtml = $('#map_main_div svg').children();
@@ -1739,7 +1740,7 @@ $( document ).ready(function()
 	var area_info = {};
 	function init_plugin_map()
 	{
-		var svg_intervall = setInterval(function(){ init_svg() }, 500);
+		svg_intervall = setInterval(function(){ init_svg() }, 500);
 		//$('#map_main_div svg').prepend('<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>').trigger('create');
 		$('#map_main_div svg').css('min-height', '645px');
 		//$('div').on('pageshow',function(event, ui){
