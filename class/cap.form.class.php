@@ -190,6 +190,10 @@
 						$ParameterArray['AWT'] = $plugin->AWT;
 						$ParameterArray['AWL'] = $plugin->AWL;
 					}
+					else
+					{
+						//$out.= '<input type="hidden" id="plugin" value="1">';
+					}
 
 					if(!isset($_GET['data'])) $_GET['data'] = 0;
 					$langs_arr = $this->getlang();	
