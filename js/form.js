@@ -2414,42 +2414,52 @@ $( document ).ready(function()
 			{cap_array:jsonOb, data:data, awt:awt_ok_js, use_plugin: plugin_name},
 			function(r){
 				//your success response
-				console.log(r);
-				if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
-				replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-				replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-				  //the json is ok
-					area_green = jQuery.parseJSON(r);
-				}else{
-				  //the json is not ok
-				  alert(r);
-				}
-				//area_green = jQuery.parseJSON(r);
-				if(area_green !== null)
+				if($('#plugin_name').val() == 'webservice')
 				{
+					console.log(r);
 					if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
 					replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
 					replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 					  //the json is ok
-						plugin_send_final(r);
+						area_green = jQuery.parseJSON(r);
+					}else{
+					  //the json is not ok
+					  alert(r);
 					}
+					//area_green = jQuery.parseJSON(r);
+					if(area_green !== null)
+					{
+						if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
+						replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+						replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+						  //the json is ok
+							plugin_send_final(r);
+						}
+					}
+					else
+					{
+						if($('#plugin_name').val() == 'webservice')
+						{
+							plugin_make_white_areas_green(0);
+						}
+					}
+
+					////send_all_proce_cap(yesno);
+					//$.mobile.loading( "hide" );
+					//$('#CAPpopupDialog').popup( "close" );
+					//setTimeout(function(){
+					//	$('#set').html('').trigger('create');
+					//	$('#CAP_Send_popupDialog').popup();
+					//	$('#CAP_Send_popupDialog').popup( "open" );
+					//}, 100);
 				}
 				else
 				{
-					if($('#plugin_name').val() == 'webservice')
-					{
-						plugin_make_white_areas_green(0);
-					}
+					//alert(r);
+					$('#SOAPUL').html(r).trigger('create');
+					$('#CAP_SOAP_popupDialog').popup();
+					$('#CAP_SOAP_popupDialog').popup( "open" );
 				}
-
-				////send_all_proce_cap(yesno);
-				//$.mobile.loading( "hide" );
-				//$('#CAPpopupDialog').popup( "close" );
-				//setTimeout(function(){
-				//	$('#set').html('').trigger('create');
-				//	$('#CAP_Send_popupDialog').popup();
-				//	$('#CAP_Send_popupDialog').popup( "open" );
-				//}, 100);
 			}
 		);
 	}

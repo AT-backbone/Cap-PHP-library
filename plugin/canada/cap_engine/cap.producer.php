@@ -70,16 +70,16 @@
 	if(is_array($cap_array))
 	foreach($cap_array as $id => $data)
 	{
-		print "\n".'id: '.$id."\n";
+		//print "\n".'id: '.$id."\n";
 		if(is_array($data['type']))
 		foreach($data['type'] as $type => $level)
 		{
-			print 'type: '.$type."\n";
-			print 'level: '.$level."\n";
+			//print 'type: '.$type."\n";
+			//print 'level: '.$level."\n";
 			if(is_array($langs_keys))
 			foreach($langs_keys as $key => $lang_val)
 			{
-				print $lang_val.': '.$data['desc'][$type][$key]."\n";
+				//print $lang_val.': '.$data['desc'][$type][$key]."\n";
 				if($type > 0 && $level > 0 && $id != "")
 				{
 
@@ -200,7 +200,7 @@
 						if($data['desc'][$type][$key] != "")	
 						{
 							$post['language'][] = $lang_val;
-							$post['headline'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$name;
+							$post['headline'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$data['name'];
 							$post['description'][$lang_val] =$data['desc'][$type][$key];
 							if($data['inst'][$type][$key] != "") $post['instruction'][$lang_val] = $data['inst'][$type][$key];
 						}
@@ -209,14 +209,14 @@
 							if($level == 1)
 							{
 								$post['language'][] = $lang_val;
-								$post['headline'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$name;
-								$post['description'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$name;
+								$post['headline'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$data['name'];
+								$post['description'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$data['name'];
 							}
 						}
 					}
 
 
-					$post['areaDesc'] = $name;
+					$post['areaDesc'] = $data['name'];
 
 					$post['parameter']['valueName'][0] = 'awareness_level';
 					$post['parameter']['value'][0] = $plugin->AWL[$level]['level'];
@@ -230,6 +230,16 @@
 					$cap->buildCap();
 					$cap->destination = $conf->cap->output;
 					$path = $cap->createFile();
+
+
+					$outFiles[] = array( 
+						'file' => $post['identifier'].'.cap', 
+						'datafrom' => $post['effective'],
+						'datato' => $post['expires'], 
+						'datageo' => $data['name'], 
+						'datalevel' => $plugin->AWL[$level]['level'], 
+						'datatype' => $plugin->AWT[$type]['hazard_type_DESC']
+					);
 					//print '<pre>';
 					//	print_r($post);
 					//print '</pre>';
@@ -237,6 +247,17 @@
 				}
 			}
 		}
+	}
+
+	foreach($outFiles as $key => $output)
+	{
+		print '<li data-role="collapsible" data-icon="'.$icon.'" data-iconpos="right" data-inset="false" class="ui-icon-alert '.$icon.'">';
+			print '<h2>'.$output['datageo'].' ['.$output['datatype'].': '.$output['datalevel'].']</h2>';
+			print 'from: '.$output['datafrom']['date'].' '.$output['datafrom']['time'].'<br>';
+			print 'to: '.$output['datato']['date'].' '.$output['datato']['time'].'<br>';
+			print '<a href="index.php?read=1&location='.$output['file'].'#capview" data-ajax="false" target="_blank">'.$output['file'].'</a><br>';
+			print $out;
+		print '</li>';
 	}
 
 
