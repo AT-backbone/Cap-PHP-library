@@ -333,7 +333,12 @@
 		*/
 		function calc_cap_update()
 		{
-			if($this->debug == true) print_r($this->cap_array);
+			if($this->debug == true) 
+			{
+				print '<pre>';
+					print_r($this->cap_array);
+				print '</pre>';
+			}
 			foreach($this->cap_array as $aid => $warr)
 			{
 				if($this->debug == true) print '<p>'.$warr->name.'<br>'; // Output Debug values
@@ -388,12 +393,12 @@
 							$warning->sender 		= $this->cap_ident[$warning->type][$warning->eid]['sender'];
 							$warning->timestamp 	= $this->cap_ident[$warning->type][$warning->eid]['timestamp'];
 							$warning->references 	= $ident; // set the referenc for the Updated
-							$this->cap_data['Update'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0).$warning->eid][] = $warning; // Updates have to be send one by one!
+							$this->cap_data['Update'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->desc->{'0'}).$warning->eid][] = $warning; // Updates have to be send one by one!
 						}
 						else // if there is no similar warning so make an Alert
 						{
 							// make an Alert
-							$this->cap_data['Alert'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->text_0)][] = $warning;
+							$this->cap_data['Alert'][$warning->type][$warning->level][addslashes($warning->from)][addslashes($warning->to)][addslashes($warning->desc->{'0'})][] = $warning;
 						}
 
 						$this->AreaIDArray[$aid][$warning->type] = $warning->level; // set level to type
@@ -450,7 +455,7 @@
 						$warning->name = $vl_warning['AreaCaption'];
 						$warning->eid = $vl_warning['EMMA_ID'];
 
-						$warning->text_0 = "no warning";
+						$warning->desc->{'0'} = "no warning";
 						$warning->type = $vl_warning['type'];
 						$warning->level = 1;
 
@@ -672,12 +677,12 @@
 
 										foreach($langs_keys as $key => $lang_val)
 										{
-											if($data_arr[0]->{'text_'.$key} != "")	
+											if($data_arr[0]->desc->$key != "")	
 											{
 												$post['language'][] = $lang_val;
 												$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
-												$post['description'][$lang_val] = $data_arr[0]->{'text_'.$key};
-												if($data_arr[0]->inst_0 != "") $post['instruction'][$lang_val] = $data_arr[0]->{'inst_'.$key};
+												$post['description'][$lang_val] = $data_arr[0]->desc->$key;
+												if($data_arr[0]->inst->$key != "") $post['instruction'][$lang_val] = $data_arr[0]->inst->$key;
 											}
 											else
 											{

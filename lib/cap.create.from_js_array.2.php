@@ -138,8 +138,41 @@
 	// $conf->identifier->WMO_OID
 	// $conf->identifier->ISO
 	// $conf->cap->output
+
+	$utc = date('P');
 	
-	$capupdater = new CAP_Updater($cap_array, $awt_arr);
+
+	$cap_array_2 = array();
+	foreach($cap_array as $aid => $cap)
+	{
+		//type
+		//eid
+		//level
+		//from
+		//to
+		$i = 0;
+		foreach($cap->type as $type => $level)
+		{
+			$cap_array_2[$aid][$i]->name = $cap->name;
+
+			$cap_array_2[$aid][$i]->type = $type;
+			$cap_array_2[$aid][$i]->level = $level;
+
+			$cap_array_2[$aid][$i]->eid = $cap->emma_id;
+
+			$cap_array_2[$aid][$i]->from = date('Y-m-d H:i:s', strtotime(str_replace('&nbsp;', ' ', $cap->from->$type).' '.$utc[0].' '.$utc[1].$utc[2].' hours'));
+			$cap_array_2[$aid][$i]->to = date('Y-m-d H:i:s', strtotime(str_replace('&nbsp;', ' ', $cap->to->$type).' '.$utc[0].' '.$utc[1].$utc[2].' hours'));
+
+			$cap_array_2[$aid][$i]->desc = $cap->desc->$type;
+			$cap_array_2[$aid][$i]->inst = $cap->inst->$type;
+
+			$cap_array_2[$aid][$i]->identifier = $cap->identifier->$type;
+
+			$i++;
+		}
+	}
+	
+	$capupdater = new CAP_Updater($cap_array_2, $awt_arr);
 
 	$capupdater->debug = true;
 

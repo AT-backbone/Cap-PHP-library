@@ -150,7 +150,7 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $AreaVLArray, $plugin;
+			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin;
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
@@ -195,6 +195,7 @@
 						$out.= '<input type="hidden" id="plugin_name" value="webservice">';
 						$out.= '<input type="hidden" id="cap_engine" value="lib/cap.create.from_js_array.2.php">';
 						$out.= '<input type="hidden" id="plugin" value="1">';
+						if($SVLdetail) $out.= str_replace('&nbsp;', ' ', $SVLdetail);
 					}
 
 					if(!isset($_GET['data'])) $_GET['data'] = 0;

@@ -1711,7 +1711,7 @@ $( document ).ready(function()
 	function init_svg()
 	{
 		svghtml = $('#map_main_div svg').children();
-		console.log(svghtml);
+		//console.log(svghtml);
 		if(svghtml)
 		{
 			panZoomInstance = svgPanZoom('#map_main_div svg', {
@@ -1743,26 +1743,33 @@ $( document ).ready(function()
 		svg_intervall = setInterval(function(){ init_svg() }, 500);
 		//$('#map_main_div svg').prepend('<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>').trigger('create');
 		$('#map_main_div svg').css('min-height', '645px');
-		//$('div').on('pageshow',function(event, ui){
-		//	if($('#map_main_div svg g').html())
-		//	{
-		//		panZoomInstance = svgPanZoom('#map_main_div svg', {
-		//			zoomEnabled: true,
-		//			zoomScaleSensitivity: 0.5,
-		//			dblClickZoomEnabled: false,
-		//			preventMouseEventsDefault: false, 
-		//			controlIconsEnabled: true,
-		//			fit: true,
-		//			center: true,
-		//			minZoom: 0.5,
-		//			onZoom: function(){
-		//				zoomscal = (1 / panZoomInstance.getZoom());
-		//				$('pattern').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
-		//				$('pattern image').css('transform', 'scale('+zoomscal+', '+zoomscal+')');
-		//			}
-		//		});
-		//	}
-		//});
+		
+		if($('#map_main_div svg').attr('process') > 0)
+		{
+			$('#mk_process_info').html($('#mk_process_lang').val());
+
+			loading_dots();
+			$("#submit_cap").addClass('ui-disabled');
+			mk_pro_interval = setInterval(function(){ 
+				$.ajax({
+					type: "POST",
+					url: 'lib/cap.meteoalarm.webservices.mkv.php',
+					data: '', // serializes the forms elements.
+					success: function(data)
+					{			
+						if(parseInt(data) > 0)
+						{
+							//loading_dots();
+						}
+						else
+						{
+							$( "#submit_cap" ).removeClass('ui-disabled');
+							location.reload();	
+						}
+					}
+				});
+			}, 30000);
+		}
 
 		lang_1 = $('#lang_1').val();
 		$('input[name=langs]').each(function(index, data){
@@ -1782,6 +1789,7 @@ $( document ).ready(function()
 				area_data[id] = {};
 				area_data[id]['name'] = $('#emmaid_select option[value='+id+']').text();
 				area_data[id]['eid'] = id;
+				area_data[id]['emma_id'] = $(this).attr('eid');
 				area_data[id]['sel'] = 0;
 				area_data[id]['sel_type'] = 0;
 				area_data[id]['type'] = {};
@@ -1793,6 +1801,26 @@ $( document ).ready(function()
 			}
 			delete(id);
 		});
+
+		if(area_vl !== undefined)
+		{
+			$.each(area_vl, function(index, val){
+				area_data[val['aid']]['type'][val['type']] = val['level'];
+
+				area_data[val['aid']]['emma_id'] = val['EMMA_ID'];
+
+				area_data[val['aid']]['from'][val['type']] = val['from'];
+				area_data[val['aid']]['to'][val['type']] = val['to'];
+
+				if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
+				area_data[val['aid']]['desc'][val['type']][0] = val['text'];
+
+				if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
+				area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
+
+				$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
+			});
+		}
 
 		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) { 
 			$("#CAP_SOAP_popupDialog").popup("reposition", {positionTo: 'origin'});
@@ -2340,7 +2368,7 @@ $( document ).ready(function()
 	function plugin_get_all_warnings()
 	{
 		console.log(area_data);
-		cap_engine = $('#cap_engine').val();
+		cap_engine = $('#cap_engine').val(); // webservice uses lib/cap.create.from_js_array.2.php
 		plugin_name = $('#plugin_name').val();
 		data = $('#day').val();
 		if(data == "" || data === undefined) data = 0;
@@ -2350,7 +2378,16 @@ $( document ).ready(function()
 			{cap_array:jsonOb, data:data, use_plugin: plugin_name},
 			function(r){
 				//your success response
-				alert(r);
+				console.log(r);
+
+				//send_all_proce_cap(yesno);
+				$.mobile.loading( "hide" );
+				$('#CAPpopupDialog').popup( "close" );
+				setTimeout(function(){
+					$('#set').html('').trigger('create');
+					$('#CAP_Send_popupDialog').popup();
+					$('#CAP_Send_popupDialog').popup( "open" );
+				}, 100);
 			}
 		);
 	}
