@@ -259,20 +259,20 @@
 										$out.= '<span id="right_area_type"></span>';
 										$out.= '</h1>';
 									$out.= '</li>';
-									if(empty($plugin->name))
-									{
-										$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
-											$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
-											$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
-												$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
-													$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
-													$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
-													$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
-												$out.= '</fieldset>';
-											$out.= '</span>';
-										$out.= '</li>';
-									}
+									//if(empty($plugin->name))
+									//{
+									//	$out.= '<li data-role="list-divider" data-theme="b" >'; // style="border: 1px solid #dddddd; border-bottom: none;"
+									//		$out.= '<legend>'.$langs->trans('MultiAreaSelectLabel').': '.$this->tooltip('radio', $langs->trans("DESC_MultiAreaSelectLabel")).'</legend>';
+									//		$out.= '<span id="multisel_area_name" style="position: absolute;top: 3px;right: 9px;">';
+									//			$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
+									//				$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2a" value="1" checked="checked">';
+									//				$out.= '<label for="radio-choice-h-2a">'.$langs->trans('ON').'</label>';
+									//				$out.= '<input type="radio" name="multisel_area_name_bool" id="radio-choice-h-2b" value="0">';
+									//				$out.= '<label for="radio-choice-h-2b">'.$langs->trans('OFF').'</label>';
+									//			$out.= '</fieldset>';
+									//		$out.= '</span>';
+									//	$out.= '</li>';
+									//}
 									$i = 0;
 									foreach($langs_keys as $key => $lang_val)
 									{
@@ -420,7 +420,7 @@
 											//	$out.= '<div class="awareness" id="Reset"><img src="includes/meteoalarm/reset.png"></div>';
 											//$out.= '</div>';
 
-											$out.= '<div id="process_toolbox" class="process_toolbox_div"></div>';
+											$out.= '<div id="process_toolbox" class="process_toolbox_div"><div id="process_toolbox_inner" class="process_toolbox_div_inner"></div></div>';
 
 											$out.= substr($soap_SVG, 0, -6); // SVG from the SOAP
 											//$out.= '<svg id="notme">';
@@ -438,10 +438,13 @@
 													{
 														if($level_arr['id'] > 0)
 														{
-															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="100" height="100" patternUnits="userSpaceOnUse">';
-																$out.= '<rect x="0" y="0" width="100" height="100" fill="'.$level_arr['hazard_level'].'"/>';
-																 if(!empty($type_arr['img_src'])) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="40" height="40" transform="scale(1, 1)"/>';
-																 else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="includes/meteoalarm/warn-typs_'.$tmpID.'.png" id="pattern_regen_3_img" x="0" y="0" width="40" height="40" transform="scale(1, 1)"/>';
+															if(!empty($type_arr['img_src'])) $standard_map = getimagesize($type_arr['img_src']);
+															else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $standard_map = getimagesize('includes/meteoalarm/warn-typs_'.$tmpID.'.png');
+
+															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" patternUnits="userSpaceOnUse">';
+																$out.= '<rect x="0" y="0" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" fill="'.$level_arr['hazard_level'].'"/>';
+																if(!empty($type_arr['img_src'])) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
+																else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="includes/meteoalarm/warn-typs_'.$tmpID.'.png" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
 															$out.= '</pattern>';
 														}
 													}

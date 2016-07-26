@@ -174,58 +174,58 @@
 	
 	$capupdater = new CAP_Updater($cap_array_2, $awt_arr);
 
-	$capupdater->debug = true;
+	//$capupdater->debug = true;
 
 	//print 'getlang:<br>';
 	// get all langs used in your caps
-	print '<br>getlang()';
+	//print '<br>getlang()';
 	$capupdater->getlang();
 
 	//print 'del_caps_in_output:<br>';
 	// delete all caps in the export folder
 	if(empty($_POST['no_del']))
 	{
-		print '<br>del_caps_in_output()';
+		//print '<br>del_caps_in_output()';
 		$capupdater->del_caps_in_output();
 	}
 
 	//print 'webservice_meteoalarm:<br>';
 	// get visio level warnings and area data from Meteoalarm webservice
-	print '<br>webservice_meteoalarm()';
+	//print '<br>webservice_meteoalarm()';
 	$capupdater->webservice_meteoalarm();
 	
 	//print 'get_area_identifier:<br>';
 	// set identifier sorted in area
 	//$capupdater->debug = true;
-	print '<br>get_area_identifier()';
+	//print '<br>get_area_identifier()';
 	$capupdater->get_area_identifier();
 	//$capupdater->debug = false;
 
 	//print 'calc_cap_update:<br>';
 	// calculate cap which should be Updated or Alerted
 	//$capupdater->debug = true;
-	print '<br>calc_cap_update()';
+	//print '<br>calc_cap_update()';
 	$capupdater->calc_cap_update();
 	//$capupdater->debug = false;
 
 	//print 'calc_cap_cancel:<br>';
 	// calculate cap which should be Cancelled (Updated as green)
-	print '<br>calc_cap_cancel()';
+	//print '<br>calc_cap_cancel()';
 	$capupdater->calc_cap_cancel();
 
 	//print 'get_white_warnings:<br>';
 	// calculate white areas
-	print '<br>get_white_warnings()';
+	//print '<br>get_white_warnings()';
 	$capupdater->get_white_warnings();
 	
 	//print 'produce_all_caps:<br>';
 	// produce and save all caps in the export folder
-	print '<br>produce_all_caps()';
+	//print '<br>produce_all_caps()';
 	$capupdater->produce_all_caps();
 	
 	//print 'fetch_white_areas:<br>';
 	// return white type from the areas
-	print '<br>fetch_white_areas()';
+	//print '<br>fetch_white_areas()';
 	$white_area = $capupdater->fetch_white_areas();
 
 	//print 'json_encode:<br>';

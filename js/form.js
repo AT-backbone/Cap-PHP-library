@@ -1771,6 +1771,19 @@ $( document ).ready(function()
 			}, 30000);
 		}
 
+		if($('#plugin_name').val() == 'webservice')
+		{
+			aktive_types = [];
+			for (var i = 1; i <= 13; i++) {
+				awt_bool = $('#map_main_div svg').attr('awt_'+i);
+				aktive_types[i] = awt_bool;
+				if(i < 10) i_tmp = '0' + i;
+				else i_tmp = i;
+				$('#left_box_type_' + i_tmp).attr('aktive', awt_bool);
+				if(awt_bool == "0") $("#type option[value='"+i+"']").remove();
+			};
+		}
+
 		lang_1 = $('#lang_1').val();
 		$('input[name=langs]').each(function(index, data){
 			lang[index] = $(data).val();
@@ -1820,6 +1833,8 @@ $( document ).ready(function()
 
 				$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
 			});
+			// a webservice is aktive
+			plugin_show_type(false);
 		}
 
 		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) { 
@@ -1916,13 +1931,13 @@ $( document ).ready(function()
 			send_all_proce_cap(1);
 		});
 
-		//$('#map_main_div svg').mouseenter(function() {
-		//	disableScroll();
-		//});
-//
-		//$('#map_main_div svg').mouseleave(function() {
-		//	enableScroll();
-		//});
+		// Enable and disable scrolling in process toolbox inner and outer!
+		$('#process_toolbox_inner').mouseenter(function() {
+			$('#process_toolbox').css('pointer-events', 'all');
+		});
+		$('#process_toolbox_inner').mouseleave(function() {
+			$('#process_toolbox').css('pointer-events', 'none');
+		});
 
 		$('li:not(#map-container)').on('click', function(){
 			aktive_type = false;
@@ -2068,7 +2083,11 @@ $( document ).ready(function()
 								out+= '<div class="awareness" aktive="2" onclick="plugin_area_warning_detail(\''+id+'\', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
 							}
 
-							$.each(data['type'], function(type, level){
+							
+							keysSorted = Object.keys(data['type']).sort(function(a,b){return data['type'][b] - data['type'][a]});
+							//alert(keysSorted);     // bar,me,you,foo
+							$.each(keysSorted, function(index, type){
+								level = data['type'][type];
 								css_selected = ''; // when selelcted type border
 								if(sel_type == type) css_selected='border: 3px solid rgb(0, 0, 255);';
 								imgsrc = $('#left_box_type_'+type+' img').attr('src');
@@ -2103,7 +2122,7 @@ $( document ).ready(function()
 				out+= '</div>';
 			}
 		});
-		$('#process_toolbox').html(out);
+		$('#process_toolbox_inner').html(out);
 
 		// Open Area List
 		if(area_list_on == false)
@@ -2372,10 +2391,26 @@ $( document ).ready(function()
 		plugin_name = $('#plugin_name').val();
 		data = $('#day').val();
 		if(data == "" || data === undefined) data = 0;
+		
+		awt_ok = [];
+		awt_ok[0] = 0;
+		for (var ty = 1; ty <= 13; ty++) 
+		{
+			if($('#map_main_div svg').attr('awt_'+ty) == 1)
+			{
+				awt_ok[ty] = 1;
+			}
+			else
+			{
+				awt_ok[ty] = 0;
+			}
+		}
+		var awt_ok_js = JSON.stringify(awt_ok);
+		
 		var jsonOb = JSON.stringify(area_data);
 		$.post(
 			cap_engine,
-			{cap_array:jsonOb, data:data, use_plugin: plugin_name},
+			{cap_array:jsonOb, data:data, awt:awt_ok_js, use_plugin: plugin_name},
 			function(r){
 				//your success response
 				console.log(r);
@@ -2488,4 +2523,9 @@ $( document ).ready(function()
 		window.onwheel = null; 
 		window.ontouchmove = null;  
 		document.onkeydown = null;  
+	}
+
+	function standard_sort(a, b)
+	{
+		return a-b;
 	}
