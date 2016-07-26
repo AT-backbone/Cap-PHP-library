@@ -140,16 +140,10 @@
 	// $conf->cap->output
 
 	$utc = date('P');
-	
 
 	$cap_array_2 = array();
 	foreach($cap_array as $aid => $cap)
 	{
-		//type
-		//eid
-		//level
-		//from
-		//to
 		$i = 0;
 		foreach($cap->type as $type => $level)
 		{
@@ -171,7 +165,7 @@
 			$i++;
 		}
 	}
-	
+
 	$capupdater = new CAP_Updater($cap_array_2, $awt_arr);
 
 	//$capupdater->debug = true;

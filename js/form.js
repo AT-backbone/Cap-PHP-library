@@ -1502,7 +1502,7 @@ $( document ).ready(function()
 			}
 				
 				if(data['type'] < 10) 
-					content+= $('#left_box_type_0'+data['type']).closest('div')[0].outerHTML;
+					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
 				else 
 					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
 				
@@ -1815,7 +1815,7 @@ $( document ).ready(function()
 			delete(id);
 		});
 
-		if(area_vl !== undefined)
+		if(area_vl !== undefined && area_vl != "")
 		{
 			$.each(area_vl, function(index, val){
 				area_data[val['aid']]['type'][val['type']] = val['level'];
@@ -1907,15 +1907,15 @@ $( document ).ready(function()
 		});
 
 		$('#green_no').on('click', function(){
-			make_white_areas_green(0);
+			plugin_make_white_areas_green(0);
 		});
 
 		$('#green_yes').on('click', function(){
-			make_white_areas_green(1);
+			plugin_make_white_areas_green(1);
 		});
 
 		$('#green_edit').on('click', function(){
-			make_white_areas_green(-1);
+			plugin_make_white_areas_green(-1);
 		});
 
 		$('.ui-collapsible-set').on('click', function(){
@@ -2384,6 +2384,7 @@ $( document ).ready(function()
 		}
 	}
 
+	var area_green = {};
 	function plugin_get_all_warnings()
 	{
 		console.log(area_data);
@@ -2414,17 +2415,219 @@ $( document ).ready(function()
 			function(r){
 				//your success response
 				console.log(r);
+				if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
+				replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+				replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+				  //the json is ok
+					area_green = jQuery.parseJSON(r);
+				}else{
+				  //the json is not ok
+				  alert(r);
+				}
+				//area_green = jQuery.parseJSON(r);
+				if(area_green !== null)
+				{
+					if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
+					replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+					replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+					  //the json is ok
+						plugin_send_final(r);
+					}
+				}
+				else
+				{
+					if($('#plugin_name').val() == 'webservice')
+					{
+						plugin_make_white_areas_green(0);
+					}
+				}
 
-				//send_all_proce_cap(yesno);
-				$.mobile.loading( "hide" );
-				$('#CAPpopupDialog').popup( "close" );
-				setTimeout(function(){
-					$('#set').html('').trigger('create');
-					$('#CAP_Send_popupDialog').popup();
-					$('#CAP_Send_popupDialog').popup( "open" );
-				}, 100);
+				////send_all_proce_cap(yesno);
+				//$.mobile.loading( "hide" );
+				//$('#CAPpopupDialog').popup( "close" );
+				//setTimeout(function(){
+				//	$('#set').html('').trigger('create');
+				//	$('#CAP_Send_popupDialog').popup();
+				//	$('#CAP_Send_popupDialog').popup( "open" );
+				//}, 100);
 			}
 		);
+	}
+
+	function plugin_send_final(r)
+	{
+		//console.log(r);
+		var content = '<form><ul data-role="listview" data-inset="true" data-shadow="false" id="GreenUL" style="margin-top: 0px;">';
+		var r_arr = jQuery.parseJSON(r);
+		tmp_name ='';
+		li_bool = false;
+		$.each(r_arr, function(index, data) {
+		
+			if(data['name'] != tmp_name)
+			{
+				if(li_bool) content+= '</div>';
+				if(li_bool) content+= '</li>';
+				if(li_bool) content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps">'; /*data-role="collapsible"  */ 
+				else 		content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps" style="border-top: 1px solid #dddddd !important;">'; /*data-role="collapsible"  */ 
+					content+= '<h2 style="margin: 0px;">'+data['name']+'</h2>';
+					content+= '<div id="green_div_'+data['aid']+'" style="height: 30px;">';
+					tmp_name = data['name'];
+					li_bool = true;
+			}
+				
+				if(data['type'] < 10) 
+					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
+				else 
+					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
+				
+				//content+= '<br>'+data['type']+': <input type="checkbox" name="checkbox-'+data['aid']+'" id="checkbox-'+data['aid']+'" checked="checked" value="'+data['type']+'"/>';
+		});
+		content+= '</ul></form>';
+
+		$('[type="checkbox"]').checkboxradio();
+		$('[type="checkbox"]').checkboxradio("refresh");
+
+		$('#set').append( content ).trigger('create');
+		$('#set').collapsibleset( "refresh" );
+
+		$.each(r_arr, function(index, data) {
+			$('#green_div_'+data['aid']+' div').css('background-color', '#29d660');
+			$('#green_div_'+data['aid']+' div').css('float', 'left');
+			$('#green_div_'+data['aid']+' div').addClass('green_area_type_sel');
+			if(data['type'] < 10)
+				$('#green_div_'+data['aid']+' #left_box_type_0'+data['type']).attr('AaidTtype','a'+data['aid']+'t'+data['type']);
+			else
+				$('#green_div_'+data['aid']+' #left_box_type_'+data['type']).attr('AaidTtype','a'+data['aid']+'t'+data['type']);
+			console.log(index + ' / ' + r_arr.length);
+		});
+
+		$('.green_area_type_sel').on('click', function(){
+			if($(this).attr('no_green') != 1)
+			{
+				$(this).css('background-color', '#ffffff');
+				$(this).attr('no_green', 1);
+			}
+			else
+			{
+				$(this).css('background-color', '#29d660');
+				$(this).attr('no_green', 0);
+			}
+		});
+
+		$('.type_collaps .ui-collapsible-content').css('padding','13px');
+
+		//$('#set div').trigger('create');
+
+		$('div .ui-checkbox').css('margin', '-1px 0');
+
+		$.mobile.loading( "hide" );
+
+		$('#CAPpopupDialog').popup();
+		$('#CAPpopupDialog').popup( "open" );
+	}
+
+	var area_green_data = {};
+	function plugin_make_white_areas_green(yesno)
+	{
+		if(yesno == 1)
+		{
+			var date = new Date();
+			console.log(area_green);
+			$.each(area_green, function(index, data){
+				aid = data['aid'];
+				if(area_green_data[aid] === undefined)
+				{
+					area_green_data[aid] = {};
+				}
+
+				cinfo = 3;
+				//for (var ty = 1; ty <= 13; ty++) 
+				//{
+					aaidttype="a461t1"
+
+				if($('#map_main_div svg').attr('awt_'+data['type']) == 1 && $('[aaidttype='+'a'+data['aid']+'t'+data['type']+']').attr('no_green') != 1)
+				{
+					area_green_data[aid]['name'] = data['name'];
+
+					level 	= 1;
+					type 	= data['type'];
+					//to 	= 
+					//from 	= 
+					
+					if(level > 0 && type > 0)
+					{
+						area_green_data[aid]['emma_id'] 	= data['eid'];
+						area_green_data[aid]['level'] 	= level;
+
+						if(area_green_data[aid]['type'] === undefined)
+						{
+							area_green_data[aid]['type'] = {};
+						}
+						area_green_data[aid]['type'][data['type']] 	= level;
+
+						if(area_green_data[aid]['desc'] === undefined)
+						{
+							area_green_data[aid]['desc'] = {};
+							area_green_data[aid]['desc'][data['type']] = {};
+						}
+						if(area_green_data[aid]['desc'][data['type']] === undefined)
+						{
+							area_green_data[aid]['desc'][data['type']] = {};
+						}
+						area_green_data[aid]['desc'][data['type']][0]	= 'no warning';
+						offset = $('#timezone_h').html();
+
+						//area_data[aid]['exutc'][data['type']] 	= '+00:00';
+						if(area_green_data[aid]['from'] === undefined)
+						{
+							area_green_data[aid]['from'] = {};
+						}
+						area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH() + ' 23:00:00';
+
+						if(area_green_data[aid]['to'] === undefined)
+						{
+							area_green_data[aid]['to'] = {};
+						}
+						area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd() + ' 22:59:59';
+					}
+				}
+				//}
+			});
+			
+			data = $('#day').val();
+			if(data == "" || data === undefined) data = 0;
+			var jsonOb = JSON.stringify(area_green_data);
+			
+			$.mobile.loading( "hide" );
+			JQ_loader('Loading', 'b');
+			
+			$.post(
+				"lib/cap.create.from_js_array.2.php",
+				{cap_array:jsonOb, no_del:1,data:data, use_plugin: plugin_name},
+				function(r){
+					//your success response
+					//alert('OK!');
+					$.mobile.loading( "hide" );
+					area_green_final_resp = r; // shoud be NULL
+					//send_final(r);
+				}
+			);
+		}
+		else if(yesno == -1)
+		{
+			$('.type_collaps').collapsible( "expand" );
+		}
+
+		if(yesno != -1)
+		{
+			$.mobile.loading( "hide" );
+			$('#CAPpopupDialog').popup( "close" );
+			setTimeout(function(){
+				$('#set').html('').trigger('create');
+				$('#CAP_Send_popupDialog').popup();
+				$('#CAP_Send_popupDialog').popup( "open" );
+			}, 100);
+		}
 	}
 
 	var mk_pro_dot_interval;
