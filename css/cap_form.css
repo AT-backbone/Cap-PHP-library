@@ -134,6 +134,42 @@ textarea{
 	margin-bottom: 9px;
 }
 
+.top_menu {
+	position: absolute;
+	top: 0px;
+	left: 41px;
+	width: 40%;
+	height: 42px;
+	z-index: 1000;
+}
+
+.top_menu a{
+	top: 10px;
+	border-right: 1px solid rgba(255, 255, 255, 0.48);
+	padding-left: 15px;
+	padding-right: 30px;
+	padding-top: 5px;
+	padding-bottom: 20px;
+	text-decoration: none;
+}
+.top_menu a:hover{
+    background-color: #065c00;
+}
+
+.top_menu a img{
+	position: relative;
+	top: 10px;
+}
+
+.top_menu a span{
+	position: relative;
+	top: 8px;
+	left: 10px;
+	color: white;
+	text-shadow: none;
+	font-size: 20px;
+}
+
 .area_deaktive {
 	position: absolute;
 	top: 200px;

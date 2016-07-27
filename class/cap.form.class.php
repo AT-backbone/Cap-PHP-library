@@ -1702,6 +1702,7 @@
 						{
 							$out.= '<div data-role="page" id="'.$pagename.'">';
 
+								// PANEL
 								$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
 								$out.= '<!-- panel content goes here -->';
 								$out.= '<ul data-role="listview">';
@@ -1741,6 +1742,11 @@
 								if($conf->webservice->login && $conf->webservice_aktive) $login_show_name = $conf->webservice->login;
 								else $login_show_name = $langs->trans('Login');								
 						
+								// HEADER	
+								$out.= '<div class="top_menu">';
+									$out.= '<a href="index.php#alert" data-ajax="false"><img width"20px" src="css/images/form_edit_w.png"><span>Alert</span></a>';
+									$out.= '<a href="map.php" data-ajax="false"><img width"20px" src="css/images/paint_edit_w.png"><span>Paint</span></a>';
+								$out.= '</div>';
 								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
