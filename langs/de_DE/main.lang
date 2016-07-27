@@ -181,3 +181,12 @@ perm_for_output1=Permision problems detectet pleas fix this: Can\'t create the f
 perm_for_output2=") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! 
 LabelTemplate=Cap-Vorlage
 LabelTemplateDesc=In einer Vorlage können die Werte hinterlegt werden, die falls keine Eingabe bei der Erstellung erfolgte für neue CAP-Dateien verwendet werden. 
+
+WebserviceNotConnectedReconnectOrUsePluginZIP=Es ist kein Webservice aktive oder verbunden. Bitte verbinde dich mit einen Webservice oder installiere / nutze ein Plugin
+WebserviceNotConnectedReconnectOrUsePluginZIPDESC=Ein Plugin das für die GUI vom Paint and Alert des Cap-PHP-library erstellt worden ist kan direkt aus einen ZIP file Installiert werden!
+Upload=Hochladen
+UsePlugin=Importierte Plugins
+UsePluginDESC=Eine Liste von allen installierten Plugins auf diesen System
+Plugin=Plugin
+Use=Benutze
+ProducedCaps=Fertig produzierte Cap!

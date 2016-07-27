@@ -562,7 +562,8 @@
 					$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
 						$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
 						$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
-							$out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
+							if(!empty($plugin->name)) $out.= '<h2>'.$langs->trans('ProducedCaps').'</h2>';
+							else $out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
 						$out.= '</div>';
 						$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
 							$out.= '<ul data-role="listview" data-inset="true" data-shadow="false" id="SOAPUL">';

@@ -138,3 +138,12 @@ LabelEffectiveDesc=(OPCIONAL) <br>El tiempo efectivo de la información del mens
 LabelOnsetDesc=(OPCIONAL) <br>La hora prevista de comienzo del evento sujeto del mensaje de alerta.
 LabelExpiresDesc=(OPCIONAL) <br>El tiempo de caducidad de la información del mensaje de alerta.
 LabelParameterDesc=(OPCIONAL) <br>Un parámetro adicional específicas asociado con el mensaje de alerta.
+	
+	WebserviceNotConnectedReconnectOrUsePluginZIP=Your Webservice is not connected please reconnect or (import/use) a Plugin
+	WebserviceNotConnectedReconnectOrUsePluginZIPDESC=A Plugin created for the Paint and Alert GUI in the Cap-PHP-Library can directly imported as a ZIP File!
+	Upload=Upload
+	UsePlugin=Imported Plugins
+	UsePluginDESC=A List from all currently installed Plugins
+	Plugin=Plugin
+	Use=Use
+	ProducedCaps=Finally produced Cap!

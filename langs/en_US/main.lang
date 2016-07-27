@@ -170,7 +170,14 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	DESC_MultiAreaSelectLabel=If this setting is on "ON" you can select multiple areas with the same type (and level) of warning and write a single description for these.
 	DESC_EditWarningNotAktive=This Area only becomes available after the selection of a warning!
 
-
+	WebserviceNotConnectedReconnectOrUsePluginZIP=Your Webservice is not connected please reconnect or (import/use) a Plugin
+	WebserviceNotConnectedReconnectOrUsePluginZIPDESC=A Plugin created for the Paint and Alert GUI in the Cap-PHP-Library can directly imported as a ZIP File!
+	Upload=Upload
+	UsePlugin=Imported Plugins
+	UsePluginDESC=A List from all currently installed Plugins
+	Plugin=Plugin
+	Use=Use
+	ProducedCaps=Finally produced Cap!
 
 
 ###Configuration Site###

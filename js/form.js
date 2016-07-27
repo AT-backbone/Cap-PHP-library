@@ -444,7 +444,7 @@ $( document ).ready(function()
 		});
 		
 		$('#submit_cap').on('click', function(){
-			if(area_info['problem'] == true)
+			if(area_info['problem'] == false)
 				plugin_get_all_warnings();
 			else
 				$('#Error_popupDialog').popup('open');
@@ -683,12 +683,12 @@ $( document ).ready(function()
 								{
 									out+= '<div class="problem awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
 									out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
+									area_info['problem'] = true;
 								}
 								else 
 								{
 									out+= '<div class="awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
 									out+= '<img src="'+imgsrc+'">';
-									area_info['problem'] = true;
 								}
 								out+= '</div>';
 							});
@@ -708,10 +708,6 @@ $( document ).ready(function()
 				keysSorted = Object.keys(data['type']).sort(function(a,b){return data['type'][b] - data['type'][a]});
 				$.each(keysSorted, function(index, type){
 					if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined) 
-					{
-						// ...
-					}
-					else 
 					{
 						area_info['problem'] = true;
 					}
