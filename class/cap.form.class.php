@@ -1742,11 +1742,6 @@
 								if($conf->webservice->login && $conf->webservice_aktive) $login_show_name = $conf->webservice->login;
 								else $login_show_name = $langs->trans('Login');								
 						
-								// HEADER	
-								$out.= '<div class="top_menu">';
-									$out.= '<a href="index.php#alert" data-ajax="false"><img width"20px" src="css/images/form_edit_w.png"><span>Alert</span></a>';
-									$out.= '<a href="map.php" data-ajax="false"><img width"20px" src="css/images/paint_edit_w.png"><span>Paint</span></a>';
-								$out.= '</div>';
 								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
@@ -1755,6 +1750,18 @@
 								
 								// Main
 								$out.= '<div id="main-div" class="ui-content ui-page-theme-a" data-form="ui-page-theme-a" data-theme="a" role="main">';
+									
+									/* TODO: 1.4 HEADERS
+									if(basename($_SERVER['PHP_SELF']) == "map.php")  $css_paint_top = 'style="background-color:#065c00;"';
+									elseif($pagename == "alert") $css_alert_top = 'style="background-color:#065c00;"';
+									elseif($pagename == "conf") $css_conf_top = 'style="background-color:#065c00;"';
+									// HEADER	
+									$out.= '<div class="top_menu">';
+										$out.= '<a href="index.php#alert" data-ajax="false" '.$css_alert_top.'><img width"20px" src="css/images/form_edit_w.png"><span>'.$langs->trans('Alert').'</span></a>';
+										$out.= '<a href="map.php" data-ajax="false" '.$css_paint_top.'><img width"20px" src="css/images/paint_edit_w.png"><span>'.$langs->trans('Paint').'</span></a>';
+										$out.= '<a href="index.php#conf" data-ajax="false" '.$css_conf_top.'><img width"20px" src="css/images/conf_edit_w.png"><span>'.$langs->trans('Conf').'</span></a>';
+									$out.= '</div>';
+									*/
 									
 									if(!isset($Pages_arr['notitle']['#'.$pagename]))
 									$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
