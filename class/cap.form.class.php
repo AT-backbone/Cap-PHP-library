@@ -184,6 +184,7 @@
 						$out.= '<input type="hidden" id="plugin" value="1">';
 						$out.= '<input type="hidden" id="plugin_name" value="'.$plugin->name.'">';
 						$out.= '<input type="hidden" id="cap_engine" value="'.$plugin->cap_engine.'">';
+						$out.= '<script> var area_vl;</script>'; // for non webservice app
 						$soap_SVG = $plugin->svg_val;
 						$countryName = $plugin->svg_name;
 						$AreaCodesArray = $plugin->area_codes;
@@ -195,6 +196,7 @@
 						$out.= '<input type="hidden" id="plugin_name" value="webservice">';
 						$out.= '<input type="hidden" id="cap_engine" value="lib/cap.create.from_js_array.2.php">';
 						$out.= '<input type="hidden" id="plugin" value="1">';
+						$out.= '<script> var area_vl;</script>'; // for non webservice app
 						if($SVLdetail) $out.= str_replace('&nbsp;', ' ', $SVLdetail);
 					}
 

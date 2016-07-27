@@ -363,26 +363,29 @@ $( document ).ready(function()
 			delete(id);
 		});
 
-		if(area_vl !== undefined && area_vl != "" && area_vl[0] != "Error2")
+		if(area_vl !== undefined)
 		{
-			$.each(area_vl, function(index, val){
-				area_data[val['aid']]['type'][val['type']] = val['level'];
+			if(area_vl != "" && area_vl[0] != "Error2")
+			{
+				$.each(area_vl, function(index, val){
+					area_data[val['aid']]['type'][val['type']] = val['level'];
 
-				area_data[val['aid']]['emma_id'] = val['EMMA_ID'];
+					area_data[val['aid']]['emma_id'] = val['EMMA_ID'];
 
-				area_data[val['aid']]['from'][val['type']] = val['from'];
-				area_data[val['aid']]['to'][val['type']] = val['to'];
+					area_data[val['aid']]['from'][val['type']] = val['from'];
+					area_data[val['aid']]['to'][val['type']] = val['to'];
 
-				if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
-				area_data[val['aid']]['desc'][val['type']][0] = val['text'];
+					if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
+					area_data[val['aid']]['desc'][val['type']][0] = val['text'];
 
-				if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
-				area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
+					if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
+					area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
 
-				$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
-			});
-			// a webservice is aktive
-			plugin_show_type(false);
+					$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
+				});
+				// a webservice is aktive
+				plugin_show_type(false);
+			}
 		}
 
 		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) { 
@@ -543,6 +546,20 @@ $( document ).ready(function()
 			}
 		});
 
+		$(document).bind('click', function(e) {
+			if($(e.target).closest('#awareness_toolbox').length === 0 && $(e.target).closest('#map_main_div svg g, path, polygon').length === 0 && $(e.target).closest('#awareness_color_toolbox').length === 0) 
+			{
+				aktive_type = false;
+				$('#awareness_toolbox .awareness').css('border', '');
+				$('#awareness_toolbox .awareness[aktive=1]').css('opacity', 1);
+				aktive_level = false;
+				$('#awareness_color_toolbox .awareness').css('border', '');
+				$('#awareness_color_toolbox .awareness').css('opacity', 1);
+				$('#map_main_div svg').css('cursor', 'auto');
+				$('#awareness_color_toolbox').css('display', '');
+			}
+		});
+
 		$('#map_main_div svg g, path, polygon').mouseover(function() {
 			id = $(this).attr('id');
 			if(id !== undefined)
@@ -593,16 +610,28 @@ $( document ).ready(function()
 				}
 				else
 				{
+					if(area_data[id]['sel'] == 0)
+					{
+						area_data[id]['sel'] = 1;
+						$(this).css('filter', 'url(#css_brightness)');
+						$(this).css('stroke', 'blue');
+						$(this).css('stroke-width', '3px');
+					}
 					area_data[id]['type'][aktive_type] = aktive_level;
+					area_data[id]['desc'][aktive_type] = {};
+					area_data[id]['inst'][aktive_type] = {};
 					$(this).css('fill', 'url(#pattern_l'+aktive_level+'t'+aktive_type+')');
 				}
 				plugin_calc_map();
 			}
 		});
 
-		if(area_vl[0] != "Error2")
+		if(area_vl !== undefined)
 		{
-			plugin_calc_map(); // init warnings data first time (when data5)
+			if(area_vl[0] != "Error2")
+			{
+				plugin_calc_map(); // init warnings data first time (when data5)
+			}
 		}
 	}
 

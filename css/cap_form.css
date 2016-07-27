@@ -193,7 +193,6 @@ textarea{
 	text-shadow: none; 
 	background-color: rgba(0, 0, 0, 0.25);
 	border: 1px solid #dddddd;
-	pointer-events: none;
 }
 
 .awareness_div .awareness:last-child {
@@ -263,7 +262,6 @@ textarea{
 	text-shadow: none; 
 	background-color: rgba(0, 0, 0, 0.25);
 	border: 1px solid #dddddd;
-	pointer-events: none;
 }
 
 .awareness_color_div .awareness{
