@@ -320,6 +320,7 @@ $( document ).ready(function()
 
 		if($('#plugin_name').val() == 'webservice')
 		{
+			$('#CountryInfo').html($('#map_main_div svg').attr('country'));
 			aktive_types = [];
 			for (var i = 1; i <= 13; i++) {
 				awt_bool = $('#map_main_div svg').attr('awt_'+i);
