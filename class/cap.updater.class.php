@@ -134,6 +134,9 @@
 		// Contains the warnings sorted to areas
 		var $AreaCodesArray;
 
+		// Contains User information from Meteoalarm
+		var $User;
+
 		// Contains the identifiers of the akitve warnings
 		// struc: array(awt_type => array( EMMA_ID  => array( identifier, level, from, to, sender, timestamp) ) ) 
 		var $cap_ident;
@@ -259,6 +262,26 @@
 						if(!empty($AreaCodesArray['document']['AreaInfo']))
 						{
 							$this->AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+						}
+						else
+						{
+							$res = -3;  // Can't fetch VL Data
+						}
+					}
+					else
+					{
+						print 'file do not exists: lib/cap.meteoalarm.webservices.vl.php';
+					}
+					//print_r($AreaCodesArray);
+					if(file_exists('lib/cap.meteoalarm.webservices.user.php'))  // test if the lib exists
+					{
+						// Contains the warnings sorted to areas
+						include 'lib/cap.meteoalarm.webservices.user.php'; // get data through the meteoalarm lib (vl - Visio Level)
+						if(!empty($User['document']['AreaInfo']))
+						{
+							$this->User = $User['document']['AreaInfo'];
+							// $this->User['sender'] = email
+							// $this->User['senderName'] = meteo Name
 						}
 						else
 						{
@@ -584,11 +607,15 @@
 										if($ref == "Update") 
 										{
 											$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+											if($this->User['sender'] != "") $data_arr[0]->sender = $this->User['sender'];
 											if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 											$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
 										}
 
 										// Template
+										if($this->User['sender'] != "")
+										$post['sender']					= $this->User['sender'];
+
 										if($post['sender'] == "") 
 										$post['sender']					= 'admin@meteoalarm.eu';
 
@@ -672,8 +699,11 @@
 										// Template
 										if($post['info'][0]['senderName'] != "") 
 											$post['senderName'] = $post['info'][0]['senderName'];
+										elseif($this->User['senderName'] != "")
+											$post['senderName']	= $this->User['senderName'];
 										else
-											$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
+											$post['senderName'] = 'Cap-PHP-Library Version 1.3';
+
 
 										foreach($langs_keys as $key => $lang_val)
 										{

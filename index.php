@@ -264,6 +264,16 @@
 					$ParameterArray = $ParameterArray['document']['AreaInfo'];
 				}
 			}
+			if(file_exists('lib/cap.meteoalarm.webservices.user.php'))  // test if the lib exists
+			{
+				// Contains the warnings sorted to areas
+				include 'lib/cap.meteoalarm.webservices.user.php'; // get data through the meteoalarm lib (vl - Visio Level)
+				if($_GET['web_test'] == 3) die(print_r($User));
+				if(!empty($User['document']['AreaInfo']))
+				{
+					$User = $User['document']['AreaInfo'];
+				}
+			}
 			
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
 			{
@@ -393,6 +403,12 @@
 		$form = new CAP_Form();
 		$_POST = $form->MakeIdentifier($_POST);
 		
+		if($conf->webservice_aktive == 1)
+		{
+			if($_POST['sender'] == "") $_POST['sender'] = $User['sender'];
+			if($_POST['senderName'] == "") $_POST['senderName'] = $User['senderName'];
+		}
+
 		$cap = new CAP_Class($_POST);
 		
 		if(!empty($_GET['cap']))
