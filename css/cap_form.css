@@ -180,6 +180,7 @@ textarea{
 }
 
 .awareness[aktive='0'] {
+	display: none;
 	background-color: white;
 	border: 1px solid #dddddd;
 	width: 25px;
@@ -250,18 +251,6 @@ textarea{
 	background-color: #fe0104;
 }
 
-.level_1 {
-	background-color: #29d660;
-}
-.level_2 {
-	background-color: #ffff00;
-}
-.level_3 {
-	background-color: #fecb31;
-}
-.level_4 {
-	background-color: #fe0104;
-}
 
 .meteo_toolbox_div_1 {
 	position: absolute;
@@ -373,6 +362,7 @@ textarea{
 .process_toolbox_area .divtextscroll {
 	width: 155px;
 	height: 45px;
+	padding-left: 5px;
 	font-size: 14px;
 	float: left;
 	word-wrap: break-word;

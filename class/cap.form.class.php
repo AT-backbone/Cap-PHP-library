@@ -370,7 +370,7 @@
 													{
 														if($type_arr['id'] < 10) $tmpTID = '0'.$type_arr['id'];
 														else $tmpTID = $type_arr['id'];
-														$out.= '<div class="awareness" id="left_box_type_'.$type_arr['id'].'" aktive="1" type="'.$type_arr['id'].'"><img src="includes/meteoalarm/warn-typs_'.$tmpTID.'.png"></div>';
+														$out.= '<div class="awareness" id="left_box_type_'.$type_arr['id'].'" aktive="'.$type_arr['aktive'].'" type="'.$type_arr['id'].'"><img src="includes/meteoalarm/warn-typs_'.$tmpTID.'.png"></div>';
 													}
 												}
 											$out.= '</div>';
@@ -379,10 +379,11 @@
 
 											$out.= '<div id="awareness_color_toolbox" class="awareness_color_div" '.$size.'>';
 												// 29d660, ffff00, fecb31, fe0104
+												//print_r($ParameterArray['AWL']);
 												if(is_array($ParameterArray['AWL']))
 												foreach($ParameterArray['AWL'] as $key => $level_arr)
 												{
-													if($level_arr['id'] > 0) $out.= '<div class="awareness" style="background-color: '.$level_arr['hazard_level'].';" id="left_box_level_'.$level_arr['id'].'" aktive="1" level="'.$level_arr['id'].'"></div>';
+													if($level_arr['id'] > 0) $out.= '<div class="awareness" style="background-color: '.$level_arr['hazard_level_color'].';" id="left_box_level_'.$level_arr['id'].'" aktive="1" level="'.$level_arr['id'].'"></div>';
 												}
 
 											$out.= '</div>';
@@ -442,7 +443,7 @@
 															else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $standard_map = getimagesize('includes/meteoalarm/warn-typs_'.$tmpID.'.png');
 
 															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" patternUnits="userSpaceOnUse">';
-																$out.= '<rect x="0" y="0" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" fill="'.$level_arr['hazard_level'].'"/>';
+																$out.= '<rect x="0" y="0" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" fill="'.$level_arr['hazard_level_color'].'"/>';
 																if(!empty($type_arr['img_src'])) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
 																else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="includes/meteoalarm/warn-typs_'.$tmpID.'.png" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
 															$out.= '</pattern>';
@@ -487,8 +488,16 @@
 					$out.= '<div class="ui-bar">';
 						$out.= '<ul data-role="listview" data-divider-theme="b">'; // as long as it is without Area show 50% alpha
 							$out.= '<li data-role="list-divider" data-theme="b" style="padding: 15px;">';
-								$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-									$out.= 'Submit';
+								if(empty($plugin->name)) 
+									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
+								else 
+									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: lightgray;color: black;text-shadow: none;border: 1px solid black;">';
+
+									if(empty($plugin->name)) 
+										$out.= $langs->trans("Submit");
+									else
+										$out.= $langs->trans("Produce CAPs");
+
 								$out.= '</a>';
 							$out.= '</li>';
 						$out.= '</ul>';
