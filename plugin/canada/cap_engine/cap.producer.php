@@ -232,7 +232,7 @@
 					$path = $cap->createFile();
 
 
-					$outFiles[] = array( 
+					$outFiles[$post['identifier']] = array( 
 						'file' => $post['identifier'].'.cap', 
 						'datafrom' => $post['effective'],
 						'datato' => $post['expires'], 

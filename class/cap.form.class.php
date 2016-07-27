@@ -458,17 +458,17 @@
 										}
 										else
 										{
-											$out.= '</form><form action="#" data-ajax="false" method="post" enctype="multipart/form-data" name="pluginZIPForm" style="padding: 15px;">';
+											$out.= '</form><form action="map.php" data-ajax="false" method="post" enctype="multipart/form-data" name="pluginZIPForm" style="padding: 15px;">';
 												$out.= '<legend>'.$langs->trans("WebserviceNotConnectedReconnectOrUsePluginZIP").': '.$this->tooltip('jsonDESC', $langs->trans("WebserviceNotConnectedReconnectOrUsePluginZIPDESC")).'</legend>';
 												$out.= '<input type="file" name="pluginZIP" id="pluginZIP" accept=".zip">';
 												$out.= '<input type="submit" name="submitplugin" value="'.$langs->trans("Upload").'">';
-											$out.= '</form><form action="#" method="post" name="pluginForm" style="padding: 15px;">';
+											$out.= '</form><form action="map.php" method="get" name="pluginForm" style="padding: 15px;" data-ajax="false">';
 
 												$plugin = new Plugin();
 												$plugin->get_all_plugin();
 												$out.= '<legend>'.$langs->trans("UsePlugin").': '.$this->tooltip('Plugin', $langs->trans("UsePluginDESC")).'</legend>';
 												$out.= $this->buildSelect("use_plugin", $plugin->plugin_folder, "data-native-menu=\"false\" id=\"use_plugin\"", $langs->trans("Plugin"), $_GET['use_plugin']);
-												$out.= '<input type="submit" name="use_plugin_submit" value="'.$langs->trans("Use").'" data-ajax="false">';
+												$out.= '<input type="submit" value="'.$langs->trans("Use").'" data-ajax="false">';
 
 											$out.= '</form>';
 										}
