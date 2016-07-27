@@ -399,17 +399,17 @@
 
 											if(empty($plugin->name))
 											{
-												$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
-													$S_Param_AWT[0] = $langs->trans("All Types");
-													if(is_array($ParameterArray['AWT']))
-													foreach($ParameterArray['AWT'] as $key => $area_arr)
-													{
-														$S_Param_AWT[$area_arr['id']] = $area_arr['hazard_type_DESC'];
-													}
-													$out.= $this->buildSelect("type", $S_Param_AWT, "data-native-menu=\"false\" id=\"type\"", $langs->trans("Type"), $_GET['type']);
-												$out.= '</div>';
+												//$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
+												//	$S_Param_AWT[0] = $langs->trans("All Types");
+												//	if(is_array($ParameterArray['AWT']))
+												//	foreach($ParameterArray['AWT'] as $key => $area_arr)
+												//	{
+												//		$S_Param_AWT[$area_arr['id']] = $area_arr['hazard_type_DESC'];
+												//	}
+												//	$out.= $this->buildSelect("type", $S_Param_AWT, "data-native-menu=\"false\" id=\"type\"", $langs->trans("Type"), $_GET['type']);
+												//$out.= '</div>';
 
-												$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_3">';
+												$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_2">';
 													$out.= '<div class="awareness" id="reload" aktive="1"><img src="includes/meteoalarm/reload.png"></div>';
 												$out.= '</div>';
 											}
@@ -1762,7 +1762,7 @@
 										$out.= '<a href="index.php#conf" data-ajax="false" '.$css_conf_top.'><img width"20px" src="css/images/conf_edit_w.png"><span>'.$langs->trans('Conf').'</span></a>';
 									$out.= '</div>';
 									*/
-									
+
 									if(!isset($Pages_arr['notitle']['#'.$pagename]))
 									$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 										if(!isset($Pages_arr['notitle']['#'.$pagename]))
