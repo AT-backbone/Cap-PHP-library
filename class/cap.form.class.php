@@ -444,6 +444,11 @@
 															if(!empty($type_arr['img_src'])) $standard_map = getimagesize($type_arr['img_src']);
 															else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $standard_map = getimagesize('includes/meteoalarm/warn-typs_'.$tmpID.'.png');
 
+															if($standard_map[0] == 0) 
+															{
+																$standard_map[0] = "20";
+																$standard_map[1] = "20";
+															}
 															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" patternUnits="userSpaceOnUse">';
 																$out.= '<rect x="0" y="0" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" fill="'.$level_arr['hazard_level_color'].'"/>';
 																if(!empty($type_arr['img_src'])) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
