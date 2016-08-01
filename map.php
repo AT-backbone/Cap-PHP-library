@@ -26,6 +26,7 @@
  * Front end of the Cap-php-library
  */
 	error_reporting(E_ERROR | E_PARSE);
+	ini_set('memory_limit', '1G');
 	
 	require_once 'class/cap.form.class.php';
 	//require_once 'class/cap.map.class.php';

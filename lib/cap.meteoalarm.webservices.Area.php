@@ -25,6 +25,7 @@ if($conf->meteoalarm == 1)
 
 		// Set the WebService URL
 		$soapclient = new nusoap_client($WS_DOL_URL); // <-- set the Timeout above 300 Sec.
+		$soapclient->setDebugLevel(0);
 		if ($soapclient)
 		{
 			$soapclient->soap_defencoding='UTF-8';

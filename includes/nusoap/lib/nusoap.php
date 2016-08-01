@@ -129,7 +129,7 @@ class nusoap_base {
 	 * @var	integer
 	 * @access private
 	 */
-	var $debugLevel;
+	var $debugLevel = 0;
 
     /**
 	* set schema version

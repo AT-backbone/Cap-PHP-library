@@ -698,7 +698,7 @@ $( document ).ready(function()
 					//out=+ '<div class="awareness" aktive="2" onclick="area_warning_detail('+key2+', -1, this)">';
 					//	out=+ '<img src="includes/meteoalarm/warn-typs_11.png">';
 					//out=+ '</div>';
-					aname=$('option[value='+id+']').text();
+					aname=$('#emmaid_select option[value='+id+']').text();
 					//out+= '<div class="divtextscroll problem_text">' + aname + '</div>';
 					out+= '<div class="divtextscroll" style="pointer-events: all;">' + aname + '</div>';
 				out+= '</div>';
