@@ -48,6 +48,8 @@ if($conf->meteoalarm == 1)
 		'use_warntable'=>1
 	);
 
+	if($mapphp == true) $GenInsInput['ver'] = 2;
+
 	$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);
 	
 	if($mapphp == true)

@@ -285,6 +285,7 @@ $( document ).ready(function()
 	 */
 	var area_data = {};
 	var area_info = {};
+	var ind_lang = {};
 	function init_plugin_map()
 	{
 		svg_intervall = setInterval(function(){ init_svg() }, 500);
@@ -335,6 +336,8 @@ $( document ).ready(function()
 		lang_1 = $('#lang_1').val();
 		$('input[name=langs]').each(function(index, data){
 			lang[index] = $(data).val();
+			ind_lang[$(data).val()] = index;
+			//console.log(index + ' : '+ $(data).val());
 		});
 
 		area_info['sel_type'] = 0;
@@ -376,7 +379,20 @@ $( document ).ready(function()
 					area_data[val['aid']]['to'][val['type']] = val['to'];
 
 					if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
-					area_data[val['aid']]['desc'][val['type']][0] = val['text'];
+					$.each(val['desc'], function(lang_name, text){
+						if(text)
+						{
+							lkey = ind_lang[lang_name];
+							area_data[val['aid']]['desc'][val['type']][lkey] = text;
+						}
+					});
+					if(! $.isArray(area_data[val['aid']]['inst'][val['type']])) area_data[val['aid']]['inst'][val['type']] = {};
+					$.each(val['inst'], function(lang_name, text){
+						if(text)
+						{
+							area_data[val['aid']]['inst'][val['type']][ind_lang[lang_name]] = text;
+						}
+					});
 
 					if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
 					area_data[val['aid']]['identifier'][val['type']] = val['identifier'];

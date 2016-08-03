@@ -286,13 +286,19 @@
 				// Contains the warnings sorted to areas
 				$mapphp = true; // to change variable name to: AreaVLArray
 				include 'lib/cap.meteoalarm.webservices.vl.php'; // get data through the meteoalarm lib (vl - Visio Level)
-				if($_GET['web_test'] == 4) die(print_r($AreaVLArray));
+				if($_GET['web_test'] == 4) 
+				{
+					print '<pre>'; 
+					print_r((($AreaVLArray['document']['AreaInfo']))); 
+					print '</pre>';
+					exit;
+				}
 				if(!empty($AreaVLArray['document']['AreaInfo']))
 				{
-					$AreaVLArray = $AreaVLArray['document']['AreaInfo'];
+					$AreaVLArray =	$AreaVLArray['document']['AreaInfo'];
 				}
 				// put Area VL details in a js variable named (area_vl )
-				$SVLdetail = '<script>'."\n".'var area_vl = '.json_encode($AreaVLArray).';'."\n".'</script>';
+				$SVLdetail = '<script>'."\n".'var area_vl = '.($AreaVLArray).';'."\n".'</script>';
 			}
 			
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
