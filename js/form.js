@@ -338,7 +338,7 @@ $( document ).ready(function()
 		});
 
 		area_info['sel_type'] = 0;
-		area_info['problem'] = true;
+		area_info['problem'] = false;
 		$('#map_main_div svg g, path, polygon').each(function(index){
 			id = $(this).attr('id');
 			if(id !== undefined)
@@ -707,7 +707,7 @@ $( document ).ready(function()
 			{
 				keysSorted = Object.keys(data['type']).sort(function(a,b){return data['type'][b] - data['type'][a]});
 				$.each(keysSorted, function(index, type){
-					if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined) 
+					if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined && data['type'][type] !== undefined && data['type'][type] != 0 ) 
 					{
 						area_info['problem'] = true;
 					}
