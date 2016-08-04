@@ -372,6 +372,7 @@
 					if($warning->level > 0) // is level bigger than 0
 					{
 						// get identifier
+						$ident_level = $this->cap_ident[$warning->type][$warning->eid]['level'];
 						$ident = $this->cap_ident[$warning->type][$warning->eid]['id'];
 						// set 'aid' also in the $warning string Array()
 						$warning->aid = $aid; 
@@ -412,7 +413,7 @@
 						{
 							// do not make an warning (warning allready exist)
 						}
-						elseif($ident != "") // when the identifier is not empty for this warnings than make a update
+						elseif($ident != "" && $ident_level > 1) // when the identifier is not empty for this warnings than make a update
 						{
 							// make an Update
 							$warning->sender 		= $this->cap_ident[$warning->type][$warning->eid]['sender'];
