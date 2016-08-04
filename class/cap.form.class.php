@@ -220,6 +220,9 @@
 					$out.= '<input type="hidden" value="MD" id="iso">';
 					$out.= '<input type="hidden" value="2" id="green">';
 					$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
+					$utc = date('P');
+					$out.= '<input type="hidden" value="'.date('H:00:00', strtotime('23:00 '.$utc[0].' '.$utc[1].$utc[2].' hours')).'" id="st_from">';
+					$out.= '<input type="hidden" value="'.date('H:59:59', strtotime('22:59 '.$utc[0].' '.$utc[1].$utc[2].' hours')).'" id="st_to">';
 					
 					$timezone_h =  date('P');
 					$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';

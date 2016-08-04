@@ -147,6 +147,8 @@
 		$i = 0;
 		foreach($cap->type as $type => $level)
 		{
+			if($cap->exutc) $cap_array_2[$aid][$i]->exutc = $cap->exutc;
+
 			$cap_array_2[$aid][$i]->name = $cap->name;
 
 			$cap_array_2[$aid][$i]->type = $type;
@@ -154,8 +156,8 @@
 
 			$cap_array_2[$aid][$i]->eid = $cap->emma_id;
 
-			$cap_array_2[$aid][$i]->from = date('Y-m-d H:i:s', strtotime(str_replace('&nbsp;', ' ', $cap->from->$type).' '.$utc[0].' '.$utc[1].$utc[2].' hours'));
-			$cap_array_2[$aid][$i]->to = date('Y-m-d H:i:s', strtotime(str_replace('&nbsp;', ' ', $cap->to->$type).' '.$utc[0].' '.$utc[1].$utc[2].' hours'));
+			$cap_array_2[$aid][$i]->from = date('Y-m-d H:i:s', strtotime($cap->date_from->$type.' '.str_replace('&nbsp;', ' ', $cap->from->$type)));
+			$cap_array_2[$aid][$i]->to = date('Y-m-d H:i:s', strtotime($cap->date_to->$type.' '.str_replace('&nbsp;', ' ', $cap->to->$type)));
 
 			$cap_array_2[$aid][$i]->desc = $cap->desc->$type;
 			$cap_array_2[$aid][$i]->inst = $cap->inst->$type;

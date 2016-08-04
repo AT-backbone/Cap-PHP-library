@@ -336,6 +336,7 @@
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['to']			= date('Y-m-d H:i:s', $this->add_timezone(str_replace('&nbsp;', ' ', $vl_warn['to'])));
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['sender']		= $vl_warn['sender'];
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['timestamp']	= $vl_warn['timestamp'];
+				//die(print_r($this->cap_ident));
 			}
 			
 			// Output Debug values
@@ -374,6 +375,7 @@
 						$ident = $this->cap_ident[$warning->type][$warning->eid]['id'];
 						// set 'aid' also in the $warning string Array()
 						$warning->aid = $aid; 
+						//$this->debug = true;
 						if($this->debug == true)
 						{
 							print '<br>if: '.$ident.'!= ""';
@@ -781,6 +783,6 @@
 		function add_timezone($timedate)
 		{
 			$utc = date('P');
-			return strtotime(date('Y-m-d H:i:s', strtotime($timedate)).' '.$utc[0].' '.$utc[1].$utc[2].' hours');
+			return strtotime(date('Y-m-d H:i:s', strtotime($timedate)));
 		}
 }

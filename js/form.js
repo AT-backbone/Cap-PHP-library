@@ -360,6 +360,8 @@ $( document ).ready(function()
 				area_data[id]['level'] = {};
 				area_data[id]['desc'] = {};
 				area_data[id]['inst'] = {};
+				area_data[id]['date_from'] = {};
+				area_data[id]['date_to'] = {};
 				area_data[id]['from'] = {};
 				area_data[id]['to'] = {};
 			}
@@ -375,8 +377,15 @@ $( document ).ready(function()
 
 					area_data[val['aid']]['emma_id'] = val['EMMA_ID'];
 
-					area_data[val['aid']]['from'][val['type']] = val['from'];
-					area_data[val['aid']]['to'][val['type']] = val['to'];
+
+					val['from'] = val['from'].split(" ");
+					val['to'] = val['to'].split(" ");
+
+					area_data[val['aid']]['date_from'][val['type']]= val['from'][0];
+					area_data[val['aid']]['date_to'][val['type']]= val['to'][0];
+
+					area_data[val['aid']]['from'][val['type']] = val['from'][1];
+					area_data[val['aid']]['to'][val['type']] = val['to'][1];
 
 					if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
 					$.each(val['desc'], function(lang_name, text){
@@ -1194,13 +1203,13 @@ $( document ).ready(function()
 						{
 							area_green_data[aid]['from'] = {};
 						}
-						area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH() + ' 23:00:00';
+						area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH() + ' ' + $('#st_from').val();
 
 						if(area_green_data[aid]['to'] === undefined)
 						{
 							area_green_data[aid]['to'] = {};
 						}
-						area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd() + ' 22:59:59';
+						area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd() + ' ' + $('#st_to').val();
 					}
 				}
 				//}
@@ -1348,7 +1357,7 @@ $( document ).ready(function()
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 
-		Date.prototype.yyyymmddH = function() {
+	Date.prototype.yyyymmddH = function() {
 		var yyyy = this.getFullYear().toString();
 		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
 		var dd  = (this.getDate() - 1).toString();

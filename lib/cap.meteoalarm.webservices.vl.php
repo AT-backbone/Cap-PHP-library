@@ -45,6 +45,7 @@ if($conf->meteoalarm == 1)
 		'show_warnings'=> 1,
 		'view_type'=>2,
 		'date_b'=> $_POST['data'],
+		'utc' => date('P'),
 		'use_warntable'=>1
 	);
 
