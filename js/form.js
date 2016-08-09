@@ -875,15 +875,8 @@ $( document ).ready(function()
 
 				//$('#left_area_name').html(tmp_area_name);
 				//console.log( $('input[name=multisel_area_name_bool]:checked').val());
-				if( $('input[name=multisel_area_name_bool]:checked').val() == "1") // aktive_warning_key
-				{
-					$('#emmaid_select option[value=' + id + ']').prop('selected', true);
-				}
-				else
-				{
-					$('#emmaid_select option').prop('selected', false);
-					$('#emmaid_select option[value=' + id + ']').prop('selected', true);
-				}
+
+				$('#emmaid_select option[value=' + id + ']').prop('selected', true);
 
 				$('#emmaid_select').selectmenu( "refresh" );
 				$('#right_area_type').html('');
