@@ -873,9 +873,6 @@ $( document ).ready(function()
 				$('#info_text').css('display', 'none');
 				$('#AreaDetailUL').css('pointer-events', 'auto');
 
-				//$('#left_area_name').html(tmp_area_name);
-				//console.log( $('input[name=multisel_area_name_bool]:checked').val());
-
 				$('#emmaid_select option[value=' + id + ']').prop('selected', true);
 
 				$('#emmaid_select').selectmenu( "refresh" );
@@ -886,8 +883,6 @@ $( document ).ready(function()
 					if(area_data[id]['desc'][type] !== undefined) if(area_data[id]['desc'][type][lindex] !== undefined) $('#desc_' + lindex).val((area_data[id]['desc'][type][lindex])).trigger('input');
 					if(area_data[id]['inst'][type] !== undefined) if(area_data[id]['inst'][type][lindex] !== undefined) $('#inst_' + lindex).val((area_data[id]['inst'][type][lindex])).trigger('input');
 				});
-				//$('#desc_1').val((tmp_area_text_1)).trigger('input');
-				//$('#inst_1').val((tmp_area_inst_1)).trigger('input');
 
 				if(area_data[id]['from'][type] !== undefined)
 				{
