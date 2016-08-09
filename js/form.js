@@ -1022,7 +1022,7 @@ $( document ).ready(function()
 				//your success response
 				if($('#plugin_name').val() == 'webservice')
 				{
-					console.log(r);
+					//console.log(r);
 					if (/^[\],:{}\s]*$/.test(r.replace(/\\["\\\/bfnrtu]/g, '@').
 					replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
 					replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
@@ -1107,7 +1107,7 @@ $( document ).ready(function()
 				$('#green_div_'+data['aid']+' #left_box_type_0'+data['type']).attr('AaidTtype','a'+data['aid']+'t'+data['type']);
 			else
 				$('#green_div_'+data['aid']+' #left_box_type_'+data['type']).attr('AaidTtype','a'+data['aid']+'t'+data['type']);
-			console.log(index + ' / ' + r_arr.length);
+			//console.log(index + ' / ' + r_arr.length);
 		});
 
 		$('.green_area_type_sel').on('click', function(){
@@ -1141,7 +1141,7 @@ $( document ).ready(function()
 		if(yesno == 1)
 		{
 			var date = new Date();
-			console.log(area_green);
+			//console.log(area_green);
 			$.each(area_green, function(index, data){
 				aid = data['aid'];
 				if(area_green_data[aid] === undefined)
@@ -1165,39 +1165,43 @@ $( document ).ready(function()
 					
 					if(level > 0 && type > 0)
 					{
-						area_green_data[aid]['emma_id'] 	= data['eid'];
-						area_green_data[aid]['level'] 	= level;
+						awtlv = area_data[aid]['type'][type];
+						if(awtlv === undefined || awtlv < 1 )
+						{
+							area_green_data[aid]['emma_id'] 	= data['eid'];
+							area_green_data[aid]['level'] 	= level;
 
-						if(area_green_data[aid]['type'] === undefined)
-						{
-							area_green_data[aid]['type'] = {};
-						}
-						area_green_data[aid]['type'][data['type']] 	= level;
+							if(area_green_data[aid]['type'] === undefined)
+							{
+								area_green_data[aid]['type'] = {};
+							}
+							area_green_data[aid]['type'][data['type']] 	= level;
 
-						if(area_green_data[aid]['desc'] === undefined)
-						{
-							area_green_data[aid]['desc'] = {};
-							area_green_data[aid]['desc'][data['type']] = {};
-						}
-						if(area_green_data[aid]['desc'][data['type']] === undefined)
-						{
-							area_green_data[aid]['desc'][data['type']] = {};
-						}
-						area_green_data[aid]['desc'][data['type']][0]	= 'no warning';
-						offset = $('#timezone_h').html();
+							if(area_green_data[aid]['desc'] === undefined)
+							{
+								area_green_data[aid]['desc'] = {};
+								area_green_data[aid]['desc'][data['type']] = {};
+							}
+							if(area_green_data[aid]['desc'][data['type']] === undefined)
+							{
+								area_green_data[aid]['desc'][data['type']] = {};
+							}
+							area_green_data[aid]['desc'][data['type']][0]	= 'no warning';
+							offset = $('#timezone_h').html();
 
-						//area_data[aid]['exutc'][data['type']] 	= '+00:00';
-						if(area_green_data[aid]['from'] === undefined)
-						{
-							area_green_data[aid]['from'] = {};
-						}
-						area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH() + ' ' + $('#st_from').val();
+							//area_data[aid]['exutc'][data['type']] 	= '+00:00';
+							if(area_green_data[aid]['from'] === undefined)
+							{
+								area_green_data[aid]['from'] = {};
+							}
+							area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH() + ' ' + $('#st_from').val();
 
-						if(area_green_data[aid]['to'] === undefined)
-						{
-							area_green_data[aid]['to'] = {};
+							if(area_green_data[aid]['to'] === undefined)
+							{
+								area_green_data[aid]['to'] = {};
+							}
+							area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd() + ' ' + $('#st_to').val();
 						}
-						area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd() + ' ' + $('#st_to').val();
 					}
 				}
 				//}
