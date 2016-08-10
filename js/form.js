@@ -1280,7 +1280,7 @@ $( document ).ready(function()
 
 						loading_dots();
 						$("#submit_cap").addClass('ui-disabled');
-
+						$("#map_main_div").addClass('disabled');
 						mk_pro_interval = setInterval(function(){ 
 							$.ajax({
 								type: "POST",
