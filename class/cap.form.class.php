@@ -289,8 +289,10 @@
 										//$out.= '</li>';
 										//$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
 											//$out.= $this->tooltip($lang_val, $langs->trans("LabelLanguage"));
+											if($key == 0) $requir = 'class="required"';
+											else $requir = "";
 											$out.= '<div class="lang_input" id="'.$lang_val.'">';
-													$out.= '<textarea id="desc_'.$key.'" placeholder="description" name="description['.$lang_val.']"></textarea>';
+													$out.= '<textarea id="desc_'.$key.'" placeholder="description" name="description['.$lang_val.']" '.$requir.'></textarea>';
 													$out.= '<textarea id="inst_'.$key.'" placeholder="instruction" name="instruction['.$lang_val.']"></textarea>';
 											$out.= '</div>';
 										$out.= '</li>';
