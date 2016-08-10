@@ -204,10 +204,14 @@
 	$capupdater->calc_cap_update();
 	//$capupdater->debug = false;
 
-	//print 'calc_cap_cancel:<br>';
-	// calculate cap which should be Cancelled (Updated as green)
-	//print '<br>calc_cap_cancel()';
-	$capupdater->calc_cap_cancel();
+	// be shure to sent no cancel CAP for nd from Green warnings!
+	if(empty($_POST['no_del']))
+	{
+		//print 'calc_cap_cancel:<br>';
+		// calculate cap which should be Cancelled (Updated as green)
+		//print '<br>calc_cap_cancel()';
+		$capupdater->calc_cap_cancel();
+	}
 
 	//print 'get_white_warnings:<br>';
 	// calculate white areas

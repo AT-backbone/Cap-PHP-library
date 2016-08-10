@@ -464,12 +464,12 @@
 				$timezone_date = date('P');
 
 				$timezone_date_p = $timezone_date[0];
-				$timezone_date_h = substr($timezone_date, 1);
+				$timezone_date_h = $timezone_date;
 
 				if  (
 						! isset($this->cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']]) 
 						 && 
-						date('Y-m-d', strtotime(str_replace('&nbsp;', ' ',$vl_warning['from']).' '.$timezone_date_p.' '.$timezone_date_h.' hours ')) == date('Y-m-d', strtotime('now + '.$_POST['data'].' days'))
+						date('Y-m-d', strtotime(str_replace('&nbsp;', ' ',$vl_warning['from']).' '.$timezone_date_p.' '.$timezone_date_h[1].$timezone_date_h[2].' hours')) == date('Y-m-d', strtotime('now + '.$_POST['data'].' days'))
 				    )
 				{
 					// Cancel This warning

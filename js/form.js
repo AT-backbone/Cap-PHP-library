@@ -298,6 +298,7 @@ $( document ).ready(function()
 
 			loading_dots();
 			$("#submit_cap").addClass('ui-disabled');
+			$("#map_main_div").addClass('disabled');
 			mk_pro_interval = setInterval(function(){ 
 				$.ajax({
 					type: "POST",
@@ -507,6 +508,14 @@ $( document ).ready(function()
 			plugin_send_all_proce_cap(1);
 		});
 
+		$("#desc_0").on('change keyup paste input', function(){
+			if($("#desc_0").val() == "") {
+				$("#desc_0").addClass('required');
+			} else {
+				$("#desc_0").removeClass('required');
+			}
+		});
+
 		// Enable and disable scrolling in process toolbox inner and outer!
 		$('#process_toolbox_inner').mouseenter(function() {
 			$('#process_toolbox').css('pointer-events', 'all');
@@ -524,6 +533,7 @@ $( document ).ready(function()
 			$('#awareness_color_toolbox .awareness').css('opacity', 1);
 			$('#map_main_div svg').css('cursor', 'auto');
 			$('#awareness_color_toolbox').css('display', '');
+			plugin_show_type(aktive_type);
 		});
 		$('#awareness_toolbox .awareness[aktive=1]').on('click', function(){
 			if(aktive_type != $(this).attr('type'))
@@ -582,6 +592,7 @@ $( document ).ready(function()
 				$('#awareness_color_toolbox .awareness').css('opacity', 1);
 				$('#map_main_div svg').css('cursor', 'auto');
 				$('#awareness_color_toolbox').css('display', '');
+				plugin_show_type(aktive_type);
 			}
 		});
 
@@ -704,7 +715,7 @@ $( document ).ready(function()
 								//out+= '<div class="problem awareness" style="background-color:'+levelc+';" aktive="1" onclick="area_warning_detail('+id+', '+type+', this)" '+css_selected+'>';
 								//	out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
 								//out+= '</div>';
-								if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined) 
+								if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined || data['desc'][type][0] == "") 
 								{
 									out+= '<div class="problem awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
 									out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
@@ -865,8 +876,8 @@ $( document ).ready(function()
 				area_data[id]['sel_type'] = type;
 				$(tmp_this).css('border', '3px solid blue');
 				$.each(lang, function(lindex, ldata){
-					$('#desc_'+lindex).val('');
-					$('#inst_'+lindex).val('');
+					$('#desc_'+lindex).val('').trigger('input');
+					$('#inst_'+lindex).val('').trigger('input');
 				});
 				$('#AreaDetailDIV').css('background-color', '#ffffff');
 				$('#AreaDetailUL').css('opacity', 1);
@@ -1216,7 +1227,7 @@ $( document ).ready(function()
 			
 			$.post(
 				"lib/cap.create.from_js_array.2.php",
-				{cap_array:jsonOb, no_del:1,data:data, use_plugin: plugin_name},
+				{cap_array:jsonOb, no_del:1, data:data, use_plugin: plugin_name},
 				function(r){
 					//your success response
 					//alert('OK!');
@@ -1269,7 +1280,7 @@ $( document ).ready(function()
 
 						loading_dots();
 						$("#submit_cap").addClass('ui-disabled');
-
+						$("#map_main_div").addClass('disabled');
 						mk_pro_interval = setInterval(function(){ 
 							$.ajax({
 								type: "POST",
