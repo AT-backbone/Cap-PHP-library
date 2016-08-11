@@ -80,7 +80,7 @@ if($conf->meteoalarm == 1)
 		    }
 			}
 		$conf->webservice->password = encrypt_decrypt(1, $conf->webservice->password);	
-
+		
 }
 
 ?>

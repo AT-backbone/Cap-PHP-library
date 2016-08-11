@@ -8,6 +8,9 @@ if($conf->meteoalarm == 1)
 {
 	global $conf;	
 
+	$data = $_GET['data'];
+	if($data == "") $data = 0;
+
 	$conf->webservice->password = encrypt_decrypt(2, $conf->webservice->password);
 	ini_set("default_socket_timeout", 60000);
 	set_time_limit ( 240 );
@@ -44,11 +47,12 @@ if($conf->meteoalarm == 1)
 		'iso'=>$iso,
 		'show_warnings'=> 1,
 		'view_type'=>2,
-		'date_b'=> $_POST['data'],
-		'utc' => date('P'),
+		'date_b'=> $data,
+		'utc' => '+00:00',
 		'use_warntable'=>1
 	);
 
+	if($mapphp == true) $GenInsInput['utc'] = date('P');
 	if($mapphp == true) $GenInsInput['ver'] = 2;
 
 	$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);

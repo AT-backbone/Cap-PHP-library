@@ -167,10 +167,11 @@
 		*
 		* @return	None
 		*/
-		function __construct($cap_array, $awt, $langs)
+		function __construct($cap_array, $awt, $data, $langs)
 		{
 			if(!empty($cap_array)) $this->cap_array = $cap_array;
 			if(!empty($awt)) $this->awt_arr = $awt;
+			if(!empty($data)) $this->data = $data;
 			if(!empty($langs)) $this->language = $langs;
 			//die(print_r($this));
 		}
@@ -235,6 +236,7 @@
 				if($conf->webservice->on > 0) // is webservice on ?
 				{
 					$res = true;
+					$_GET['data'] = $this->data;
 					require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP if not alredy
 
 					if(file_exists('lib/cap.meteoalarm.webservices.Area.php')) // test if the lib exists
@@ -606,7 +608,7 @@
 									if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $data_arr[0]->eid != "")
 									{
 										if($data_arr[0]->exutc != "") $timezone_date = $data_arr[0]->exutc;
-										else $timezone_date = date('P');
+										else $timezone_date = '+00:00';
 
 										$timezone_date_p = $timezone_date[0];
 										$timezone_date_h = substr($timezone_date, 1);

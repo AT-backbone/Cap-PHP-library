@@ -656,6 +656,8 @@ $( document ).ready(function()
 					area_data[id]['type'][aktive_type] = aktive_level;
 					area_data[id]['desc'][aktive_type] = {};
 					area_data[id]['inst'][aktive_type] = {};
+					delete(area_data[id]['date_from'][aktive_type]);
+					delete(area_data[id]['date_to'][aktive_type]);
 					$(this).css('fill', 'url(#pattern_l'+aktive_level+'t'+aktive_type+')');
 				}
 				plugin_calc_map();
@@ -1180,6 +1182,7 @@ $( document ).ready(function()
 						if(awtlv === undefined || awtlv < 1 )
 						{
 							area_green_data[aid]['emma_id'] 	= data['eid'];
+							area_green_data[aid]['exutc'] 	= '+01:00';
 							area_green_data[aid]['level'] 	= level;
 
 							if(area_green_data[aid]['type'] === undefined)
@@ -1205,13 +1208,13 @@ $( document ).ready(function()
 							{
 								area_green_data[aid]['from'] = {};
 							}
-							area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH() + ' ' + $('#st_from').val();
+							area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH(parseInt($('#data').val())) + ' ' + $('#st_from').val();
 
 							if(area_green_data[aid]['to'] === undefined)
 							{
 								area_green_data[aid]['to'] = {};
 							}
-							area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd() + ' ' + $('#st_to').val();
+							area_green_data[aid]['to'][data['type']] 	= date.yyyymmdd(parseInt($('#data').val())) + ' ' + $('#st_to').val();
 						}
 					}
 				}
@@ -1353,17 +1356,48 @@ $( document ).ready(function()
 		$.mobile.loading( "hide" );
 	}
 
-	Date.prototype.yyyymmdd = function() {
+	Date.prototype.yyyymmdd = function(pday) {
 		var yyyy = this.getFullYear().toString();
-		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-		var dd  = this.getDate().toString();
+		var dd  = (this.getDate() + pday);
+		var mm = (this.getMonth()+1); // getMonth() is zero-based
+		if(mm % 2)
+		{
+			if(dd > 31) var mm = mm + 1; // getMonth() is zero-based
+		}
+		else if(mm == 2)
+		{
+			if(dd > 29) var mm = mm + 1; // getMonth() is zero-based
+		}
+		else
+		{
+			if(dd > 30) var mm = mm + 1; // getMonth() is zero-based
+		}
+		mm = mm.toString();
+		dd = dd.toString();
+		
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 
-	Date.prototype.yyyymmddH = function() {
+	Date.prototype.yyyymmddH = function(pday) {
 		var yyyy = this.getFullYear().toString();
-		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-		var dd  = (this.getDate() - 1).toString();
+		if(pday > 0) var dd  = (this.getDate() - 1 + pday);
+		else var dd  = (this.getDate());
+		var mm = (this.getMonth()+1); // getMonth() is zero-based
+		if(mm % 2)
+		{
+			if(dd > 31) var mm = mm + 1; // getMonth() is zero-based
+		}
+		else if(mm == 2)
+		{
+			if(dd > 29) var mm = mm + 1; // getMonth() is zero-based
+		}
+		else
+		{
+			if(dd > 30) var mm = mm + 1; // getMonth() is zero-based
+		}
+		mm = mm.toString();
+		dd = dd.toString();
+		
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 

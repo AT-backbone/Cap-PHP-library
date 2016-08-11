@@ -217,12 +217,12 @@
 					$out.= '<input type="hidden" value="'.$langs->trans('WarnGetCalculated').'" id="mk_process_lang">';
 					$out.= '<input type="hidden" value="'.$langs->trans('DelWarning').'" id="del_warn_lang">';
 					$out.= '<input type="hidden" value="'.$langs->trans('ChangeWithoutSave').'" id="chang_without_save">';
-					$out.= '<input type="hidden" value="MD" id="iso">';
+					$out.= '<input type="hidden" value="'.$_GET['data'].'" id="data">';
 					$out.= '<input type="hidden" value="2" id="green">';
 					$out.= '<input type="hidden" value="'.date('P').'" name="timezone">';
 					$utc = date('P');
-					$out.= '<input type="hidden" value="'.date('H:00:00', strtotime('23:00 '.$utc[0].' '.$utc[1].$utc[2].' hours')).'" id="st_from">';
-					$out.= '<input type="hidden" value="'.date('H:59:59', strtotime('22:59 '.$utc[0].' '.$utc[1].$utc[2].' hours')).'" id="st_to">';
+					$out.= '<input type="hidden" value="00:00:00" id="st_from">';
+					$out.= '<input type="hidden" value="23:59:59" id="st_to">';
 					
 					$timezone_h =  date('P');
 					$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';
@@ -457,7 +457,7 @@
 															$out.= '<pattern xmlns="http://www.w3.org/2000/svg" id="pattern_l'.$level_arr['id'].'t'.$id.'" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" patternUnits="userSpaceOnUse">';
 																$out.= '<rect x="0" y="0" width="'.($standard_map[0]*2).'" height="'.($standard_map[1]*2).'" fill="'.$level_arr['hazard_level_color'].'"/>';
 																if(!empty($type_arr['img_src'])) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="'.$type_arr['img_src'].'" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
-																else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png') && $level_arr['id'] > 1) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="includes/meteoalarm/warn-typs_'.$tmpID.'.png" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'" height="'.($standard_map[1]).'" transform="scale(1, 1)"/>';
+																else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png') && $level_arr['id'] > 1) $out.= '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="includes/meteoalarm/warn-typs_'.$tmpID.'.png" id="pattern_regen_3_img" x="0" y="0" width="'.($standard_map[0]).'px" height="'.($standard_map[1]).'px" transform="scale(1, 1)"/>';
 															$out.= '</pattern>';
 														}
 													}
