@@ -373,41 +373,46 @@ $( document ).ready(function()
 		{
 			if(area_vl != "" && area_vl[0] != "Error2")
 			{
+				today = $('#today').val();
+
 				$.each(area_vl, function(index, val){
-					area_data[val['aid']]['type'][val['type']] = val['level'];
-
-					area_data[val['aid']]['emma_id'] = val['EMMA_ID'];
-
 
 					val['from'] = val['from'].split(" ");
 					val['to'] = val['to'].split(" ");
 
-					area_data[val['aid']]['date_from'][val['type']]= val['from'][0];
-					area_data[val['aid']]['date_to'][val['type']]= val['to'][0];
+					if(val['from'][0] == today || val['from'][1] == '23:00:00')
+					{
+						area_data[val['aid']]['type'][val['type']] = val['level'];
 
-					area_data[val['aid']]['from'][val['type']] = val['from'][1];
-					area_data[val['aid']]['to'][val['type']] = val['to'][1];
+						area_data[val['aid']]['emma_id'] = val['EMMA_ID'];
 
-					if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
-					$.each(val['desc'], function(lang_name, text){
-						if(text)
-						{
-							lkey = ind_lang[lang_name];
-							area_data[val['aid']]['desc'][val['type']][lkey] = text;
-						}
-					});
-					if(! $.isArray(area_data[val['aid']]['inst'][val['type']])) area_data[val['aid']]['inst'][val['type']] = {};
-					$.each(val['inst'], function(lang_name, text){
-						if(text)
-						{
-							area_data[val['aid']]['inst'][val['type']][ind_lang[lang_name]] = text;
-						}
-					});
+						area_data[val['aid']]['date_from'][val['type']]= val['from'][0];
+						area_data[val['aid']]['date_to'][val['type']]= val['to'][0];
 
-					if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
-					area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
+						area_data[val['aid']]['from'][val['type']] = val['from'][1];
+						area_data[val['aid']]['to'][val['type']] = val['to'][1];
 
-					$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
+						if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
+						$.each(val['desc'], function(lang_name, text){
+							if(text)
+							{
+								lkey = ind_lang[lang_name];
+								area_data[val['aid']]['desc'][val['type']][lkey] = text;
+							}
+						});
+						if(! $.isArray(area_data[val['aid']]['inst'][val['type']])) area_data[val['aid']]['inst'][val['type']] = {};
+						$.each(val['inst'], function(lang_name, text){
+							if(text)
+							{
+								area_data[val['aid']]['inst'][val['type']][ind_lang[lang_name]] = text;
+							}
+						});
+
+						if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
+						area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
+
+						$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
+					}
 				});
 				// a webservice is aktive
 				plugin_show_type(false);
@@ -1182,7 +1187,7 @@ $( document ).ready(function()
 						if(awtlv === undefined || awtlv < 1 )
 						{
 							area_green_data[aid]['emma_id'] 	= data['eid'];
-							area_green_data[aid]['exutc'] 	= '+01:00';
+							area_green_data[aid]['exutc'] 	= '+00:00';
 							area_green_data[aid]['level'] 	= level;
 
 							if(area_green_data[aid]['type'] === undefined)
@@ -1355,6 +1360,14 @@ $( document ).ready(function()
 	{
 		$.mobile.loading( "hide" );
 	}
+
+	Date.prototype.yyyy_mm_dd = function() {
+		var yyyy = this.getFullYear().toString();
+		var dd  = (this.getDate()).toString();
+		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+		
+		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+	};
 
 	Date.prototype.yyyymmdd = function(pday) {
 		var yyyy = this.getFullYear().toString();

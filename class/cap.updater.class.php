@@ -700,7 +700,6 @@
 										$post['onset']['plus'] = $timezone_date_p;
 										$post['onset']['UTC'] = $timezone_date_h;
 
-										if(strtotime($data_arr[0]->to) < strtotime('now')) $data_arr[0]->to = date('Y-m-d H:i:s',strtotime($data_arr[0]->to.' + 1 days'));
 										$post['expires']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$_POST['data'].' days'))));
 										$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
 										$post['expires']['plus'] = $timezone_date_p;
