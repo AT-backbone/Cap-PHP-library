@@ -405,6 +405,8 @@
 							 )
 							  || 
 							 (
+							 	$ident == $warning->identifier
+							 	 &&
 								$this->cap_ident[$warning->type][$warning->eid]['level'] == $warning->level 
 								 && 
 								$this->cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from) 
@@ -700,7 +702,9 @@
 										$post['onset']['plus'] = $timezone_date_p;
 										$post['onset']['UTC'] = $timezone_date_h;
 
-										$post['expires']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$_POST['data'].' days'))));
+										if(strtotime($data_arr[0]->to) < strtotime($data_arr[0]->from)) $Pdata = $_POST['data'] + 1;
+										else $Pdata = $_POST['data'];
+										$post['expires']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$Pdata.' days'))));
 										$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
 										$post['expires']['plus'] = $timezone_date_p;
 										$post['expires']['UTC'] = $timezone_date_h;
