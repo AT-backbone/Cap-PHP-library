@@ -52,6 +52,8 @@
 	if(!empty($_GET['cap_array'])) $cap_array_tmp = $_GET['cap_array'];
 	if(!empty($_POST['awt'])) $awt_arr_tmp = $_POST['awt'];
 	if(!empty($_GET['awt'])) $awt_arr_tmp = $_GET['awt'];
+	if(!empty($_POST['data'])) $data = $_POST['data'];
+	if(!empty($_GET['data'])) $data = $_GET['data'];
 	$cap_array = json_decode($cap_array_tmp);
 	$awt_arr = json_decode($awt_arr_tmp);
 
@@ -148,7 +150,6 @@
 		foreach($cap->type as $type => $level)
 		{
 			if($cap->exutc) $cap_array_2[$aid][$i]->exutc = $cap->exutc;
-
 			$cap_array_2[$aid][$i]->name = $cap->name;
 
 			$cap_array_2[$aid][$i]->type = $type;
@@ -156,8 +157,8 @@
 
 			$cap_array_2[$aid][$i]->eid = $cap->emma_id;
 
-			$cap_array_2[$aid][$i]->from = date('Y-m-d H:i:s', strtotime($cap->date_from->$type.' '.str_replace('&nbsp;', ' ', $cap->from->$type)));
-			$cap_array_2[$aid][$i]->to = date('Y-m-d H:i:s', strtotime($cap->date_to->$type.' '.str_replace('&nbsp;', ' ', $cap->to->$type)));
+			$cap_array_2[$aid][$i]->from = gmdate('Y-m-d H:i:s', strtotime($cap->date_from->$type.' '.str_replace('&nbsp;', ' ', $cap->from->$type)));
+			$cap_array_2[$aid][$i]->to = gmdate('Y-m-d H:i:s', strtotime($cap->date_to->$type.' '.str_replace('&nbsp;', ' ', $cap->to->$type)));
 
 			$cap_array_2[$aid][$i]->desc = $cap->desc->$type;
 			$cap_array_2[$aid][$i]->inst = $cap->inst->$type;
@@ -168,7 +169,7 @@
 		}
 	}
 
-	$capupdater = new CAP_Updater($cap_array_2, $awt_arr);
+	$capupdater = new CAP_Updater($cap_array_2, $awt_arr, $data);
 
 	//$capupdater->debug = true;
 
