@@ -603,7 +603,7 @@ $( document ).ready(function()
 
 		$('#map_main_div svg g, path, polygon').mouseover(function() {
 			id = $(this).attr('id');
-			if(id !== undefined)
+			if(id !== undefined && $('#emmaid_select option[value='+id+']').text() != "")
 			{
 				$.each(area_data, function(index, data){
 					if(data['sel'] != 1) 
@@ -620,7 +620,7 @@ $( document ).ready(function()
 
 		$('#map_main_div svg g, path, polygon').mouseleave(function() {
 			id = $(this).attr('id');
-			if(id !== undefined)
+			if(id !== undefined && $('#emmaid_select option[value='+id+']').text() != "")
 			{
 				if(area_data[id]['sel'] == 0)
 				{
@@ -632,7 +632,7 @@ $( document ).ready(function()
 
 		$('#map_main_div svg g, path, polygon').on('click', function() {
 			id = $(this).attr('id');
-			if(id !== undefined)
+			if(id !== undefined && $('#emmaid_select option[value='+id+']').text() != "")
 			{
 				if(aktive_type == false || aktive_level == false)
 				{
@@ -658,6 +658,13 @@ $( document ).ready(function()
 						$(this).css('stroke', 'blue');
 						$(this).css('stroke-width', '3px');
 					}
+
+					if(area_data[id]['type'][aktive_type] == "1")
+					{
+						area_data[id]['from'][aktive_type] = '00:00';
+						area_data[id]['to'][aktive_type] = '23:59';
+					}
+
 					area_data[id]['type'][aktive_type] = aktive_level;
 					area_data[id]['desc'][aktive_type] = {};
 					area_data[id]['inst'][aktive_type] = {};
@@ -936,6 +943,11 @@ $( document ).ready(function()
 		$.each(area_data, function(id, data){
 			if(data['sel_type'] == area_info['sel_type'])
 			{
+				$('#emmaid_select option[value=' + id + ']').prop('selected', false);
+				$('#emmaid_select').selectmenu( "refresh" );
+
+				if(area_data[id]['identifier'] !== undefined) area_data[id]['identifier'][data['sel_type']] = "";
+
 				area_data[id]['level'][data['sel_type']] = area_data[id]['type'][data['sel_type']];
 
 				area_data[id]['desc'][data['sel_type']] = {};
@@ -978,6 +990,9 @@ $( document ).ready(function()
 			$.each(area_data, function(id, data){
 				if(data['sel_type'] == area_info['sel_type'])
 				{
+					$('#emmaid_select option[value=' + id + ']').prop('selected', false);
+					$('#emmaid_select').selectmenu( "refresh" );
+
 					delete(area_data[id]['type'][data['sel_type']]);
 					area_data[id]['desc'][area_data[id]['sel_type']] = {};
 					area_data[id]['inst'][area_data[id]['sel_type']] = {};
