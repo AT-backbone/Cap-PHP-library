@@ -1227,7 +1227,9 @@ $( document ).ready(function()
 							if(area_green_data[aid]['from'] === undefined)
 							{
 								area_green_data[aid]['from'] = {};
+								area_green_data[aid]['date'] = {};
 							}
+							area_green_data[aid]['date'][data['type']] = date.yyyymmddH(parseInt($('#data').val()));
 							area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH(parseInt($('#data').val())) + ' ' + $('#st_from').val();
 
 							if(area_green_data[aid]['to'] === undefined)
