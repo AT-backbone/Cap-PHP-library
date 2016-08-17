@@ -29,7 +29,7 @@ and in addition:
 -   the **Warningsdetails** (on the left)
 -   and the **Actionbar** (at the bottom)
 
-![fig. 1 The Paint and Alert Interface](img/paintandalert_interface.PNG?raw=true "Interface")
+![fig. 1 The Paint and Alert Interface](img/paintandalert_interface.png?raw=true "Interface")
 
 ### The Logic - First steps
 
@@ -59,8 +59,11 @@ To save the warning click the **save-button**.
 
 If the warning was sucessfully saved (warningsdescription , instructiontext and start-end-date are mandatory) the exclamation mark on the warningicon is removed.
 
-![fig. 2 - Selecting a type in the Awareness Toolbox](img/paintandalert_typeselect.PNG?raw=true "Type Select") 
-<File:paintandalertauswhal1.png>| fig. 2 - Selecting a type in the Awareness Toolbox <File:Paintandalartauswhal2.png>| fig. 3 - Selecting an area on the map <File:paintandalartauswhal3.png>| fig. 4 - Adding a warntext to the active warning <File:paintandalartauswhal4.png>| fig. 5 - additional languages are added in the configuration <File:paintandalartauswhal5.png>| fig. 6 - Adding a warntext to the active warning
+<img src="img/paintandalert_typeselect.png" width="200">
+<img src="img/paintandalert_areaselect.png" width="200">
+<img src="img/paintandalert_warntextadd.png" width="200">
+<img src="img/paintandalert_languageadd.png" width="200">
+<img src="img/paintandalert_warningadd.png" width="200">
 
 ### Sending warnings to Meteoalarm
 
@@ -76,7 +79,9 @@ After you answered this question you are asked whether you want to send the warn
 
 By confirming, all produced CAP-files will be sent to the Meteoalarm webservice. The results of the transfer will be presented in the Debug-Info (fig. 8) in the form of green (OK) and red (Error) entries. By clicking an entry the transfer details (fig. 9) will open. After the transfer the application will check every ten seconds whether Meteoalarm has already processed the warnings. When Ḿeteoalarm has processed the warnings the application will ask to reload the website.
 
-<File:paintandalertSubmit.png>| fig. 7 <File:paintandalertWeiseTypen.png>| fig. 8 <File:paintandalertSoapResult.png>| fig. 9
+<img src="img/paintandalert_Submit.png" width="200">
+<img src="img/paintandalert_warngreen.png" width="200">
+<img src="img/paintandalert_SoapResult.png" width="200">
 
 ### Change the warned Day
 
