@@ -443,7 +443,11 @@
 		if(! empty($_GET['use_plugin']))
 		{
 			$plugin = new Plugin();
-			$plugin->fetch($_GET['use_plugin']);
+			$res = $plugin->fetch($_GET['use_plugin']);
+			if($res < 1)
+			{
+				die('Error: '.$plugin->get_error($res));
+			}
 		}
 		
 			$conf->optional_menu = "menu/map_menu.lib.php";
