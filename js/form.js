@@ -365,6 +365,7 @@ $( document ).ready(function()
 				area_data[id]['date_to'] = {};
 				area_data[id]['from'] = {};
 				area_data[id]['to'] = {};
+				area_data[id]['identifier'] = {};
 			}
 			delete(id);
 		});
@@ -380,7 +381,7 @@ $( document ).ready(function()
 					val['from'] = val['from'].split(" ");
 					val['to'] = val['to'].split(" ");
 
-					if(val['from'][0] == today || val['from'][1] == '23:00:00')
+					if(val['from'][0] == today || val['to'][0] == today)
 					{
 						area_data[val['aid']]['type'][val['type']] = val['level'];
 
@@ -408,7 +409,6 @@ $( document ).ready(function()
 							}
 						});
 
-						if(! $.isArray(area_data[val['aid']]['identifier'])) area_data[val['aid']]['identifier'] = {};
 						area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
 
 						$('#'+val['aid']).css('fill', 'url(#pattern_l'+val['level']+'t'+val['type']+')');
