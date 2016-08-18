@@ -168,7 +168,7 @@
 
 	if(! is_dir("output") || ! is_writable("output"))
 	{
-		$error_out.='[output/] '.$langs->trans("perm_for_output1")."output/".$langs->trans("perm_for_output2")."<p>";
+		$error_out.= '[output/] '.$langs->trans('perm_for_conf')."<p>";
 		//((die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
 	}
 
