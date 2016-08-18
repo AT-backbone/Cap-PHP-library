@@ -164,6 +164,12 @@
 			die($langs->trans('perm_for_conf').' ['.realpath('conf').'/conf.php]');
 			//die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
 		}
+
+		if(! is_dir("output/") || ! is_writable("output/"))
+		{
+			die($langs->trans("perm_for_output1")."output/".$langs->trans("perm_for_output2"));
+			//((die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
+		}
 	}
 	$conf->cap->output="output";
 	$conf->cap->save = 1;
