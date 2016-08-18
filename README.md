@@ -22,7 +22,7 @@ and has the permissions to warn a certain country via CAP-Import
 ... is shown an additional application called Paint and Alert in the menu.
 The visual interface eases the input and saves a lot of hassle with the necessities of the Cap-Standard. <br>We spare the user every setting that is not absolutely necessary. Paint and Alert was developed with a responsive design that is fully supported by tablets. The interface resembles a paint program.
 
-[**more Information**](doc/Paintandalert.md)
+[**more Information**](doc/PaintandAlert.md)
 
 
 
