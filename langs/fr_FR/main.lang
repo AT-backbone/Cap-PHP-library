@@ -139,6 +139,7 @@ LabelOnsetDesc=(FACULTATIF) <br>L'heure prévue du début de l'événement de l'
 LabelExpiresDesc=(FACULTATIF) <br>Le délai d'expiration des informations de la message d'alerte.
 LabelParameterDesc=(FACULTATIF) <br>Un paramètre supplémentaire spécifique au système associé au message d'alerte.
 
+	WrongISOorConfiguration=Something went wrong. Check your ISO code and configuration!
 	WebserviceNotConnectedReconnectOrUsePluginZIP=Your Webservice is not connected please reconnect or (import/use) a Plugin
 	WebserviceNotConnectedReconnectOrUsePluginZIPDESC=A Plugin created for the Paint and Alert GUI in the Cap-PHP-Library can directly imported as a ZIP File!
 	Upload=Upload
@@ -147,3 +148,4 @@ LabelParameterDesc=(FACULTATIF) <br>Un paramètre supplémentaire spécifique au
 	Plugin=Plugin
 	Use=Use
 	ProducedCaps=Finally produced Cap!
+	error_wrong_login=Wrong User, Password, Permision or Configuration!

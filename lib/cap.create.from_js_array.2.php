@@ -157,7 +157,7 @@
 
 			$cap_array_2[$aid][$i]->eid = $cap->emma_id;
 
-			if(!empty($cap->date_from->$type)) $cap_array_2[$aid][$i]->data = $cap->date_from->$type;
+			if(!empty($cap->date->$type)) $cap_array_2[$aid][$i]->data = $cap->date->$type;
 			$cap_array_2[$aid][$i]->from = gmdate('Y-m-d H:i:s', strtotime($cap->date_from->$type.' '.str_replace('&nbsp;', ' ', $cap->from->$type)));
 			$cap_array_2[$aid][$i]->to = gmdate('Y-m-d H:i:s', strtotime($cap->date_to->$type.' '.str_replace('&nbsp;', ' ', $cap->to->$type)));
 
@@ -170,7 +170,7 @@
 		}
 	}
 
-	//if(!empty($_POST['no_del'])) print_r($cap_array_2);
+	if(!empty($_POST['no_del'])) print_r($cap_array_2);
 
 	$capupdater = new CAP_Updater($cap_array_2, $awt_arr, $data);
 

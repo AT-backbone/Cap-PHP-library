@@ -1173,6 +1173,9 @@ $( document ).ready(function()
 	{
 		if(yesno == 1)
 		{
+			$.mobile.loading( "hide" );
+			JQ_loader('Loading', 'b');
+			
 			var date = new Date();
 			//console.log(area_green);
 			$.each(area_green, function(index, data){
@@ -1227,7 +1230,9 @@ $( document ).ready(function()
 							if(area_green_data[aid]['from'] === undefined)
 							{
 								area_green_data[aid]['from'] = {};
+								area_green_data[aid]['date'] = {};
 							}
+							area_green_data[aid]['date'][data['type']] = date.yyyymmddH(parseInt($('#data').val()));
 							area_green_data[aid]['from'][data['type']] 	= date.yyyymmddH(parseInt($('#data').val())) + ' ' + $('#st_from').val();
 
 							if(area_green_data[aid]['to'] === undefined)
@@ -1244,9 +1249,6 @@ $( document ).ready(function()
 			data = $('#day').val();
 			if(data == "" || data === undefined) data = 0;
 			var jsonOb = JSON.stringify(area_green_data);
-			
-			$.mobile.loading( "hide" );
-			JQ_loader('Loading', 'b');
 			
 			$.post(
 				"lib/cap.create.from_js_array.2.php",

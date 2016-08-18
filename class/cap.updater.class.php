@@ -692,7 +692,7 @@
 										if($post['info'][0]['audience'] != "") 
 											$post['audience'] = $post['info'][0]['audience'];
 
-										if(!empty($data_arr[0]->data && $_POST['data'] > 1)) $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + 1 days'))));
+										if(!empty($data_arr[0]->data) && $_POST['data'] > 1) $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + 1 days'))));
 										else $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 										
 										$post['effective']['date'] = $eff_date;
@@ -708,7 +708,7 @@
 										if(strtotime($data_arr[0]->to) < strtotime($data_arr[0]->from)) $Pdata = $_POST['data'] + 1;
 										else $Pdata = $_POST['data'];
 										
-										if(!empty($data_arr[0]->data && $Pdata > 1)) $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + 1 days'))));
+										if(!empty($data_arr[0]->data) && $Pdata > 1) $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + 1 days'))));
 										else $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$Pdata.' days'))));
 										
 										$post['expires']['date'] = $exp_date;
