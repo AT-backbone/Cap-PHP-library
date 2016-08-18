@@ -161,16 +161,22 @@
 		}
 		else
 		{
-			die($langs->trans('perm_for_conf').' ['.realpath('conf').'/conf.php]');
+			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
 			//die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
 		}
-
-		if(! is_dir("output/") || ! is_writable("output/"))
-		{
-			die($langs->trans("perm_for_output1")."output/".$langs->trans("perm_for_output2"));
-			//((die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
-		}
 	}
+
+	if(! is_dir("output") || ! is_writable("output"))
+	{
+		$error_out.='[output/] '.$langs->trans("perm_for_output1")."output/".$langs->trans("perm_for_output2")."<p>";
+		//((die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
+	}
+
+	if(!empty($error_out))
+	{
+		die($error_out);
+	}
+
 	$conf->cap->output="output";
 	$conf->cap->save = 1;
 
