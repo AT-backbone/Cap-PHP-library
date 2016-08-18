@@ -239,10 +239,10 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 	Labelwebservice_WS_DOL_URL=<b>Webservice URL</b>
 	Labelwebservice_WS_DOL_URLDesc=Path of the webservice including filename. Normally the webservice administrator will provide this information.
-
-
+	
 ###Error Messages###
-
+	
+	WrongISOorConfiguration=Something went wrong. Check your ISO code and configuration!
 	standard_menuLibPhpIsCurupt=Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library
 	perm_for_output1=Permision problems detectet pleas fix this: Can\'t create the folder ("
 	perm_for_output2=") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! 

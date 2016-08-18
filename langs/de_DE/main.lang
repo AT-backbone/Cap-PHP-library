@@ -190,3 +190,5 @@ UsePluginDESC=Eine Liste von allen installierten Plugins auf diesen System
 Plugin=Plugin
 Use=Benutze
 ProducedCaps=Fertig produzierte Cap!
+
+WrongISOorConfiguration=Etwas ist schief gelaufen. Bitte überprüfe die eingestellte ISO!

@@ -432,6 +432,14 @@
 
 											$out.= '<div id="process_toolbox" class="process_toolbox_div"><div id="process_toolbox_inner" class="process_toolbox_div_inner"></div></div>';
 
+											if($AreaCodesArray[0][0] == "Error2" || count($AreaCodesArray) < 1 || $soap_SVG == "")
+											{
+												$out.= '<span id="info_text" class="area_deaktive" style="top: 0px;left: 0px;width: 100%;height: 100%;padding: 85px;">';
+													//$out.= 'Something went wrong. Check your ISO code and configuration!';
+													$out.= $langs->trans("WrongISOorConfiguration");
+												$out.= '</span>';
+											}
+
 											$out.= substr($soap_SVG, 0, -6); // SVG from the SOAP
 											//$out.= '<svg id="notme">';
 											$out.= '<defs><filter id="css_brightness"><feComponentTransfer id="css_brightness"><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter></defs>';
