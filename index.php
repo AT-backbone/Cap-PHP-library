@@ -173,6 +173,7 @@
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
 
+	$tryed_login = false;
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
 		
@@ -209,7 +210,8 @@
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
 				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
 			}
-			//unset($_POST);
+			$tryed_login = true;
+			unset($_POST);
 		}
 		else
 		{
@@ -217,7 +219,7 @@
 			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
 			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
-			//unset($_POST);
+			unset($_POST);
 		}
 	}
 	
@@ -292,13 +294,16 @@
 	}
 
 	$login_to_webservice_faild = false;
-	if(!empty($_POST['send-login']) && $conf->webservice_aktive == -1)
+	if($tryed_login == true && $conf->webservice_aktive == -1)
 	{
 		unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 		unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
 		unset($conf->webservice->login);
 		unset($conf->webservice->password);
-		unset($_POST);
+		if(!is_array($_POST['send-logout']))
+		{
+			unset($_POST);
+		}
 		$login_to_webservice_faild = true;
 	}
 
