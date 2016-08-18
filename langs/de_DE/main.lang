@@ -192,3 +192,4 @@ Use=Benutze
 ProducedCaps=Fertig produzierte Cap!
 
 WrongISOorConfiguration=Etwas ist schief gelaufen. Bitte überprüfe die eingestellte ISO!
+error_wrong_login=Falscher Benutzer, Passwort oder falsche Rechte oder Configuration!

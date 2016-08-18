@@ -148,3 +148,4 @@ LabelParameterDesc=(OPCIONAL) <br>Un parámetro adicional específicas asociado 
 	Plugin=Plugin
 	Use=Use
 	ProducedCaps=Finally produced Cap!
+	error_wrong_login=Wrong User, Password, Permision or Configuration!

@@ -172,6 +172,7 @@
 	$conf->webservice->password = "";
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
+
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
 		
@@ -208,7 +209,7 @@
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
 				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
 			}
-			unset($_POST);
+			//unset($_POST);
 		}
 		else
 		{
@@ -216,7 +217,7 @@
 			unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 			unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
 			setcookie("Session_login_name", '', strtotime(' - 1 day'));  /* verfällt sofort */
-			unset($_POST);
+			//unset($_POST);
 		}
 	}
 	
@@ -281,14 +282,26 @@
 			}
 			else
 			{
-				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
-				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				unset($conf->webservice->login);
-				unset($conf->webservice->password);
+				$conf->webservice_aktive = -1;
+				//unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				//unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				//unset($conf->webservice->login);
+				//unset($conf->webservice->password);
 			}
 		}
 	}
-	
+
+	$login_to_webservice_faild = false;
+	if(!empty($_POST['send-login']) && $conf->webservice_aktive == -1)
+	{
+		unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+		unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+		unset($conf->webservice->login);
+		unset($conf->webservice->password);
+		unset($_POST);
+		$login_to_webservice_faild = true;
+	}
+
 	if(!file_exists('conf/conf.php'))
 	{
 		$cap = new CAP_Form();			

@@ -150,7 +150,7 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin;
+			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild;
 			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
@@ -1364,7 +1364,12 @@
 							else // Login
 							{
 								$out = '<h3>'.$langs->trans("LoginToYourWebservice").'</h3>';
-														
+								
+								if($login_to_webservice_faild == true)
+								{
+									$out.= $langs->trans('error_wrong_login');
+								}			
+
 								$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
 									$out.= '<input '.$status_theme.' type="text" name="Session_login_name['.$this->login_id.']" value="'.$conf->webservice->login.'">';
 		
@@ -1373,6 +1378,7 @@
 		
 								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
+								$out.= '<input type="hidden" name="login_sended" value="1" data-theme="b">';	
 							}
 							
 							if(empty($conf->webservice_aktive) && $conf->webservice->on == 1 && $this->login_id == 1)
@@ -1692,7 +1698,7 @@
 	 */
 		function Form()
 		{
-			global $conf, $langs;
+			global $conf, $langs, $login_to_webservice_faild;
 			
 			
 			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
@@ -1768,7 +1774,17 @@
 								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
-									if($conf->webservice->on == 1) $out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">'.$login_show_name.'</a>';
+									if($conf->webservice->on == 1)
+									{
+										if($login_to_webservice_faild == true) 
+										{
+											$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop" style="background-color: red;color: black;text-shadow: none;">'.$login_show_name.'</a>';
+										}
+										else
+										{
+											$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">'.$login_show_name.'</a>';
+										}
+									}
 								$out.= '</div>'; // HEADER					
 								
 								// Main
@@ -1862,7 +1878,14 @@
 												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 													$out.= '<ul data-role="listview" data-divider-theme="b">';
 													
-													$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans('Title'.$popupname).'</h1></li>';
+													if($popupname == 'Login' && $login_to_webservice_faild == true)
+													{
+														$out.= '<li data-role="list-divider" data-theme="b" style="background-color: red;border-top: none;"><h1 style="font-size:22px;">'.$langs->trans('Title'.$popupname).'</h1></li>';
+													}
+													else
+													{
+														$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans('Title'.$popupname).'</h1></li>';
+													}
 													
 														foreach($TypePopup as $key => $type)
 														{							
