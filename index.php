@@ -202,8 +202,8 @@
 				session_unset();
 				session_start();
 
-				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
-				setcookie('ServiceHost', $Webservicename[1], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
+				$Webservicename = parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST);
+				setcookie('ServiceHost', $Webservicename, strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_pass", encrypt_decrypt(1,$_POST['Session_login_pass'][$key]), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
@@ -216,8 +216,8 @@
 				session_unset();
 				session_start();
 				
-				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
-				$_SESSION['ServiceHost'] = $Webservicename[1];
+				$Webservicename = parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST);
+				$_SESSION['ServiceHost'] = $Webservicename;
 				$_SESSION['timestamp'] = strtotime('now');
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
 				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
@@ -428,7 +428,7 @@
 
 		print $form->Form();
 	}
-	elseif($_POST['action'] == "create" && $_GET['conf'] != 1)
+	elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sended'] != 1)
 	{
 		$form = new CAP_Form();
 		$_POST = $form->MakeIdentifier($_POST);

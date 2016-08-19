@@ -1359,6 +1359,7 @@
 									$out.= '<li>'.$langs->trans("User").': '.$conf->webservice->login.'</li>';
 									$out.= '<li>'.$langs->trans("LoginDate").': '.date('d.m.Y H:i:s', $_SESSION['timestamp']).'</li>';
 									$out.= '<li><input '.$status_theme.' type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b"></li>';
+									$out.= '<input type="hidden" name="login_sended" id="logout_sended" value="0">';
 								$out.= '</ul>';
 							}
 							else // Login
@@ -1378,18 +1379,24 @@
 		
 								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
-								$out.= '<input type="hidden" name="login_sended" value="1" data-theme="b">';	
+								$out.= '<input type="hidden" name="login_sended" id="login_sended" value="0">';	
 							}
 							
-							if(empty($conf->webservice_aktive) && $conf->webservice->on == 1 && $this->login_id == 1)
+							if((empty($conf->webservice_aktive) || $conf->webservice_aktive == -1) && $conf->webservice->on == 1 && $this->login_id == 1)
 							{
 								$out.= 			'
 													<script>
 														$("#Login-alert").on("keyup",function(event){
+															event.preventDefault();
 															if ( event.which == 13 ) 
 															{
 																$( "#submit_login_button" ).trigger( "click" );
 															}
+														});
+
+														$( "#submit_login_button" ).on("click", function(){
+															$("#action").remove();
+															$("#login_sended").val(1);
 														});
 														
 														$(document).on("pageshow", "#alert" ,function ()
@@ -1723,7 +1730,7 @@
 			
 			$out.= '<body>';
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
-				$out.= '<input type="hidden" name="action" value="create">';
+				$out.= '<input type="hidden" name="action" id="action" value="create">';
 					
 					foreach($Type_arr as $pagename => $TypePage)
 					{
@@ -2140,7 +2147,7 @@
 
 			$out.= '<body>';
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
-				$out.= '<input type="hidden" name="action" value="create">';
+				$out.= '<input type="hidden" name="action" id="action" value="create">';
 						$out.= '<div data-role="page" id="'.$pagename.'">';
 
 							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';

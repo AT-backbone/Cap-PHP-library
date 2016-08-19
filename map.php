@@ -175,6 +175,7 @@
 	$conf->webservice->password = "";
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
+	$tryed_login = false;
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
 		
@@ -211,6 +212,7 @@
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
 				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
 			}
+			$tryed_login = true;
 			unset($_POST);
 		}
 		else
@@ -298,7 +300,7 @@
 					$AreaVLArray =	$AreaVLArray['document']['AreaInfo'];
 				}
 				// put Area VL details in a js variable named (area_vl )
-				$SVLdetail = '<script>'."\n".'var area_vl = '.($AreaVLArray).';'."\n".'</script>';
+				if(!empty($AreaVLArray)) $SVLdetail = '<script>'."\n".'var area_vl = '.($AreaVLArray).';'."\n".'</script>';
 			}
 			
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
@@ -307,12 +309,27 @@
 			}
 			else
 			{
-				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
-				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				unset($conf->webservice->login);
-				unset($conf->webservice->password);
+				$conf->webservice_aktive = -1;
+				//unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+				//unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+				//unset($conf->webservice->login);
+				//unset($conf->webservice->password);
 			}
 		}
+	}
+
+	$login_to_webservice_faild = false;
+	if($tryed_login == true && $conf->webservice_aktive == -1)
+	{
+		unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
+		unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
+		unset($conf->webservice->login);
+		unset($conf->webservice->password);
+		if(!is_array($_POST['send-logout']))
+		{
+			unset($_POST);
+		}
+		$login_to_webservice_faild = true;
 	}
 	
 	if(!file_exists('conf/conf.php'))
@@ -456,7 +473,7 @@
 
 			print $form->Form();
 	}
-	elseif($_POST['action'] == "create" && $_GET['conf'] != 1)
+	elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sended'] != 1)
 	{
 		$form = new CAP_Form();
 		$_POST = $form->MakeIdentifier($_POST);

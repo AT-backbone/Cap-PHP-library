@@ -437,29 +437,36 @@
      */
 		function createFile()
 		{
-			if(substr($this->identifier,-5,5) == '.cap') $end_type = ""; else $end_type = ".cap";
-			$capfile = fopen($this->destination.'/'.$this->identifier.$end_type, "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.$end_type);
-			fwrite($capfile, $this->cap);
-			fclose($capfile);
+			if($this->identifier != "")
+			{
+				if(substr($this->identifier,-5,5) == '.cap') $end_type = ""; else $end_type = ".cap";
+				$capfile = fopen($this->destination.'/'.$this->identifier.$end_type, "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.$end_type);
+				fwrite($capfile, $this->cap);
+				fclose($capfile);
 
-			chmod($this->destination.'/'.$this->identifier.$end_type, 0660);  // octal; correct value of mode
-			chgrp($this->destination.'/'.$this->identifier.$end_type, filegroup($this->destination)); 
-			
-			// convert in UTF-8
-			$data = file_get_contents($this->destination.'/'.$this->identifier.$end_type);
-			
-			if (preg_match('!!u', $data))
-			{
-			   // this is utf-8
+				chmod($this->destination.'/'.$this->identifier.$end_type, 0660);  // octal; correct value of mode
+				chgrp($this->destination.'/'.$this->identifier.$end_type, filegroup($this->destination)); 
+				
+				// convert in UTF-8
+				$data = file_get_contents($this->destination.'/'.$this->identifier.$end_type);
+				
+				if (preg_match('!!u', $data))
+				{
+				   // this is utf-8
+				}
+				else 
+				{
+				   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+				}
+				
+				file_put_contents($this->destination.'/'.$this->identifier.$end_type, $data);
+				
+				return $this->destination.'/'.$this->identifier.$end_type;
 			}
-			else 
+			else
 			{
-			   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+				return -1;
 			}
-			
-			file_put_contents($this->destination.'/'.$this->identifier.$end_type, $data);
-			
-			return $this->destination.'/'.$this->identifier.$end_type;
 		}
 			
 		/*

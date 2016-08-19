@@ -259,7 +259,7 @@ $( document ).ready(function()
 	{
 		svghtml = $('#map_main_div svg').children();
 		//console.log(svghtml);
-		if(svghtml)
+		if($(svghtml).html())
 		{
 			panZoomInstance = svgPanZoom('#map_main_div svg', {
 				zoomEnabled: true,
