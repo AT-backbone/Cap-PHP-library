@@ -66,7 +66,7 @@
 	
 		return $output;
 	}
-	
+
 	if(file_exists('conf/conf.php'))
 	{
 		include 'conf/conf.php';
@@ -164,6 +164,22 @@
 			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
 			//die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
 		}
+	}
+
+	if(!empty($_GET['encrypt']))
+	{	
+		$crpt = encrypt_decrypt(1, $_GET['encrypt']);
+		print $crpt;
+		print '<br>'.encrypt_decrypt(2, $crpt);
+		exit;
+	}
+
+	if(!empty($_GET['decrypt']))
+	{	
+		$crpt = encrypt_decrypt(2, $_GET['decrypt']);
+		print $crpt;
+		print '<br>'.encrypt_decrypt(1, $crpt);
+		exit;
 	}
 
 	if(! is_dir("output") || ! is_writable("output"))
