@@ -30,7 +30,7 @@ $( document ).ready(function()
 			$("#conf-detail").hide();
 		}
 	});				
-	
+
 	$( "#msgType" ).change(function() {
 		if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
 		{		

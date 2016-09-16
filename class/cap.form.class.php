@@ -719,6 +719,15 @@
 								$out.= $msgType;							
 								$out.= $scope;
 						$out.= '</fieldset>';
+
+					if(!empty($this->references[0]))
+					{
+						$out.= '<li id="LIreferences" class="ui-li-static ui-body-inherit ui-last-child">';
+							//$out.= '<div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset">';
+								$out.= '<input placeholder="references" type="text" name="references" value="'.$this->references[0].'">';
+							//$out.= '</div>';
+						$out.= '</li>';
+					}
 				break;
 				
 				case 'category': 
