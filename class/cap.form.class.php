@@ -600,6 +600,15 @@
 							$out.= $langs->trans('err_cap_not_complete01');
 						$out.= '</div>';
 					$out.= '</div>';
+
+					$out.= '<div data-role="popup" id="MeteoalarmCalc_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
+						$out.= '<div data-role="header" id="MeteoalarmCalc_popupDialog_header" data-theme="a">';
+							$out.= '<h2 style="color: yellow;">'.$langs->trans('Meteoalarm Soap').'</h2>';
+						$out.= '</div>';
+						$out.= '<div role="main" id="MeteoalarmCalc_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
+							$out.= $langs->trans('MeteoalarmCalc');
+						$out.= '</div>';
+					$out.= '</div>';
 					break;
 
 				case 'CapButton':

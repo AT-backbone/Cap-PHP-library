@@ -297,6 +297,7 @@ $( document ).ready(function()
 			$('#mk_process_info').html($('#mk_process_lang').val());
 
 			loading_dots();
+
 			$("#submit_cap").addClass('ui-disabled');
 			$("#map_main_div").addClass('disabled');
 			mk_pro_interval = setInterval(function(){ 
@@ -1302,6 +1303,15 @@ $( document ).ready(function()
 					setTimeout(function(){
 						//something_changed=false;
 						$('#mk_process_info').html($('#mk_process_lang').val());
+						$('#MeteoalarmCalc_popupDialog_main').html($('#mk_process_lang').val());
+						$( "#CAP_SOAP_popupDialog" ).popup({
+							afterclose: function( event, ui ) {
+								setTimeout(function(){
+									$('#MeteoalarmCalc_popupDialog').popup();
+									$('#MeteoalarmCalc_popupDialog').popup( "open" );
+								}, 100);
+							}
+						});
 
 						loading_dots();
 						$("#submit_cap").addClass('ui-disabled');
