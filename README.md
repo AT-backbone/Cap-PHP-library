@@ -10,9 +10,7 @@ You can use it as a standalone application or as a web application accessible vi
 
 You can freely use, study, modify or distribute it according to it's Software licence.
 
-Look up our Video about the CAP PHP Library: 
-
-https://www.youtube.com/watch?v=uqiMiyajOXc
+Look up our Overview Video: [CAP PHP Library](https://www.youtube.com/watch?v=uqiMiyajOXc)
 
 [**more Information**](doc/)
 
@@ -33,6 +31,8 @@ We provide the following install instructions:
 * Normal Webspace
 
 You can find the instructions [here](doc/install.md)
+
+and the video instructions: [here](https://www.youtube.com/watch?v=yIUlMLd6A9w)
 
 ## Paint and Alert
 
