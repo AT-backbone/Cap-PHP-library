@@ -10,7 +10,7 @@ You can use it as a standalone application or as a web application accessible vi
 
 You can freely use, study, modify or distribute it according to it's Software licence.
 
-Or look up our Video about the CAP PHP Library: 
+Look up our Video about the CAP PHP Library: 
 https://www.youtube.com/watch?v=uqiMiyajOXc
 
 [**more Information**](doc/)
