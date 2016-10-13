@@ -14,6 +14,10 @@ Look up our Overview Video: [CAP PHP Library](https://www.youtube.com/watch?v=uq
 
 [![CAP PHP Library Youtube video](https://img.youtube.com/vi/uqiMiyajOXc/0.jpg)](https://www.youtube.com/watch?v=uqiMiyajOXc)
 
+If you want to learn more about CAP here is a short Video:
+
+[![What is CAP Youtube video](https://img.youtube.com/vi/LikHsZ0mj6c/0.jpg)](https://www.youtube.com/watch?v=LikHsZ0mj6c)
+
 [**more Information**](doc/)
 
 ## Features
