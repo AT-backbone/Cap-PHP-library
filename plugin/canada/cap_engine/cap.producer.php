@@ -104,13 +104,13 @@
 					if($ref == "Update") 
 					{
 						$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$type.$level.$id;
-						if($sender == "") $sender = "CapMapImport@meteoalarm.eu";
+						if($sender == "") $sender = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];;
 						if($references) $post['references'] 			= $sender.','.$references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$timestamp)));
 					}
 
 					// Template
 					if($post['sender'] == "") 
-					$post['sender']					= 'admin@meteoalarm.eu';
+					$post['sender']					= "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];;
 
 					$post['sent'] 					= array();
 					$post['sent']['date'] 			= date('Y-m-d', strtotime('now + '.$_POST['data'].' days'));
@@ -193,7 +193,7 @@
 					if($post['info'][0]['senderName'] != "") 
 						$post['senderName'] = $post['info'][0]['senderName'];
 					else
-						$post['senderName'] = 'ZAMG Zentralanstalt für Meteorologie und Geodynamik';
+						$post['senderName'] = 'Cap-PHP-Library Version 1.3';
 
 					foreach($langs_keys as $key => $lang_val)
 					{
