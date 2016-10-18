@@ -39,6 +39,7 @@ We provide the following install instructions:
 You can find the instructions [here](doc/install.md)
 
 and the video instructions: [here](https://www.youtube.com/watch?v=yIUlMLd6A9w)
+[![How To: install the Cap PHP Library](https://img.youtube.com/vi/yIUlMLd6A9w/0.jpg)](https://www.youtube.com/watch?v=yIUlMLd6A9w)
 
 ## Paint and Alert
 
