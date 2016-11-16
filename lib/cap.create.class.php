@@ -192,7 +192,6 @@
 				
 				$xml->tag_simple('status', $this->status);
 				$xml->tag_simple('msgType', $this->msgType);
-				$xml->tag_simple('references', $this->references);
 				$xml->tag_simple('scope', $this->scope);
 				
 				$xml->tag_simple('source', $this->source);
@@ -200,6 +199,7 @@
 				$xml->tag_simple('addresses', $this->addresses);
 				$xml->tag_simple('code', $this->code);
 				$xml->tag_simple('note', $this->note);
+				$xml->tag_simple('references', $this->references);
 				$xml->tag_simple('incidents', $this->incidents);
 				
 				if(count($this->language) > 0)
