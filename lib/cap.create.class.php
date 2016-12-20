@@ -183,6 +183,7 @@
 				
 				if($this->useingaclass == false)
 				{
+					if(empty($this->sent['plus'])) $this->sent['plus'] = "+";
 					$xml->tag_simple('sent', date("Y-m-d\TH:i:s" , strtotime($this->sent['date']." ".$this->sent['time'] )).$this->sent['plus'].date("H:i",strtotime($this->sent['UTC'])));
 				}
 				else
