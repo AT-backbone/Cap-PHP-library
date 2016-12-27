@@ -12,3 +12,4 @@ web_test.php
 menu/refugees_menu.lib.php
 css/old/*.old
 /plugin/Beispiel_Plugin
+output/*.cap
