@@ -495,7 +495,7 @@
 				{
 					if (!copy($conf->cap->output.'/'.$_POST['Template'], 'conf/template.cap'))
 					{
-						die('Permision problems detectet pleas fix this: copy ['.$conf->cap->output.'/'.$_POST['Template'].'] to [conf/template.cap]' );
+						die('Permission problems detectet pleas fix this: copy ['.$conf->cap->output.'/'.$_POST['Template'].'] to [conf/template.cap]' );
 					}
 				}
 			}
