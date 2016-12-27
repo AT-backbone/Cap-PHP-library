@@ -376,17 +376,20 @@
 				$location = $_FILES["uploadfile"]["tmp_name"];
 			}
 
-			$alert = new alert($location);
-			$cap = $alert->output();
+			if(simplexml_load_file($location) != ""){
+				$alert = new alert($location);
+				$cap = $alert->output();
 
-			$cap_m = new CAP_Class($_POST);
-			$cap_m->buildCap_from_read($cap);
+				$cap_m = new CAP_Class($_POST);
+				$cap_m->buildCap_from_read($cap);
 
-			$cap_m->identifier = $_FILES["uploadfile"]["name"];
-			$cap_m->destination = $conf->cap->output;
-			$path = $cap_m->createFile();
-
-			header('Location: '.$_SERVER['PHP_SELF'].'#read');
+				$cap_m->identifier = $_FILES["uploadfile"]["name"];
+				$cap_m->destination = $conf->cap->output;
+				$path = $cap_m->createFile();
+				header('Location: '.$_SERVER['PHP_SELF'].'#read');
+			}else{
+				header('Location: '.$_SERVER['PHP_SELF'].'?error=fileisnotxml#read');
+			}
 		}
 
 		if(! empty($_FILES["uploadfile"]["name"]))
