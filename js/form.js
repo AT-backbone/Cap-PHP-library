@@ -403,6 +403,7 @@ $( document ).ready(function()
 							}
 						});
 						if(! $.isArray(area_data[val['aid']]['inst'][val['type']])) area_data[val['aid']]['inst'][val['type']] = {};
+						if(val['inst'] != undefined)
 						$.each(val['inst'], function(lang_name, text){
 							if(text)
 							{
