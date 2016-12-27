@@ -464,14 +464,39 @@
 		else
 		{
 			// Used to build the cap and save it at $cap->destination
-			$cap->buildCap();
-			$cap->destination = $conf->cap->output;
-			if($conf->cap->save == 1)	$path = $cap->createFile();
+			if($_POST['capedit'] == false) {
+				$cap->buildCap();
+				$cap->destination = $conf->cap->output;
+				if($conf->cap->save == 1)	$path = $cap->createFile();
 
-			$conf->identifier->ID_ID++;
-			$form->WriteConf();
+				$conf->identifier->ID_ID++;
+				$form->WriteConf();
 
-			print $form->CapView($cap->cap, $_POST[identifier]); // Cap Preview +
+				print $form->CapView($cap->cap, $_POST[identifier]); // Cap Preview +
+			}else{
+				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap');
+				fwrite($capfile, $_POST['capeditfield']);
+				fclose($capfile);
+
+				chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap', 0660);  // octal; correct value of mode
+				chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap', filegroup($conf->cap->output));
+
+				// convert in UTF-8
+				$data = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap');
+
+				if (preg_match('!!u', $data))
+				{
+				   // this is utf-8
+				}
+				else
+				{
+				   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+				}
+
+				file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap');
+
+				print $form->CapView($_POST['capeditfield'], date('Y.m.d.H.i.s').'.edited'); // Cap Preview +
+			}
 		}
 	}
 	elseif($_GET['webservice'] == 1)

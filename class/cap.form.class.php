@@ -1330,7 +1330,9 @@
 						break;
 
 					case 'capview':
-							$out = '<textarea id="capviewtextarea" readonly></textarea>';
+							$out = '<textarea id="capviewtextarea" readonly name="capeditfield"></textarea>';
+							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
+							$out.= '<input type="hidden" name="capedit" id="capedit" value="false">';
 						break;
 
 					case 'caplist':
