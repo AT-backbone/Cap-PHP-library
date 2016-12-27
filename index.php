@@ -312,10 +312,6 @@
 			else
 			{
 				$conf->webservice_aktive = -1;
-				//unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
-				//unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				//unset($conf->webservice->login);
-				//unset($conf->webservice->password);
 			}
 		}
 	}
