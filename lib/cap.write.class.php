@@ -44,6 +44,7 @@
  		function xml($version, $encoding, $options=array()){
  			
  			$this->addrow(('<'.'?xml version="'.$version.'" encoding="'.$encoding.'"'.$this->aToT($options).' ?'.'>'));
+               $this->addrow(('<'.'?xml-stylesheet type="text/xsl" href="cap_style.xsl" ?'.'>'));
  		}
  		
  		/**

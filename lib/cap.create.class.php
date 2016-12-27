@@ -440,7 +440,7 @@
 		{
 			if($this->identifier != "")
 			{
-				if(substr($this->identifier,-5,5) == '.cap') $end_type = ""; else $end_type = ".cap";
+				if(substr($this->identifier,-5,5) == '.cap') $end_type = ""; else $end_type = ".cap.xml";
 				$capfile = fopen($this->destination.'/'.$this->identifier.$end_type, "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.$end_type);
 				fwrite($capfile, $this->cap);
 				fclose($capfile);
