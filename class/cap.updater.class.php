@@ -746,10 +746,10 @@
 										}
 
 										if($post['info'][0]['web'] != "")
-											$post['web'] 		= $post['info'][0]['web'][0];
+											$post['web'] 		= $post['info'][0]['web'];
 
 										if($post['info'][0]['contact'] != "")
-											$post['contact'] 		= $post['info'][0]['contact'][0];
+											$post['contact'] 		= $post['info'][0]['contact'];
 
 										$post['areaDesc'] = $data_arr[0]->name;
 
