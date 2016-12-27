@@ -1,4 +1,4 @@
-﻿<?php 
+﻿<?php
 /*
  *  Copyright (c) 2015  Guido Schratzer   <guido.schratzer@backbone.co.at>
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
@@ -21,41 +21,41 @@
  *	\file      	index.php
  *  \ingroup   	main
  */
- 
+
 /**
  * Front end of the Cap-php-library cap 1.3
  */
 	error_reporting(E_ERROR | E_PARSE);
-	
+
 	require_once 'class/cap.form.class.php';
 	require_once 'lib/cap.create.class.php';
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
-	
+
 	$langs = new Translate();
-	
+
 	/**
    * encrypt and decrypt function for passwords
-   *     
+   *
    * @return	string
    */
-	function encrypt_decrypt($action, $string, $key = "") 
+	function encrypt_decrypt($action, $string, $key = "")
 	{
 		global $conf;
-		
+
 		$output = false;
-	
+
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
 		$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
-	
+
 		// hash
 		$key = hash('sha256', $secret_key);
-		
+
 		// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
 		$iv = substr(hash('sha256', $secret_iv), 0, 16);
-	
+
 		if( $action == 1 ) {
 			$output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
 			$output = base64_encode($output);
@@ -63,7 +63,7 @@
 		else if( $action == 2 ){
 			$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
 		}
-	
+
 		return $output;
 	}
 
@@ -71,8 +71,8 @@
 	{
 		include 'conf/conf.php';
 		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
-		$langs->setDefaultLang($conf->user->lang);		
-		$langs->load("main");	
+		$langs->setDefaultLang($conf->user->lang);
+		$langs->load("main");
 	}
 	else
 	{
@@ -111,7 +111,7 @@
 		$"."conf->lang['bg']                                      = 'bulgarian';
 		$"."conf->lang['mk']                                      = 'македонски';
 		$"."conf->lang['name']                                    = '';
-		
+
 		$"."conf->select->lang['en-GB']                           = 1;
 		$"."conf->select->lang['ca']                              = 0;
 		$"."conf->select->lang['cs']                              = 0;
@@ -150,9 +150,9 @@
 		");
 		fclose($capfile);
 		$conf->user->lang = 'en_US';
-		$langs->setDefaultLang($conf->user->lang);		
-		$langs->load("main");	
-		
+		$langs->setDefaultLang($conf->user->lang);
+		$langs->load("main");
+
 		// index.php#conf
 		if(file_exists('conf/conf.php'))
 		{
@@ -167,7 +167,7 @@
 	}
 
 	if(!empty($_GET['encrypt']))
-	{	
+	{
 		$crpt = encrypt_decrypt(1, $_GET['encrypt']);
 		print $crpt;
 		print '<br>'.encrypt_decrypt(2, $crpt);
@@ -175,7 +175,7 @@
 	}
 
 	if(!empty($_GET['decrypt']))
-	{	
+	{
 		$crpt = encrypt_decrypt(2, $_GET['decrypt']);
 		print $crpt;
 		print '<br>'.encrypt_decrypt(1, $crpt);
@@ -185,7 +185,6 @@
 	if(! is_dir("output") || ! is_writable("output"))
 	{
 		$error_out.= '[output/] '.$langs->trans('perm_for_conf')."<p>";
-		//((die('Permision problems detectet pleas fix this: Can\'t create the folder ("'.$post['cap']['output'].'") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! ');
 	}
 
 	if(!empty($error_out))
@@ -204,17 +203,17 @@
 	$tryed_login = false;
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
-		
+
 		if(!is_array($_POST['send-logout']))
 		{
 			end($_POST['send-login']);
 			$key = key($_POST['send-login']);
 
 			if(!empty($_POST['savepass'][$key]))
-			{		
+			{
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				
+
 				session_unset();
 				session_start();
 
@@ -228,10 +227,10 @@
 			{
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				
+
 				session_unset();
 				session_start();
-				
+
 				$Webservicename = parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST);
 				$_SESSION['ServiceHost'] = $Webservicename;
 				$_SESSION['timestamp'] = strtotime('now');
@@ -250,19 +249,19 @@
 			unset($_POST);
 		}
 	}
-	
+
 	if($_COOKIE['Session_login_name'])
 	{
 		$conf->webservice->login = $_COOKIE['Session_login_name'];
 		$conf->webservice->password =  $_COOKIE['Session_login_pass'];
 	}
-	
+
 	if($_SESSION['Session_login_name'])
 	{
 		$conf->webservice->login = $_SESSION['Session_login_name'];
 		$conf->webservice->password = $_SESSION['Session_login_pass'];
 	}
-	
+
 	// build service url
 	$service_arr = explode('/', $conf->webservice->WS_DOL_URL);
 	end($service_arr);
@@ -274,12 +273,12 @@
 	// METEOALARM WEBSERVICE ---
 	$conf->meteoalarm = 1;
 	if($conf->meteoalarm == 1)
-	{			
+	{
 		if($conf->webservice->on > 0)
 		{
 			if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
 			{
-				include 'lib/cap.meteoalarm.webservices.Area.php';		
+				include 'lib/cap.meteoalarm.webservices.Area.php';
 				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
 				if(!empty($AreaCodesArray['document']['AreaInfo']))
 				{
@@ -288,7 +287,7 @@
 			}
 			if(file_exists('lib/cap.meteoalarm.webservices.Parameter.php'))
 			{
-				include 'lib/cap.meteoalarm.webservices.Parameter.php';		
+				include 'lib/cap.meteoalarm.webservices.Parameter.php';
 				if($_GET['web_test'] == 2) die(print_r($ParameterArray));
 				if(!empty($ParameterArray['document']['AreaInfo']))
 				{
@@ -305,7 +304,7 @@
 					$User = $User['document']['AreaInfo'];
 				}
 			}
-			
+
 			if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
 			{
 				 $conf->webservice_aktive = 1;
@@ -337,7 +336,7 @@
 
 	if(!file_exists('conf/conf.php'))
 	{
-		$cap = new CAP_Form();			
+		$cap = new CAP_Form();
 		print $cap->install();
 	}
 	elseif($_GET['conv'] == 1)
@@ -354,12 +353,12 @@
 			{
 				$location = $conf->cap->output.'/'.urldecode($_POST['location']);
 			}
-			
+
 			$alert = new alert($location);
 			$cap = $alert->output();
-			
+
 			// Convert
-			$converter = new Convert_CAP_Class();		
+			$converter = new Convert_CAP_Class();
 			$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $conf->cap->output);
 
 			$form = new CAP_Form();
@@ -380,20 +379,20 @@
 			{
 				$location = $_FILES["uploadfile"]["tmp_name"];
 			}
-			
+
 			$alert = new alert($location);
 			$cap = $alert->output();
-			
+
 			$cap_m = new CAP_Class($_POST);
 			$cap_m->buildCap_from_read($cap);
-			
+
 			$cap_m->identifier = $_FILES["uploadfile"]["name"];
 			$cap_m->destination = $conf->cap->output;
 			$path = $cap_m->createFile();
-			
+
 			header('Location: '.$_SERVER['PHP_SELF'].'#read');
 		}
-		
+
 		if(! empty($_FILES["uploadfile"]["name"]))
 		{
 			$location = $_FILES["uploadfile"]["tmp_name"];
@@ -409,7 +408,7 @@
 				$location = $conf->cap->output.'/'.urldecode($_GET['location']);
 			}
 		}
-		
+
 		$alert = new alert($location);
 		$cap = $alert->output();
 		//die(print_r($cap)); // DEBUG
@@ -418,7 +417,7 @@
 			print $cap['msg_format'];
 			exit;
 		}
-		
+
 			$form = new CAP_Form($cap);
 
 			print $form->Form();
@@ -427,11 +426,11 @@
 	{
 		// Build Cap Creator form
 		if(! empty($_GET['delete']))
-		{			
-			unlink($conf->cap->output.'/'.$_GET['delete']);		
+		{
+			unlink($conf->cap->output.'/'.$_GET['delete']);
 			header('Location: '.$_SERVER['PHP_SELF'].'#read');
 		}
-		
+
 		if(file_exists('conf/template.cap'))
 		{
 			require_once 'lib/cap.read.template.class.php';
@@ -439,7 +438,7 @@
 			$cap = $alert->output_template();
 			unset($alert);
 		}
-			
+
 		$form = new CAP_Form($cap);
 
 		print $form->Form();
@@ -448,7 +447,7 @@
 	{
 		$form = new CAP_Form();
 		$_POST = $form->MakeIdentifier($_POST);
-		
+
 		if($conf->webservice_aktive == 1)
 		{
 			if($_POST['sender'] == "") $_POST['sender'] = $User['sender'];
@@ -456,7 +455,7 @@
 		}
 
 		$cap = new CAP_Class($_POST);
-		
+
 		if(!empty($_GET['cap']))
 		{
 			// Used for the Cap preview
@@ -469,10 +468,10 @@
 			$cap->buildCap();
 			$cap->destination = $conf->cap->output;
 			if($conf->cap->save == 1)	$path = $cap->createFile();
-			
+
 			$conf->identifier->ID_ID++;
 			$form->WriteConf();
-			
+
 			print $form->CapView($cap->cap, $_POST[identifier]); // Cap Preview +
 		}
 	}
@@ -485,17 +484,17 @@
 	}
 	elseif($_GET['conf'] == "1")
 	{
-		$form = new CAP_Form();		
+		$form = new CAP_Form();
 		$form->PostToConf($_POST['conf']);
 		$form->WriteConf();
-		
+
 		if($_POST['template_on'] == 'on')
 		{
 			if(!empty($_POST['Template']))
 			{
 				if(!file_exists('conf/'.$_POST['Template']))
 				{
-					if (!copy($conf->cap->output.'/'.$_POST['Template'], 'conf/template.cap')) 
+					if (!copy($conf->cap->output.'/'.$_POST['Template'], 'conf/template.cap'))
 					{
 						die('Permision problems detectet pleas fix this: copy ['.$conf->cap->output.'/'.$_POST['Template'].'] to [conf/template.cap]' );
 					}
@@ -509,11 +508,11 @@
 				unlink('conf/template.cap');
 			}
 		}
-		
+
 		return true;
 	}
 	elseif($_GET['web_test'] == "1")
 	{
-		
+
 	}
 ?>
