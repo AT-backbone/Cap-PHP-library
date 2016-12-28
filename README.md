@@ -10,6 +10,8 @@ You can use it as a standalone application or as a web application accessible vi
 
 You can freely use, study, modify or distribute it according to it's Software licence.
 
+To check your CAP and ATOM files please use our CAP & ATOM Validator Tool http://validator.meteoalarm.eu
+
 Look up our Overview Video: [CAP PHP Library](https://www.youtube.com/watch?v=uqiMiyajOXc)
 
 [![CAP PHP Library Youtube video](https://img.youtube.com/vi/uqiMiyajOXc/0.jpg)](https://www.youtube.com/watch?v=uqiMiyajOXc)
