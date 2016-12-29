@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml-stylesheet type="text/xsl" href="cap_style.xsl" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>2.0.0.1.AT.1483024456.162AT005</identifier>
+	<sender>n.spanring@backbone.co.at</sender>
+	<sent>2016-12-29T16:30:10+01:00</sent>
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<info>
+		<language>en-GB</language>
+		<category>Met</category>
+		<event>Moderate low-temperature warning</event>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Moderate</severity>
+		<certainty>Likely</certainty>
+		<effective>2016-12-28T23:00:00+00:00</effective>
+		<onset>2016-12-28T23:00:00+00:00</onset>
+		<expires>2016-12-29T22:59:00+00:00</expires>
+		<senderName>Niklas Spanring</senderName>
+		<headline>Yellow low-temperature for Salzburg</headline>
+		<description>Es ist Kälte zu erwarten</description>
+		<parameter>
+			<valueName>awareness_type</valueName>
+			<value>6; low-temperature</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_level</valueName>
+			<value>2; yellow; Moderate</value>
+		</parameter>
+		<area>
+			<areaDesc>Salzburg</areaDesc>
+			<polygon>-34.20647856785336,149.1943359375 -34.81302816547975,148.99658203125 -33.81944570348443,149.2218017578125 -34.664064027824395,150.8642578125 -34.8896623876221,149.5294189453125 -34.22464836938266,149.2877197265625 -34.20647856785336,149.1943359375 </polygon>
+		</area>
+	</info>
+</alert>

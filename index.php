@@ -464,7 +464,7 @@
 		else
 		{
 			// Used to build the cap and save it at $cap->destination
-			if($_POST['capedit'] == false) {
+			if($_POST['capedit'] == "false") {
 				$cap->buildCap();
 				$cap->destination = $conf->cap->output;
 				if($conf->cap->save == 1)	$path = $cap->createFile();

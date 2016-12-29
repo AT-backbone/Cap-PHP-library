@@ -59,10 +59,44 @@ function initMap() {
 	});
 
 	if($('#polygon').val() != ""){
+		poly_arr = [];
+		$.each($('#polygon').val().split(' '), function(index, data){
+			arr_xy = [];
+			$.each(data.split(','), function(index, xy){
+				arr_xy[index] = parseFloat(xy);
+			});
+			poly_arr[index] = {lat: arr_xy[0], lng:arr_xy[1]};
+		});
+
+		// Construct the polygon.
+		polygon = new google.maps.Polygon({
+			paths: poly_arr,
+			strokeColor: '#FF0000',
+			strokeOpacity: 0.8,
+			strokeWeight: 3,
+			fillColor: '#FF0000',
+			fillOpacity: 0.35
+		});
+		polygon.setMap(map);
 		console.log($('#polygon').val());
 	}
 
 	if($('#circle').val() != ""){
+		circle_data = $('#circle').val().split(' ');
+
+		circle_xy = circle_data[0].split(',');
+
+		circle = new google.maps.Circle({
+			strokeColor: '#FF0000',
+			strokeOpacity: 0.8,
+			strokeWeight: 2,
+			fillColor: '#FF0000',
+			fillOpacity: 0.35,
+			map: map,
+			center: {lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])},
+			radius: circle_data[1] * 1000
+		});
+		circle.setMap(map);
 		console.log($('#circle').val());
 	}
 
@@ -126,6 +160,11 @@ function initMap() {
 
 }
 
+$( document ).ready(function() {
+	$( document ).on( "pagechange", function( event, to_page ) { 
+		initMap();
+	});
+});
 /* OLD
 $( document ).ready(function() 
 {
