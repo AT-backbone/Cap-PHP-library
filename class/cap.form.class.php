@@ -1063,17 +1063,18 @@
 						break;
 
 					case 'map':
+						// GOOGLE MAP 
 							$out = '<div id="map" style="height: 480px;" class="map"></div>';
-							$out.= '<div id="mapinfo" class="mapinfo">';
-								$out.='<ul data-role="listview">';
-									$out.='<li>';
-										$out.='<label for="dragCircle">'.$langs->trans("Labelpolygon").':</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
-									$out.='</li>';
-									$out.='<li>';
-										$out.='<label for="dragCircle">'.$langs->trans("Labelcircle").':</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
-									$out.='</li>';
-								$out.='</ul>';
-							$out.= '</div>';
+							//$out.= '<div id="mapinfo" class="mapinfo">';
+							//	$out.='<ul data-role="listview">';
+							//		$out.='<li>';
+							//			$out.='<label for="dragCircle">'.$langs->trans("Labelpolygon").':</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
+							//		$out.='</li>';
+							//		$out.='<li>';
+							//			$out.='<label for="dragCircle">'.$langs->trans("Labelcircle").':</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
+							//		$out.='</li>';
+							//	$out.='</ul>';
+							//$out.= '</div>';
 						break;
 
 					case 'geocode':
@@ -1940,7 +1941,9 @@
 			$out.= '<script>
 							'.$this->script.'
 							</script>';
-
+			// GOOGLE MAP
+			//$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&callback=initMap" async defer></script>';
+			$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
 			$out.= '</body>';
 			$out.=
 			'
