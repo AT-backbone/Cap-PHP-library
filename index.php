@@ -432,10 +432,10 @@
 
 		if(file_exists('conf/template.cap'))
 		{
-			require_once 'lib/cap.read.template.class.php';
-			$alert = new alert_template('conf/template.cap');
-			$cap = $alert->output_template();
-			unset($alert);
+				require_once 'lib/cap.read.template.class.php';
+				$alert = new alert_template('conf/template.cap');
+				$cap = $alert->output_template();
+				unset($alert);
 		}
 
 		$form = new CAP_Form($cap);

@@ -80,27 +80,27 @@
 		}
 		
 		function buildFromArray_template($a,$key=''){
-			foreach($a as $k => $v)
-			{
-				if($key) $k = $key;
-				if(is_array($v) )
+				foreach($a as $k => $v)
 				{
-					$this->buildFromArray_template($v,$k);
+					if($key) $k = $key;
+					if(is_array($v) )
+					{
+						$this->buildFromArray_template($v,$k);
+					}
+					elseif(isset($this->subclass[$k]))
+					{
+						$class = $this->subclass[$k];
+						$nc = new $class();
+						
+						$nc->buildFromArray_template($v);
+
+						$this->{'_set'.ucfirst($k)}( $nc );
+					}
+					else
+					{
+							$this->{'_set'.ucfirst($k)}( trim((string) $v) );
+					}	
 				}
-				elseif(isset($this->subclass[$k]))
-				{
-					$class = $this->subclass[$k];
-					$nc = new $class();
-					
-					$nc->buildFromArray_template($v);
-				
-					$this->{'_set'.ucfirst($k)}( $nc );
-				}
-				else
-				{
-					$this->{'_set'.ucfirst($k)}( trim((string) $v) );
-				}	
-			}
 		}
 		
 		/*
@@ -140,7 +140,8 @@
 			var   $info = array();
 			private $infoIndex = 0;
 			
-			function __construct($xml=''){				
+			function __construct($xml=''){		
+
 				if(is_file($xml)){
 					$f = simplexml_load_file ($xml);					
 				}elseif(is_array($xml) || is_object($xml)){
@@ -395,14 +396,14 @@
 						return false;
 					break;
 				}
-				
+				return false;
 			}
+
 			function _setAudience($str = ""){
 				$this->audience = $str;
 			}		
 			
-		
-			function _setEventCode(parameter $eventCode){
+			function _setEventCode(parameter_template $eventCode){
 				$this->eventCode[$this->eventCodeIndex] = $eventCode;
 				$this->eventCodeIndex++;
 			}
