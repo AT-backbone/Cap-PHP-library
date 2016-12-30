@@ -292,7 +292,7 @@
 							} // foreach parameter
 							
 							// look if area zone is used
-							if(! empty($this->areaDesc) || ! empty($this->polygon)  || ! empty($this->circle) || ! empty($this->geocode['value'][0]))
+							if(!empty($this->areaDesc) || !empty($this->polygon)  || !empty($this->circle) || !is_array($this->geocode))
 							{
 								$xml->tag_open('area');
 							
