@@ -83,6 +83,8 @@
 			
 			// Lang conf
 			$type['conf'][] = "lang_conf";
+
+			$type['conf'][] = "GoogleMapAPIkey";
 			//$type['conf'][] = "lang_conf_plus";
 			//$type['conf'][] = "lang_conf_remove";
 

@@ -1064,7 +1064,8 @@
 
 					case 'map':
 						// GOOGLE MAP 
-							$out = '<div id="map" style="height: 480px;" class="map"></div>';
+							if(!empty($conf->GoogleMap->APIkey))
+								$out = '<div id="map" style="height: 480px;" class="map"></div>';
 							//$out.= '<div id="mapinfo" class="mapinfo">';
 							//	$out.='<ul data-role="listview">';
 							//		$out.='<li>';
@@ -1154,6 +1155,12 @@
 						if(!empty($conf->identifier->ISO)) $status_theme = 'data-theme="f"';
 						$out = '<legend>'.$langs->trans("LabelISO").': '.$this->tooltip($type.'tool', $langs->trans("LabelISODesc")).'</legend>';
 						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">';
+						break;
+
+					case 'GoogleMapAPIkey':
+						if(!empty($conf->GoogleMap->APIkey)) $status_theme = 'data-theme="f"';
+						$out = '<legend><b>Google Maps API key</b>: '.$this->tooltip($type.'tool', $langs->trans("LabelGoogleMapsAPIkeyDesc")).'</legend>';
+						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="Google Map API key" name="conf[GoogleMap][APIkey]" value="'.$conf->GoogleMap->APIkey.'">';
 						break;
 
 					case 'timezone':
@@ -1943,7 +1950,9 @@
 							</script>';
 			// GOOGLE MAP
 			//$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&callback=initMap" async defer></script>';
-			$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
+			if(!empty($conf->GoogleMap->APIkey)){
+				$out.= '<script src="https://maps.googleapis.com/maps/api/js?key='.$conf->GoogleMap->APIkey.'&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
+			}
 			$out.= '</body>';
 			$out.=
 			'

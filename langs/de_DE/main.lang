@@ -193,3 +193,6 @@ ProducedCaps=Fertig produzierte Cap!
 
 WrongISOorConfiguration=Etwas ist schief gelaufen. Bitte überprüfe die eingestellte ISO!
 error_wrong_login=Falscher Benutzer, Passwort oder falsche Rechte oder Configuration!
+
+LabelGoogleMapAPIkey=Google Maps API Key
+LabelGoogleMapAPIkeyDesc=To get started using the JavaScript API, click the button below, which guides you through the process of activating the JavaScript API and any related services automatically.<a href="https://console.developers.google.com/flows/enableapi?apiid=maps_backend%2Cgeocoding_backend%2Cdirections_backend%2Cdistance_matrix_backend%2Celevation_backend%2Cplaces_backend&reusekey=true&hl=de">Get Key</a>
