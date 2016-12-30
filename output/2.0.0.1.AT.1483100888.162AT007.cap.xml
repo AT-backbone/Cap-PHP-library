@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <?xml-stylesheet type="text/xsl" href="cap_style.xsl" ?>
 <alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
-	<identifier>2.0.0.1.AT.1483086567.132AT005</identifier>
+	<identifier>2.0.0.1.AT.1483100888.162AT007</identifier>
 	<sender>n.spanring@backbone.co.at</sender>
-	<sent>2016-12-30T09:29:27+00:00</sent>
+	<sent>2016-12-30T13:28:08+00:00</sent>
 	<status>Actual</status>
 	<msgType>Alert</msgType>
 	<scope>Public</scope>
 	<info>
 		<language>en-GB</language>
 		<category>Met</category>
-		<event>Moderate Thunderstorm warning</event>
+		<event>Moderate low-temperature warning</event>
 		<responseType>Monitor</responseType>
 		<urgency>Immediate</urgency>
 		<severity>Moderate</severity>
@@ -19,7 +19,7 @@
 		<onset>2016-12-29T23:00:00+00:00</onset>
 		<expires>2016-12-30T22:59:00+00:00</expires>
 		<senderName>Niklas Spanring</senderName>
-		<headline>Yellow Thunderstorm for Salzburg</headline>
+		<headline>Yellow low-temperature for Oberösterreich</headline>
 		<description>test</description>
 		<parameter>
 			<valueName>awareness_level</valueName>
@@ -27,17 +27,13 @@
 		</parameter>
 		<parameter>
 			<valueName>awareness_type</valueName>
-			<value>3; Thunderstorm</value>
+			<value>6; low-temperature</value>
 		</parameter>
 		<area>
-			<areaDesc>Salzburg</areaDesc>
+			<areaDesc>Oberösterreich</areaDesc>
 			<geocode>
 				<valueName>emma_id</valueName>
-				<value>AT005</value>
-			</geocode>
-			<geocode>
-				<valueName>emma_id</valueName>
-				<value>AT003</value>
+				<value>AT007</value>
 			</geocode>
 		</area>
 	</info>

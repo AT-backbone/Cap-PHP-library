@@ -203,10 +203,10 @@
 					if(!isset($_GET['data'])) $_GET['data'] = 0;
 					$langs_arr = $this->getlang();
 
-					foreach($langs_arr as $key_l => $val_l)
-					{
-						if(in_array($key,$this->language)) unset($langs_arr[$key]);
-					}
+					//foreach($langs_arr as $key_l => $val_l)
+					//{
+					//	if(in_array($key,$this->language)) unset($langs_arr[$key]);
+					//}
 					foreach ($langs_arr as $key_l => $val_l)
 					{
 						$langs_keys[] = $key_l;
@@ -638,7 +638,7 @@
 
 					$out = '<div id="Identapend">';
 						$out.= '<label>'.$langs->trans("LabelIdentifier").': '.$this->tooltip($type, $langs->trans("LabelIdentifierDesc")).'</label>';
-						if(!is_array($this->identifier))
+						if($this->identifier[0] == "" | !is_array($this->identifier))
 						{
 							$status_theme_wm = $status_theme;
 							$status_theme_is = $status_theme;
@@ -1733,7 +1733,7 @@
 	 */
 		function Form()
 		{
-			global $conf, $langs, $login_to_webservice_faild;
+			global $conf, $langs, $login_to_webservice_faild, $nogooglemap;
 
 
 			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
@@ -1950,7 +1950,7 @@
 							</script>';
 			// GOOGLE MAP
 			//$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&callback=initMap" async defer></script>';
-			if(!empty($conf->GoogleMap->APIkey)){
+			if(!empty($conf->GoogleMap->APIkey) && $nogooglemap != 1){
 				$out.= '<script src="https://maps.googleapis.com/maps/api/js?key='.$conf->GoogleMap->APIkey.'&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
 			}
 			$out.= '</body>';

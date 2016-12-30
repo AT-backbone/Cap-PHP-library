@@ -440,6 +440,10 @@
 		{
 			require_once 'lib/cap.read.template.class.php';
 			$alert = new alert_template('conf/template.cap');
+			foreach($alert->info as $key => $value){
+				$alert->info[$key]->language = "";
+			}
+			
 			$cap = $alert->output_template();
 			unset($alert);
 		}
@@ -470,7 +474,7 @@
 			$conf->optional_menu = "menu/map_menu.lib.php";
 
 			$form = new CAP_Form($cap);
-
+			$nogooglemap = 1;
 			print $form->Form();
 	}
 	elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sended'] != 1)

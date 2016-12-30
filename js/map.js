@@ -53,7 +53,7 @@ function initMap() {
 				contentString += xy.lat() + ',' + xy.lng() + ' ';
 			}
 			contentString += save_xy;
-			$('#polygon').val(contentString);
+			$('#polygon').val(contentString.trim());
 			drawingManager.setDrawingMode(null);
 		} else if(event.type == google.maps.drawing.OverlayType.CIRCLE) {
 			if(circle != null) circle.setMap(null);
@@ -61,6 +61,7 @@ function initMap() {
 			$('#circle').val(circle.getCenter().lat()+','+circle.getCenter().lng()+' '+(circle.getRadius() / 1000));
 			drawingManager.setDrawingMode(null);
 		}
+		updateCapXML();
 	});
 
 	google.maps.event.addListener(drawingManager, "drawingmode_changed", function() {
@@ -75,7 +76,7 @@ function initMap() {
 
 	if($('#polygon').val() != ""){
 		poly_arr = [];
-		$.each($('#polygon').val().split(' '), function(index, data){
+		$.each($('#polygon').val().trim().split(' '), function(index, data){
 			arr_xy = [];
 			$.each(data.split(','), function(index, xy){
 				arr_xy[index] = parseFloat(xy);
@@ -98,7 +99,7 @@ function initMap() {
 	}
 
 	if($('#circle').val() != ""){
-		circle_data = $('#circle').val().split(' ');
+		circle_data = $('#circle').val().trim().split(' ');
 
 		circle_xy = circle_data[0].split(',');
 
@@ -181,7 +182,11 @@ function initMap() {
 
 $( document ).ready(function() {
 	$( document ).on( "pagechange", function( event, to_page ) { 
-		initMap();
+		if(typeof google == 'undefined'){
+			
+		}else{
+			initMap();
+		}
 	});
 });
 /* OLD
