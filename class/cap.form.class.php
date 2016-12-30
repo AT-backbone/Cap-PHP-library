@@ -1083,7 +1083,7 @@
 						// $out.= $AreaCodesArray;
 						foreach($AreaCodesArray as $key => $area_arr)
 						{
-							if(!empty($area_arr['geotype']))
+							if(!empty($area_arr['geotype']) && $area_arr['geotype'] == $this->geocod[0]['valueName'])
 							{
 								$S_Area[$area_arr['geocode']] = $area_arr['AreaCaption'];
 								$G_Area[$area_arr['geocode']] = $area_arr['geotype'];
