@@ -7,10 +7,25 @@ var infoWindow;
 var polygon = null;
 var circle = null;
 
+
 function initMap() {
+
+	google.maps.Polygon.prototype.getBounds = function() {
+	    var bounds = new google.maps.LatLngBounds();
+	    var paths = this.getPaths();
+	    var path;        
+	    for (var i = 0; i < paths.getLength(); i++) {
+	        path = paths.getAt(i);
+	        for (var ii = 0; ii < path.getLength(); ii++) {
+	            bounds.extend(path.getAt(ii));
+	        }
+	    }
+	    return bounds;
+	}
+
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 8
+    center: {lat: 53, lng: 9},
+    zoom: 3
   });
 
   var drawingManager = new google.maps.drawing.DrawingManager({
@@ -78,6 +93,7 @@ function initMap() {
 			fillOpacity: 0.35
 		});
 		polygon.setMap(map);
+		map.fitBounds(polygon.getBounds());
 		console.log($('#polygon').val());
 	}
 
@@ -97,6 +113,7 @@ function initMap() {
 			radius: circle_data[1] * 1000
 		});
 		circle.setMap(map);
+		map.setCenter({lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])});
 		console.log($('#circle').val());
 	}
 
@@ -138,6 +155,7 @@ function initMap() {
 			fillOpacity: 0.35
 		});
 		polygon.setMap(map);
+		map.fitBounds(polygon.getBounds());
 	});
 
 	$("#circle").bind( "change", function(event, ui) {
@@ -156,6 +174,7 @@ function initMap() {
 			radius: circle_data[1] * 1000
 		});
 		circle.setMap(map);
+		map.setCenter({lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])});
 	});
 
 }
