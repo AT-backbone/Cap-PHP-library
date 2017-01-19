@@ -358,7 +358,7 @@
 			$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $conf->cap->output);
 
 			$form = new CAP_Form();
-			print $form->CapView($capconvertet, $cap[identifier].'.conv'); // Cap Preview +
+			print $form->CapView($capconvertet, $cap[identifier].'.conv.cap.xml'); // Cap Preview +
 		}
 		else
 		{
@@ -386,7 +386,8 @@
 				$cap_m->identifier = $_FILES["uploadfile"]["name"];
 				$cap_m->destination = $conf->cap->output;
 				$path = $cap_m->createFile();
-				header('Location: '.$_SERVER['PHP_SELF'].'#read');
+				if ($path < 0) header('Location: '.$_SERVER['PHP_SELF'].'?error=createFileErr'.$path.'#read');
+				else header('Location: '.$_SERVER['PHP_SELF'].'#read');
 			}else{
 				header('Location: '.$_SERVER['PHP_SELF'].'?error=fileisnotxml#read');
 			}
@@ -467,22 +468,24 @@
 			if($_POST['capedit'] == "false" || $_POST['capedit'] == false) {
 				$cap->buildCap();
 				$cap->destination = $conf->cap->output;
-				if($conf->cap->save == 1)	$path = $cap->createFile();
+				if($conf->cap->save == 1) $path = $cap->createFile();
+				if ($path < 0) die($path);
 
 				$conf->identifier->ID_ID++;
+				
 				$form->WriteConf();
-
-				print $form->CapView($cap->cap, $_POST[identifier]); // Cap Preview +
+				
+				print $form->CapView($cap->cap, $cap->identifier.".cap.xml"); // Cap Preview +
 			}else{
-				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap');
+				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');
 				fwrite($capfile, $_POST['capeditfield']);
 				fclose($capfile);
 
-				chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap', 0660);  // octal; correct value of mode
-				chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap', filegroup($conf->cap->output));
+				chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', 0660);  // octal; correct value of mode
+				chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', filegroup($conf->cap->output));
 
 				// convert in UTF-8
-				$data = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap');
+				$data = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');
 
 				if (preg_match('!!u', $data))
 				{
@@ -493,9 +496,9 @@
 				   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 				}
 
-				file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap');
+				file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');
 
-				print $form->CapView($_POST['capeditfield'], date('Y.m.d.H.i.s').'.edited'); // Cap Preview +
+				print $form->CapView($_POST['capeditfield'], date('Y.m.d.H.i.s').'.edited.cap.xml'); // Cap Preview +
 			}
 		}
 	}
@@ -503,7 +506,6 @@
 	{
 		// start webservices
 			$form = new CAP_Form();
-
 			print $form->Webservice($_POST[filename]);
 	}
 	elseif($_GET['conf'] == "1")
