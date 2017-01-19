@@ -1,6 +1,6 @@
-﻿<?php
+<?php
 /*
- *  Copyright (c) 2015  Guido Schratzer   <guido.schratzer@backbone.co.at>
+ *  Copyright (c) 2017  Guido Schratzer   <guido.schratzer@backbone.co.at>
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
  *
  * This program is free software; you can redistribute it and/or modify
