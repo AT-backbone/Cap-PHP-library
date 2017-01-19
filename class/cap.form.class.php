@@ -203,10 +203,10 @@
 					if(!isset($_GET['data'])) $_GET['data'] = 0;
 					$langs_arr = $this->getlang();
 
-					//foreach($langs_arr as $key_l => $val_l)
-					//{
-					//	if(in_array($key,$this->language)) unset($langs_arr[$key]);
-					//}
+					foreach($langs_arr as $key_l => $val_l)
+					{
+						if(in_array($key,$this->language)) unset($langs_arr[$key]);
+					}
 					foreach ($langs_arr as $key_l => $val_l)
 					{
 						$langs_keys[] = $key_l;
@@ -2118,7 +2118,7 @@
 						$out.= '<div data-theme="b" data-role="header">';
 							//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 							$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
-							$out.= '<h1>'.$ID.'.cap</h1>';
+							$out.= '<h1>'.$ID.'</h1>';
 						$out.= '</div>';
 
 						$out.= '<div role="main" class="ui-content">';
@@ -2126,9 +2126,9 @@
 							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
 
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'.cap</h1></li>';
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'</h1></li>';
 
-									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'.cap" download data-ajax="false">Download '.$ID.'.cap</a></li>';
+									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'" download data-ajax="false">Download '.$ID.'</a></li>';
 
 									if($conf->webservice->on == 1) $out.= '<li><input type="submit" value="<h1>'.$langs->trans("sendviaSoap").'</h1>" data-ajax="false"></li>';
 
@@ -2344,7 +2344,7 @@
 							$out.= '<div data-theme="b" data-role="header">';
 								//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 								$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
-								$out.= '<h1>'.$ID.'.cap</h1>';
+								$out.= '<h1>'.$ID.'</h1>';
 							$out.= '</div>';
 
 							// MAIN

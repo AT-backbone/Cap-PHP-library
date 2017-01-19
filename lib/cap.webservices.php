@@ -32,7 +32,7 @@ if ($_POST[filename])
 	  	'login'=> $conf->webservice->login,
   	  'password'=> $conf->webservice->password);
  
-  $tmpfile = $conf->cap->output.'/'.$_POST[filename].'.cap';
+  $tmpfile = $conf->cap->output.'/'.$_POST[filename];
 	$handle = fopen($tmpfile, "r");                  // Open the temp file
 	$contents = fread($handle, filesize($tmpfile));  // Read the temp file
 	fclose($handle);                                 // Close the temp file
@@ -98,7 +98,7 @@ else
 	$out.= 'Import <input type="checkbox" name="import" value="1" />? <br>';
 	$out.= 'Debug Text <input type="checkbox" name="debug" value="1" />? <p>';
 	$out.= '<input type="submit" name="submit" value="Submit">';		
-	$out.= '<input type="hidden" name="filename" value="'.$cap->identifier.'.cap">';
+	$out.= '<input type="hidden" name="filename" value="'.$cap->identifier.'.cap.xml">';
 	$out.= '<input type="hidden" name="destination" value="'.$cap->destination.'">';
 	
 	$out.= '</form>';
