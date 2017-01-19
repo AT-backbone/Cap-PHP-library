@@ -1,6 +1,8 @@
 <?php
 /*
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
+ *  Copyright (c) 2017  Guido Schratzer   <guido.schratzer@backbone.co.at>
+
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -434,13 +436,18 @@
 		/**
      * Create File
      *
-     * @return	path of the New CAP 1.2
+     * @return	path of the New CAP 1.2 or errorcode -1 no identifier(filename) -2 no content or file -3 write error
+	
      */
 		function createFile()
 		{
 			if($this->identifier != "")
 			{
-				if(substr($this->identifier,-5,5) == '.cap') $end_type = ""; else $end_type = ".cap.xml";
+				if(substr($this->identifier,-4) == '.cap') $end_type = "";
+				elseif(substr($this->identifier,-4) == '.xml') $end_type = "";
+				elseif(substr($this->identifier,-5,5) == '.cap') $end_type = ""; 
+				else $end_type = ".cap.xml";
+				
 				$capfile = fopen($this->destination.'/'.$this->identifier.$end_type, "w") or die("Unable to open file! ".$this->destination.'/'.$this->identifier.$end_type);
 				fwrite($capfile, $this->cap);
 				fclose($capfile);
@@ -450,8 +457,8 @@
 				
 				// convert in UTF-8
 				$data = file_get_contents($this->destination.'/'.$this->identifier.$end_type);
-				
-				if (preg_match('!!u', $data))
+				if ($data == false) return -2; // no content or no file found
+				elseif (preg_match('!!u', $data))
 				{
 				   // this is utf-8
 				}
@@ -460,7 +467,8 @@
 				   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 				}
 				
-				file_put_contents($this->destination.'/'.$this->identifier.$end_type, $data);
+				$fsize=file_put_contents($this->destination.'/'.$this->identifier.$end_type, $data);
+				if ($fsize == false) return -3; // if file no created
 				
 				return $this->destination.'/'.$this->identifier.$end_type;
 			}
