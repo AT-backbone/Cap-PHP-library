@@ -32,8 +32,10 @@
 	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
+	require_once 'lib/cap.class.php';
 
 	$langs = new Translate();
+	$CapProcessor = new CapProcessor();
 
 	/**
    * encrypt and decrypt function for passwords
@@ -411,6 +413,12 @@
 
 		$alert = new alert($location);
 		$cap = $alert->output();
+		print '<pre>';
+		print_r($cap);
+		print '</pre>';
+		$CapProcessor->readCap($location);
+		$CapProcessor->makeTestCAP(false);
+		$cap = $CapProcessor->getCapXmlArray();
 		//die(print_r($cap)); // DEBUG
 		if(! empty($cap['msg_format']))
 		{
@@ -472,9 +480,9 @@
 				if ($path < 0) die($path);
 
 				$conf->identifier->ID_ID++;
-				
+
 				$form->WriteConf();
-				
+
 				print $form->CapView($cap->cap, $cap->identifier.".cap.xml"); // Cap Preview +
 			}else{
 				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');

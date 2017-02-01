@@ -92,8 +92,76 @@
 						$this->geocode[]			= $area['geocode'];
 					}
 				}
+				$this->cap = $post;
+			}else if(is_object($post)){
+				$this->identifier[] 			= (string) $post->identifier;
+				$this->sender[]						= (string) $post->sender;
+				$this->sent[]							= (string) $post->sent;
+				$this->status[]						= (string) $post->status;
+				$this->msgType[]					= (string) $post->msgType;
+				$this->references[]				= (string) $post->references;
+				$this->scope[]						= (string) $post->scope;
 
-				$this->cap 					= $post;
+				$this->source[]						= (string) $post->source;
+				$this->restriction[]			= (string) $post->restriction;
+				$this->addresses[]				= (string) $post->addresses;
+				$this->code[]							= (string) $post->code;
+				$this->note[]							= (string) $post->note;
+				$this->incidents[]				= (string) $post->incidents;
+
+				$i=0;
+				foreach($post->info as $key => $info)
+				{
+					$this->language[]				= (string) $info->language;
+					$this->category[]				= (string) $info->category;
+					$this->event[]					= (string) $info->event;
+					$this->responseType[]		= (string) $info->responseType;
+					$this->urgency[]				= (string) $info->urgency;
+					$this->severity[]				= (string) $info->severity;
+					$this->certainty[]			= (string) $info->certainty;
+					$this->audience[]				= (string) $info->audience;
+
+					$e=0;
+					foreach($info->eventCode as $key => $eventCarr)
+					{
+						$this->eventCode[$i][$e]['value']			= (string) $eventCarr->value;
+						$this->eventCode[$i][$e++]['valueName']			= (string) $eventCarr->valueName;
+					}
+
+					$this->effective[]			= (string) $info->effective;
+					$this->onset[]					= (string) $info->onset;
+					$this->expires[]				= (string) $info->expires;
+					$this->senderName[]			= (string) $info->senderName;
+					$this->headline[]				= (string) $info->headline;
+					$this->description[]		= (string) $info->description;
+					$this->instruction[]		= (string) $info->instruction;
+					$this->web[]						= (string) $info->web;
+					$this->contact[]				= (string) $info->contact;
+
+					$p=0;
+					foreach($info->parameter as $key => $paramarr)
+					{
+						$this->parameter[$i][$p]['value']			= (string) $paramarr->value;
+						$this->parameter[$i][$p++]['valueName']			= (string) $paramarr->valueName;
+					}
+
+					foreach($info->area as $key2 => $area)
+					{
+						$this->areaDesc[]			= (array) $area->areaDesc;
+						$this->polygon[]			= (array) $area->polygon;
+						$this->circle[]				= (array) $area->circle;
+
+						$g=0;
+						foreach($info->geocode as $key => $geoarr)
+						{
+							$this->geocode[$i][$g]['value']			= (string) $geoarr->value;
+							$this->geocode[$i][$g++]['valueName']			= (string) $geoarr->valueName;
+						}
+					}
+					$i++;
+				}
+				$this->cap = $post;
+				//$this->Debug();
 			}
 		}
 
@@ -1063,7 +1131,7 @@
 						break;
 
 					case 'map':
-						// GOOGLE MAP 
+						// GOOGLE MAP
 							if(!empty($conf->GoogleMap->APIkey))
 								$out = '<div id="map" style="height: 480px;" class="map"></div>';
 							//$out.= '<div id="mapinfo" class="mapinfo">';

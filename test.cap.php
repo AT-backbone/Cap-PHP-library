@@ -3,7 +3,9 @@ require_once 'lib/cap.class.php';
 
 	$cap = new CapProcessor();
 	$cap2 = new CapProcessor();
-	//$cap->makeTestCAP(false);
+	$cap->makeTestCAP(false);
+	$cap_xml_cont = $cap->buildCap();
+	$cap_xml_dest = $cap->saveCap('output/changed.test.123456789.123');
 
 	$cap->readCap("output/2.0.0.1.AT.1483100888.162AT007.cap.xml");
 
