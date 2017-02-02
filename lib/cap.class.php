@@ -83,6 +83,103 @@ class CapProcessor{
     return $this->capRead->cap_xml_contend[$index];
   }
 
+  // This funktion is only for the Cap Php Library Desgined!
+  function makeCapOfPost($post){
+    $this->debug = true;
+
+    $alert = $this->addAlert();
+
+      $alert->setIdentifier($post['identifier']);
+      $alert->setSender($post['sender']);
+
+      if(empty($post['sent']['plus'])) $post['sent']['plus'] = "+";
+      $alert->setSent(date("Y-m-d\TH:i:s" , strtotime($post['sent']['date']." ".$post['sent']['time'] )).$post['sent']['plus'].date("H:i",strtotime($post['sent']['UTC'])));
+      $alert->setStatus($post['status']);
+      $alert->setMsgType($post['msgType']);
+      $alert->setScope($post['scope']);
+
+      $alert->setSource($post['source']);
+      $alert->setRestriction($post['restriction']);
+      $alert->setAddresses($post['addresses']);
+      $alert->setCode($post['code']);
+      $alert->setNote($post['note']);
+      $alert->setReferences($post['references']);
+      $alert->setIncidents($post['incidents']);
+
+      // if category dann ja
+      if($post['category']){
+        $info = $alert->addInfo();
+        // foreach language specific data
+        if(count($post['language']) > 0)
+        foreach($post['language'] as $lang)
+        {
+          if(!empty($lang))
+          {
+            $info->setLanguage($lang);
+            $info->setEvent($post['event'][$lang]);
+            $info->setHeadline($post['headline'][$lang]);
+            $info->setDescription($post['description'][$lang]);
+            $info->setInstruction($post['instruction'][$lang]);
+          }
+        }
+
+        $info->setCategory($post['category']);
+        $info->setResponseType($post['responseType']);
+        $info->setUrgency($post['urgancy']);
+        $info->setSeverity($post['severity']);
+        $info->setCertainty($post['certainty']);
+        $info->setAudience($post['audience']);
+
+        if(! empty($post['eventCode']['valueName'][0]))
+        foreach($post['eventCode']['valueName'] as $key => $eventCode)
+        {
+          if(!empty($post['eventCode']['valueName'][$key]))
+          {
+            $info->setEventCode($post['eventCode']['valueName'][$key], $post['eventCode']['value'][$key]);
+          }
+        }
+
+        $info->setEffective(date("Y-m-d\TH:i:s" , strtotime($post['effective']['date']." ".$post['effective']['time'] )).$post['effective']['plus'].date("H:i",strtotime($post['effective']['UTC'])));
+        $info->setOnset(date("Y-m-d\TH:i:s" , strtotime($post['onset']['date']." ".$post['onset']['time'] )).$post['onset']['plus'].date("H:i",strtotime($post['onset']['UTC'])));
+        $info->setExpires(date("Y-m-d\TH:i:s" , strtotime($post['expires']['date']." ".$post['expires']['time'] )).$post['expires']['plus'].date("H:i",strtotime($post['expires']['UTC'])));
+
+        $info->setSenderName($post['senderName']);
+        $info->setWeb($post['web']);
+        $info->setContact($post['contact']);
+
+        if(! empty($post['parameter']['valueName'][0]))
+        foreach($post['parameter']['valueName'] as $key => $parameter)
+        {
+          if(!empty($post['eventCode']['valueName'][$key]))
+          {
+            $info->setParameter($post['parameter']['valueName'][$key], $post['parameter']['value'][$key]);
+          }
+        }
+
+        // look if area zone is used
+        if(!empty($post['areaDesc']) || !empty($post['polygon'])  || !empty($post['circle']) || !is_array($post['geocode']))
+        {
+          $area = $info->addArea();
+
+          $area->setAreaDesc($post['areaDesc']);
+          $area->setPolygon($post['polygon']);
+          $area->setCircle($post['circle']);
+
+          if(! empty($post['geocode']['valueName'][0]))
+          foreach($post['geocode']['valueName'] as $key => $geocode)
+          {
+            if(!empty($post['geocode']['valueName'][$key]))
+            {
+              $area->setGeocode($post['geocode']['valueName'][$key], $post['geocode']['value'][$key]);
+            }
+          }
+        }
+      }
+
+    //$this->debug($this);
+    return true;
+  }
+
   // fills the Class with test values
   function makeTestCAP($debug = true){
     $this->debug = $debug;

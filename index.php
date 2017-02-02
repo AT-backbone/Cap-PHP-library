@@ -411,11 +411,9 @@
 			}
 		}
 
-		$alert = new alert($location);
-		$cap = $alert->output();
-		print '<pre>';
-		print_r($cap);
-		print '</pre>';
+		//$alert = new alert($location);
+		//$cap = $alert->output();
+
 		$CapProcessor->readCap($location);
 		$CapProcessor->makeTestCAP(false);
 		$cap = $CapProcessor->getCapXmlArray();
@@ -464,11 +462,14 @@
 
 		$cap = new CAP_Class($_POST);
 
+		$cap2 = new CapProcessor();
+		$cap2->makeCapOfPost($_POST);
+
 		if(!empty($_GET['cap']))
 		{
 			// Used for the Cap preview
-			$cap->buildCap();
-			print $cap->cap;
+			$cap_contend = $cap2->buildCap();
+			print $cap_contend;
 		}
 		else
 		{
@@ -549,4 +550,5 @@
 	{
 
 	}
+
 ?>

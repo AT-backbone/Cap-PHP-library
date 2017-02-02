@@ -145,22 +145,25 @@
 						$this->parameter[$i][$p++]['valueName']			= (string) $paramarr->valueName;
 					}
 
+					$a=0;
 					foreach($info->area as $key2 => $area)
 					{
-						$this->areaDesc[]			= (array) $area->areaDesc;
-						$this->polygon[]			= (array) $area->polygon;
-						$this->circle[]				= (array) $area->circle;
+						$this->areaDesc[]			= (string) $area->areaDesc;
+						$this->polygon[$a][]			= (string) $area->polygon;
+						$this->circle[$a][]				= (string) $area->circle;
 
 						$g=0;
-						foreach($info->geocode as $key => $geoarr)
+						foreach($area->geocode as $key => $geoarr)
 						{
 							$this->geocode[$i][$g]['value']			= (string) $geoarr->value;
 							$this->geocode[$i][$g++]['valueName']			= (string) $geoarr->valueName;
 						}
+						$a++;
 					}
 					$i++;
 				}
 				$this->cap = $post;
+
 				//$this->Debug();
 			}
 		}
