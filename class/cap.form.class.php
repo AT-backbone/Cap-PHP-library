@@ -115,8 +115,14 @@
 					$this->language[]				= (string) $info->language;
 					$this->category[]				= (string) $info->category;
 					$this->event[]					= (string) $info->event;
-					$this->responseType[]		= (string) $info->responseType;
-					$this->urgency[]				= (string) $info->urgency;
+					foreach($info->responseType as $key => $responseType)
+					{
+						$this->responseType[]	= (array) $responseType;
+					}
+					foreach($info->urgency as $key => $urgency)
+					{
+						$this->urgency[]			= (string) $urgency;
+					}
 					$this->severity[]				= (string) $info->severity;
 					$this->certainty[]			= (string) $info->certainty;
 					$this->audience[]				= (string) $info->audience;

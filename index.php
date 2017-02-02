@@ -462,6 +462,7 @@
 
 		$cap = new CAP_Class($_POST);
 
+		// Add the new Cap Processor Class
 		$cap2 = new CapProcessor();
 		$cap2->makeCapOfPost($_POST);
 

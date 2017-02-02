@@ -125,7 +125,7 @@ class CapProcessor{
 
         $info->setCategory($post['category']);
         $info->setResponseType($post['responseType']);
-        $info->setUrgency($post['urgancy']);
+        $info->setUrgency($post['urgency']);
         $info->setSeverity($post['severity']);
         $info->setCertainty($post['certainty']);
         $info->setAudience($post['audience']);
