@@ -58,7 +58,7 @@ function initMap() {
 		} else if(event.type == google.maps.drawing.OverlayType.CIRCLE) {
 			if(circle != null) circle.setMap(null);
 			circle = event.overlay;
-			$('#circle').val(circle.getCenter().lat()+','+circle.getCenter().lng()+' '+(circle.getRadius() / 1000));
+			$('#circle').val(circle.getCenter().lat()+','+circle.getCenter().lng()+' '+(circle.getRadius()));
 			drawingManager.setDrawingMode(null);
 		}
 		updateCapXML();
@@ -111,7 +111,7 @@ function initMap() {
 			fillOpacity: 0.35,
 			map: map,
 			center: {lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])},
-			radius: circle_data[1] * 1000
+			radius: circle_data[1]
 		});
 		circle.setMap(map);
 		map.setCenter({lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])});
@@ -172,7 +172,7 @@ function initMap() {
 			fillOpacity: 0.35,
 			map: map,
 			center: {lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])},
-			radius: circle_data[1] * 1000
+			radius: circle_data[1]
 		});
 		circle.setMap(map);
 		map.setCenter({lat: parseFloat(circle_xy[0]), lng: parseFloat(circle_xy[1])});
