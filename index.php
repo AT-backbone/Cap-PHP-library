@@ -415,7 +415,7 @@
 		//$cap = $alert->output();
 
 		$CapProcessor->readCap($location);
-		$CapProcessor->makeTestCAP(false);
+		//$CapProcessor->makeTestCAP(false);
 		$cap = $CapProcessor->getCapXmlArray();
 		//die(print_r($cap)); // DEBUG
 		if(! empty($cap['msg_format']))

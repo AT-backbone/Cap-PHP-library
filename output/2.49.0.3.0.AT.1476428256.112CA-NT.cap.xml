@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>2.49.0.3.0.AT.1476428256.112CA-NT</identifier>
+	<sender>admin@meteoalarm.eu</sender>
+	<sent>2016-10-14T08:57:36+02:00</sent>
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<info>
+		<language>en-GB</language>
+		<category>Met</category>
+		<event>Extreme Wind warning</event>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Extreme</severity>
+		<certainty>Likely</certainty>
+		<effective>2016-10-14T00:00:00+02:00</effective>
+		<onset>2016-10-14T00:00:00+02:00</onset>
+		<expires>2016-10-16T22:00:00+02:00</expires>
+		<senderName>ZAMG Zentralanstalt für Meteorologie und Geodynamik</senderName>
+		<headline>red Wind for </headline>
+		<description>test</description>
+		<instruction>123</instruction>
+		<parameter>
+			<valueName>awareness_level</valueName>
+			<value>Extreme</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_type</valueName>
+			<value>Wind</value>
+		</parameter>
+		<area>
+			<geocode>
+				<valueName>id</valueName>
+				<value>CA-NT</value>
+			</geocode>
+		</area>
+	</info>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>Extreme Wind warning</event>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Extreme</severity>
+		<certainty>Likely</certainty>
+		<effective>2016-10-14T00:00:00+02:00</effective>
+		<onset>2016-10-14T00:00:00+02:00</onset>
+		<expires>2016-10-16T22:00:00+02:00</expires>
+		<senderName>ZAMG Zentralanstalt für Meteorologie und Geodynamik</senderName>
+		<headline>red Wind for </headline>
+		<description>123</description>
+		<instruction>123</instruction>
+		<parameter>
+			<valueName>awareness_level</valueName>
+			<value>Extreme</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_type</valueName>
+			<value>Wind</value>
+		</parameter>
+		<area>
+			<geocode>
+				<valueName>id</valueName>
+				<value>CA-NT</value>
+			</geocode>
+		</area>
+	</info>
+</alert>

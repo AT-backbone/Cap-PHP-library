@@ -83,7 +83,7 @@ class CapProcessor{
     return $this->capRead->cap_xml_contend[$index];
   }
 
-  // This funktion is only for the Cap Php Library Desgined!
+  // This function is only for the Cap Php Library Desgined!
   function makeCapOfPost($post){
     $this->debug = true;
 
