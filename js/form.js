@@ -109,10 +109,11 @@ $( document ).ready(function()
 		        success: function(data)
 		        {
 		        	$("#capviewtextarea").val(data);
+							webservice_on = $('#webservice_aktive').val();
 							$.ajax({
 								type: "POST",
 								url: "lib/ajax/validate.ajax.php",
-								data: {webservice_aktive: 0,cap: data}, // serializes the forms elements.
+								data: {webservice_aktive: webservice_on,cap: data}, // serializes the forms elements.
 								success: function(data)
 								{
 									$("#resultValidate").html(data);

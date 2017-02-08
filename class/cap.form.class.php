@@ -1419,6 +1419,7 @@
 							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
 							$out.= '<input type="hidden" name="capedit" id="capedit" value="false">';
 							$out.= '</li><li id="resultValidate" style="text-shadow: none;"></li>';
+							if($conf->webservice_aktive == 1) $out.= '<input type="hidden" name="webservice_aktive" id="webservice_aktive" value="1">';
 						break;
 
 					case 'caplist':

@@ -114,7 +114,7 @@ class CapProcessor{
 			foreach(array_unique($post['language']) as $lkey => $lang)
 			{
 				// check if the value is not a dummy
-				if(!empty($lang))
+				if(!empty($lang) && $lang != "")
 				{
 					// if we have more than 1 language we have to produce more info blocks
 					if($lkey > 0 && count($post['language']) > 1){

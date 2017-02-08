@@ -62,9 +62,9 @@
 		}
 
 		function removeBody($html){
-			$split = explode('<h4>Validation messages</h4>',$html);
-			$split = explode('<!--<div class=footer>',$split[1]);
-			return '<div class="container"><h4>Validation messages</h4>'.$split[0]."<br>";
+			$split = explode('<div class="container">',$html);
+			$split = explode('<!--<div class=footer>',$split[2]);
+			return '<div class="container">'.$split[0]."<br>";
 		}
 	}
 
