@@ -1418,6 +1418,7 @@
 							$out = '<textarea id="capviewtextarea" readonly name="capeditfield"></textarea>';
 							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
 							$out.= '<input type="hidden" name="capedit" id="capedit" value="false">';
+							$out.= '</li><li id="resultValidate" style="text-shadow: none;"></li>';
 						break;
 
 					case 'caplist':
@@ -2181,7 +2182,7 @@
 		 *
 		 * @return	string 	$out
 		 */
-		function CapView($content, $ID)
+		function CapView($content, $ID, $extrahtml = "")
 		{
 			global $conf, $langs;
 
@@ -2214,6 +2215,13 @@
 											$out.= $content;
 										$out.= '</textarea>';
 									$out.= '</li>';
+
+									if(!empty($extrahtml)) {
+										$out.= '<li>';
+											$out.= $extrahtml;
+										$out.= '</li>';
+									}
+
 								$out.= '</ul>';
 							$out.= '</div>';
 

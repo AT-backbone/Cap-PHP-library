@@ -1,15 +1,15 @@
-$( document ).ready(function() 
+$( document ).ready(function()
 {
 	// Inital ClockPicker Addon
 	$('.clockpicker').clockpicker().find('input').change(function(){
 		//console.log(this.value);
 	});
-	
+
 	if($('#init_map').val() != 1)
 	{
 		updateCapXML();
 	}
-		
+
 	if($('#init_map').val() != 1)
 	{
 		$( "input, select" ).change(function() {
@@ -18,8 +18,8 @@ $( document ).ready(function()
 			dependencies_js();
 		});
 	}
-	
-	
+
+
 	$( "#webservice_switch" ).change(function() {
 		if($( "#webservice_switch" ).prop('checked'))
 		{
@@ -29,11 +29,11 @@ $( document ).ready(function()
 		{
 			$("#conf-detail").hide();
 		}
-	});				
+	});
 
 	$( "#msgType" ).change(function() {
 		if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
-		{		
+		{
 			if(typeof $("#LIreferences").html()  === "undefined")
 			{
 				$("#TypeMessage").after('<li id="LIreferences" class="ui-li-static ui-body-inherit ui-last-child"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="references" type="text" name="references"></div></li>');
@@ -51,9 +51,9 @@ $( document ).ready(function()
 			}
 		}
 	});
-	
+
 	$( "#language" ).change(function() {
-		
+
 		$( ".lang_input" ).each(function( index )
 		{
 			if($( "#language" ).val() == $(this).attr("id"))
@@ -63,12 +63,12 @@ $( document ).ready(function()
 			else
 			{
 				$(this).hide();
-			}					
-		});	
-		
+			}
+		});
+
 		$("#" + $( "#language" ).val() + "_Button").show();
 		$( "#" + $( "#language" ).val() + "_language_input" ).val($( "#language" ).val());
-		
+
 		$( ".Lang_Button" ).each(function( index )
 		{
 			if( $( "#language" ).val() + "_Button" == $(this).attr("id"))
@@ -80,7 +80,7 @@ $( document ).ready(function()
 				$(this).css("box-shadow", "");
 			}
 		});
-		
+
 	});
 
 	if($('#init_map').val() == 1 && $('#plugin').val() != 1)
@@ -107,22 +107,35 @@ $( document ).ready(function()
 		        url: url,
 		        data: $("#capform").serialize(), // serializes the forms elements.
 		        success: function(data)
-		        {			
+		        {
 		        	$("#capviewtextarea").val(data);
+							$.ajax({
+								type: "POST",
+								url: "lib/ajax/validate.ajax.php",
+								data: {webservice_aktive: 0,cap: data}, // serializes the forms elements.
+								success: function(data)
+								{
+									$("#resultValidate").html(data);
+								},
+								error: function(errorThrown)
+								{
+									console.log( errorThrown);
+								}
+							});
 		        	$("#capviewtextarea").textinput( "refresh" );
 		        },
-				error: function(errorThrown){
-					console.log( errorThrown);
-				}
-		       });
-		
+						error: function(errorThrown){
+							console.log( errorThrown);
+						}
+		    	});
+
 		return false; // avoid to execute the actual submit of the form.
 	}
-	
+
 	function ajax_conf()
 	{
 		var url = "index.php?conf=1"; // the script where you handle the form input.
-		
+
 		$.ajax({
 		      	type: "POST",
 		        url: url,
@@ -138,62 +151,62 @@ $( document ).ready(function()
 		       });
 		return false; // avoid to execute the actual submit of the form.
 	}
-	
+
 	function plusLangInput()
 	{
 		var url = "index.php?conf=1"; // the script where you handle the form input.
-		
+
 		key  = $("#lang_conf_plus_key").val();
 		$("#lang_conf_plus_name").attr("name", "conf[lang][" + key + "]");
-		
+
 		$.ajax({
 		      	type: "POST",
 		        url: url,
 		        data: $("#capform").serialize(), // serializes the forms elements.
 		        success: function(data)
-		        {					        	
+		        {
 		        	location.reload();
 		        }
 		       });
-		
+
 		return false; // avoid to execute the actual submit of the form.
 	}
-	
+
 	function minusLangInput()
 	{
 		var url = "index.php?conf=1"; // the script where you handle the form input.
-		
+
 		key  = $("#lang_remove").val();
 		$("#lang_remove_input").attr("name", "conf[lang][remove][" + key + "]");
-		
+
 		$.ajax({
 		      	type: "POST",
 		        url: url,
 		        data: $("#capform").serialize(), // serializes the forms elements.
 		        success: function(data)
-		        {					        	
+		        {
 		        	location.reload();
 		        }
 		       });
-		
+
 		return false; // avoid to execute the actual submit of the form.
 	}
-	
+
 	function plusParameterInput()
 	{
 		$("#Parameterappend").after('<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="parameter[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="parameter[value][]"></div></div><div class="ui-block-c"></div></div>');
 	}
-	
+
 	function plusEventCodeInput()
 	{
 		$("#Eventappend").after('<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="eventCode[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="eventCode[value][]"></div></div><div class="ui-block-c"></div></div>');
 	}
-	
+
 	function plusGeocodeInput()
 	{
 		$("#Geocodeappend").after('<div class="ui-grid-b"><div class="ui-block-a"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Valuename" type="text" name="geocode[valueName][]"></div></div><div class="ui-block-b"><div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset"><input placeholder="Value" type="text" name="geocode[value][]"></div></div><div class="ui-block-c"></div></div>');
 	}
-	
+
 	function updateColor(this_element)
 	{
 		if($('#init_map').val() != 1) // not wehn PAINT and ALERT aktive !!!
@@ -265,7 +278,7 @@ $( document ).ready(function()
 				zoomEnabled: true,
 				zoomScaleSensitivity: 0.5,
 				dblClickZoomEnabled: false,
-				preventMouseEventsDefault: false, 
+				preventMouseEventsDefault: false,
 				controlIconsEnabled: true,
 				fit: true,
 				center: true,
@@ -291,7 +304,7 @@ $( document ).ready(function()
 		svg_intervall = setInterval(function(){ init_svg() }, 500);
 		//$('#map_main_div svg').prepend('<filter id="css_brightness"><feComponentTransfer><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter>').trigger('create');
 		$('#map_main_div svg').css('min-height', '645px');
-		
+
 		if($('#map_main_div svg').attr('process') > 0)
 		{
 			$('#mk_process_info').html($('#mk_process_lang').val());
@@ -300,13 +313,13 @@ $( document ).ready(function()
 
 			$("#submit_cap").addClass('ui-disabled');
 			$("#map_main_div").addClass('disabled');
-			mk_pro_interval = setInterval(function(){ 
+			mk_pro_interval = setInterval(function(){
 				$.ajax({
 					type: "POST",
 					url: 'lib/cap.meteoalarm.webservices.mkv.php',
 					data: '', // serializes the forms elements.
 					success: function(data)
-					{			
+					{
 						if(parseInt(data) > 0)
 						{
 							//loading_dots();
@@ -314,7 +327,7 @@ $( document ).ready(function()
 						else
 						{
 							$( "#submit_cap" ).removeClass('ui-disabled');
-							location.reload();	
+							location.reload();
 						}
 					}
 				});
@@ -421,7 +434,7 @@ $( document ).ready(function()
 			}
 		}
 
-		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) { 
+		$( "#CAP_SOAP_popupDialog" ).on( "collapsibleexpand", function( event, ui ) {
 			$("#CAP_SOAP_popupDialog").popup("reposition", {positionTo: 'origin'});
 			$('#CAP_SOAP_popupDialog').resize();
 		});
@@ -453,7 +466,7 @@ $( document ).ready(function()
 				$('#'+id).css('fill', 'lightgrey');
 			});
 			$.each($(this).val(), function(index, id){
-				if(area_data[id]['type'][area_info['sel_type']] < 1 || area_data[id]['type'][area_info['sel_type']] == undefined) 
+				if(area_data[id]['type'][area_info['sel_type']] < 1 || area_data[id]['type'][area_info['sel_type']] == undefined)
 				{
 					area_data[id]['type'][area_info['sel_type']] = area_data[area_info['last_area']]['type'][area_info['sel_type']];
 				}
@@ -475,7 +488,7 @@ $( document ).ready(function()
 		$(document).on('popupafterclose', '#emmaid_select-listbox-popup', function () {
 			plugin_show_type(false);
 		});
-		
+
 		$('#submit_cap').on('click', function(){
 			if(area_info['problem'] == false)
 				plugin_get_all_warnings();
@@ -485,7 +498,7 @@ $( document ).ready(function()
 
 		$('#sav_war').on('click', function(){
 			plugin_save_warning_detail();
-		});	
+		});
 		$('#del_war').on('click', function(){
 			plugin_delete_warning_detail();
 		});
@@ -589,7 +602,7 @@ $( document ).ready(function()
 		});
 
 		$(document).bind('click', function(e) {
-			if($(e.target).closest('#awareness_toolbox').length === 0 && $(e.target).closest('#map_main_div svg g, path, polygon').length === 0 && $(e.target).closest('#awareness_color_toolbox').length === 0) 
+			if($(e.target).closest('#awareness_toolbox').length === 0 && $(e.target).closest('#map_main_div svg g, path, polygon').length === 0 && $(e.target).closest('#awareness_color_toolbox').length === 0)
 			{
 				aktive_type = false;
 				$('#awareness_toolbox .awareness').css('border', '');
@@ -608,7 +621,7 @@ $( document ).ready(function()
 			if(id !== undefined && $('#emmaid_select option[value='+id+']').text() != "")
 			{
 				$.each(area_data, function(index, data){
-					if(data['sel'] != 1) 
+					if(data['sel'] != 1)
 					{
 						$('#'+index).css('stroke', 'black');
 						$('#'+index).css('stroke-width', '1');
@@ -711,13 +724,13 @@ $( document ).ready(function()
 						if(noty_i > 3) size =  (noty_i * 40);
 						else size = 121;
 						out+= '<div class="proccess_type_area_scroll" style="position: relative;padding-left: 6px;width: '+size+'px;">';
-							
-							for (noty=1; noty <= (3 - noty_i); noty++) 
+
+							for (noty=1; noty <= (3 - noty_i); noty++)
 							{
 								out+= '<div class="awareness" aktive="2" onclick="plugin_area_warning_detail(\''+id+'\', -1, this)"><img src="includes/meteoalarm/warn-typs_11.png"></div>';
 							}
 
-							
+
 							keysSorted = Object.keys(data['type']).sort(function(a,b){return data['type'][b] - data['type'][a]});
 							//alert(keysSorted);     // bar,me,you,foo
 							$.each(keysSorted, function(index, type){
@@ -731,13 +744,13 @@ $( document ).ready(function()
 								//out+= '<div class="problem awareness" style="background-color:'+levelc+';" aktive="1" onclick="area_warning_detail('+id+', '+type+', this)" '+css_selected+'>';
 								//	out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
 								//out+= '</div>';
-								if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined || data['desc'][type][0] == "") 
+								if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined || data['desc'][type][0] == "")
 								{
 									out+= '<div class="problem awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
 									out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
 									area_info['problem'] = true;
 								}
-								else 
+								else
 								{
 									out+= '<div class="awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
 									out+= '<img src="'+imgsrc+'">';
@@ -746,7 +759,7 @@ $( document ).ready(function()
 							});
 						out+= '</div>';
 					out+= '</div>';
-				
+
 					//out=+ '<div class="awareness" aktive="2" onclick="area_warning_detail('+key2+', -1, this)">';
 					//	out=+ '<img src="includes/meteoalarm/warn-typs_11.png">';
 					//out=+ '</div>';
@@ -759,7 +772,7 @@ $( document ).ready(function()
 			{
 				keysSorted = Object.keys(data['type']).sort(function(a,b){return data['type'][b] - data['type'][a]});
 				$.each(keysSorted, function(index, type){
-					if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined && data['type'][type] !== undefined && data['type'][type] != 0 ) 
+					if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined && data['type'][type] !== undefined && data['type'][type] != 0 )
 					{
 						area_info['problem'] = true;
 					}
@@ -798,7 +811,7 @@ $( document ).ready(function()
 				area_list_on = false;
 			}
 		}
-		
+
 	}
 
 	function plugin_show_type(type)
@@ -928,7 +941,7 @@ $( document ).ready(function()
 					$('#to_0').val('23:59').trigger('input');
 				}
 			}
-			if(area_info['sel_type'] != 0) 
+			if(area_info['sel_type'] != 0)
 			{
 				$('.awareness[type!='+area_info['sel_type']+']').css('opacity', '0.5');
 				$('.awareness[type='+area_info['sel_type']+']').css('opacity', '1');
@@ -1033,10 +1046,10 @@ $( document ).ready(function()
 		plugin_name = $('#plugin_name').val();
 		data = $('#day').val();
 		if(data == "" || data === undefined) data = 0;
-		
+
 		awt_ok = [];
 		awt_ok[0] = 0;
-		for (var ty = 1; ty <= 13; ty++) 
+		for (var ty = 1; ty <= 13; ty++)
 		{
 			if($('#map_main_div svg').attr('awt_'+ty) == 1)
 			{
@@ -1048,7 +1061,7 @@ $( document ).ready(function()
 			}
 		}
 		var awt_ok_js = JSON.stringify(awt_ok);
-		
+
 		var jsonOb = JSON.stringify(area_data);
 		$.post(
 			cap_engine,
@@ -1092,7 +1105,7 @@ $( document ).ready(function()
 					$('#CAP_SOAP_popupDialog').popup();
 					$('#CAP_SOAP_popupDialog').popup( "open" );
 				}
-			
+
 				JQ_loader_off();
 			}
 		);
@@ -1106,24 +1119,24 @@ $( document ).ready(function()
 		tmp_name ='';
 		li_bool = false;
 		$.each(r_arr, function(index, data) {
-		
+
 			if(data['name'] != tmp_name)
 			{
 				if(li_bool) content+= '</div>';
 				if(li_bool) content+= '</li>';
-				if(li_bool) content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps">'; /*data-role="collapsible"  */ 
-				else 		content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps" style="border-top: 1px solid #dddddd !important;">'; /*data-role="collapsible"  */ 
+				if(li_bool) content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps">'; /*data-role="collapsible"  */
+				else 		content+= '<li data-iconpos="right" data-inset="false" data-mini="true" class="lang_collaps type_collaps" style="border-top: 1px solid #dddddd !important;">'; /*data-role="collapsible"  */
 					content+= '<h2 style="margin: 0px;">'+data['name']+'</h2>';
 					content+= '<div id="green_div_'+data['aid']+'" style="height: 30px;">';
 					tmp_name = data['name'];
 					li_bool = true;
 			}
-				
-				if(data['type'] < 10) 
+
+				if(data['type'] < 10)
 					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
-				else 
+				else
 					content+= $('#left_box_type_'+data['type']).closest('div')[0].outerHTML;
-				
+
 				//content+= '<br>'+data['type']+': <input type="checkbox" name="checkbox-'+data['aid']+'" id="checkbox-'+data['aid']+'" checked="checked" value="'+data['type']+'"/>';
 		});
 		content+= '</ul></form>';
@@ -1177,7 +1190,7 @@ $( document ).ready(function()
 		{
 			$.mobile.loading( "hide" );
 			JQ_loader('Loading', 'b');
-			
+
 			var date = new Date();
 			//console.log(area_green);
 			$.each(area_green, function(index, data){
@@ -1188,7 +1201,7 @@ $( document ).ready(function()
 				}
 
 				cinfo = 3;
-				//for (var ty = 1; ty <= 13; ty++) 
+				//for (var ty = 1; ty <= 13; ty++)
 				//{
 					aaidttype="a461t1"
 
@@ -1198,9 +1211,9 @@ $( document ).ready(function()
 
 					level 	= 1;
 					type 	= data['type'];
-					//to 	= 
-					//from 	= 
-					
+					//to 	=
+					//from 	=
+
 					if(level > 0 && type > 0)
 					{
 						awtlv = area_data[aid]['type'][type];
@@ -1247,11 +1260,11 @@ $( document ).ready(function()
 				}
 				//}
 			});
-			
+
 			data = $('#day').val();
 			if(data == "" || data === undefined) data = 0;
 			var jsonOb = JSON.stringify(area_green_data);
-			
+
 			$.post(
 				"lib/cap.create.from_js_array.2.php",
 				{cap_array:jsonOb, no_del:1, data:data, use_plugin: plugin_name},
@@ -1295,7 +1308,7 @@ $( document ).ready(function()
 					$.mobile.loading( "hide" );
 					//your success response
 					$('#SOAPUL').html(r).trigger('create');
-					
+
 					$('#CAP_Send_popupDialog').popup( "close" );
 					setTimeout(function(){
 						$('#CAP_SOAP_popupDialog').popup();
@@ -1317,13 +1330,13 @@ $( document ).ready(function()
 						loading_dots();
 						$("#submit_cap").addClass('ui-disabled');
 						$("#map_main_div").addClass('disabled');
-						mk_pro_interval = setInterval(function(){ 
+						mk_pro_interval = setInterval(function(){
 							$.ajax({
 								type: "POST",
 								url: 'lib/cap.meteoalarm.webservices.mkv.php',
 								data: '', // serializes the forms elements.
 								success: function(data)
-								{			
+								{
 									if(parseInt(data) > 0)
 									{
 										//loading_dots();
@@ -1350,7 +1363,7 @@ $( document ).ready(function()
 	{
 		$('#mk_process_info').html($('#mk_process_lang').val() + ' ');
 		mk_pro_dot_interval_i = 0;
-		mk_pro_dot_interval = setInterval(function(){ 
+		mk_pro_dot_interval = setInterval(function(){
 			if(mk_pro_dot_interval_i < 3)
 			{
 				$('#mk_process_info').html($('#mk_process_info').html() + '.');
@@ -1393,7 +1406,7 @@ $( document ).ready(function()
 		var yyyy = this.getFullYear().toString();
 		var dd  = (this.getDate()).toString();
 		var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-		
+
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 
@@ -1415,7 +1428,7 @@ $( document ).ready(function()
 		}
 		mm = mm.toString();
 		dd = dd.toString();
-		
+
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 
@@ -1438,7 +1451,7 @@ $( document ).ready(function()
 		}
 		mm = mm.toString();
 		dd = dd.toString();
-		
+
 		return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 	};
 
@@ -1453,7 +1466,7 @@ $( document ).ready(function()
 		e = e || window.event;
 		if (e.preventDefault)
 		e.preventDefault();
-		e.returnValue = false;  
+		e.returnValue = false;
 	}
 
 	function preventDefaultForScrollKeys(e) {
@@ -1475,10 +1488,10 @@ $( document ).ready(function()
 	function enableScroll() {
 		if (window.removeEventListener)
 		window.removeEventListener('DOMMouseScroll', preventDefault, false);
-		window.onmousewheel = document.onmousewheel = null; 
-		window.onwheel = null; 
-		window.ontouchmove = null;  
-		document.onkeydown = null;  
+		window.onmousewheel = document.onmousewheel = null;
+		window.onwheel = null;
+		window.ontouchmove = null;
+		document.onkeydown = null;
 	}
 
 	function standard_sort(a, b)

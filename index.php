@@ -31,6 +31,8 @@ require_once 'class/cap.form.class.php';
 require_once 'lib/cap.convert.class.php';
 require_once 'class/translate.class.php';
 require_once 'lib/cap.class.php';
+require_once 'lib/CapValidatorChecker.class.php';
+
 
 $langs = new Translate();
 $CapProcessor = new CapProcessor();
@@ -452,56 +454,63 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 		if($_POST['senderName'] == "") $_POST['senderName'] = $User['senderName'];
 	}
 
-	//$cap = new CAP_Class($_POST);
+		//$cap = new CAP_Class($_POST);
 
-	// Add the new Cap Processor Class
-	$cap = new CapProcessor();
-	$cap->makeCapOfPost($_POST);
+		// Add the new Cap Processor Class
+		$cap = new CapProcessor();
+		$cap->makeCapOfPost($_POST);
 
-	if(!empty($_GET['cap']))
-	{
-		// Used for the Cap preview
-		$cap_contend = $cap->buildCap();
-		print $cap_contend;
-	}
-	else
-	{
-		// Used to build the cap and save it at $cap->destination
-		if($_POST['capedit'] == "false" || $_POST['capedit'] == false) {
+		if(!empty($_GET['cap']))
+		{
+			// Used for the Cap preview
 			$cap_contend = $cap->buildCap();
-			$cap->destination = $conf->cap->output;
-			if($conf->cap->save == 1) $path = $cap->saveCap();
-			if ($path < 0) die($path);
-
-			$conf->identifier->ID_ID++;
-
-			$form->WriteConf();
-
-			print $form->CapView($cap_contend, $cap->getAlert()->getIdentifier().".xml"); // Cap Preview +
-		}else{
-			$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
-			fwrite($capfile, $_POST['capeditfield']);
-			fclose($capfile);
-
-			chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', 0660);  // octal; correct value of mode
-			chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', filegroup($conf->cap->output));
-
-			// convert in UTF-8
-			$data = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
-
-			if (preg_match('!!u', $data))
-			{
-				// this is utf-8
-			}
-			else
-			{
-				$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
-			}
-
-			file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
-
-			print $form->CapView($_POST['capeditfield'], date('Y.m.d.H.i.s').'.edited.xml'); // Cap Preview +
+			print $cap_contend;
 		}
+		else
+		{
+			// Used to build the cap and save it at $cap->destination
+			if($_POST['capedit'] == "false" || $_POST['capedit'] == false) {
+				$cap_contend = $cap->buildCap();
+				$cap->destination = $conf->cap->output;
+				if($conf->cap->save == 1) $path = $cap->saveCap();
+				if ($path < 0) die($path);
+
+				$conf->identifier->ID_ID++;
+
+				$form->WriteConf();
+				$capname = $cap->getAlert()->getIdentifier().".xml";
+				//print $form->CapView($cap_contend, $capname); // Cap Preview +
+			}else{
+				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
+				fwrite($capfile, $_POST['capeditfield']);
+				fclose($capfile);
+
+				chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', 0660);  // octal; correct value of mode
+				chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', filegroup($conf->cap->output));
+
+				// convert in UTF-8
+				$cap_contend = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
+
+				if (preg_match('!!u', $cap_contend))
+				{
+					// this is utf-8
+				}
+				else
+				{
+					$cap_contend = mb_convert_encoding($cap_contend, 'UTF-8', 'OLD-ENCODING');
+				}
+
+				file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
+
+				$capname = date('Y.m.d.H.i.s').'.edited.xml';
+				//print $form->CapView($cap_contend, $capname); // Cap Preview +
+			}
+
+		$CVal = new CapChecker();
+		if($conf->webservice_aktive == 1) $CVal->profile = "meteoalarm";
+		$cap_path = $conf->cap->output.'/'.$capname;
+		$Cvalinfo = $CVal->validate_CAP($cap_path);
+		print $form->CapView($cap_contend, $capname, $CVal->removeBody($Cvalinfo['html'])); // Cap Preview +
 	}
 }
 elseif($_GET['webservice'] == 1)
