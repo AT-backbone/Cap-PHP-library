@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml-stylesheet type="text/xsl" href="cap_style.xsl" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>2.0.0.1.IL.1486110628.134IL015</identifier>
+	<sender>n.spanring@backbone.co.at</sender>
+	<sent>2017-02-03T09:30:28+00:00</sent>
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<info>
+		<language>en-GB</language>
+		<category>Met</category>
+		<event>Extreme Thunderstorm warning</event>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Extreme</severity>
+		<certainty>Likely</certainty>
+		<effective>2017-02-02T23:00:00+00:00</effective>
+		<onset>2017-02-02T23:00:00+00:00</onset>
+		<expires>2017-02-03T22:59:00+00:00</expires>
+		<senderName>Niklas Spanring</senderName>
+		<headline>Red Thunderstorm for North-Eastern Negev</headline>
+		<description>TEST Red</description>
+		<parameter>
+			<valueName>awareness_level</valueName>
+			<value>4; red; Extreme</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_type</valueName>
+			<value>3; Thunderstorm</value>
+		</parameter>
+		<area>
+			<areaDesc>North-Eastern Negev</areaDesc>
+			<geocode>
+				<valueName>emma_id</valueName>
+				<value>IL015</value>
+			</geocode>
+			<geocode>
+				<valueName>emma_id</valueName>
+				<value>IL016</value>
+			</geocode>
+			<geocode>
+				<valueName>emma_id</valueName>
+				<value>IL017</value>
+			</geocode>
+		</area>
+	</info>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>Extreme Thunderstorm warning</event>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Extreme</severity>
+		<certainty>Likely</certainty>
+		<effective>2017-02-02T23:00:00+00:00</effective>
+		<onset>2017-02-02T23:00:00+00:00</onset>
+		<expires>2017-02-03T22:59:00+00:00</expires>
+		<senderName>Niklas Spanring</senderName>
+		<headline>Red Thunderstorm for North-Eastern Negev</headline>
+		<description>Test Rot</description>
+		<parameter>
+			<valueName>awareness_level</valueName>
+			<value>4; red; Extreme</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_type</valueName>
+			<value>3; Thunderstorm</value>
+		</parameter>
+		<area>
+			<areaDesc>North-Eastern Negev</areaDesc>
+			<geocode>
+				<valueName>emma_id</valueName>
+				<value>IL015</value>
+			</geocode>
+			<geocode>
+				<valueName>emma_id</valueName>
+				<value>IL016</value>
+			</geocode>
+			<geocode>
+				<valueName>emma_id</valueName>
+				<value>IL017</value>
+			</geocode>
+		</area>
+	</info>
+</alert>
