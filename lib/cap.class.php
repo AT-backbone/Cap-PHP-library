@@ -96,9 +96,8 @@ class CapProcessor{
 		$alert->setSent(date("Y-m-d\TH:i:s" , strtotime($post['sent']['date']." ".$post['sent']['time'] )).$post['sent']['plus'].date("H:i",strtotime($post['sent']['UTC'])));
 		$alert->setStatus($post['status']);
 		$alert->setMsgType($post['msgType']);
-		$alert->setScope($post['scope']);
-
 		$alert->setSource($post['source']);
+		$alert->setScope($post['scope']);
 		$alert->setRestriction($post['restriction']);
 		$alert->setAddresses($post['addresses']);
 		$alert->setCode($post['code']);
@@ -106,71 +105,84 @@ class CapProcessor{
 		$alert->setReferences($post['references']);
 		$alert->setIncidents($post['incidents']);
 
-		// if category dann ja
+		// if category is present enter the info block
 		if($post['category']){
-			$info = $alert->addInfo();
+			$info_arr[] = $alert->addInfo(); // add first info block in a array
+
 			// foreach language specific data
 			if(count($post['language']) > 0)
-			foreach($post['language'] as $lang)
+			foreach(array_unique($post['language']) as $lkey => $lang)
 			{
+				// check if the value is not a dummy
 				if(!empty($lang))
 				{
-					$info->setLanguage($lang);
-					$info->setEvent($post['event'][$lang]);
-					$info->setHeadline($post['headline'][$lang]);
-					$info->setDescription($post['description'][$lang]);
-					$info->setInstruction($post['instruction'][$lang]);
+					// if we have more than 1 language we have to produce more info blocks
+					if($lkey > 0 && count($post['language']) > 1){
+						$info_arr[$lkey] = $alert->addInfo(); // write new info block in the array
+					}
+
+					// the $lkey is spezifing language specific data
+					$info_arr[$lkey]->setLanguage($lang);
+					$info_arr[$lkey]->setEvent($post['event'][$lang]);
+					$info_arr[$lkey]->setHeadline($post['headline'][$lang]);
+					$info_arr[$lkey]->setDescription($post['description'][$lang]);
+					$info_arr[$lkey]->setInstruction($post['instruction'][$lang]);
 				}
 			}
 
-			$info->setCategory($post['category']);
-			$info->setResponseType($post['responseType']);
-			$info->setUrgency($post['urgency']);
-			$info->setSeverity($post['severity']);
-			$info->setCertainty($post['certainty']);
-			$info->setAudience($post['audience']);
-
-			if(! empty($post['eventCode']['valueName'][0]))
-			foreach($post['eventCode']['valueName'] as $key => $eventCode)
+			// all other data is not language specific so we put it in all info blocks
+			foreach($info_arr as $ikey => $info)
 			{
-				if(!empty($post['eventCode']['valueName'][$key]))
+				$info->setCategory($post['category']);
+				$info->setResponseType($post['responseType']);
+				$info->setUrgency($post['urgency']);
+				$info->setSeverity($post['severity']);
+				$info->setCertainty($post['certainty']);
+				$info->setAudience($post['audience']);
+
+				if(! empty($post['eventCode']['valueName'][0]))
+				foreach($post['eventCode']['valueName'] as $key => $eventCode)
 				{
-					$info->setEventCode($post['eventCode']['valueName'][$key], $post['eventCode']['value'][$key]);
-				}
-			}
-
-			$info->setEffective(date("Y-m-d\TH:i:s" , strtotime($post['effective']['date']." ".$post['effective']['time'] )).$post['effective']['plus'].date("H:i",strtotime($post['effective']['UTC'])));
-			$info->setOnset(date("Y-m-d\TH:i:s" , strtotime($post['onset']['date']." ".$post['onset']['time'] )).$post['onset']['plus'].date("H:i",strtotime($post['onset']['UTC'])));
-			$info->setExpires(date("Y-m-d\TH:i:s" , strtotime($post['expires']['date']." ".$post['expires']['time'] )).$post['expires']['plus'].date("H:i",strtotime($post['expires']['UTC'])));
-
-			$info->setSenderName($post['senderName']);
-			$info->setWeb($post['web']);
-			$info->setContact($post['contact']);
-
-			if(! empty($post['parameter']['valueName'][0]))
-			foreach($post['parameter']['valueName'] as $key => $parameter)
-			{
-				if(!empty($post['eventCode']['valueName'][$key]))
-				{
-					$info->setParameter($post['parameter']['valueName'][$key], $post['parameter']['value'][$key]);
-				}
-			}
-
-			// look if area zone is used
-			if(!empty($post['areaDesc']) || !empty($post['polygon'])  || !empty($post['circle']) || !is_array($post['geocode']))
-			{
-				$area = $info->addArea();
-
-				$area->setAreaDesc($post['areaDesc']);
-				$area->setPolygon($post['polygon']);
-				$area->setCircle($post['circle']);
-
-				if(! empty($post['geocode']['valueName'][0]))
-				foreach($post['geocode']['valueName'] as $key => $geocode)
-				{
-					if(!empty($post['geocode']['valueName'][$key]))
+					if(!empty($post['eventCode']['valueName'][$key]))
 					{
-						$area->setGeocode($post['geocode']['valueName'][$key], $post['geocode']['value'][$key]);
+						$info->setEventCode($post['eventCode']['valueName'][$key], $post['eventCode']['value'][$key]);
+					}
+				}
+
+				// key: date | time | plus | UTC => 2017-02-03 | 20:00:02 | + | 01:00
+				$info->setEffective(date("Y-m-d\TH:i:s" , strtotime($post['effective']['date']." ".$post['effective']['time'] )).$post['effective']['plus'].date("H:i",strtotime($post['effective']['UTC'])));
+				$info->setOnset(date("Y-m-d\TH:i:s" , strtotime($post['onset']['date']." ".$post['onset']['time'] )).$post['onset']['plus'].date("H:i",strtotime($post['onset']['UTC'])));
+				$info->setExpires(date("Y-m-d\TH:i:s" , strtotime($post['expires']['date']." ".$post['expires']['time'] )).$post['expires']['plus'].date("H:i",strtotime($post['expires']['UTC'])));
+
+				$info->setSenderName($post['senderName']);
+				$info->setWeb($post['web']);
+				$info->setContact($post['contact']);
+
+				if(! empty($post['parameter']['valueName'][0]))
+				foreach($post['parameter']['valueName'] as $key => $parameter)
+				{
+					if(!empty($post['eventCode']['valueName'][$key]))
+					{
+						$info->setParameter($post['parameter']['valueName'][$key], $post['parameter']['value'][$key]);
+					}
+				}
+
+				// look if area zone is used
+				if(!empty($post['areaDesc']) || !empty($post['polygon'])  || !empty($post['circle']) || !is_array($post['geocode']))
+				{
+					$area = $info->addArea();
+
+					$area->setAreaDesc($post['areaDesc']);
+					$area->setPolygon($post['polygon']);
+					$area->setCircle($post['circle']);
+
+					if(! empty($post['geocode']['valueName'][0]))
+					foreach($post['geocode']['valueName'] as $key => $geocode)
+					{
+						if(!empty($post['geocode']['valueName'][$key]))
+						{
+							$area->setGeocode($post['geocode']['valueName'][$key], $post['geocode']['value'][$key]);
+						}
 					}
 				}
 			}
@@ -954,7 +966,7 @@ class CapCreate{
 			if($alert->identifier != "")
 			{
 				if($name == '') $name = $alert->identifier;
-				if(substr($name,-5,5) == '.xml') $end_type = ""; else $end_type = ".xml";
+				if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
 				$capfile = fopen($this->processor->output_destination.'/'.$name.$end_type, "w");
 				if($capfile === false) return "Unable to open file! ".$this->processor->output_destination.'/'.$name.$end_type;
 				fwrite($capfile, $this->processor->output_content);

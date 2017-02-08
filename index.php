@@ -28,8 +28,6 @@
 error_reporting(E_ERROR | E_PARSE);
 
 require_once 'class/cap.form.class.php';
-require_once 'lib/cap.create.class.php';
-require_once 'lib/cap.write.class.php';
 require_once 'lib/cap.convert.class.php';
 require_once 'class/translate.class.php';
 require_once 'lib/cap.class.php';
@@ -352,8 +350,8 @@ elseif($_GET['conv'] == 1)
 			$location = $conf->cap->output.'/'.urldecode($_POST['location']);
 		}
 
-		$alert = new alert($location);
-		$cap = $alert->output();
+		$CapProcessor->readCap($location);
+		$cap = $CapProcessor->getCapXmlArray();
 
 		// Convert
 		$converter = new Convert_CAP_Class();
@@ -379,15 +377,9 @@ elseif($_GET['read'] == 1)
 		}
 
 		if(simplexml_load_file($location) != ""){
-			$alert = new alert($location);
-			$cap = $alert->output();
-
-			$cap_m = new CAP_Class($_POST);
-			$cap_m->buildCap_from_read($cap);
-
-			$cap_m->identifier = $_FILES["uploadfile"]["name"];
-			$cap_m->destination = $conf->cap->output;
-			$path = $cap_m->createFile();
+			$CapProcessor->readCap($location); // read cap
+			$CapProcessor->buildCap(); // build cap
+			$path = $CapProcessor->saveCap($_FILES["uploadfile"]["name"]); // save cap in a file
 			if ($path < 0) header('Location: '.$_SERVER['PHP_SELF'].'?error=createFileErr'.$path.'#read');
 			else header('Location: '.$_SERVER['PHP_SELF'].'#read');
 		}else{
@@ -460,42 +452,42 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 		if($_POST['senderName'] == "") $_POST['senderName'] = $User['senderName'];
 	}
 
-	$cap = new CAP_Class($_POST);
+	//$cap = new CAP_Class($_POST);
 
 	// Add the new Cap Processor Class
-	$cap2 = new CapProcessor();
-	$cap2->makeCapOfPost($_POST);
+	$cap = new CapProcessor();
+	$cap->makeCapOfPost($_POST);
 
 	if(!empty($_GET['cap']))
 	{
 		// Used for the Cap preview
-		$cap_contend = $cap2->buildCap();
+		$cap_contend = $cap->buildCap();
 		print $cap_contend;
 	}
 	else
 	{
 		// Used to build the cap and save it at $cap->destination
 		if($_POST['capedit'] == "false" || $_POST['capedit'] == false) {
-			$cap->buildCap();
+			$cap_contend = $cap->buildCap();
 			$cap->destination = $conf->cap->output;
-			if($conf->cap->save == 1) $path = $cap->createFile();
+			if($conf->cap->save == 1) $path = $cap->saveCap();
 			if ($path < 0) die($path);
 
 			$conf->identifier->ID_ID++;
 
 			$form->WriteConf();
 
-			print $form->CapView($cap->cap, $cap->identifier.".cap.xml"); // Cap Preview +
+			print $form->CapView($cap_contend, $cap->getAlert()->getIdentifier().".xml"); // Cap Preview +
 		}else{
-			$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');
+			$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
 			fwrite($capfile, $_POST['capeditfield']);
 			fclose($capfile);
 
-			chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', 0660);  // octal; correct value of mode
-			chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml', filegroup($conf->cap->output));
+			chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', 0660);  // octal; correct value of mode
+			chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', filegroup($conf->cap->output));
 
 			// convert in UTF-8
-			$data = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');
+			$data = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
 
 			if (preg_match('!!u', $data))
 			{
@@ -506,9 +498,9 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 				$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 			}
 
-			file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.cap.xml');
+			file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
 
-			print $form->CapView($_POST['capeditfield'], date('Y.m.d.H.i.s').'.edited.cap.xml'); // Cap Preview +
+			print $form->CapView($_POST['capeditfield'], date('Y.m.d.H.i.s').'.edited.xml'); // Cap Preview +
 		}
 	}
 }
