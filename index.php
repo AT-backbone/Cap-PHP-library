@@ -457,28 +457,28 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 		//$cap = new CAP_Class($_POST);
 
 		// Add the new Cap Processor Class
-		$cap = new CapProcessor();
-		$cap->makeCapOfPost($_POST);
+		$CapProcessor->makeCapOfPost($_POST);
+		//die(print_r($_POST));
 
 		if(!empty($_GET['cap']))
 		{
 			// Used for the Cap preview
-			$cap_contend = $cap->buildCap();
+			$cap_contend = $CapProcessor->buildCap();
 			print $cap_contend;
 		}
 		else
 		{
 			// Used to build the cap and save it at $cap->destination
 			if($_POST['capedit'] == "false" || $_POST['capedit'] == false) {
-				$cap_contend = $cap->buildCap();
-				$cap->destination = $conf->cap->output;
-				if($conf->cap->save == 1) $path = $cap->saveCap();
+				$cap_contend = $CapProcessor->buildCap();
+				$CapProcessor->destination = $conf->cap->output;
+				if($conf->cap->save == 1) $path = $CapProcessor->saveCap();
 				if ($path < 0) die($path);
 
 				$conf->identifier->ID_ID++;
 
 				$form->WriteConf();
-				$capname = $cap->getAlert()->getIdentifier().".xml";
+				$capname = $CapProcessor->getAlert()->getIdentifier().".xml";
 				//print $form->CapView($cap_contend, $capname); // Cap Preview +
 			}else{
 				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');

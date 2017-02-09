@@ -109,15 +109,19 @@ class CapProcessor{
 		if($post['category']){
 			$info_arr[] = $alert->addInfo(); // add first info block in a array
 
+			foreach ($post['language'] as $key => $value) {
+				if( $value == "") unset($post['language'][$key]);
+			}
+			$post['language'] = array_values($post['language']);
 			// foreach language specific data
-			if(count($post['language']) > 0)
+			if(array_unique($post['language']) > 0)
 			foreach(array_unique($post['language']) as $lkey => $lang)
 			{
 				// check if the value is not a dummy
 				if(!empty($lang) && $lang != "")
 				{
 					// if we have more than 1 language we have to produce more info blocks
-					if($lkey > 0 && count($post['language']) > 1){
+					if($lkey >= 1 && count($post['language']) > 1){
 						$info_arr[$lkey] = $alert->addInfo(); // write new info block in the array
 					}
 
@@ -453,7 +457,7 @@ class infoBlock{
 	protected $subclass = array('eventCode'=>'parameterBlock', 'parameter'=>'parameterBlock', 'resource'=>'resourceBlock', 'area' => 'areaBlock');
 
 	// language-COUNTRY Format RFC 3066 Specification: de-DE -> German
-	var     $language = "en-US";
+	var     $language = "en-GB";
 	// Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
 	var     $category = array();
 	private $categoryIndex = 0;

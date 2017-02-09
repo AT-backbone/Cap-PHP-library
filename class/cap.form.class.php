@@ -1418,6 +1418,7 @@
 							$out = '<textarea id="capviewtextarea" readonly name="capeditfield"></textarea>';
 							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
 							$out.= '<input type="hidden" name="capedit" id="capedit" value="false">';
+							$out.= '<input type="button" value="validate" onclick="validateCap()">';
 							$out.= '</li><li id="resultValidate" style="text-shadow: none;"></li>';
 							if($conf->webservice_aktive == 1) $out.= '<input type="hidden" name="webservice_aktive" id="webservice_aktive" value="1">';
 						break;
@@ -1797,6 +1798,9 @@
 				$out.= '<link rel="stylesheet" type="text/css" href="includes/plugin/jquery-clockpicker.min.css">';
 				$out.= '<script type="text/javascript" src="includes/plugin/jquery-clockpicker.min.js"></script>';
 
+				$out.= '<!--[if lt IE 9]>
+    							<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+								<![endif]-->';
 				$out.= '<title>Cap Creator</title>';
 
 			$out.= '</head>';

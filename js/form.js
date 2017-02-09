@@ -109,20 +109,6 @@ $( document ).ready(function()
 		        success: function(data)
 		        {
 		        	$("#capviewtextarea").val(data);
-							webservice_on = $('#webservice_aktive').val();
-							$.ajax({
-								type: "POST",
-								url: "lib/ajax/validate.ajax.php",
-								data: {webservice_aktive: webservice_on,cap: data}, // serializes the forms elements.
-								success: function(data)
-								{
-									$("#resultValidate").html(data);
-								},
-								error: function(errorThrown)
-								{
-									console.log( errorThrown);
-								}
-							});
 		        	$("#capviewtextarea").textinput( "refresh" );
 		        },
 						error: function(errorThrown){
@@ -131,6 +117,24 @@ $( document ).ready(function()
 		    	});
 
 		return false; // avoid to execute the actual submit of the form.
+	}
+
+	function validateCap(){
+		var data = $("#capviewtextarea").val();
+		var webservice_on = $('#webservice_aktive').val();
+		$.ajax({
+			type: "POST",
+			url: "lib/ajax/validate.ajax.php",
+			data: {webservice_aktive: webservice_on,cap: data}, // serializes the forms elements.
+			success: function(data)
+			{
+				$("#resultValidate").html(data);
+			},
+			error: function(errorThrown)
+			{
+				console.log( errorThrown);
+			}
+		});
 	}
 
 	function ajax_conf()
