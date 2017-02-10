@@ -9,20 +9,20 @@
 	if(file_exists('conf/conf.php'))
 	{
 		include 'conf/conf.php';
-		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
-		$langs->setDefaultLang($conf->user->lang);		
-		$langs->load("main");	
+		if(! empty($_GET['lang'])) $configuration->conf["user"]["language"] = $_GET['lang'];
+		$langs->setDefaultLang($configuration->conf["user"]["language"]);
+		$langs->load("main");
 	}
 
 	$language = array();
 	/**
 	 * Output RFC 3066 Array
-	 *     
+	 *
 	 * @return	string						Array with RFC 3066 Array
 	 */
 	function getlang($config = false){
 		global $conf, $language;
-		
+
 		if(is_array($language))
 		{
 			foreach($language as $key => $lang_name)
@@ -31,34 +31,34 @@
 			}
 		}
 
-		$out_tmp = $conf->lang;
+		$out_tmp = $configuration->conf["language"];
 
 		foreach($out_tmp as $key => $lang_name)
 		{
-			if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
+			if($configuration->conf["selected_language"][$key] == true) $out[$key] = $out_tmp[$key];
 		}
-		
+
 		return $out;
 	}
 
 	/**
 	* encrypt and decrypt function for passwords
-	*     
+	*
 	* @return	string
 	*/
-	function encrypt_decrypt($action, $string, $key = "") 
+	function encrypt_decrypt($action, $string, $key = "")
 	{
 		global $conf;
-		
+
 		$output = false;
 
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-		$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+		$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 		// hash
 		$key = hash('sha256', $secret_key);
-		
+
 		// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
 		$iv = substr(hash('sha256', $secret_iv), 0, 16);
 
@@ -72,7 +72,7 @@
 
 		return $output;
 	}
-	
+
 
 	$severity = array(
 		1 => 'Minor',
@@ -126,20 +126,20 @@
 	);
 
 	// Delete all Caps in output
-	$files = glob($conf->cap->output.'/*'); // get all file names
+	$files = glob($configuration->conf["cap"]["output"].'/*'); // get all file names
 	foreach($files as $file){ // iterate files
 		if(is_file($file) && empty($_POST['no_del'])) unlink($file); // delete file
 	}
 
 
-	$conf->meteoalarm = 1;
-	if($conf->meteoalarm == 1)
-	{			
-		if($conf->webservice->on > 0)
+	$meteoalarm = 1;
+	if($meteoalarm == 1)
+	{
+		if($configuration->conf["webservice"]["service_on"] > 0)
 		{
 			if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
 			{
-				include 'lib/cap.meteoalarm.webservices.Area.php';		
+				include 'lib/cap.meteoalarm.webservices.Area.php';
 				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
 				if(!empty($AreaCodesArray['document']['AreaInfo']))
 				{
@@ -149,7 +149,7 @@
 			if(file_exists('lib/cap.meteoalarm.webservices.vl.php'))
 			{
 				require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
-				include 'lib/cap.meteoalarm.webservices.vl.php';		
+				include 'lib/cap.meteoalarm.webservices.vl.php';
 				if($_GET['web_test'] == 1) die(print_r($AreaCodesArray));
 				if(!empty($AreaCodesArray['document']['AreaInfo']))
 				{
@@ -275,7 +275,7 @@
 			//print '</pre>';
 		}
 	}
-	
+
 	//print_r($awt_arr);
 	foreach($AreaIDArray as $aid => $data)
 	{
@@ -299,13 +299,13 @@
 
 	unset($cancel_check);
 
-	$langs_arr = getlang();	
-							
+	$langs_arr = getlang();
+
 	foreach($langs_arr as $key_l => $val_l)
 	{
 		if(in_array($key,$language)) unset($langs_arr[$key]);
 	}
-	foreach ($langs_arr as $key_l => $val_l) 
+	foreach ($langs_arr as $key_l => $val_l)
 	{
 		$langs_keys[] = $key_l;
 	}
@@ -335,10 +335,10 @@
 							if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $data_arr[0]->eid != "")
 							{
 								//print 'TEST';
-								$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
-								if($ref == "Update") 
+								$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+								if($ref == "Update")
 								{
-									$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+									$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 									if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 									$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\+01:00', strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
 								}
@@ -362,12 +362,12 @@
 									$post['event'][$lang_val]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
 								}
 								//$post['event'][$langs_keys[1]]	= $severity[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' warning';
-								$post['category'] 				= 'Met';				
+								$post['category'] 				= 'Met';
 								$post['responseType']			= 'Monitor';
 								$post['urgency'] 				= 'Immediate';
 								$post['severity'] 				= $severity[$data_arr[0]->level];
 								$post['certainty'] 				= 'Likely';
-								
+
 								$timezone_date = date('P');
 								$timezone_date_p = $timezone_date[0];
 								$timezone_date_h = substr($timezone_date, 1);
@@ -389,7 +389,7 @@
 								//print_r($data_arr[0]);
 								foreach($langs_keys as $key => $lang_val)
 								{
-									if($data_arr[0]->{'text_'.$key} != "")	
+									if($data_arr[0]->{'text_'.$key} != "")
 									{
 										$post['language'][] = $lang_val;
 										$post['headline'][$lang_val] = $headline_level[$data_arr[0]->level].' '.$event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
@@ -422,7 +422,7 @@
 								//print_r($post);
 								$cap = new CAP_Class($post);
 								$cap->buildCap();
-								$cap->destination = $conf->cap->output;
+								$cap->destination = $configuration->conf["cap"]["output"];
 								$path = $cap->createFile();
 								unset($post);
 							}
@@ -438,7 +438,7 @@
 	//print_r($white_data);
 	unset($data);
 	foreach($white_data as $aid => $data)
-	{	
+	{
 		foreach ($data as $type => $wh_arr) {
 			if($wh_arr['aid'] > 0)
 			{
@@ -448,7 +448,6 @@
 	}
 
 	echo json_encode($white_area);
-	//$files = glob('../'.$conf->cap->output.'/*'); // get all file names
 	//echo json_encode($files);
 
 ?>

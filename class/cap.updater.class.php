@@ -183,7 +183,7 @@
 		 */
 		function getlang($config = false)
 		{
-			global $conf;
+			global $configuration;
 
 			if(is_array($this->language))
 			{
@@ -193,12 +193,12 @@
 				}
 			}
 
-			$out_tmp = $conf->lang;
+			$out_tmp = $configuration->conf["language"];
 			//conf->lang['en-GB']			= 'english'; // Key and name of lang
 			//conf->select->lang['en-GB']	= 1; // key and bool if lang is aktive
 			foreach($out_tmp as $key => $lang_name)
 			{
-				if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
+				if($configuration->conf["selected_language"][$key] == true) $out[$key] = $out_tmp[$key];
 			}
 
 			return $out;
@@ -213,10 +213,10 @@
 		{
 			global $conf;
 
-			// $conf->cap->output the dir of the caps
-			$files = glob($conf->cap->output.'/*'); // get all file names
+			// the dir of the caps
+			$files = glob($configuration->conf["cap"]["output"].'/*'); // get all file names
 			foreach($files as $file){ // iterate files
-				if(is_file($file) && $file != $conf->cap->output.'/COPYING') unlink($file); // delete file
+				if(is_file($file) && $file != $configuration->conf["cap"]["output"].'/COPYING') unlink($file); // delete file
 			}
 
 			return true;
@@ -230,10 +230,10 @@
 		function webservice_meteoalarm()
 		{
 			global $conf;
-			$conf->meteoalarm = 1; // set meteoalarm on (debug value)
-			if($conf->meteoalarm == 1) // is meteoalarm service on ?
+			$meteoalarm = 1; // set meteoalarm on (debug value)
+			if($meteoalarm == 1) // is meteoalarm service on ?
 			{
-				if($conf->webservice->on > 0) // is webservice on ?
+				if($configuration->conf["webservice"]["service_on"] > 0) // is webservice on ?
 				{
 					$res = true;
 					$_GET['data'] = $this->data;
@@ -615,10 +615,10 @@
 										$timezone_date_p = $timezone_date[0];
 										$timezone_date_h = substr($timezone_date, 1);
 
-										$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+										$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 										if($ref == "Update")
 										{
-											$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+											$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 											if($this->User['sender'] != "") $data_arr[0]->sender = $this->User['sender'];
 											if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 											$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
@@ -766,7 +766,7 @@
 
 										$cap = new CAP_Class($post);
 										$cap->buildCap();
-										$cap->destination = $conf->cap->output;
+										$cap->destination = $configuration->conf["cap"]["output"];
 										$path = $cap->createFile();
 										//print '<pre>';
 										//	print_r($post);

@@ -5,6 +5,7 @@
 *.demosource/conf/*.0
 conf/*.demo
 conf.php
+conf.ini
 *.cap
 .xml
 ftp_tmp/*.zip

@@ -57,14 +57,22 @@
 			$info['nohtml'] = strip_tags($html);
 
 			$info['html'] = $html;
-
+			//print_r($info);
 			return $info;
 		}
 
 		function removeBody($html){
-			$split = explode('<div class="container">',$html);
-			$split = explode('<!--<div class=footer>',$split[2]);
-			return '<div class="container">'.$split[0]."<br>";
+			if (strpos($html, '<div class="container">') !== false) {
+				$split = explode('<div class="container">',$html);
+				$split = explode('<!--<div class=footer>',$split[2]);
+				if(!empty($split[0]))
+					return '<div class="container">'.$split[0]."<br>";
+				else
+					return '<div class="container">'.$html."<br>";
+			}else{
+				$split = explode('</form>', $html);
+				return $split[1];
+			}
 		}
 	}
 

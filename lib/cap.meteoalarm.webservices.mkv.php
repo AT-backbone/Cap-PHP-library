@@ -9,29 +9,29 @@
 	if(file_exists('conf/conf.php'))
 	{
 		include 'conf/conf.php';
-		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
-		$langs->setDefaultLang($conf->user->lang);		
-		$langs->load("main");	
+		if(! empty($_GET['lang'])) $configuration->conf["user"]["language"] = $_GET['lang'];
+		$langs->setDefaultLang($configuration->conf["user"]["language"]);
+		$langs->load("main");
 	}
 
 	/**
 	* encrypt and decrypt function for passwords
-	*     
+	*
 	* @return	string
 	*/
-	function encrypt_decrypt($action, $string, $key = "") 
+	function encrypt_decrypt($action, $string, $key = "")
 	{
 		global $conf;
-		
+
 		$output = false;
 
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-		$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+		$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 		// hash
 		$key = hash('sha256', $secret_key);
-		
+
 		// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
 		$iv = substr(hash('sha256', $secret_iv), 0, 16);
 
@@ -45,14 +45,14 @@
 
 		return $output;
 	}
-	
-	$conf->meteoalarm = 1;
-	if($conf->meteoalarm == 1)
+
+	$meteoalarm = 1;
+	if($meteoalarm == 1)
 	{
 		global $conf;
 
-		$conf->webservice->login = "";
-		$conf->webservice->password = "";
+		$configuration->conf["webservice"]["login"] = "";
+		$configuration->conf["webservice"]["password"] = "";
 		session_name(encrypt_decrypt(1, getcwd()));
 		session_start();
 		if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
@@ -63,14 +63,14 @@
 				$key = key($_POST['send-login']);
 
 				if(!empty($_POST['savepass'][$key]))
-				{		
+				{
 					unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 					unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-					
+
 					session_unset();
 					session_start();
 
-					$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
+					$Webservicename = explode('.', parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST));
 					setcookie('ServiceHost', $Webservicename[1], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 					setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 					setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
@@ -80,11 +80,11 @@
 				{
 					unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 					unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-					
+
 					session_unset();
 					session_start();
-					
-					$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
+
+					$Webservicename = explode('.', parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST));
 					$_SESSION['ServiceHost'] = $Webservicename[1];
 					$_SESSION['timestamp'] = strtotime('now');
 					$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
@@ -101,26 +101,27 @@
 				unset($_POST);
 			}
 		}
-		
+
 		if($_COOKIE['Session_login_name'])
 		{
-			$conf->webservice->login = $_COOKIE['Session_login_name'];
-			$conf->webservice->password =  $_COOKIE['Session_login_pass'];
+
+			$configuration->conf["webservice"]["login"] = $_COOKIE['Session_login_name'];
+			$configuration->conf["webservice"]["password"] =  $_COOKIE['Session_login_pass'];
 		}
-		
+
 		if($_SESSION['Session_login_name'])
 		{
-			$conf->webservice->login = $_SESSION['Session_login_name'];
-			$conf->webservice->password = $_SESSION['Session_login_pass'];
+			$configuration->conf["webservice"]["login"] = $_SESSION['Session_login_name'];
+			$configuration->conf["webservice"]["password"] = $_SESSION['Session_login_pass'];
 		}
 
 		global $out;
-		$conf->webservice->password = encrypt_decrypt(2, $conf->webservice->password);
+		$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 		ini_set("default_socket_timeout", 60000);
 		set_time_limit ( 240 );
 		require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
-		
-		$ns=$conf->webservice->ns;
+
+		$ns=$configuration->conf["webservice"]["ns"];
 		$WS_DOL_URL = $ns.'SvgAreaInfo.php';
 
 		$filename = $_POST[filename];
@@ -136,50 +137,51 @@
 				$soapclient->soap_defencoding='UTF-8';
 				$soapclient->decodeUTF8(false);
 			}
-			
+
 			// Call the WebService method and store its result in $result.
 			$authentication=array(
-			    'dolibarrkey'=>$conf->webservice->securitykey,
+			    'dolibarrkey'=>$configuration->conf["webservice"]["securitykey"],
 			    'sourceapplication'=>'getSvgInfo',
-			  	'login'=> $conf->webservice->login,
-		  	  'password'=> $conf->webservice->password);
+			  	'login'=> $configuration->conf["webservice"]["login"],
+		  	  'password'=> $configuration->conf["webservice"]["password"]);
 
-			if(!empty($conf->identifier->ISO)) $iso = $conf->identifier->ISO;
+			if(!empty($configuration->conf["identifier"]["ISO"])) $iso = $configuration->conf["identifier"]["ISO"];
 			if(!empty($_GET['iso'])) $iso = $_GET['iso'];
-			
+
 			$GenInsInput=array(
 				'iso'=>$iso,
 				'mkv' => 1,
 				'EMMA_ID'=>$_GET["EMMA_ID"]
 			);
-			    	
-			
+
+
 				$parameters = array('authentication'=>$authentication, 'getSvgInfo'=>$GenInsInput);
-				
+
 				$pid = $soapclient->call('getSvgInfo',$parameters,$ns,'');
 
-				if ($soapclient->fault) 
+				if ($soapclient->fault)
 				{
 			    $out.= '<h2>Fault</h2><pre>';
 			    $out.=var_dump($result);
 			    $out.= '</pre>';
-				} else 
+				} else
 				{
 					    // Check for errors
 					$err = $soapclient->getError();
-					
-					if ($err) 
+
+					if ($err)
 					{
 					  // Display the error
 					  $out.= '<h2>Error</h2><pre>' . $err . '</pre>';
-			    } 
-			    else 
+			    }
+			    else
 			    {
 
 			    }
 			}
 
-			$conf->webservice->password = encrypt_decrypt(1, $conf->webservice->password);	
+
+			$configuration->set("webservice", "password", encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 
 			print $pid['document']['SvgInfo'];
 	}

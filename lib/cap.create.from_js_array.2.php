@@ -10,29 +10,29 @@
 	if(file_exists('conf/conf.php'))
 	{
 		include 'conf/conf.php';
-		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
-		$langs->setDefaultLang($conf->user->lang);		
-		$langs->load("main");	
+		if(! empty($_GET['lang'])) $configuration->conf["user"]["language"] = $_GET['lang'];
+		$langs->setDefaultLang($configuration->conf["user"]["language"]);
+		$langs->load("main");
 	}
 
 	/**
 	* encrypt and decrypt function for passwords
-	*     
+	*
 	* @return	string
 	*/
-	function encrypt_decrypt($action, $string, $key = "") 
+	function encrypt_decrypt($action, $string, $key = "")
 	{
-		global $conf;
-		
+		global $configuration;
+
 		$output = false;
 
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-		$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+		$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 		// hash
 		$key = hash('sha256', $secret_key);
-		
+
 		// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
 		$iv = substr(hash('sha256', $secret_iv), 0, 16);
 
@@ -57,8 +57,8 @@
 	$cap_array = json_decode($cap_array_tmp);
 	$awt_arr = json_decode($awt_arr_tmp);
 
-		$conf->webservice->login = "";
-	$conf->webservice->password = "";
+		$configuration->conf["webservice"]["login"] = "";
+		$configuration->conf["webservice"]["password"] = "";
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
@@ -69,14 +69,14 @@
 			$key = key($_POST['send-login']);
 
 			if(!empty($_POST['savepass'][$key]))
-			{		
+			{
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				
+
 				session_unset();
 				session_start();
 
-				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
+				$Webservicename = explode('.', parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST));
 				setcookie('ServiceHost', $Webservicename[1], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
@@ -86,11 +86,11 @@
 			{
 				unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 				unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-				
+
 				session_unset();
 				session_start();
-				
-				$Webservicename = explode('.', parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST));
+
+				$Webservicename = explode('.', parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST));
 				$_SESSION['ServiceHost'] = $Webservicename[1];
 				$_SESSION['timestamp'] = strtotime('now');
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
@@ -107,39 +107,29 @@
 			unset($_POST);
 		}
 	}
-	
+
 	if($_COOKIE['Session_login_name'])
 	{
-		$conf->webservice->login = $_COOKIE['Session_login_name'];
-		$conf->webservice->password =  $_COOKIE['Session_login_pass'];
-	}
-	
-	if($_SESSION['Session_login_name'])
-	{
-		$conf->webservice->login = $_SESSION['Session_login_name'];
-		$conf->webservice->password = $_SESSION['Session_login_pass'];
+		$configuration->set("webservice", "login", $_COOKIE['Session_login_name']);
+		$configuration->set("webservice", "password", $_COOKIE['Session_login_pass']);
 	}
 
-	$service_arr = explode('/', $conf->webservice->WS_DOL_URL);
+	if($_SESSION['Session_login_name'])
+	{
+		$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
+		$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
+	}
+
+	$service_arr = explode('/', $configuration->conf["webservice"]["WS_DOL_URL"]);
 	end($service_arr);
 	$key = key($service_arr);
 
-	$conf->webservice->ns = str_replace($service_arr[$key],'',$conf->webservice->WS_DOL_URL);
-	$conf->webservice->sourceapplication = $conf->webservice->WS_METHOD;
+	$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
+	$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
 
 	//print_r($conf);
 
 	//print '<br>Start:<br>';
-
-	// $conf->webservice
-	// $conf->lang
-	// $conf->select->lang
-	// $conf->cap->output
-	// $conf->meteoalarm
-	// $conf->webservice->on
-	// $conf->identifier->WMO_OID
-	// $conf->identifier->ISO
-	// $conf->cap->output
 
 	$utc = date('P');
 
@@ -193,7 +183,7 @@
 	// get visio level warnings and area data from Meteoalarm webservice
 	//print '<br>webservice_meteoalarm()';
 	$capupdater->webservice_meteoalarm();
-	
+
 	//print 'get_area_identifier:<br>';
 	// set identifier sorted in area
 	//$capupdater->debug = true;
@@ -221,12 +211,12 @@
 	// calculate white areas
 	//print '<br>get_white_warnings()';
 	$capupdater->get_white_warnings();
-	
+
 	//print 'produce_all_caps:<br>';
 	// produce and save all caps in the export folder
 	//print '<br>produce_all_caps()';
 	$capupdater->produce_all_caps();
-	
+
 	//print 'fetch_white_areas:<br>';
 	// return white type from the areas
 	//print '<br>fetch_white_areas()';
@@ -235,7 +225,7 @@
 	//print 'json_encode:<br>';
 
 	echo json_encode($white_area);
-	//$files = glob('../'.$conf->cap->output.'/*'); // get all file names
+
 	//echo json_encode($files);
 
 ?>

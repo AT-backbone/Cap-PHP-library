@@ -3,19 +3,19 @@
  *       \file       htdocs/public/webservices/cap_export_client.php
  *       \brief      Client to make a client call to Meteoalarm WebServices "putCap"
  */
-$conf->meteoalarm = 1;
-if($conf->meteoalarm == 1)
+$meteoalarm = 1;
+if($meteoalarm == 1)
 {
-	global $conf;	
+	global $conf;
 
 	$data = $_GET['data'];
 	if($data == "") $data = 0;
 
-	$conf->webservice->password = encrypt_decrypt(2, $conf->webservice->password);
+	$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 	ini_set("default_socket_timeout", 60000);
 	set_time_limit ( 240 );
-	
-	$ns=$conf->webservice->ns;
+
+	$ns=$configuration->conf["webservice"]["ns"];
 	$WS_DOL_URL = $ns.'CapAreaInfo.php';
 
 	$filename = $_POST[filename];
@@ -32,17 +32,17 @@ if($conf->meteoalarm == 1)
 		$soapclient->soap_defencoding='UTF-8';
 		$soapclient->decodeUTF8(false);
 	}
-	
+
 	// Call the WebService method and store its result in $result.
 	$authentication=array(
-		'dolibarrkey'=>$conf->webservice->securitykey,
+		'dolibarrkey'=>$configuration->conf["webservice"]["securitykey"],
 		'sourceapplication'=>'getAreaInfo',
-		'login'=> $conf->webservice->login,
-		'password'=> $conf->webservice->password);
+		'login'=> $configuration->conf["webservice"]["login"] ,
+		'password'=> $configuration->conf["webservice"]["password"] );
 
-	if(!empty($conf->identifier->ISO)) $iso = $conf->identifier->ISO;
+	if(!empty($configuration->conf["identifier"]["ISO"])) $iso = $configuration->conf["identifier"]["ISO"];
 	if(!empty($_GET['iso'])) $iso = $_GET['iso'];
-	
+
 	$GenInsInput=array(
 		'iso'=>$iso,
 		'show_warnings'=> 1,
@@ -56,38 +56,38 @@ if($conf->meteoalarm == 1)
 	if($mapphp == true) $GenInsInput['ver'] = 2;
 
 	$parameters = array('authentication'=>$authentication, 'getAreaInfo'=>$GenInsInput);
-	
+
 	if($mapphp == true)
 	{
 		$AreaVLArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
 	}
 	else
 	{
-		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');	
+		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
 	}
-	
-	if ($soapclient->fault) 
+
+	if ($soapclient->fault)
 	{
 		$out.= '<h2>Fault</h2><pre>';
 		$out.=var_dump($result);
 		$out.= '</pre>';
-	} 
-	else 
+	}
+	else
 	{
 		    // Check for errors
 		$err = $soapclient->getError();
-		
-		if ($err) 
+
+		if ($err)
 		{
 		  // Display the error
 		  $out.= '<h2>Error</h2><pre>' . $err . '</pre>';
-		} 
-		else 
+		}
+		else
 		{
 
 		}
 	}
 
-	$conf->webservice->password = encrypt_decrypt(1, $conf->webservice->password);	
+	$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 }
 ?>

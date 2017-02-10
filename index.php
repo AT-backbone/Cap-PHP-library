@@ -30,12 +30,44 @@ error_reporting(E_ERROR | E_PARSE);
 require_once 'class/cap.form.class.php';
 require_once 'lib/cap.convert.class.php';
 require_once 'class/translate.class.php';
+require_once 'class/conf.class.php';
 require_once 'lib/cap.class.php';
 require_once 'lib/CapValidatorChecker.class.php';
 
-
 $langs = new Translate();
 $CapProcessor = new CapProcessor();
+
+
+$configuration = new Configuration("conf/conf.ini");
+
+if($configuration->get("installed", "finished") != true){
+	$standard_configuration = new Configuration("conf/standard.conf.ini");
+	$configuration->conf = $standard_configuration->conf;
+	$configuration->set("installed", "finished", true);
+	$configuration->write_php_ini();
+	header('Location: index.php#conf');
+	exit;
+}else{
+	// the library is installed
+	if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
+	$langs->setDefaultLang($configuration->get("user", "language"));
+	$langs->load("main");
+
+	if(!file_exists('conf/conf.ini'))
+	{
+		$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
+	}
+}
+
+if(! is_dir("output") || ! is_writable("output"))
+{
+	$error_out.= '[output/] '.$langs->trans('perm_for_conf')."<p>";
+}
+
+if(!empty($error_out))
+{
+	die($error_out);
+}
 
 /**
 * encrypt and decrypt function for passwords
@@ -50,7 +82,8 @@ function encrypt_decrypt($action, $string, $key = "")
 
 	$encrypt_method = "AES-256-CBC";
 	$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-	$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+
+	$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 	// hash
 	$key = hash('sha256', $secret_key);
@@ -69,105 +102,6 @@ function encrypt_decrypt($action, $string, $key = "")
 	return $output;
 }
 
-if(file_exists('conf/conf.php'))
-{
-	include 'conf/conf.php';
-	if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
-	$langs->setDefaultLang($conf->user->lang);
-	$langs->load("main");
-}
-else
-{
-	chmod('conf', 755);
-	$capfile = fopen('conf/conf.php', "w");
-	fwrite($capfile, "
-	<?php
-	$"."conf->lang['en-GB']                                   = 'english';
-	$"."conf->lang['ca']                                      = 'català';
-	$"."conf->lang['cs']                                      = 'ceština';
-	$"."conf->lang['da-DK']                                   = 'dansk';
-	$"."conf->lang['de-DE']                                   = 'deutsch';
-	$"."conf->lang['es-ES']                                   = 'español';
-	$"."conf->lang['et']                                      = 'eesti';
-	$"."conf->lang['eu']                                      = 'euskera';
-	$"."conf->lang['fr-FR']                                   = 'français';
-	$"."conf->lang['gl']                                      = 'galego';
-	$"."conf->lang['hr-HR']                                   = 'hrvatski';
-	$"."conf->lang['is']                                      = 'íslenska';
-	$"."conf->lang['it-IT']                                   = 'italiano';
-	$"."conf->lang['lt']                                      = 'lietuviu';
-	$"."conf->lang['lv']                                      = 'latviešu';
-	$"."conf->lang['hu-HU']                                   = 'magyar';
-	$"."conf->lang['mt']                                      = 'malti';
-	$"."conf->lang['nl-NL']                                   = 'nederlands';
-	$"."conf->lang['no']                                      = 'norsk';
-	$"."conf->lang['pl']                                      = 'polski';
-	$"."conf->lang['pt-PT']                                   = 'português';
-	$"."conf->lang['ro']                                      = 'româna';
-	$"."conf->lang['sr']                                      = 'српски';
-	$"."conf->lang['sl']                                      = 'slovenšcina';
-	$"."conf->lang['sk']                                      = 'slovencina';
-	$"."conf->lang['fi-FI']                                   = 'suomi';
-	$"."conf->lang['sv-SE']                                   = 'svenska';
-	$"."conf->lang['el-GR']                                   = 'Ελληνικά';
-	$"."conf->lang['bg']                                      = 'bulgarian';
-	$"."conf->lang['mk']                                      = 'македонски';
-	$"."conf->lang['name']                                    = '';
-
-	$"."conf->select->lang['en-GB']                           = 1;
-	$"."conf->select->lang['ca']                              = 0;
-	$"."conf->select->lang['cs']                              = 0;
-	$"."conf->select->lang['da-DK']                           = 0;
-	$"."conf->select->lang['de-DE']                           = 1;
-	$"."conf->select->lang['es-ES']                           = 0;
-	$"."conf->select->lang['et']                              = 0;
-	$"."conf->select->lang['eu']                              = 0;
-	$"."conf->select->lang['fr-FR']                           = 0;
-	$"."conf->select->lang['gl']                              = 0;
-	$"."conf->select->lang['hr-HR']                           = 0;
-	$"."conf->select->lang['is']                              = 0;
-	$"."conf->select->lang['it-IT']                           = 0;
-	$"."conf->select->lang['lt']                              = 0;
-	$"."conf->select->lang['lv']                              = 0;
-	$"."conf->select->lang['hu-HU']                           = 0;
-	$"."conf->select->lang['mt']                              = 0;
-	$"."conf->select->lang['nl-NL']                           = 0;
-	$"."conf->select->lang['no']                              = 0;
-	$"."conf->select->lang['pl']                              = 0;
-	$"."conf->select->lang['pt-PT']                           = 0;
-	$"."conf->select->lang['ro']                              = 0;
-	$"."conf->select->lang['sr']                              = 0;
-	$"."conf->select->lang['sl']                              = 0;
-	$"."conf->select->lang['sk']                              = 0;
-	$"."conf->select->lang['fi-FI']                           = 0;
-	$"."conf->select->lang['sv-SE']                           = 0;
-	$"."conf->select->lang['el-GR']                           = 0;
-	$"."conf->select->lang['bg']                              = 0;
-	$"."conf->select->lang['mk']                              = 0;
-	$"."conf->trans['en_US']                                  = 'english';
-	$"."conf->trans['de_DE']                                  = 'deutsch';
-	$"."conf->trans['fr_FR']                                  = 'français';
-	$"."conf->trans['es_ES']                                  = 'Español';
-	?>
-	");
-	fclose($capfile);
-	$conf->user->lang = 'en_US';
-	$langs->setDefaultLang($conf->user->lang);
-	$langs->load("main");
-
-	// index.php#conf
-	if(file_exists('conf/conf.php'))
-	{
-		header('Location: index.php#conf');
-		exit;
-	}
-	else
-	{
-		$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
-		//die('Permision problems detectet pleas fix this: Can\'t create conf.php file in folder conf/<br>Please give this folder conf/ the group apache and the mod rwxrwxr-x');
-	}
-}
-
 if(!empty($_GET['encrypt']))
 {
 	$crpt = encrypt_decrypt(1, $_GET['encrypt']);
@@ -184,21 +118,10 @@ if(!empty($_GET['decrypt']))
 	exit;
 }
 
-if(! is_dir("output") || ! is_writable("output"))
-{
-	$error_out.= '[output/] '.$langs->trans('perm_for_conf')."<p>";
-}
+$configuration->set("cap", "save", 1);
 
-if(!empty($error_out))
-{
-	die($error_out);
-}
-
-$conf->cap->output="output";
-$conf->cap->save = 1;
-
-$conf->webservice->login = "";
-$conf->webservice->password = "";
+$configuration->conf["webservice"]["login"] = "";
+$configuration->conf["webservice"]["password"] = "";
 session_name(encrypt_decrypt(1, getcwd()));
 session_start();
 
@@ -219,7 +142,7 @@ if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 			session_unset();
 			session_start();
 
-			$Webservicename = parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST);
+			$Webservicename = parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST);
 			setcookie('ServiceHost', $Webservicename, strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 			setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 			setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
@@ -233,7 +156,7 @@ if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 			session_unset();
 			session_start();
 
-			$Webservicename = parse_url($conf->webservice->WS_DOL_URL, PHP_URL_HOST);
+			$Webservicename = parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST);
 			$_SESSION['ServiceHost'] = $Webservicename;
 			$_SESSION['timestamp'] = strtotime('now');
 			$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
@@ -254,29 +177,29 @@ if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 
 if($_COOKIE['Session_login_name'])
 {
-	$conf->webservice->login = $_COOKIE['Session_login_name'];
-	$conf->webservice->password =  $_COOKIE['Session_login_pass'];
+	$configuration->set("webservice", "login", $_COOKIE['Session_login_name']);
+	$configuration->set("webservice", "password", $_COOKIE['Session_login_pass']);
 }
 
 if($_SESSION['Session_login_name'])
 {
-	$conf->webservice->login = $_SESSION['Session_login_name'];
-	$conf->webservice->password = $_SESSION['Session_login_pass'];
+	$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
+	$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
 }
 
 // build service url
-$service_arr = explode('/', $conf->webservice->WS_DOL_URL);
+$service_arr = explode('/', $configuration->conf["webservice"]["WS_DOL_URL"]);
 end($service_arr);
 $key = key($service_arr);
 
-$conf->webservice->ns = str_replace($service_arr[$key],'',$conf->webservice->WS_DOL_URL);
-$conf->webservice->sourceapplication = $conf->webservice->WS_METHOD;
+$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
+$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
 
 // METEOALARM WEBSERVICE ---
-$conf->meteoalarm = 1;
-if($conf->meteoalarm == 1)
+$meteoalarm = 1;
+if($meteoalarm == 1)
 {
-	if($conf->webservice->on > 0)
+	if($configuration->conf["webservice"]["service_on"] > 0)
 	{
 		if(file_exists('lib/cap.meteoalarm.webservices.Area.php'))
 		{
@@ -309,22 +232,22 @@ if($conf->meteoalarm == 1)
 
 		if(is_array($AreaCodesArray) && is_array($ParameterArray) && empty($AreaCodesArray['result']) && empty($ParameterArray['result']))
 		{
-			$conf->webservice_aktive = 1;
+			$configuration->conf["webservice_aktive"] = 1;
 		}
 		else
 		{
-			$conf->webservice_aktive = -1;
+			$configuration->conf["webservice_aktive"] = -1;
 		}
 	}
 }
 
 $login_to_webservice_faild = false;
-if($tryed_login == true && $conf->webservice_aktive == -1)
+if($tryed_login == true && $configuration->conf["webservice_aktive"] == -1)
 {
 	unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 	unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-	unset($conf->webservice->login);
-	unset($conf->webservice->password);
+	$configuration->set("webservice", "login", "");
+	$configuration->set("webservice", "password", "");
 	if(!is_array($_POST['send-logout']))
 	{
 		unset($_POST);
@@ -332,7 +255,7 @@ if($tryed_login == true && $conf->webservice_aktive == -1)
 	$login_to_webservice_faild = true;
 }
 
-if(!file_exists('conf/conf.php'))
+if(!file_exists('conf/conf.ini'))
 {
 	$cap = new CAP_Form();
 	print $cap->install();
@@ -349,7 +272,8 @@ elseif($_GET['conv'] == 1)
 		}
 		else
 		{
-			$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+
+			$location = $configuration->conf["cap"]["output"].'/'.urldecode($_POST['location']);
 		}
 
 		$CapProcessor->readCap($location);
@@ -357,7 +281,7 @@ elseif($_GET['conv'] == 1)
 
 		// Convert
 		$converter = new Convert_CAP_Class();
-		$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $conf->cap->output);
+		$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $configuration->conf["cap"]["output"]);
 
 		$form = new CAP_Form();
 		print $form->CapView($capconvertet, $cap[identifier].'.conv.cap.xml'); // Cap Preview +
@@ -397,11 +321,11 @@ elseif($_GET['read'] == 1)
 	{
 		if(! empty($_POST['location']))
 		{
-			$location = $conf->cap->output.'/'.urldecode($_POST['location']);
+			$location = $configuration->conf["cap"]["output"].'/'.urldecode($_POST['location']);
 		}
 		else if(! empty($_GET['location']))
 		{
-			$location = $conf->cap->output.'/'.urldecode($_GET['location']);
+			$location = $configuration->conf["cap"]["output"].'/'.urldecode($_GET['location']);
 		}
 	}
 
@@ -427,7 +351,7 @@ elseif(empty($_POST['action']) && $_GET['webservice'] != 1 && empty($_GET['web_t
 	// Build Cap Creator form
 	if(! empty($_GET['delete']))
 	{
-		unlink($conf->cap->output.'/'.$_GET['delete']);
+		unlink($configuration->conf["cap"]["output"].'/'.$_GET['delete']);
 		header('Location: '.$_SERVER['PHP_SELF'].'#read');
 	}
 
@@ -448,7 +372,7 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 	$form = new CAP_Form();
 	$_POST = $form->MakeIdentifier($_POST);
 
-	if($conf->webservice_aktive == 1)
+	if($configuration->conf["webservice_aktive"] == 1)
 	{
 		if($_POST['sender'] == "") $_POST['sender'] = $User['sender'];
 		if($_POST['senderName'] == "") $_POST['senderName'] = $User['senderName'];
@@ -471,25 +395,25 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 			// Used to build the cap and save it at $cap->destination
 			if($_POST['capedit'] == "false" || $_POST['capedit'] == false) {
 				$cap_contend = $CapProcessor->buildCap();
-				$CapProcessor->destination = $conf->cap->output;
-				if($conf->cap->save == 1) $path = $CapProcessor->saveCap();
+				$CapProcessor->destination = $configuration->conf["cap"]["output"];
+				if($configuration->conf["cap"]["save"] == 1) $path = $CapProcessor->saveCap();
 				if ($path < 0) die($path);
 
-				$conf->identifier->ID_ID++;
+				$configuration->set("identifier", "ID_ID", $configuration->conf["identifier"]["ID_ID"] + 1);
 
 				$form->WriteConf();
 				$capname = $CapProcessor->getAlert()->getIdentifier().".xml";
 				//print $form->CapView($cap_contend, $capname); // Cap Preview +
 			}else{
-				$capfile = fopen($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
+				$capfile = fopen($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
 				fwrite($capfile, $_POST['capeditfield']);
 				fclose($capfile);
 
-				chmod($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', 0660);  // octal; correct value of mode
-				chgrp($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml', filegroup($conf->cap->output));
+				chmod($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml', 0660);  // octal; correct value of mode
+				chgrp($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml', filegroup($configuration->conf["cap"]["output"]));
 
 				// convert in UTF-8
-				$cap_contend = file_get_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
+				$cap_contend = file_get_contents($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
 
 				if (preg_match('!!u', $cap_contend))
 				{
@@ -500,15 +424,15 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 					$cap_contend = mb_convert_encoding($cap_contend, 'UTF-8', 'OLD-ENCODING');
 				}
 
-				file_put_contents($conf->cap->output.'/'.date('Y.m.d.H.i.s').'.edited.xml');
+				file_put_contents($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
 
 				$capname = date('Y.m.d.H.i.s').'.edited.xml';
 				//print $form->CapView($cap_contend, $capname); // Cap Preview +
 			}
 
 		$CVal = new CapChecker();
-		if($conf->webservice_aktive == 1) $CVal->profile = "meteoalarm";
-		$cap_path = $conf->cap->output.'/'.$capname;
+		if($configuration->conf["webservice_aktive"] == 1) $CVal->profile = "meteoalarm";
+		$cap_path = $configuration->conf["cap"]["output"].'/'.$capname;
 		$Cvalinfo = $CVal->validate_CAP($cap_path);
 		print $form->CapView($cap_contend, $capname, $CVal->removeBody($Cvalinfo['html'])); // Cap Preview +
 	}
@@ -523,7 +447,7 @@ elseif($_GET['conf'] == "1")
 {
 	$form = new CAP_Form();
 	$form->PostToConf($_POST['conf']);
-	$form->WriteConf();
+	$configuration->write_php_ini();
 
 	if($_POST['template_on'] == 'on')
 	{
@@ -531,9 +455,9 @@ elseif($_GET['conf'] == "1")
 		{
 			if(!file_exists('conf/'.$_POST['Template']))
 			{
-				if (!copy($conf->cap->output.'/'.$_POST['Template'], 'conf/template.cap'))
+				if (!copy($configuration->conf["cap"]["output"].'/'.$_POST['Template'], 'conf/template.cap'))
 				{
-					die('Permission problems detectet pleas fix this: copy ['.$conf->cap->output.'/'.$_POST['Template'].'] to [conf/template.cap]' );
+					die('Permission problems detectet pleas fix this: copy ['.$configuration->conf["cap"]["output"].'/'.$_POST['Template'].'] to [conf/template.cap]' );
 				}
 			}
 		}

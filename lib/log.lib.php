@@ -8,11 +8,11 @@
  * Copyright (C) 2005-2012	Regis Houssin        <regis.houssin@capnetworks.com>
  * Copyright (C) 2008      	Raphael Bertrand (Resultic)       <raphael.bertrand@resultic.fr>
  * Copyright (C) 2010-2014 	Juanjo Menent        <jmenent@2byte.es>
- * Copyright (C) 2013      	Cédric Salvador      <csalvador@gpcsolutions.fr>
+ * Copyright (C) 2013      	Cï¿½dric Salvador      <csalvador@gpcsolutions.fr>
  * Copyright (C) 2013      	Alexandre Spangaro   <aspangaro.dolibarr@gmail.com>
- * Copyright (C) 2014     	Cédric GROSS         <c.gross@kreiz-it.fr>
- * Copyright (C) 2014-2015 	Marcos García        <marcosgdf@gmail.com>
- * Copyright (C) 2015       Jean-François Ferry	 <jfefe@aternatik.fr>
+ * Copyright (C) 2014     	Cï¿½dric GROSS         <c.gross@kreiz-it.fr>
+ * Copyright (C) 2014-2015 	Marcos Garcï¿½a        <marcosgdf@gmail.com>
+ * Copyright (C) 2015       Jean-Franï¿½ois Ferry	 <jfefe@aternatik.fr>
  * Copyright (c) 2015  			Guido Schratzer   	 <guido.schratzer@backbone.co.at>
  * Copyright (c) 2015 			 Niklas Spanring   	 <n.spanring@backbone.co.at>
  *
@@ -64,13 +64,12 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
     global $conf;
 
     // If syslog module enabled
-    //if (empty($conf->syslog->enabled)) return;
 
     if (! empty($level) && empty($conf->disable_log))
     {
         // Test log level
         $logLevels = array( LOG_EMERG, LOG_ALERT, LOG_CRIT, LOG_ERR, LOG_WARNING, LOG_NOTICE, LOG_INFO, LOG_DEBUG);
-        
+
         if (!in_array($level, $logLevels))
         {
             throw new Exception('Incorrect log level');
@@ -100,7 +99,7 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
 					$tmp2 = $message[2];
 					$tmp3 = $message[3];
 					$tmp4 = $message[4];
-					
+
 					if($tmp)
 					{
 						while(strlen($tmp) < 15)
@@ -142,9 +141,9 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
 					}
 					unset($message);
 					$message = $tmp.$tmp1.$tmp2.$tmp3.$tmp4;
-					
-					
-					
+
+
+
 				}
 
         $data = array(

@@ -227,7 +227,7 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild;
+			global $configuration, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild;
 
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
@@ -722,17 +722,17 @@
 							$status_theme_ti = $status_theme;
 							$status_theme_id = $status_theme;
 
-							if(!empty($conf->identifier->WMO_OID)) 	$status_theme_wm = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							if(!empty($conf->identifier->ISO)) 			$status_theme_is = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							if(!empty($conf->identifier->ID_ID)) 		$status_theme_ti = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							if($conf->identifier->time->on == true) $status_theme_id = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["identifier"]["WMO_OID"])) 	$status_theme_wm = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["identifier"]["ISO"])) 			$status_theme_is = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["identifier"]["ID_ID"])) 		$status_theme_ti = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if($configuration->conf["identifier"]["time_on"] == true) $status_theme_id = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 
 							$out.= '<div class="ui-grid-c">';
-								if(!empty($conf->identifier->WMO_OID))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" '.$status_theme_wm.' type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
-								if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input '.$status_theme_is.' placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
-								if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input '.$status_theme_ti.' placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
-								if(!empty($conf->identifier->ID_ID))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input '.$status_theme_id.' placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
-								if(empty($conf->identifier->ID_ID)) 		$out.= '<div class="ui-block-d"><input '.$status_theme.' placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
+								if(!empty($configuration->conf["identifier"]["WMO_OID"]))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" '.$status_theme_wm.' type="text" maxlength="22" name="identifier[WMO]"  value="'.$configuration->conf["identifier"]["WMO_OID"].'"></div>';
+								if(!empty($configuration->conf["identifier"]["ISO"]))			$out.= '<div class="ui-block-b" style="width: 45px;"><input '.$status_theme_is.' placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$configuration->conf["identifier"]["ISO"].'"></div>';
+								if($configuration->conf["identifier"]["time_on"] == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input '.$status_theme_ti.' placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
+								if(!empty($configuration->conf["identifier"]["ID_ID"]))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input '.$status_theme_id.' placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$configuration->conf["identifier"]["ID_ID"].'"></div>';
+								if(empty($configuration->conf["identifier"]["ID_ID"])) 		$out.= '<div class="ui-block-d"><input '.$status_theme.' placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
 							$out.= '</div>';
 						}
 						else
@@ -1141,7 +1141,7 @@
 
 					case 'map':
 						// GOOGLE MAP
-							if(!empty($conf->GoogleMap->APIkey))
+							if(!empty($configuration->conf["GoogleMap"]["APIkey"]))
 								$out = '<div id="map" style="height: 480px;" class="map"></div>';
 							//$out.= '<div id="mapinfo" class="mapinfo">';
 							//	$out.='<ul data-role="listview">';
@@ -1202,8 +1202,8 @@
 					 */
 
 					case 'cap_save':
-						if(!empty($conf->cap->save)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						if($conf->cap->save == 1) $onoroff = 'checked=""';
+						if(!empty($configuration->conf["cap"]["save"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+						if($configuration->conf["cap"]["save"] == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
 						//$out = '<label for="identifier_time">'.$langs->trans("LabelSaveCapsInOutputFolder").':</label>';
 						$out = '<legend>'.$langs->trans("LabelSaveCapsInOutputFolder").': '.$this->tooltip($type.'tool', $langs->trans("LabelSaveCapsInOutputFolderDesc")).'</legend>';
@@ -1211,33 +1211,33 @@
 						break;
 
 					case 'cap_output':
-							if(!empty($conf->cap->output)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["cap"]["output"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("Labelcap_output").': '.$this->tooltip($type.'tool', $langs->trans("Labelcap_outputDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
+							$out.= '<input '.$status_theme.' type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$configuration->conf["cap"]["output"].'">';
 						break;
 
 					case 'ID_ID':
-							if(!empty($conf->identifier->ID_ID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["identifier"]["ID_ID"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("LabelIdentifierNumber").': '.$this->tooltip($type.'tool', $langs->trans("LabelIdentifierNumberDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
+							$out.= '<input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$configuration->conf["identifier"]["ID_ID"].'">';
 						break;
 
 					case 'WMO_OID':
-							if(!empty($conf->identifier->WMO_OID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["identifier"]["WMO_OID"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("LabelWMO_OID").': '.$this->tooltip($type.'tool', $langs->trans("LabelWMO_OIDDesc")).'</legend>';
-							$out.= '<input '.$status_theme.'  type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
+							$out.= '<input '.$status_theme.'  type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$configuration->conf["identifier"]["WMO_OID"].'">';
 						break;
 
 					case 'ISO':
-						if(!empty($conf->identifier->ISO)) $status_theme = 'data-theme="f"';
+						if(!empty($configuration->conf["identifier"]["ISO"])) $status_theme = 'data-theme="f"';
 						$out = '<legend>'.$langs->trans("LabelISO").': '.$this->tooltip($type.'tool', $langs->trans("LabelISODesc")).'</legend>';
-						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">';
+						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$configuration->conf["identifier"]["ISO"].'">';
 						break;
 
 					case 'GoogleMapAPIkey':
-						if(!empty($conf->GoogleMap->APIkey)) $status_theme = 'data-theme="f"';
+						if(!empty($configuration->conf["GoogleMap"]["APIkey"])) $status_theme = 'data-theme="f"';
 						$out = '<legend><b>Google Maps API key</b>: '.$this->tooltip($type.'tool', $langs->trans("LabelGoogleMapsAPIkeyDesc")).'</legend>';
-						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="Google Map API key" name="conf[GoogleMap][APIkey]" value="'.$conf->GoogleMap->APIkey.'">';
+						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="Google Map API key" name="conf[GoogleMap][APIkey]" value="'.$configuration->conf["GoogleMap"]["APIkey"].'">';
 						break;
 
 					case 'timezone':
@@ -1248,8 +1248,8 @@
 						break;
 
 					case 'identifier_time':
-						if(!empty($conf->identifier->time->on)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
+						if(!empty($configuration->conf["identifier"]["time_on"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+						if($configuration->conf["identifier"]["time_on"] == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
 						$out = '<legend>'.$langs->trans("LabelAutomaticIdentifierTime").': '.$this->tooltip($type.'tool', $langs->trans("LabelAutomaticIdentifierTimeDesc")).'</legend>';
 						//$out = '<label for="identifier_time">'.$langs->trans("LabelAutomaticIdentifierTime").':</label>';
@@ -1259,7 +1259,7 @@
 					case 'template':
 						if(file_exists('conf/template.cap')) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 
-						foreach(scandir($conf->cap->output) as $num => $capfilename)
+						foreach(scandir($configuration->conf["cap"]["output"]) as $num => $capfilename)
 						{
 							if($capfilename != '.' && $capfilename != '..' && $capfilename != '.cap' && $capfilename != '.conv.cap')
 							{
@@ -1289,13 +1289,14 @@
 						break;
 
 					case 'lang_conf':
-						if(!empty($conf->select->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+						if(!empty($configuration->conf["selected_language"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						//$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
 						$out = '<legend>'.$langs->trans("LabelUsableLanguages").': '.$this->tooltip($type.'tool', $langs->trans("LabelUsableLanguagesDesc")).'</legend>';
 						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
-						foreach($conf->lang as $key => $lang_name)
+
+						foreach($configuration->conf["language"] as $key => $lang_name)
 						{
-							if($conf->select->lang[$key] == false)
+							if($configuration->conf["selected_language"][$key] == false)
 							{
 								$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
 							}
@@ -1309,13 +1310,13 @@
 						break;
 
 					case 'lang_conf_use':
-							if(!empty($conf->user->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["user"]["language"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							//$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
 							$out = '<legend>'.$langs->trans("Labellang_conf_use").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_useDesc")).'</legend>';
 							$out.= '<select name="conf[user][lang]" id="lang_conf_use" data-native-menu="false" data-iconpos="left">';
-							foreach($conf->trans as $key => $lang_name)
+							foreach($configuration->conf["translation"] as $key => $lang_name)
 							{
-								if($conf->user->lang != $key)
+								if($configuration->conf["user"]["language"] != $key)
 								{
 									$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
 								}
@@ -1347,7 +1348,7 @@
 								$out.= '<div class="ui-grid-a">';
 									$out.= '<div class="ui-block-a">';
 										$out.= '<select id="lang_remove" data-native-menu="false" data-iconpos="left">';
-										foreach($conf->lang as $key => $lang_name)
+										foreach($configuration->conf["language"] as $key => $lang_name)
 										{
 											$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
 										}
@@ -1362,7 +1363,7 @@
 						break;
 
 					case 'webservice_on':
-							if($conf->webservice->on == 1) $onoroff = 'checked=""';
+							if($configuration->conf["webservice"]["service_on"] == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
 							//$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
 							$out = '<legend>'.$langs->trans("LabelWebservice").': '.$this->tooltip($type.'tool', $langs->trans("LabelWebserviceDesc")).'</legend>';
@@ -1371,47 +1372,42 @@
 
 					case 'webservice_password':
 							$out = '<legend>'.$langs->trans("Labelwebservice_password").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_passwordDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$configuration->conf["webservice"]["password"].'">';
 						break;
 
 					case 'webservice_securitykey':
 							$out = '<legend>'.$langs->trans("Labelwebservice_securitykey").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_securitykeyDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$configuration->conf["webservice"]["securitykey"].'">';
 						break;
 
 					case 'webservice_sourceapplication':
 							$out = '<legend>'.$langs->trans("Labelwebservice_sourceapplication").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_sourceapplicationDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$configuration->conf["webservice"]["sourceapplication"].'">';
 						break;
 
 					case 'webservice_login':
 							$out = '<legend>'.$langs->trans("Labelwebservice_login").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_loginDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$configuration->conf["webservice"]["login"].'">';
 						break;
 
 					case 'webservice_entity':
 							$out = '<legend>'.$langs->trans("Labelwebservice_entity").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_entityDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$configuration->conf["webservice"]["entity"].'">';
 						break;
-
-					//case 'webservice_destination':
-					//		$out.= '<legend>'.$langs->trans("Labelwebservice_destination").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_destinationDesc")).'</legend>';
-					//		$out.= '<input type="text" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
-					//	break;
 
 					case 'webservice_WS_METHOD':
 							$out = '<legend>'.$langs->trans("webservice_WS_METHOD").': '.$this->tooltip($type.'tool', $langs->trans("webservice_WS_METHODDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$configuration->conf["webservice"]["WS_METHOD"].'">';
 						break;
 
 					case 'webservice_ns':
 							$out = '<legend>'.$langs->trans("Labelwebservice_ns").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_nsDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][ns]" value="'.$configuration->conf["webservice"]["ns"].'">';
 						break;
 
 					case 'webservice_WS_DOL_URL':
 							$out = '<legend>'.$langs->trans("Labelwebservice_WS_DOL_URL").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_WS_DOL_URLDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$configuration->conf["webservice"]["WS_DOL_URL"].'">';
 						break;
 
 					case 'capview':
@@ -1420,7 +1416,7 @@
 							$out.= '<input type="hidden" name="capedit" id="capedit" value="false">';
 							$out.= '<input type="button" value="validate" onclick="validateCap()">';
 							$out.= '</li><li id="resultValidate" style="text-shadow: none;"></li>';
-							if($conf->webservice_aktive == 1) $out.= '<input type="hidden" name="webservice_aktive" id="webservice_aktive" value="1">';
+							if($configuration->conf["webservice_aktive"] == 1) $out.= '<input type="hidden" name="webservice_aktive" id="webservice_aktive" value="1">';
 						break;
 
 					case 'caplist':
@@ -1428,14 +1424,14 @@
 						$out.= '<input type="file" name="uploadfile" id="uploadfile"><input type="submit" value="'.$langs->trans('LabelUpload').'" name="upload" data-ajax="false">';
 
 						$out.= '<fieldset data-role="controlgroup">';
-								foreach(scandir($conf->cap->output) as $num => $capfilename)
+								foreach(scandir($configuration->conf["cap"]["output"]) as $num => $capfilename)
 								{
 									if($num > 1)
 									{
 										$out.= '<div class="ui-grid-a">';
 											$out.= '<div class="ui-block-a" style="width:90%">';
 												$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
-												$out.= '<label for="cap_file_'.$num.'">'.$capfilename.' <span style="font-size: 12px;color: #5A5A5A;">('.filesize($conf->cap->output.'/'.$capfilename).'b | '.date('d.m.Y H:i:s',filectime($conf->cap->output.'/'.$capfilename)).')</span> </label>';
+												$out.= '<label for="cap_file_'.$num.'">'.$capfilename.' <span style="font-size: 12px;color: #5A5A5A;">('.filesize($configuration->conf["cap"]["output"].'/'.$capfilename).'b | '.date('d.m.Y H:i:s',filectime($configuration->conf["cap"]["output"].'/'.$capfilename)).')</span> </label>';
 											$out.= '</div>';
 											$out.= '<div class="ui-block-b" style="width:10%">';
 												$out.= '<a href="#cap_file_'.$num.'_delete" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini"><span style="color:#ff0000">X</span></a>';
@@ -1456,15 +1452,15 @@
 						break;
 
 					case 'login_popup':
-						if($conf->webservice->on == 1)
+						if($configuration->conf["webservice"]["service_on"] == 1)
 						{
 							$this->login_id++;
 
-							if($conf->webservice_aktive == 1) // Logout
+							if($configuration->conf["webservice_aktive"] == 1) // Logout
 							{
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
 									$out.= '<li>'.$langs->trans("Service").': '.$_SESSION['ServiceHost'].'</li>';
-									$out.= '<li>'.$langs->trans("User").': '.$conf->webservice->login.'</li>';
+									$out.= '<li>'.$langs->trans("User").': '.$configuration->conf["webservice"]["login"].'</li>';
 									$out.= '<li>'.$langs->trans("LoginDate").': '.date('d.m.Y H:i:s', $_SESSION['timestamp']).'</li>';
 									$out.= '<li><input '.$status_theme.' type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b"></li>';
 									$out.= '<input type="hidden" name="login_sended" id="logout_sended" value="0">';
@@ -1480,17 +1476,17 @@
 								}
 
 								$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
-									$out.= '<input '.$status_theme.' type="text" name="Session_login_name['.$this->login_id.']" value="'.$conf->webservice->login.'">';
+									$out.= '<input '.$status_theme.' type="text" name="Session_login_name['.$this->login_id.']" value="'.$configuration->conf["webservice"]["login"].'">';
 
 								$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
-									$out.= '<input '.$status_theme.' type="password" name="Session_login_pass['.$this->login_id.']" value="'.$conf->webservice->password.'">';
+									$out.= '<input '.$status_theme.' type="password" name="Session_login_pass['.$this->login_id.']" value="'.$configuration->conf["webservice"]["password"].'">';
 
 								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';
 								$out.= '<input type="hidden" name="login_sended" id="login_sended" value="0">';
 							}
 
-							if((empty($conf->webservice_aktive) || $conf->webservice_aktive == -1) && $conf->webservice->on == 1 && $this->login_id == 1)
+							if((empty($configuration->conf["webservice_aktive"]) || $configuration->conf["webservice_aktive"] == -1) && $configuration->conf["webservice"]["service_on"] == 1 && $this->login_id == 1)
 							{
 								$out.= 			'
 													<script>
@@ -1695,13 +1691,14 @@
 	 */
 		function encrypt_decrypt($action, $string, $key)
 		{
-			global $conf;
+			global $configuration;
 
 			$output = false;
 
 			$encrypt_method = "AES-256-CBC";
 			$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-			$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+
+			$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 			// hash
 			$key = hash('sha256', $secret_key);
@@ -1726,7 +1723,7 @@
 	 * @return	string						Array with RFC 3066 Array
 	 */
 		function getlang($config = false){
-			global $conf;
+			global $configuration;
 
 			if(is_array($this->language))
 			{
@@ -1736,11 +1733,11 @@
 				}
 			}
 
-			$out_tmp = $conf->lang;
+			$out_tmp = $configuration->conf["language"];
 
 			foreach($out_tmp as $key => $lang_name)
 			{
-				if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
+				if($configuration->conf["selected_language"][$key] == true) $out[$key] = $out_tmp[$key];
 			}
 
 			return $out;
@@ -1753,7 +1750,7 @@
 	 */
 		function Header_llx()
 		{
-			global $conf, $SVLdetail;
+			global $configuration, $SVLdetail;
 
 			$out = '<head>';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
@@ -1776,7 +1773,7 @@
 				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
 				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
 
-				if( $conf->webservice_aktive == 1 )
+				if( $configuration->conf["webservice_aktive"] == 1 )
 				{
 					$out.= '<link rel="stylesheet" href="css/MeteoalarmMobile.css" />';
 				}
@@ -1816,16 +1813,16 @@
 	 */
 		function Form()
 		{
-			global $conf, $langs, $login_to_webservice_faild, $nogooglemap;
+			global $configuration, $langs, $login_to_webservice_faild, $nogooglemap;
 
 
-			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
+			if(file_exists('menu/standard_menu.lib.php') && empty($configuration->conf["optional_menu"]))
 			{
 				include 'menu/standard_menu.lib.php';
 			}
-			elseif(!empty($conf->optional_menu))
+			elseif(!empty($configuration->conf["optional_menu"]))
 			{
-				include addslashes($conf->optional_menu);
+				include addslashes($configuration->conf["optional_menu"]);
 			}
 			else
 			{
@@ -1886,13 +1883,13 @@
 									$out.= '</ul>';
 								$out.= '</div>'; // PANEL
 
-								if($conf->webservice->login && $conf->webservice_aktive) $login_show_name = $conf->webservice->login;
+								if($configuration->conf["webservice"]["login"] && $configuration->conf["webservice_aktive"]) $login_show_name = $configuration->conf["webservice"]["login"];
 								else $login_show_name = $langs->trans('Login');
 
 								$out.= '<div data-theme="b" data-role="header">';
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';
-									if($conf->webservice->on == 1)
+									if($configuration->conf["webservice"]["service_on"] == 1)
 									{
 										if($login_to_webservice_faild == true)
 										{
@@ -1947,7 +1944,7 @@
 									if(count ($TypePage['detail']['value']) >= 1 && $TypePage['detail']['value'] != -1)
 									{
 										$visibl = "";
-										if($conf->webservice->on == 0 && $pagename == "conf") $visibl = 'style="display:none;"';
+										if($configuration->conf["webservice"]["service_on"] == 0 && $pagename == "conf") $visibl = 'style="display:none;"';
 										$out.= '<div data-role="collapsible" id="'.$pagename.'-detail" data-theme="b" data-content-theme="a" '.$visibl.'>';
 											$out.= '<h2>'.$TypePage['detail']['name'].'</h2>';
 											$out.= '<ul data-role="listview">';
@@ -2033,8 +2030,8 @@
 							</script>';
 			// GOOGLE MAP
 			//$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&callback=initMap" async defer></script>';
-			if(!empty($conf->GoogleMap->APIkey) && $nogooglemap != 1){
-				$out.= '<script src="https://maps.googleapis.com/maps/api/js?key='.$conf->GoogleMap->APIkey.'&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
+			if(!empty($configuration->conf["GoogleMap"]["APIkey"]) && $nogooglemap != 1){
+				$out.= '<script src="https://maps.googleapis.com/maps/api/js?key='.$configuration->conf["GoogleMap"]["APIkey"].'&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
 			}
 			$out.= '</body>';
 			$out.=
@@ -2189,7 +2186,7 @@
 		 */
 		function CapView($content, $ID, $extrahtml = "")
 		{
-			global $conf, $langs;
+			global $configuration, $langs;
 
 			$out = $this->Header_llx();
 
@@ -2211,9 +2208,9 @@
 
 									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'</h1></li>';
 
-									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'" download data-ajax="false">Download '.$ID.'</a></li>';
+									if($configuration->conf["cap"]["save"] == 1) $out.= '<li><a href="'.$configuration->conf["cap"]["output"].'/'.$ID.'" download data-ajax="false">Download '.$ID.'</a></li>';
 
-									if($conf->webservice->on == 1) $out.= '<li><input type="submit" value="<h1>'.$langs->trans("sendviaSoap").'</h1>" data-ajax="false"></li>';
+									if($configuration->conf["webservice"]["service_on"] == 1) $out.= '<li><input type="submit" value="<h1>'.$langs->trans("sendviaSoap").'</h1>" data-ajax="false"></li>';
 
 									$out.= '<li>';
 										$out.= '<textarea readonly>';
@@ -2246,15 +2243,15 @@
 
 		function ListCap()
 		{
-			global $conf, $langs;
+			global $configuration, $langs;
 
-			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
+			if(file_exists('menu/standard_menu.lib.php') && empty($configuration->conf["optional_menu"]))
 			{
 				include 'menu/standard_menu.lib.php';
 			}
-			elseif(!empty($conf->optional_menu))
+			elseif(!empty($configuration->conf["optional_menu"]))
 			{
-				include addslashes($conf->optional_menu);
+				include addslashes($configuration->conf["optional_menu"]);
 			}
 			else
 			{
@@ -2384,7 +2381,7 @@
 									// or
 									$out.= '<fieldset data-role="controlgroup">';
 										$out.= '<legend>'.$langs->trans("SelectCaps").':</legend>';
-											foreach(scandir($conf->cap->output) as $num => $capfilename)
+											foreach(scandir($configuration->conf["cap"]["output"]) as $num => $capfilename)
 											{
 												if($num > 1)
 												{
@@ -2414,7 +2411,7 @@
 
 		function Webservice($ID)
 		{
-			global $conf, $langs, $out;
+			global $configuration, $langs, $out;
 
 			$out = $this->Header_llx();
 
@@ -2425,7 +2422,7 @@
 					 *  WEBSERVICE
 					 *
 					 */
-					 if($conf->webservice->on == 1)
+					 if($configuration->conf["webservice"]["service_on"] == 1)
 					 {
 
 						$out.= '<div data-role="page" id="capview">';
@@ -2443,11 +2440,11 @@
 								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
 
 									// decryp password
-									$conf->webservice->password = $this->encrypt_decrypt(2, $conf->webservice->password);
+									$configuration->set("webservice", "password", $this->encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 
 									include("lib/cap.webservices.php");
 
-									$conf->webservice->password = $this->encrypt_decrypt(1, $conf->webservice->password);
+									$configuration->set("webservice", "password",$this->encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 
 								$out.= '</div>';
 
@@ -2510,7 +2507,7 @@
 		/*
 		function login_page()
 		{
-			global $conf, $langs;
+			global $configuration, $langs;
 
 				//$out.= '<form method="POST" id="login_form" name="login_form" action="index.php?login=1" enctype="multipart/form-data" >';
 
@@ -2626,7 +2623,7 @@
 		 */
 		function PostToConf($post)
 		{
-			global $conf, $langs;
+			global $configuration, $langs;
 
 			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "")
 			{
@@ -2644,80 +2641,80 @@
 			{
 				if($lang_key != "key" && $lang_name != "name" && $lang_key != "remove")
 				{
-					$conf->lang[$lang_key] = $lang_name;
+					$configuration->conf["language"][$lang_key] = $lang_name;
 				}
 			}
 
 				// conf[lang][remove][en-GB]:remove -> conf[lang][remove][remove]:en-GB
 			$rmv_lang_arr = array_flip($lang_arr['remove']);
 			unset($post['lang']['remove']);
-			foreach($conf->lang as $lang_key => $lang_name)
+			foreach($configuration->conf["language"] as $lang_key => $lang_name)
 			{
 				if(in_array($lang_key, $rmv_lang_arr))
 				{
-					unset($conf->lang[$lang_key]);
+					unset($configuration->conf["language"][$lang_key]);
 				}
 			}
 
 			// set visible langs
 			$lang_arr = $post['select']['lang'];
 			unset($post['select']);
-			foreach($conf->select->lang as $lang_name => $lang_boolen)
+			foreach($configuration->conf["selected_language"] as $lang_name => $lang_boolen)
 			{
 				if(in_array($lang_name, $lang_arr))
 				{
-					$conf->select->lang[$lang_name] = 1;
+					$configuration->conf["selected_language"][$lang_name] = 1;
 				}
 				else
 				{
-					$conf->select->lang[$lang_name] = 0;
+					$configuration->conf["selected_language"][$lang_name] = 0;
 				}
 			}
 			// specifie the automatic time set
 			if($post['timezone'] != "")
 			{
-				$conf->timezone = $post['timezone'];
+				$configuration->conf["timezone"] = $post['timezone'];
 			}
 			unset($post['timezone']);
 			// specifie the automatic time set
 			if($post['identifier']['time']['on'] == "on")
 			{
-				$conf->identifier->time->on = 1;
+				$configuration->set("identifier", "time_on", 1);
 			}
 			else
 			{
-				$conf->identifier->time->on = 0;
+				$configuration->set("identifier", "time_on", 0);
 			}
 			unset($post['identifier']['time']);
 
 			if($post['cap']['save'] == "on")
 			{
-				$conf->cap->save = 1;
+				$configuration->set("cap", "save", 1);
 			}
 			else
 			{
-				$conf->cap->save = 0;
+				$configuration->set("cap", "save", 0);
 			}
 			unset($post['cap']['save']);
 
 			if($post['webservice']['on'] == "on")
 			{
-				$conf->webservice->on = 1;
+				$configuration->set("webservice", "service_on", 1);
 			}
 			else
 			{
-				$conf->webservice->on = 0;
+				$configuration->set("webservice", "service_on", 0);
 			}
 			unset($post['webservice']['on']);
 
 			// crypt pass
-			if($conf->webservice->password == $post['webservice']['password'])
+			if($configuration->conf["webservice"]["password"] == $post['webservice']['password'])
 			{
 
 			}
 			else
 			{
-				$conf->webservice->password = $this->encrypt_decrypt(1, $post['webservice']['password']);
+				$configuration->set("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
 				unset($post['webservice']['password']);
 			}
 
@@ -2738,26 +2735,26 @@
 							{
 								foreach($obj_2_val as $obj_3_name => $obj_3_val)
 								{
-									$conf->{$obj_name}->{$obj_2_name}->{$obj_3_name} = $obj_3_val;
+									$configuration->set($obj_name, $obj_2_name."_".$obj_3_name, $obj_3_val);
 								} // Level 2
 							}
 							else
 							{
-								$conf->{$obj_name}->{$obj_2_name} = $obj_2_val;
+								$configuration->set($obj_name, $obj_2_name, $obj_2_val);
 							}
 
 						} // Level 1
 					}
 					else
 					{
-						$conf->{$obj_name}->{$obj_1_name} = $obj_1_val;
+						$configuration->set($obj_name, $obj_1_name, $obj_1_val);
 					}
 
 				} // Base
 			}
 			else
 			{
-				$conf->{$obj_name} = $obj_val;
+				$configuration->set($obj_name, "", $obj_val);
 			}
 
 		}
@@ -2769,95 +2766,15 @@
 		 */
 		function WriteConf($write = true)
 		{
-			global $conf;
-
-			$out = "<?php"."\n";
-			$out.= "date_default_timezone_set('".$conf->timezone."');"."\n";
-			// CONF BASE
-			if(is_object($conf) || is_array($conf_arr))
-			{
-				foreach($conf as $conf_name => $conf_arr)
-				{
-
-					// LEVEL 1
-					if(is_object($conf_arr) || is_array($conf_arr))
-					{
-						foreach($conf_arr as $conf_name_var => $conf_val)
-						{
-
-							// LEVEL 2
-							if(is_object($conf_val) || is_array($conf_val))
-							{
-								foreach($conf_val as $conf_name_level_2_var => $conf_level_2_val)
-								{
-									if(is_array($conf_val))
-									{
-										$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var."['".$conf_name_level_2_var."']");
-										if(!is_numeric($conf_level_2_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
-										$out.= "$"."conf->".$conf_name."->".$conf_name_var."['".$conf_name_level_2_var."']".$space."= ".$string_or_number.$conf_level_2_val.$string_or_number.";"."\n";
-									}
-									elseif(is_object($conf_val))
-									{
-										$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var."->".$conf_name_level_2_var);
-										if(!is_numeric($conf_level_2_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
-										$out.= "$"."conf->".$conf_name."->".$conf_name_var."->".$conf_name_level_2_var.$space."= ".$string_or_number.$conf_level_2_val.$string_or_number.";"."\n";
-									}
-								} // foreach conf_val
-							} // is_array conf_val
-							else
-							{
-								if(is_array($conf_arr))
-								{
-									$space = $this->ConfSpaces("$"."conf->".$conf_name."['".$conf_name_var."']");
-									if(!is_numeric($conf_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
-									$out.= "$"."conf->".$conf_name."['".$conf_name_var."']".$space."= ".$string_or_number.$conf_val.$string_or_number.";"."\n";
-								}
-								elseif(is_object($conf_arr))
-								{
-									$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var);
-									if(!is_numeric($conf_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
-									$out.= "$"."conf->".$conf_name."->".$conf_name_var.$space."= ".$string_or_number.$conf_val.$string_or_number.";"."\n";
-								}
-							} // else is_array conf_val
-
-						} // foreach conf_arr
-					} // is_array conf_arr
-					else
-					{
-						if(is_array($conf_arr))
-						{
-							$space = $this->ConfSpaces("$"."conf['".$conf_name."']");
-							if(!is_numeric($conf_arr)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
-							$out.= "$"."conf['".$conf_name."']".$space."= ".$string_or_number.$conf_arr.$string_or_number.";"."\n";
-						}
-						elseif(is_object($conf_arr))
-						{
-							$space = $this->ConfSpaces("$"."conf->".$conf_name);
-							if(!is_numeric($conf_arr)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
-							$out.= "$"."conf->".$conf_name.$space."= ".$string_or_number.$conf_arr.$string_or_number.";"."\n";
-						}
-					} // else is_object conf_arr
-					$out.= "\n";
-
-				} // foreach conf
-			} // is_array conf
-			else
-			{
-				$write = false;
-				print 'FAIL TO READ CONF';
-			} // else is_object conf
-
-			$out.= "?>";
+			global $configuration;
 
 			if($write == true)
 			{
-				$conf_file = fopen("conf/conf.php", "w") or print("Unable to open conf!");
-				fwrite($conf_file, $out);
-				fclose($conf_file);
+				$configuration->write_php_ini();
 			}
 			else
 			{
-				print ($out);
+				print ($configuration->conf);
 			}
 		}
 
