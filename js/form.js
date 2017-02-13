@@ -148,10 +148,10 @@ $( document ).ready(function()
 		        success: function(datare)
 		        {
 		        	if(datare != "") alert(datare);
-					else $( "#Saved_conf" ).popup( "open" );
-					setTimeout(function(){
-						window.location = "index.php#conf";
-					}, 1500);
+							//else $( "#Saved_conf" ).popup( "open" );
+							setTimeout(function(){
+								location.reload();
+							}, 1500);
 		        }
 		       });
 		return false; // avoid to execute the actual submit of the form.

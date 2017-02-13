@@ -33,7 +33,7 @@
 
 	class CAP_Form{
 
-		var $version = '1.3';
+		var $version = '1.4';
 		var $login_id = 0;
 		/**
 	 * initialize Class with Data
@@ -1310,7 +1310,7 @@
 						break;
 
 					case 'lang_conf_use':
-							if(!empty($configuration->conf["user"]["language"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($configuration->conf["translation"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							//$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
 							$out = '<legend>'.$langs->trans("Labellang_conf_use").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_useDesc")).'</legend>';
 							$out.= '<select name="conf[user][lang]" id="lang_conf_use" data-native-menu="false" data-iconpos="left">';
@@ -1737,7 +1737,7 @@
 
 			foreach($out_tmp as $key => $lang_name)
 			{
-				if($configuration->conf["selected_language"][$key] == true) $out[$key] = $out_tmp[$key];
+				if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
 			}
 
 			return $out;
@@ -1753,6 +1753,7 @@
 			global $configuration, $SVLdetail;
 
 			$out = '<head>';
+				$out.= '<meta charset="UTF-8">';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
 				//$out.= '<script type="text/javascript" src="includes/jquery/jquery-3.0.0.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
@@ -1976,7 +1977,13 @@
 										}
 										else
 										{
-											$out.= '<ul data-role="listview" data-inset="true"><li><a href="#'.$Pages_arr['next']['name'][$pagename].'"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
+											$out.= '<ul data-role="listview" data-inset="true">';
+												$out.= '<li>';
+													$out.= '<a href="#'.$Pages_arr['next']['name'][$pagename].'">';
+														$out.= '<h1>'.$langs->trans('Next').'</h1>';
+													$out.= '</a>';
+												$out.= '</li>';
+											$out.= '</ul>';
 										}
 									}
 
@@ -2627,12 +2634,16 @@
 
 			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "")
 			{
-				mkdir($post['cap']['output'], 0775);
+				//mkdir($post['cap']['output'], 0775); // check security!
 			}
 
 			/*
 			 * Special
 			 */
+		 	if(!empty($post['user']['lang']))
+ 			{
+ 				$configuration->set("user", "language", $post['user']['lang']);
+ 			}
 
 			 // set langs
 			$lang_arr = $post['lang'];
@@ -2659,7 +2670,7 @@
 			// set visible langs
 			$lang_arr = $post['select']['lang'];
 			unset($post['select']);
-			foreach($configuration->conf["selected_language"] as $lang_name => $lang_boolen)
+			foreach($configuration->conf["language"] as $lang_name => $lang_boolen)
 			{
 				if(in_array($lang_name, $lang_arr))
 				{
@@ -2717,6 +2728,12 @@
 				$configuration->set("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
 				unset($post['webservice']['password']);
 			}
+
+
+			if(!empty($post['timezone']))
+ 			{
+ 				$configuration->set("installed", "timezone", $post['timezone']);
+ 			}
 
 			/*
 			 * Reguler

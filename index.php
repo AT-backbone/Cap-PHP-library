@@ -45,14 +45,16 @@ if($configuration->get("installed", "finished") != true){
 	$configuration->conf = $standard_configuration->conf;
 	$configuration->set("installed", "finished", true);
 	$configuration->write_php_ini();
-	header('Location: index.php#conf');
-	exit;
+	if($_GET['save'] != 1){
+		header('Location: index.php?save=1#conf');
+		exit;
+	}
 }else{
 	// the library is installed
 	if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
 	$langs->setDefaultLang($configuration->get("user", "language"));
 	$langs->load("main");
-
+	date_default_timezone_set($configuration->conf["installed"]["timezone"]);
 	if(!file_exists('conf/conf.ini'))
 	{
 		$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";

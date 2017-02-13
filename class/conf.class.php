@@ -36,7 +36,7 @@
 			    {
 			        if(is_array($val))
 			        {
-			            $res[] = "[$key]";
+			            $res[] = "\n[$key]";
 			            foreach($val as $skey => $sval) $res[] = "$skey = ".(is_numeric($sval) ? $sval : '"'.$sval.'"');
 			        }
 			        else $res[] = "$key = ".(is_numeric($val) ? $val : '"'.$val.'"');
