@@ -3,18 +3,33 @@
 	error_reporting(E_ERROR | E_PARSE);
 	require_once 'class/translate.class.php';
 	require_once 'cap.create.class.php';
+	require_once 'class/conf.class.php';
 	require_once 'class/cap.updater.class.php';
 
 	$langs = new Translate();
 
-	if(file_exists('conf/conf.php'))
-	{
-		include 'conf/conf.php';
-		if(! empty($_GET['lang'])) $configuration->conf["user"]["language"] = $_GET['lang'];
-		$langs->setDefaultLang($configuration->conf["user"]["language"]);
-		$langs->load("main");
-	}
+	$configuration = new Configuration("conf/conf.ini");
 
+	if($configuration->get("installed", "finished") != true){
+		$standard_configuration = new Configuration("conf/standard.conf.ini");
+		$configuration->conf = $standard_configuration->conf;
+		$configuration->set("installed", "finished", true);
+		$configuration->write_php_ini();
+		if($_GET['save'] != 1){
+			header('Location: index.php?save=1#conf');
+			exit;
+		}
+	}else{
+		// the library is installed
+		if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
+		$langs->setDefaultLang($configuration->get("user", "language"));
+		$langs->load("main");
+		date_default_timezone_set($configuration->conf["installed"]["timezone"]);
+		if(!file_exists('conf/conf.ini'))
+		{
+			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
+		}
+	}
 	/**
 	* encrypt and decrypt function for passwords
 	*
@@ -22,12 +37,13 @@
 	*/
 	function encrypt_decrypt($action, $string, $key = "")
 	{
-		global $configuration;
+		global $conf;
 
 		$output = false;
 
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
+
 		$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 		// hash

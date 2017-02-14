@@ -239,28 +239,26 @@
 
 
 	/**
-	 * Output RFC 3066 Array
-	 *
-	 * @return	string						Array with RFC 3066 Array
-	 */
-	function getlang($config = false)
-	{
-		global $conf;
+ * Output RFC 3066 Array
+ *
+ * @return	string						Array with RFC 3066 Array
+ */
+	function getlang($config = false){
+		global $configuration;
 
-		if(is_array($language))
+		if(is_array($this->language))
 		{
-			foreach($language as $key => $lang_name)
+			foreach($this->language as $key => $lang_name)
 			{
 				$out[$lang_name] = $lang_name;
 			}
 		}
 
 		$out_tmp = $configuration->conf["language"];
-		//conf->lang['en-GB']			= 'english'; // Key and name of lang
-		//conf->select->lang['en-GB']	= 1; // key and bool if lang is aktive
+
 		foreach($out_tmp as $key => $lang_name)
 		{
-			if($configuration->conf["selected_language"][$key] == true) $out[$key] = $out_tmp[$key];
+			if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
 		}
 
 		return $out;

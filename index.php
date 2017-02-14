@@ -337,6 +337,7 @@ elseif($_GET['read'] == 1)
 	$CapProcessor->readCap($location);
 	//$CapProcessor->makeTestCAP(false);
 	$cap = $CapProcessor->getCapXmlArray();
+
 	//die(print_r($cap)); // DEBUG
 	if(! empty($cap['msg_format']))
 	{

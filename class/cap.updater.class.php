@@ -177,12 +177,11 @@
 		}
 
 		/**
-		 * Output RFC 3066 Array
-		 *
-		 * @return	string						Array with RFC 3066 Array
-		 */
-		function getlang($config = false)
-		{
+	 * Output RFC 3066 Array
+	 *
+	 * @return	string						Array with RFC 3066 Array
+	 */
+		function getlang($config = false){
 			global $configuration;
 
 			if(is_array($this->language))
@@ -194,11 +193,10 @@
 			}
 
 			$out_tmp = $configuration->conf["language"];
-			//conf->lang['en-GB']			= 'english'; // Key and name of lang
-			//conf->select->lang['en-GB']	= 1; // key and bool if lang is aktive
+
 			foreach($out_tmp as $key => $lang_name)
 			{
-				if($configuration->conf["selected_language"][$key] == true) $out[$key] = $out_tmp[$key];
+				if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
 			}
 
 			return $out;
@@ -211,7 +209,7 @@
 		*/
 		function del_caps_in_output()
 		{
-			global $conf;
+			global $configuration;
 
 			// the dir of the caps
 			$files = glob($configuration->conf["cap"]["output"].'/*'); // get all file names
@@ -229,7 +227,7 @@
 		*/
 		function webservice_meteoalarm()
 		{
-			global $conf;
+			global $configuration;
 			$meteoalarm = 1; // set meteoalarm on (debug value)
 			if($meteoalarm == 1) // is meteoalarm service on ?
 			{
@@ -560,7 +558,7 @@
 		*/
 		function produce_all_caps()
 		{
-			global $conf;
+			global $configuration;
 
 			$langs_arr = $this->getlang();
 

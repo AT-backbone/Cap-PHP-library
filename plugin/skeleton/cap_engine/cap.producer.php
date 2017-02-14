@@ -44,8 +44,8 @@
 	{
 		include 'conf/conf.php';
 		if(! empty($_GET['lang'])) $conf->user->lang = $_GET['lang'];
-		$langs->setDefaultLang($conf->user->lang);		
-		$langs->load("main");	
+		$langs->setDefaultLang($conf->user->lang);
+		$langs->load("main");
 
 
 		// $conf->cap->output the dir of the caps
@@ -55,13 +55,13 @@
 		}
 	}
 
-	$langs_arr = getlang();	
-							
+	$langs_arr = getlang();
+
 	foreach($langs_arr as $key_l => $val_l)
 	{
 		if(in_array($key,$language)) unset($langs_arr[$key]);
 	}
-	foreach ($langs_arr as $key_l => $val_l) 
+	foreach ($langs_arr as $key_l => $val_l)
 	{
 		$langs_keys[] = $key_l;
 	}
@@ -101,7 +101,7 @@
 					$timezone_date_h = substr($timezone_date, 1);
 
 					$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$type.$level.$id;
-					if($ref == "Update") 
+					if($ref == "Update")
 					{
 						$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$type.$level.$id;
 						if($sender == "") $sender = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -109,7 +109,7 @@
 					}
 
 					// Template
-					if($post['sender'] == "") 
+					if($post['sender'] == "")
 					$post['sender']					= "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
 					$post['sent'] 					= array();
@@ -119,7 +119,7 @@
 					$post['sent']['UTC']  			= $timezone_date_h;
 
 					// Template
-					if($post['status'] != "") 
+					if($post['status'] != "")
 						$post['status'] 			= $post['status'];
 					else
 						$post['status'] 			= 'Actual';
@@ -134,7 +134,7 @@
 					}
 
 					// Template
-					if($post['scope'] != "") 
+					if($post['scope'] != "")
 						$post['scope'] 				= $post['scope'];
 					else
 						$post['scope'] 				= 'Public';
@@ -145,32 +145,32 @@
 					}
 
 					// Template
-					if($post['info'][0]['category'] != "") 
+					if($post['info'][0]['category'] != "")
 						$post['category'] 			= $post['info'][0]['category'];
 					else
-						$post['category'] 			= 'Met';		
+						$post['category'] 			= 'Met';
 
 					// Template
-					if($post['info'][0]['responseType'] != "") 
+					if($post['info'][0]['responseType'] != "")
 						$post['responseType'] 		= $post['info'][0]['responseType'][0];
 					else
 						$post['responseType']		= 'Monitor';
 
 					// Template
-					if($post['info'][0]['urgency'] != "") 
+					if($post['info'][0]['urgency'] != "")
 						$post['urgency'] 			= $post['info'][0]['urgency'];
 					else
 						$post['urgency'] 			= 'Immediate';
 
 					$post['severity'] 				= $plugin->AWL[$level]['level'];
-					
+
 					// Template
-					if($post['info'][0]['certainty'] != "") 
+					if($post['info'][0]['certainty'] != "")
 						$post['certainty'] 			= $post['info'][0]['certainty'];
 					else
 						$post['certainty'] 			= 'Likely';
 
-					if($post['info'][0]['audience'] != "") 
+					if($post['info'][0]['audience'] != "")
 						$post['audience'] = $post['info'][0]['audience'];
 
 					$post['effective']['date'] = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data['from'][$type].' + '.$_POST['data'].' days'))));
@@ -190,14 +190,14 @@
 					$post['expires']['UTC'] = $timezone_date_h;
 
 					// Template
-					if($post['info'][0]['senderName'] != "") 
+					if($post['info'][0]['senderName'] != "")
 						$post['senderName'] = $post['info'][0]['senderName'];
 					else
 						$post['senderName'] = 'Cap-PHP-Library Version 1.3';
 
 					foreach($langs_keys as $key => $lang_val)
 					{
-						if($data['desc'][$type][$key] != "")	
+						if($data['desc'][$type][$key] != "")
 						{
 							$post['language'][] = $lang_val;
 							$post['headline'][$lang_val] = $plugin->AWL[$level]['name'].' '.$plugin->AWT[$type]['hazard_type_DESC'].' for '.$data['name'];
@@ -225,19 +225,19 @@
 					$post['parameter']['value'][1] = $plugin->AWT[$type]['hazard_type_DESC'];
 
 					$post['geocode']['value'][] = $id.'<|>id';
-					
+
 					$cap = new CAP_Class($post);
 					$cap->buildCap();
 					$cap->destination = $conf->cap->output;
 					$path = $cap->createFile();
 
 
-					$outFiles[$post['identifier']] = array( 
-						'file' => $post['identifier'].'.cap', 
+					$outFiles[$post['identifier']] = array(
+						'file' => $post['identifier'].'.cap',
 						'datafrom' => $post['effective'],
-						'datato' => $post['expires'], 
-						'datageo' => $data['name'], 
-						'datalevel' => $plugin->AWL[$level]['level'], 
+						'datato' => $post['expires'],
+						'datageo' => $data['name'],
+						'datalevel' => $plugin->AWL[$level]['level'],
 						'datatype' => $plugin->AWT[$type]['hazard_type_DESC']
 					);
 					//print '<pre>';
@@ -262,30 +262,28 @@
 
 
 	/**
-	 * Output RFC 3066 Array
-	 *     
-	 * @return	string						Array with RFC 3066 Array
-	 */
-	function getlang($config = false)
-	{
-		global $conf;
-		
-		if(is_array($language))
+ * Output RFC 3066 Array
+ *
+ * @return	string						Array with RFC 3066 Array
+ */
+	function getlang($config = false){
+		global $configuration;
+
+		if(is_array($this->language))
 		{
-			foreach($language as $key => $lang_name)
+			foreach($this->language as $key => $lang_name)
 			{
 				$out[$lang_name] = $lang_name;
 			}
 		}
 
-		$out_tmp = $conf->lang;
-		//conf->lang['en-GB']			= 'english'; // Key and name of lang
-		//conf->select->lang['en-GB']	= 1; // key and bool if lang is aktive
+		$out_tmp = $configuration->conf["language"];
+
 		foreach($out_tmp as $key => $lang_name)
 		{
-			if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
+			if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
 		}
-		
+
 		return $out;
 	}
 ?>

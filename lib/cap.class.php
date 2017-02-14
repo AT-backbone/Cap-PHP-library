@@ -165,7 +165,7 @@ class CapProcessor{
 				if(! empty($post['parameter']['valueName'][0]))
 				foreach($post['parameter']['valueName'] as $key => $parameter)
 				{
-					if(!empty($post['eventCode']['valueName'][$key]))
+					if(!empty($post['parameter']['valueName'][$key]))
 					{
 						$info->setParameter($post['parameter']['valueName'][$key], $post['parameter']['value'][$key]);
 					}
@@ -180,12 +180,24 @@ class CapProcessor{
 					$area->setPolygon($post['polygon']);
 					$area->setCircle($post['circle']);
 
-					if(! empty($post['geocode']['valueName'][0]))
-					foreach($post['geocode']['valueName'] as $key => $geocode)
-					{
-						if(!empty($post['geocode']['valueName'][$key]))
+					if(strpos($post['geocode']['value'][0], "<|>") === false){
+						if(! empty($post['geocode']['valueName'][0]))
+						foreach($post['geocode']['valueName'] as $key => $geocode)
 						{
-							$area->setGeocode($post['geocode']['valueName'][$key], $post['geocode']['value'][$key]);
+							if(!empty($post['geocode']['valueName'][$key]))
+							{
+								$area->setGeocode($post['geocode']['valueName'][$key], $post['geocode']['value'][$key]);
+							}
+						}
+					}else{ // if the geocode contains "<|>" we calculate it this way
+						if(! empty($post['geocode']['value'][0]))
+						foreach($post['geocode']['value'] as $key => $geocode)
+						{
+							$geo_arr = explode("<|>", $post['geocode']['value'][$key]);
+							if(!empty($geo_arr[0]) && !empty($geo_arr[1]))
+							{
+								$area->setGeocode($geo_arr[1], $geo_arr[0]);
+							}
 						}
 					}
 				}

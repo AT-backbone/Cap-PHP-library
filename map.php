@@ -29,14 +29,14 @@
 	ini_set('memory_limit', '1G');
 
 	require_once 'class/cap.form.class.php';
-	//require_once 'class/cap.map.class.php';
-	require_once 'lib/cap.create.class.php';
-	require_once 'lib/cap.write.class.php';
 	require_once 'lib/cap.convert.class.php';
 	require_once 'class/translate.class.php';
-	require_once 'class/plugin.install.class.php';
+	require_once 'class/conf.class.php';
+	require_once 'lib/cap.class.php';
+	require_once 'lib/CapValidatorChecker.class.php';
 
 	$langs = new Translate();
+	$CapProcessor = new CapProcessor();
 
 	$configuration = new Configuration("conf/conf.ini");
 
@@ -45,14 +45,16 @@
 		$configuration->conf = $standard_configuration->conf;
 		$configuration->set("installed", "finished", true);
 		$configuration->write_php_ini();
-		header('Location: index.php#conf');
-		exit;
+		if($_GET['save'] != 1){
+			header('Location: index.php?save=1#conf');
+			exit;
+		}
 	}else{
 		// the library is installed
 		if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
 		$langs->setDefaultLang($configuration->get("user", "language"));
 		$langs->load("main");
-
+		date_default_timezone_set($configuration->conf["installed"]["timezone"]);
 		if(!file_exists('conf/conf.ini'))
 		{
 			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
@@ -70,10 +72,10 @@
 	}
 
 	/**
-   * encrypt and decrypt function for passwords
-   *
-   * @return	string
-   */
+	* encrypt and decrypt function for passwords
+	*
+	* @return	string
+	*/
 	function encrypt_decrypt($action, $string, $key = "")
 	{
 		global $conf;
@@ -82,6 +84,7 @@
 
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
+
 		$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
 
 		// hash
@@ -101,13 +104,29 @@
 		return $output;
 	}
 
+	if(!empty($_GET['encrypt']))
+	{
+		$crpt = encrypt_decrypt(1, $_GET['encrypt']);
+		print $crpt;
+		print '<br>'.encrypt_decrypt(2, $crpt);
+		exit;
+	}
+
+	if(!empty($_GET['decrypt']))
+	{
+		$crpt = encrypt_decrypt(2, $_GET['decrypt']);
+		print $crpt;
+		print '<br>'.encrypt_decrypt(1, $crpt);
+		exit;
+	}
+
 	$configuration->set("cap", "save", 1);
 
 	$configuration->conf["webservice"]["login"] = "";
 	$configuration->conf["webservice"]["password"] = "";
-
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
+
 	$tryed_login = false;
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
@@ -125,8 +144,8 @@
 				session_unset();
 				session_start();
 
-				$Webservicename = explode('.', parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST));
-				setcookie('ServiceHost', $Webservicename[1], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
+				$Webservicename = parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST);
+				setcookie('ServiceHost', $Webservicename, strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie('timestamp', strtotime('now'), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_name", $_POST['Session_login_name'][$key], strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
 				setcookie("Session_login_pass", encrypt_decrypt(1,$_POST['Session_login_pass'][$key]), strtotime(' + 3 day'));  /* verfällt in 1 Stunde */
@@ -139,8 +158,8 @@
 				session_unset();
 				session_start();
 
-				$Webservicename = explode('.', parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST));
-				$_SESSION['ServiceHost'] = $Webservicename[1];
+				$Webservicename = parse_url($configuration->conf["webservice"]["WS_DOL_URL"], PHP_URL_HOST);
+				$_SESSION['ServiceHost'] = $Webservicename;
 				$_SESSION['timestamp'] = strtotime('now');
 				$_SESSION['Session_login_name'] = $_POST['Session_login_name'][$key];
 				$_SESSION['Session_login_pass'] = encrypt_decrypt(1, $_POST['Session_login_pass'][$key]);
@@ -169,8 +188,6 @@
 		$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
 		$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
 	}
-
-
 	// build service url
 	$service_arr = explode('/', $configuration->conf["webservice"]["WS_DOL_URL"]);
 	end($service_arr);
@@ -178,11 +195,6 @@
 
 	$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
 	$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
-	//webservice_sourceapplication
-	//webservice_login
-	//webservice_password
-	//webservice_entity
-	//webservice_ns
 
 	// METEOALARM WEBSERVICE ---
 	$meteoalarm = 1;
@@ -475,4 +487,5 @@
 	{
 
 	}
+
 ?>

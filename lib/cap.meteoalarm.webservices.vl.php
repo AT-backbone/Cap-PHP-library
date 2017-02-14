@@ -88,6 +88,6 @@ if($meteoalarm == 1)
 		}
 	}
 
-	$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
+	$configuration->set("webservice", "password", encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 }
 ?>
