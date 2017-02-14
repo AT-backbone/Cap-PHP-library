@@ -100,7 +100,13 @@ class CapProcessor{
 		$alert->setScope($post['scope']);
 		$alert->setRestriction($post['restriction']);
 		$alert->setAddresses($post['addresses']);
-		$alert->setCode($post['code']);
+		if(!is_array($post['code'])){
+			$alert->setCode($post['code']);
+		}else{
+			foreach($post['code'] as $key => $code_val){
+				$alert->setCode($code_val);
+			}
+		}
 		$alert->setNote($post['note']);
 		$alert->setReferences($post['references']);
 		$alert->setIncidents($post['incidents']);

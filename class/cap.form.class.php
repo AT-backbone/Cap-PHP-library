@@ -1520,7 +1520,13 @@
 
 							$out = '<div>';
 								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Info".$type)).'</label>';
-								$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'" value="'.$this->{$type}[0].'">';
+								if(!is_array($this->{$type}[0])){
+									$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'" value="'.$this->{$type}[0].'">';
+								}else{
+									foreach($this->{$type}[0] as $key => $val){
+										$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'['.$key.']" value="'.$val.'">';
+									}
+								}
 								//$out.= print_r($this, true);
 							$out.= '</div>';
 						break;
