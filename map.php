@@ -276,12 +276,7 @@
 		$login_to_webservice_faild = true;
 	}
 
-	if(!file_exists('conf/conf.php'))
-	{
-		$cap = new CAP_Form();
-		print $cap->install();
-	}
-	elseif($_GET['conv'] == 1)
+	if($_GET['conv'] == 1)
 	{
 		if(! empty($_POST['location']) || ! empty($_FILES["uploadfile"]["name"]))
 		{
