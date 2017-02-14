@@ -5,17 +5,18 @@ $( document ).ready(function()
 		//console.log(this.value);
 	});
 
-	if($('#init_map').val() != 1)
-	{
+	$( document ).on( "pageinit", "#capview", function( event ) {
 		updateCapXML();
-	}
+	});
 
 	if($('#init_map').val() != 1)
 	{
 		$( "input, select" ).change(function() {
 			updateCapXML();
 			updateColor(this);
-			dependencies_js();
+			if (typeof dependencies_js !== "undefined") {
+				dependencies_js();
+			}
 		});
 	}
 
@@ -150,7 +151,7 @@ $( document ).ready(function()
 		        	if(datare != "") alert(datare);
 							//else $( "#Saved_conf" ).popup( "open" );
 							setTimeout(function(){
-								location.reload();
+								location.reload(true);
 							}, 1500);
 		        }
 		       });
