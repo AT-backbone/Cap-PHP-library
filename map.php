@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  *  Copyright (c) 2015  Guido Schratzer   <guido.schratzer@backbone.co.at>
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
@@ -78,7 +78,7 @@
 	*/
 	function encrypt_decrypt($action, $string, $key = "")
 	{
-		global $conf;
+		global $configuration;
 
 		$output = false;
 
