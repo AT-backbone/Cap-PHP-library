@@ -256,7 +256,6 @@ if($tryed_login == true && $configuration->conf["webservice_aktive"] == -1)
 	}
 	$login_to_webservice_faild = true;
 }
-
 if(!file_exists('conf/conf.ini'))
 {
 	$cap = new CAP_Form();
@@ -264,6 +263,7 @@ if(!file_exists('conf/conf.ini'))
 }
 elseif($_GET['conv'] == 1)
 {
+
 	if(! empty($_POST['location']) || ! empty($_FILES["uploadfile"]["name"]))
 	{
 		require_once 'lib/cap.read.class.php';
@@ -274,7 +274,6 @@ elseif($_GET['conv'] == 1)
 		}
 		else
 		{
-
 			$location = $configuration->conf["cap"]["output"].'/'.urldecode($_POST['location']);
 		}
 
@@ -284,7 +283,6 @@ elseif($_GET['conv'] == 1)
 		// Convert
 		$converter = new Convert_CAP_Class();
 		$capconvertet = $converter->convert($cap, $_POST['stdconverter'],	$_POST['areaconverter'], $_POST['inputconverter'], $_POST['outputconverter'], $configuration->conf["cap"]["output"]);
-
 		$form = new CAP_Form();
 		print $form->CapView($capconvertet, $cap[identifier].'.conv.cap.xml'); // Cap Preview +
 	}
