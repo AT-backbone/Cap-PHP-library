@@ -138,7 +138,7 @@ LabelEffectiveDesc=(OPCIONAL) <br>El tiempo efectivo de la información del mens
 LabelOnsetDesc=(OPCIONAL) <br>La hora prevista de comienzo del evento sujeto del mensaje de alerta.
 LabelExpiresDesc=(OPCIONAL) <br>El tiempo de caducidad de la información del mensaje de alerta.
 LabelParameterDesc=(OPCIONAL) <br>Un parámetro adicional específicas asociado con el mensaje de alerta.
-	
+
 	WrongISOorConfiguration=Something went wrong. Check your ISO code and configuration!
 	WebserviceNotConnectedReconnectOrUsePluginZIP=Your Webservice is not connected please reconnect or (import/use) a Plugin
 	WebserviceNotConnectedReconnectOrUsePluginZIPDESC=A Plugin created for the Paint and Alert GUI in the Cap-PHP-Library can directly imported as a ZIP File!
@@ -152,3 +152,7 @@ LabelParameterDesc=(OPCIONAL) <br>Un parámetro adicional específicas asociado 
 
   	LabelGoogleMapAPIkey=Google Maps API Key
 	LabelGoogleMapAPIkeyDesc=To get started using the JavaScript API, click the button below, which guides you through the process of activating the JavaScript API and any related services automatically.<a href="https://console.developers.google.com/flows/enableapi?apiid=maps_backend%2Cgeocoding_backend%2Cdirections_backend%2Cdistance_matrix_backend%2Celevation_backend%2Cplaces_backend&reusekey=true&hl=de">Get Key</a>
+
+	LabelCAPValidatorUrl=Cap Validator Url
+	LabelCAPValidatorUrlDesc=
+	Url=Url

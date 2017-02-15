@@ -1236,9 +1236,15 @@
 
 					case 'GoogleMapAPIkey':
 						if(!empty($configuration->conf["GoogleMap"]["APIkey"])) $status_theme = 'data-theme="f"';
-						$out = '<legend><b>Google Maps API key</b>: '.$this->tooltip($type.'tool', $langs->trans("LabelGoogleMapsAPIkeyDesc")).'</legend>';
+						$out = '<legend>Google Maps API key: '.$this->tooltip($type.'tool', $langs->trans("LabelGoogleMapsAPIkeyDesc")).'</legend>';
 						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="Google Map API key" name="conf[GoogleMap][APIkey]" value="'.$configuration->conf["GoogleMap"]["APIkey"].'">';
 						break;
+
+					case 'CAPValidatorUrl':
+							if(!empty($configuration->conf["Validator"]["url"])) $status_theme = 'data-theme="f"';
+							$out = '<legend>'.$langs->trans("LabelCAPValidatorUrl").': '.$this->tooltip($type.'tool', $langs->trans("LabelCAPValidatorUrlDesc")).'</legend>';
+							$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="'.$langs->trans("Url").'" name="conf[Validator][url]" value="'.$configuration->conf["Validator"]["url"].'">';
+							break;
 
 					case 'timezone':
 							$timezone = $this->timezone_list();
