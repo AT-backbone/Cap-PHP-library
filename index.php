@@ -78,7 +78,7 @@ if(!empty($error_out))
 */
 function encrypt_decrypt($action, $string, $key = "")
 {
-	global $conf;
+	global $configuration;
 
 	$output = false;
 

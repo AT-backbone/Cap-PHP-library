@@ -1696,12 +1696,13 @@
 			return $ctime;
 		}
 
+
 		/**
-	 * encrypt and decrypt function for passwords
-	 *
-	 * @return	string
-	 */
-		function encrypt_decrypt($action, $string, $key)
+		* encrypt and decrypt function for passwords
+		*
+		* @return	string
+		*/
+		function encrypt_decrypt($action, $string, $key = "")
 		{
 			global $configuration;
 

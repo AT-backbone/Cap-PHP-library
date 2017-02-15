@@ -178,7 +178,7 @@ class CapProcessor{
 				}
 
 				// look if area zone is used
-				if(!empty($post['areaDesc']) || !empty($post['polygon'])  || !empty($post['circle']) || !is_array($post['geocode']))
+				if(!empty($post['areaDesc']) || !empty($post['polygon'])  || !empty($post['circle']) || !empty($post['geocode']))
 				{
 					$area = $info->addArea();
 
