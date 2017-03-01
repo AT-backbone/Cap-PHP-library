@@ -1,159 +1,155 @@
-SeparatorDecimal=.
-SeparatorThousand=,
-Lang=English
-Download=Download
-Submit=Submit
-viaSoap=Or upload via SOAP to
-sendviaSoap=Send with SOAP Webservice
-LabelIdentifier=Identifier
-LabelSent=Sent Time (sent)
-LabelEffective=Effective Time (effective)
-LabelEventCode=Event Code (eventCode)
-LabelEventCodeDesc=(OPTIONAL)<br>A system-specific code identifying the event type of the alert message.
-LabelOnset=OnSet Time (onset)
-LabelExpires=Expire Time (expires)
-Labelcap_output=CAP Outputpath
-Labelcap_outputDesc=Here you can specify the Outputfolder of the CAPs
-LabelOutputOfTheConf=Output Of The Configuration file
+###General###
+	TitleMain=Main Page
 
+	SeparatorDecimal=.
+	SeparatorThousand=,
 
+	Save=Save
+	Next=Next
+	Submit=Submit
+	Lang=English
 
-LabelSetTheTypesOfTheMessage=Set the types of messages
-LabelSetTheHazardType=Set the hazard type
-LabelSetThePriorityOfTheMessage=Set the Priority of the Message
-LabelGeocode=Geocode
-LabelCapViewOf=Cap View of
-LabelSaveCapsInOutputFolder=Save Caps in Output Folder
-LabelRemoveLanguage=Remove Language
-LabelAddLanguage=Add Language
-
-TitleMain=Main Page
-TitleAlert=Alert
-TitleInfo=Info
-TitleArea=Area
-TitleMap=Paint and Alert
-TitleCapView=Cap View
-TitleConfig=Configuration
-TitelWebservice=Webservices
-
-
-
-Labelwebservice_destination=<b>Webservice URL</b>
-
-
-
-webservice_destination=Webservice Destination
-
-
-NewCap=New Cap File
-ReadCap=Read Cap File
-LabelIdentifierDesc=The CAP identifier consists of the OID of the WMO, the ISO code, the time and an arbitrary number.
-LabelSentDesc=(REQUIRED)<br>Time the CAP file has been sent.
-LabelSetTheTypesOfTheMessageDesc=“status”:<br>  “Actual” - Actionable by all targeted recipients<br>“Exercise” - Actionable only by designated exercise participants; exercise identifier SHOULD appear in "note"<br>  “System” -  For messages that support alert network internal functions<br>  “Test” - Technische Tests des Cap Files<br>  “Draft” – A preliminary template or draft, not actionable in its current form<br><br>“MsgType”:<br>  “Alert” - Initial information<br>  “Update” - Updates and supercedes the earlier message(s) identified in "references"<br>  “Cancel” - Cancels the earlier message(s) identified in "references"<br>“Ack” - Acknowledges receipt and acceptance of the message(s) identified in "references"<br>  “Error” - Indicates rejection of the message(s) identified in "references"; explanation SHOULD appear in "note"<br><br>“scope”:<br>  “Public” - For general dissemination to unrestricted audiences<br>“Restricted” - For dissemination only to users with a known operational requirement (see <restriction>, below)<br>“Private” - For dissemination only to specified addresses (see <addresses>, below)
-LabelSetTheHazardTypeDesc=“category”:<br> “Geo” - Geophysical (inc. landslide) ...<br> “Met” - Meteorological (inc. flood) ...<br> “Safety” - General emergency and public safety ...<br> “Security” - Law enforcement, military, homeland ...<br> “Rescue” - Rescue and recovery ...<br> “Fire” - Fire suppression and rescue ...<br> “Health” - Medical and public health ...<br> “Env” - Pollution and other environmental ...<br> “Transport” - Public and private transportation ...<br> “Infra” - Utility, telecommunication, ...<br> “CBRNE” – Chemical, Biological, Radiological, Nuclear ...<br> “Other” - Other events<br><br>“responseType”:<br> “Shelter” - Take shelter in place or ...<br> “Evacuate” – evacuate, ...<br> “Prepare” – Make preparations, ...<br> “Execute” –  Execute a pre-planned activity... <br> “Avoid” – Avoid the subject event ...<br> “Monitor” – Attend to information sources ...<br>    ... as described in "instruction".<br><br> “Assess” – Evaluate the information in this message.  (This value SHOULD NOT be used in public warning applications.)<br> “AllClear” – The subject event no longer poses a threat or concern <br> “None” – No action recommended
-LabelSetThePriorityOfTheMessageDesc=With “urgency”, “severity” and “certainty” you choose the priority of the Alert and possible Actions<br><br>“urgency”:<br>Execute Action ..<br> - “Immediate” - .. immediatly ..<br> - “Expected” ..within the next hour ..<br> - “Future” - .. in the near future ..<br> - “Past” - .. not anymore ..<br> <br><br>“severity”:<br>-“Extreme” - .. extreme ..<br>-“Severe” - .. severe ..<br>-“Moderate” - .. possible ..<br>-“Minor” – .. minimal ..<br> .. .. Danger for Life and Property<br> Do not choose “Unknown”!<br><br>“certainty”:<br> “Observed” - (p = 100%)<br>“Likely” - (p > ~50%) <br>“Possible” - (p <= ~50%)<br>“Unlikely” - (p ~ 0) <br> Do not choose “Unknown”!
-ToolboxInfo=more information
-TitleCapConv=Cap Converter
-Convert=Convert
-SelectInputandOutputCap=Choose the convertfiles for the inputfile and the outputfile
-InfoSelectInputandOutputCap=Select the Input Cap Translation and Output Cap Translation to Convert the Cap you select last (from input to output)<br>You will find Information on how to create Translationfiles in the Help section.
-SelectCaps=Choose previously saved CAP
-Read=Read
-TitleCapList=Saved CAPs
-SelectStdAreaCap=Select the convertfile for Standard and Area Translation
-InfoSelectStdAreaCap=Select the Standard Cap Translation and Area Cap Translation
-Labelsource=Source
-Infosource=(OPTIONAL)<br>The particular source of this alert; e.g., an operator or a specific device.
-Labelrestriction=restriction
-Inforestriction=(CONDITIONAL)<br>Used when “scope” value is "Restricted".
-Labeladdresses=Addresses (addresses)
-Infoaddresses=(CONDITIONAL)<br>(1) Required when “scope” is “Private”, optional when “scope” is “Public” or “Restricted”.<br>(2)   Each recipient SHALL be identified by an identifier or an address.<br>(3)   Multiple space-delimited addresses MAY be included.  Addresses including whitespace MUST be enclosed in double-quotes.
-Labelcode=Code (code)
-Infocode=(OPTIONAL)<br>(1) Any user-defined flag or special code used to flag the alert message for special handling.<br>(2) Multiple instances MAY occur.
-Labelnote=Note (note)
-Infonote=(OPTIONAL) <br>The message note is primarily intended for use with “status” “Exercise” and “msgType” “Error”.
-Labelincidents=Incidents (incidents)
-Infoincidents=(OPTIONAL) <br>(1) Used to collate multiple messages referring to different aspects of the same incident.<br>(2) If multiple incident identifiers are referenced, they SHALL be separated by whitespace.  Incident names including whitespace SHALL be surrounded by double-quotes.
-Geo=Geophysical (Geo)
-Met=Weather (Met)
-Safety=Public Safety (Safety)
-Security=Security (Security)
-Rescue=Rescue (Rescue)
-Fire=Fire (Fire)
-Health=Health (Health)
-Env=Environmental (Env)
-Transport=Transportation (Transport)
-Infra=Infrastructure (Infra)
-CBRNE=Weapon of Mass Destruction (CBRNE)
-Other=Otherwise Categorized (Other)
-Shelter=Take Shelter (Shelter)
-Evacuate=Evacuate (Evacuate)
-Prepare=Make Preparations (Prepare)
-Execute=Execute Pre-Planned Action (Execute)
-Avoid=Avoid the affected Area (Avoid)
-Monitor=Monitor Conditions (Monitor)
-Assess=Evaluate Situation (Assess)
-AllClear=Resume Normal Activities (AllClear)
-None=Take No Action (None)
-LabelsenderName=Sender Name (senderName)
-Labelsender=Sender (sender)
-Labelaudience=Audience (audience)
-Labelcontact=Contact (contact)
-Labelweb=Website (web)
-LabelsenderNameDesc=(OPTIONAL)<br>The human-readable name of the agency or authority issuing this alert.
-LabelsenderDesc=(REQUIRED)<br> (1)   Identifies the originator of this alert. Guaranteed by assigner to be unique globally; e.g., may be based on an Internet domain name.<br> (2)   MUST NOT include spaces, commas or restricted characters (< and &).
-LabelaudienceDesc=(OPTIONAL)<br>The text describing the intended audience of the alert message
-LabelcontactDesc=(OPTIONAL)<br>The text describing the contact for follow-up and confirmation of the alert message
-LabelwebDesc=(OPTIONAL)<br>A full, absolute URI for an HTML page or other text resource with additional or reference information regarding this alert.
-Labelarea=Area
-Labelpolygon=Polygon
-Labelcircle=Circles (circle)
-LabelareaDesc=Area Description (areaDesc)
-LabelareaDescDesc=(REQUIRED)<br>A text description of the affected area.
-LabelpolygonDesc=(OPTIONAL) <br>(1) Code Values: The geographic polygon is represented by a whitespace-delimited list of [WGS 84] coordinate pairs.<br>(2) A minimum of 4 coordinate pairs MUST be present and the first and last pairs of coordinates MUST be the same.<br>(3) Multiple instances MAY occur within an area block.<br><br>As soon as you enable this feature you can link multiple points on the map to generate an area
-LabelcircleDesc=As soon as you enable this feature you can generate circles on the map
-LabelGeocodeDesc=Valuename: for instance: "EMMAID", "NUTS1", "NUTS2", "NUTS3" etc. <br> Value: for instance: "AT22"
-Next=Next
-Save=Save
-Saved!=Saved!
-webservice_WS_DOL_URL=Webservice URL
-LabelUpload=Upload
-
-
-Labellang_conf_remove=Remove CAP language
-Labellang_conf_removeDesc=Here you can remove a language from the possible languages in INFO
-Labellang_conf_plus=Add CAP language
-Labellang_conf_plusDesc=Here you can add a language to the possible languages in INFO
-
-
-
-LabelParameter=Parameter
-LabelLanguage=Language
-LabelEffectiveDesc=(OPTIONAL)<br>The effective time of the information of the alert message.
-LabelOnsetDesc=(OPTIONAL)<br>The expected time of the beginning of the subject event of the alert message.
-LabelExpiresDesc=(OPTIONAL)<br>The expiry time of the information of the alert message.
-LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associated with the alert message.
+	LabelLanguage=Language
 
 ###Login###
 	TitleLogin=Login
-	Service=Service
-	User=User
-	LoginDate=Login date
+	Service=<b>Service</b>
+	User=<b>User</b>
+	LoginDate=<b>Login date</b>
 	LoginToYourWebservice=Login to your Webservice
 	SaveWebservicePass=Save password?
-	
+
 	###Meteoalarm Webservice###
-	LabelAwarenessTypeWebservice=type of hazard (mws)
-	LabelAwarenessTypeWebserviceDesc=meteoalarm awareness-type (rain, tunderstorm, wind, hot-temperature, low-temperature ...)
-	
-	LabelAwarenessLevelWebservice=level of hazard (mws)
-	LabelAwarenessLevelWebserviceDesc=meteoalarm awareness-level (green, yellow, orange, red)
-	
-	LabelGeocodeWebservice=Area  (mws)
-	LabelGeocodeWebserviceDesc=meteoalarm area (i.E. EMMAID)
+		LabelAwarenessTypeWebservice=<b>type of hazard (mws)</b>
+		LabelAwarenessTypeWebserviceDesc=meteoalarm awareness-type (rain, tunderstorm, wind, hot-temperature, low-temperature ...)
+
+		LabelAwarenessLevelWebservice=<b>level of hazard (mws)</b>
+		LabelAwarenessLevelWebserviceDesc=meteoalarm awareness-level (green, yellow, orange, red)
+
+		LabelGeocodeWebservice=<b>Area  (mws)</b>
+		LabelGeocodeWebserviceDesc=meteoalarm area (i.E. EMMAID)
+
+###Alert###
+	TitleAlert=Alert
+
+	LabelIdentifier=<b>Identifier</b>
+	LabelIdentifierDesc=The CAP identifier consists of the OID of the WMO, the ISO code, the time and an arbitrary number.
+
+	LabelSetTheTypesOfTheMessage=<b>Set the types of messages</b>
+	LabelSetTheTypesOfTheMessageDesc=“status”:<br>  “Actual” - Actionable by all targeted recipients<br>“Exercise” - Actionable only by designated exercise participants; exercise identifier SHOULD appear in "note"<br>  “System” -  For messages that support alert network internal functions<br>  “Test” - Technische Tests des Cap Files<br>  “Draft” – A preliminary template or draft, not actionable in its current form<br><br>“MsgType”:<br>  “Alert” - Initial information<br>  “Update” - Updates and supercedes the earlier message(s) identified in "references"<br>  “Cancel” - Cancels the earlier message(s) identified in "references"<br>“Ack” - Acknowledges receipt and acceptance of the message(s) identified in "references"<br>  “Error” - Indicates rejection of the message(s) identified in "references"; explanation SHOULD appear in "note"<br><br>“scope”:<br>  “Public” - For general dissemination to unrestricted audiences<br>“Restricted” - For dissemination only to users with a known operational requirement (see <restriction>, below)<br>“Private” - For dissemination only to specified addresses (see <addresses>, below)
+
+	LabelSetTheHazardType=<b>Set the hazard type<b>
+	LabelSetTheHazardTypeDesc=“category”:<br> “Geo” - Geophysical (inc. landslide) ...<br> “Met” - Meteorological (inc. flood) ...<br> “Safety” - General emergency and public safety ...<br> “Security” - Law enforcement, military, homeland ...<br> “Rescue” - Rescue and recovery ...<br> “Fire” - Fire suppression and rescue ...<br> “Health” - Medical and public health ...<br> “Env” - Pollution and other environmental ...<br> “Transport” - Public and private transportation ...<br> “Infra” - Utility, telecommunication, ...<br> “CBRNE” – Chemical, Biological, Radiological, Nuclear ...<br> “Other” - Other events<br><br>“responseType”:<br> “Shelter” - Take shelter in place or ...<br> “Evacuate” – evacuate, ...<br> “Prepare” – Make preparations, ...<br> “Execute” –  Execute a pre-planned activity... <br> “Avoid” – Avoid the subject event ...<br> “Monitor” – Attend to information sources ...<br>    ... as described in "instruction".<br><br> “Assess” – Evaluate the information in this message.  (This value SHOULD NOT be used in public warning applications.)<br> “AllClear” – The subject event no longer poses a threat or concern <br> “None” – No action recommended
+
+		###Category###
+			Geo=Geophysical (Geo)
+			Met=Weather (Met)
+			Safety=Public Safety (Safety)
+			Security=Security (Security)
+			Rescue=Rescue (Rescue)
+			Fire=Fire (Fire)
+			Health=Health (Health)
+			Env=Environmental (Env)
+			Transport=Transportation (Transport)
+			Infra=Infrastructure (Infra)
+			CBRNE=Weapon of Mass Destruction (CBRNE)
+			Other=Otherwise Categorized (Other)
+
+		###Response Type###
+			Shelter=Take Shelter (Shelter)
+			Evacuate=Evacuate (Evacuate)
+			Prepare=Make Preparations (Prepare)
+			Execute=Execute Pre-Planned Action (Execute)
+			Avoid=Avoid the affected Area (Avoid)
+			Monitor=Monitor Conditions (Monitor)
+			Assess=Evaluate Situation (Assess)
+			AllClear=Resume Normal Activities (AllClear)
+			None=Take No Action (None)
+
+	LabelSetThePriorityOfTheMessage=<b>Set the Priority of the Message</b>
+	LabelSetThePriorityOfTheMessageDesc=With “urgency”, “severity” and “certainty” you choose the priority of the Alert and possible Actions<br><br>“urgency”:<br>Execute Action ..<br> - “Immediate” - .. immediatly ..<br> - “Expected” ..within the next hour ..<br> - “Future” - .. in the near future ..<br> - “Past” - .. not anymore ..<br> <br><br>“severity”:<br>-“Extreme” - .. extreme ..<br>-“Severe” - .. severe ..<br>-“Moderate” - .. possible ..<br>-“Minor” – .. minimal ..<br> .. .. Danger for Life and Property<br> Do not choose “Unknown”!<br><br>“certainty”:<br> “Observed” - (p = 100%)<br>“Likely” - (p > ~50%) <br>“Possible” - (p <= ~50%)<br>“Unlikely” - (p ~ 0) <br> Do not choose “Unknown”!
+
+	###Detail###
+		LabelEffective=<b>Effective Time (effective)</b>
+		LabelEffectiveDesc=<b>(OPTIONAL)</b><br>The effective time of the information of the alert message.
+
+		LabelOnset=<b>OnSet Time (onset)</b>
+		LabelOnsetDesc=<b>(OPTIONAL)</b><br>The expected time of the beginning of the subject event of the alert message.
+
+		LabelExpires=<b>Expire Time (expires)</b>
+		LabelExpiresDesc=<b>(OPTIONAL)</b><br>The expiry time of the information of the alert message.
+
+		LabelEventCode=<b>Event Code (eventCode)</b>
+		LabelEventCodeDesc=<b>(OPTIONAL)</b><br>A system-specific code identifying the event type of the alert message.
+
+		LabelParameter=<b>Parameter</b>
+		LabelParameterDesc=<b>(OPTIONAL)</b><br>A system-specific additional parameter associated with the alert message.
+
+		Labelsource=<b>Source</b>
+		Infosource=<b>(OPTIONAL)</b><br>The particular source of this alert; e.g., an operator or a specific device.
+
+		Labelrestriction=<b>Restriction</b>
+		Inforestriction=<b>(CONDITIONAL)</b><br>Used when “scope” value is "Restricted".
+
+		Labeladdresses=<b>Addresses (addresses)</b>
+		Infoaddresses=<b>(CONDITIONAL)</b><br>(1) Required when “scope” is “Private”, optional when “scope” is “Public” or “Restricted”.<br>(2)   Each recipient SHALL be identified by an identifier or an address.<br>(3)   Multiple space-delimited addresses MAY be included.  Addresses including whitespace MUST be enclosed in double-quotes.
+
+		Labelcode=<b>Code (code)</b>
+		Infocode=<b>(OPTIONAL)</b><br>(1) Any user-defined flag or special code used to flag the alert message for special handling.<br>(2) Multiple instances MAY occur.
+
+		Labelnote=<b>Note (note)</b>
+		Infonote=<b>(OPTIONAL)</b> <br>The message note is primarily intended for use with “status” “Exercise” and “msgType” “Error”.
+
+		Labelincidents=<b>Incidents (incidents)</b>
+		Infoincidents=(OPTIONAL) <br>(1) Used to collate multiple messages referring to different aspects of the same incident.<br>(2) If multiple incident identifiers are referenced, they SHALL be separated by whitespace.  Incident names including whitespace SHALL be surrounded by double-quotes.
+
+###Info###
+	TitleInfo=Info
+
+	LabelsenderName=<b>Sender Name (senderName)</b>
+	LabelsenderNameDesc=<b>(OPTIONAL)</b><br>The human-readable name of the agency or authority issuing this alert.
+
+	Labelsender=<b>Sender (sender)</b>
+	LabelsenderDesc=<b>(REQUIRED)</b><br> (1)   Identifies the originator of this alert. Guaranteed by assigner to be unique globally; e.g., may be based on an Internet domain name.<br> (2)   MUST NOT include spaces, commas or restricted characters (< and &).
+
+	Labelaudience=<b>Audience (audience)</b>
+	LabelaudienceDesc=<b>(OPTIONAL)</b><br>The text describing the intended audience of the alert message
+
+	Labelcontact=<b>Contact (contact)</b>
+	LabelcontactDesc=<b>(OPTIONAL)</b><br>The text describing the contact for follow-up and confirmation of the alert message
+
+	Labelweb=<b>Website (web)</b>
+	LabelwebDesc=<b>(OPTIONAL)</b><br>A full, absolute URI for an HTML page or other text resource with additional or reference information regarding this alert.
+
+###Area###
+	TitleArea=Area
+
+	Labelarea=Area
+	LabelareaDesc=<b>Area Description (areaDesc)</b>
+	LabelareaDescDesc=<b>(REQUIRED)</b><br>A text description of the affected area.
+
+	LabelGeocode=<b>Geocode</b>
+	LabelGeocodeDesc=Valuename: for instance: "EMMAID", "NUTS1", "NUTS2", "NUTS3" etc. <br> Value: for instance: "AT22"
+
+	Labelpolygon=<b>Polygon</b>
+	LabelpolygonDesc=<b>(OPTIONAL)</b> <br>(1) Code Values: The geographic polygon is represented by a whitespace-delimited list of [WGS 84] coordinate pairs.<br>(2) A minimum of 4 coordinate pairs MUST be present and the first and last pairs of coordinates MUST be the same.<br>(3) Multiple instances MAY occur within an area block.<br><br>As soon as you enable this feature you can link multiple points on the map to generate an area
+
+	Labelcircle=<b>Circles (circle)</b>
+	LabelcircleDesc=As soon as you enable this feature you can generate circles on the map
+
+###Cap View###
+	TitleCapView=Cap View
+
+	LabelEdit=Edit
+	LabelValidate=Validate
+
+	LabelCapViewOf=Cap View of
+	Download=Download
+	sendviaSoap=Send with SOAP Webservice
 
 ###Paint and Alert###
-	
+	TitleMap=Paint and Alert
+
 	LabelEffectivePaintAndAlertDesc=The effective time of the information of the alert message.
 	LabelExpiresPaintAndAlertDesc=The expiry time of the information of the alert message.
 
@@ -164,7 +160,6 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	DelWarning=Delete Warning?
 	ChangeWithoutSave=Change Warning without Saving Changes?
 	Delete=Delete
-	Save=Save
 	SOAPCaps=SOAP Debug Info
 	MultiAreaSelectLabel=Multiarea selection
 	DESC_MultiAreaSelectLabel=If this setting is on "ON" you can select multiple areas with the same type (and level) of warning and write a single description for these.
@@ -179,8 +174,21 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	Use=Use
 	ProducedCaps=Finally produced Cap!
 
+###Saved CAPs###
+	TitleCapList=Saved CAPs
+	LabelUpload=Upload
+	Read=Read
+
+###Cap Converter###
+	TitleCapConv=Cap Converter
+
+	SelectInputandOutputCap=<b>Choose the convertfiles for the inputfile and the outputfile</b>
+	InfoSelectInputandOutputCap=Select the Input Cap Translation and Output Cap Translation to Convert the Cap you select last (from input to output)<br>You will find Information on how to create Translationfiles in the Help section.
+
+	Convert=Convert
 
 ###Configuration Site###
+	TitleConfig=Configuration
 
 	Labellang_conf_use=<b>Interface language</b>
 	Labellang_conf_useDesc=You can set the interface language here.<br>After you have chosen a language please click save at the bottom of the page and reload the website
@@ -189,7 +197,7 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	LabelWMO_OIDDesc=Your Institutions unique WMO ID
 
 	LabelISO=<b>ISO</b>
-	LabelISODesc=This is your countrys 2 character ISO (ISO3166). For example AT for Austria or DE for Germany
+	LabelISODesc=This is your countries 2 character ISO (ISO3166). For example AT for Austria or DE for Germany
 
 	LabelTimezone=<b>Timezone</b>
 	LabelTimezoneDesc=The timezone is used to determine the UTC used for your CAPs. If the set timezone is not your local timezone please set it manually with the drop-down menu.
@@ -203,21 +211,22 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	LabelUsableLanguages=<b>CAP Languages</b>
 	LabelUsableLanguagesDesc=Here you can specify the languages you want to use in your CAPs
 
-  	LabelGoogleMapsAPIkey=Google Maps API Key
+  	LabelGoogleMapsAPIkey=<b>Google Maps API Key</b>
 	LabelGoogleMapsAPIkeyDesc=To get the Google Maps API Key go to (https://console.developers.google.com) and search for the (Google Maps JavaScript API)
 
 	LabelWebservice=<b>Webservice</b>
 	LabelWebserviceDesc=If you want to use a SOAP Webservice enable it here and additional options will become available.
 
+	LabelCAPValidatorUrl=<b>CAP Validator URL</b>
+	LabelCAPValidatorUrlDesc=<b>URL to your CAP Validator</b>
+
 	LabelTemplate=Cap-Template
 	LabelTemplateDesc=In a template values can be stored, which can be used for new CAP files if no input by the creation was made.
 
-	WebserviceConfiguration=Webservice Configuration
-	
-	LabelTemplate=Cap-Template
-	LabelTemplateDesc=In a template values can be stored, which can be used for new CAP files if no input by the creation was made.
+	Saved!=Saved!
 
 ###Webservice Configuration###
+	WebserviceConfiguration=Webservice Configuration
 
 	Labelwebservice_securitykey=<b>Webservice Security Key</b>
 	Labelwebservice_securitykeyDesc=The webservices securitykey. Normally the webservice administrator will provide this information.
@@ -242,13 +251,13 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 	Labelwebservice_WS_DOL_URL=<b>Webservice URL</b>
 	Labelwebservice_WS_DOL_URLDesc=Path of the webservice including filename. Normally the webservice administrator will provide this information.
-	
+
 ###Error Messages###
-	
+
 	WrongISOorConfiguration=Something went wrong. Check your ISO code and configuration!
 	standard_menuLibPhpIsCurupt=Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library
 	perm_for_output1=Permision problems detectet pleas fix this: Can\'t create the folder ("
-	perm_for_output2=") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache! 
+	perm_for_output2=") please create the folder manualy (rights 0774, group apache) or give the folder of the index.php the group apache!
 	perm_for_conf=Error! Could not write to folder. Please make sure your Webserver has permission to write to this folder.
 	err_cap_not_complete01=The CAP you are trying to send is not complete! Please check your entered information again.
 	error_wrong_login=Wrong User, Password, Permision or Configuration!
