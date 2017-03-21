@@ -11,6 +11,7 @@ if($meteoalarm == 1)
 	$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 	ini_set("default_socket_timeout", 60000);
 	set_time_limit ( 240 );
+	require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 
 	$ns=$configuration->conf["webservice"]["ns"];
 	$WS_DOL_URL = $ns.'CapAreaInfo.php';
@@ -50,7 +51,7 @@ if($meteoalarm == 1)
 	if ($soapclient->fault)
 	{
 		$out.= '<h2>Fault</h2><pre>';
-		$out.=var_dump($result);
+		$out.= print_r($User, true);
 		$out.= '</pre>';
 	}
 	else
