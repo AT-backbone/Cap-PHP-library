@@ -24,7 +24,7 @@
  *	\standards  from http://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html
  *
  */
-
+	
 	require_once 'cap.write.class.php'; // for the XML / CAP view
 	require_once 'log.lib.php';
 
@@ -34,7 +34,7 @@
 		var $destination = "output";
 		var $debug = "";
 		var $_log = "";
-
+		
 		// alert
 		var $identifier			= ""; 			// WMO Organisation ID green -> Your Country ISO Code -> Your File Date/Time "YYMMDDHHMMSS" -> your warning ID (CHAR max Len: 20 / special characters are not allowed only a-Z 0-9 and "_") -> 2.49.0.3.0.AT.150112080000.52550478
 		var $sender 				= ""; 			// link to Homepage Guaranteed by assigner to be unique globally
@@ -43,8 +43,8 @@
 		var $msgType 				= "";	 			// Alert / Update / Cancel / Ack / Error
 		var $references 		= array();	// web / identifier / sent [from the older Cap (only fore Update and Cancel)] -> http://www.zamg.ac.at/warnsys/public/aus_all.html,2.49.0.3.0.AT.150115080000.52550477,2015-01-08T10:05:02+01:00
 		var $scope 					= "";				// Public / Restricted / Private
-
-			// info
+		                            	
+			// info                	
 			var $language 		= array(); 	// language-COUNTRY 	Format RFC 3066 Specification: de-DE -> German
 			var $category 		= array();	// Geo / Met / Safety / Security / Rescue / Fire / Health / Env / Transport / Infra / CBRNE / Other
 			var $event 				= array();	// The text denoting the type of the subject event of the alert message
@@ -52,26 +52,26 @@
 			var $urgency 			= array();	// Immediate / Expected / Future / Past
 			var $severity 		= array();	// Extreme / Severe / Moderate / Minor / Unknown
 			var $certainty 		= array();	// Observed / Likely / Possible/ Unlikely / Unknown
-			var $audience 		= array();	// The text describing the intended audience of the alert message
+			var $audience 		= array();	// The text describing the intended audience of the alert message 
 			var $eventCode 		= array();	// <eventCode>  <valueName>valueName</valueName>  <value>value</value></eventCode>
 			var $effective 		= array();	// The effective time 																														/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T10:05:02+01:00
 			var $onset 				= array();	// The expected time of the beginning of the subject event of the alert message  	/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T10:05:02+01:00
 			var $expires 			= array();	// The expiry time of the information of the alert message 												/ Form: <yyyy>-<MM>-T<HH>:<mm>:<ss>+<hour>:<min> Offset to UTC -> 2015-01-08T15:00:13+01:00
 			var $senderName 	= array();	// The text naming the originator of the alert message  (The human-readable name of the agency or authority issuing this alert.) -> ZAMG Österreich
-			var $headline 		= array();	// The text headline of the alert message
-			var $description 	= array();	// The text describing the subject event of the alert message
-			var $instruction 	= array();	// The text describing the recommended action to be taken by recipients of the alert message
-			var $web 					= array();	// The identifier of the hyperlink associating additional information with the alert message
-			var $contact 			= array();	// The text describing the contact for follow-up and confirmation of the alert message
+			var $headline 		= array();	// The text headline of the alert message 
+			var $description 	= array();	// The text describing the subject event of the alert message 
+			var $instruction 	= array();	// The text describing the recommended action to be taken by recipients of the alert message 
+			var $web 					= array();	// The identifier of the hyperlink associating additional information with the alert message 
+			var $contact 			= array();	// The text describing the contact for follow-up and confirmation of the alert message 
 			var $parameter 		= array(); 	// A system-specific additional parameter associated with the alert message (as example meteoalarm.eu using it as specific warnings identifier) <parameter>  <valueName>valueName</valueName>  <value>value</value></parameter>
-
+			
 			// area
-			var $area					= array();	// The container for all component parts of the area sub-element of the info sub-element of the alert message
+			var $area					= array();	// The container for all component parts of the area sub-element of the info sub-element of the alert message 
 				var $areaDesc 	= array();	// A text description of the affected area. -> Niederösterreich
-				var $polygon 		= array();	// The paired values of points defining a polygon that delineates the affected area of the alert message
+				var $polygon 		= array();	// The paired values of points defining a polygon that delineates the affected area of the alert message 
 				var $circle 		= array();	// The paired values of a point and radius delineating the affected area of the alert message
 				var $geocode 		= array(); 	// <geocode><valueName>valueName</valueName>  <value>value</value></geocode> -> valueName: NUTS2 value: AT12
-
+				
 		/**
      * initialize Class with Data
      *
@@ -117,7 +117,7 @@
 
 			}
 		}
-
+		
 		/*********************************************************************************************************************************
 		 *********************************************************************************************************************************
      *  						  						  						  				NEW Converter
@@ -135,72 +135,72 @@
 			error_reporting(E_ERROR);
 			global $conf;
 			if($cap_output_path) $this->destination = $cap_output_path;
-			else								 $this->destination = $configuration->conf["cap"]["output"];
-
+			else								 $this->destination = $conf->cap->output;
+			
 			$this->_log.= cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('Start Converting !', LOG_INFO, 'CAP_Converter'); // LOG_EMERG LOG_ALER, LOG_CRIT LOG_ERR LOG_WARNING LOG_NOTICE LOG_INFO LOG_DEBUG
 			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog(array('Input File: ', 'conv_'.$input.'.conf.php'), LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog(array('Output File: ', 'conv_'.$output.'.conf.php'), LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
-
+			
 			if(!file_exists('./convert/conv_'.$input.'.conf.php'))
 			{
 				$this->_log.= cap_syslog('Could not found: ./convert/conv_'.$input.'.conf.php', LOG_ERR, 'CAP_Converter');
 				return 'Could not found: ./convert/conv_'.$input.'.conf.php';
-			}
+			}			
 			if(!file_exists('./convert/conv_'.$output.'.conf.php'))
 			{
 				$this->_log.= cap_syslog('Could not found: ./convert/conv_'.$output.'.conf.php', LOG_ERR, 'CAP_Converter');
 				return 'Could not found: ./convert/conv_'.$output.'.conf.php';
 			}
-
-			// Input
+			
+			// Input 
 			include './convert/conv_'.$output.'.conf.php';
 			$this->conv = $conv;
 			$this->tmpconv = $this->conv;
 			unset($this->conv, $conv);
-
+			
 			include './convert/conv_'.$input.'.conf.php';
-
+			
 			$this->conv = $conv;
-
+				
 			$this->_log.= cap_syslog(array('start:','convert_input()'), LOG_INFO, 'CAP_Converter');
-
+					
 			$icap = $this->convert_input($cap);
-
+			
 			$this->_log.= cap_syslog(array('end:','convert_input()'), LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			// Output
 			$this->tmpconv = $this->conv;
 			unset($this->conv, $conv);
 			include './convert/conv_'.$output.'.conf.php';
-
+			
 			$this->conv = $conv;
 			$this->input_actions = $this->actions;
 			unset($this->actions);
-
+							
 			$this->_log.= cap_syslog(array('start:','convert_output()'), LOG_INFO, 'CAP_Converter');
-
+							
 			$ocap = $this->convert_output($icap);
-
+			
 			$this->_log.= cap_syslog(array('end:','convert_output()'), LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
-
+			
 			$this->_log.= cap_syslog(array('start:','Create File'), LOG_INFO, 'CAP_Converter');
-
+			
 			$this->_log.= cap_syslog(array('build:','Build the Cap to xml content'), LOG_INFO, 'CAP_Converter');
 			$this->buildCap($ocap);
 			$this->_log.= cap_syslog(array('create:','save Cap'), LOG_INFO, 'CAP_Converter');
 			$path = $this->createFile($ocap);
 			$this->_log.= cap_syslog(array('end:','Create File'), LOG_INFO, 'CAP_Converter');
-
+			
 			$this->_log.= cap_syslog(array('file:',$path), LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
-
-			return $this->cap;
+			
+			return $this->cap;	
 		}
-
+		
 		function convert_input($cap)
 		{
 			foreach($this->conv->info as $key => $tagname)
@@ -213,7 +213,7 @@
 						{
 							$stag = $this->get_structur($tag);
 							$scap = $this->get_cap_structur($tag, $cap);
-							if($stag == "")
+							if($stag == "") 
 							{
 								$this->_log.= cap_syslog(array('translate:','in <alert>','<'.$tag.'>',$cap[$tag].' -> '.$this->translate_input($cap[$tag])), LOG_INFO, 'CAP_Converter');
 								$cap[$tag] =  $this->translate_input($cap[$tag]);
@@ -237,65 +237,65 @@
 									}
 								}
 							}
-
+							
 							unset($stag, $scap);
 							$this->get_action($tag);
 						}
 						else
 						{
 							$tagnameValueval = $this->conv->info['ValueName'][$key2];
-
+							
 							$stag = $this->get_structur($tag);
 							$scap = $this->get_cap_structur($tag, $cap);
 							$this->_log.= cap_syslog(array('get structur:','tag:'.$tag,'stag:'.$stag), LOG_INFO, 'CAP_Converter');
-							if($stag == "")
+							if($stag == "") 
 							{
-								foreach($cap[$tag] as $capkey => $capsearch) //
+								foreach($cap[$tag] as $capkey => $capsearch) // 
 								{
 									if($tagnameValueval == $capsearch['valueName'])
-									{
+									{						
 										$this->_log.= cap_syslog(array('translate:','in <alert>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
-
+										
 										$cap[$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
-
+										
 										$cap[$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
 									}
-								}
+								}		
 							}
-							elseif($stag == "info")
+							elseif($stag == "info") 
 							{
 								foreach($cap['info'] as $key => $tmp)
 								{
-									foreach($cap['info'][$key][$tag] as $capkey => $capsearch) //
+									foreach($cap['info'][$key][$tag] as $capkey => $capsearch) // 
 									{
 										if($tagnameValueval == $capsearch['valueName'])
-										{
+										{							
 											$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
-
+											
 											$cap['info'][$key][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
-
+											
 											$cap['info'][$key][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
 										}
-									}
+									}		
 								}
 							}
-							elseif($stag == "area")
+							elseif($stag == "area") 
 							{
 								foreach($cap['info'] as $key => $tmp)
 								{
 									foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 									{
-										foreach($cap['info'][$key]['area'][$key2][$tag] as $capkey => $capsearch) //
+										foreach($cap['info'][$key]['area'][$key2][$tag] as $capkey => $capsearch) // 
 										{
 											if($tagnameValueval == $capsearch['valueName'])
-											{
+											{						
 												$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
-
+												
 												$cap['info'][$key]['area'][$key2][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
-
+												
 												$cap['info'][$key]['area'][$key2][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
 											}
-										}
+										}		
 									}
 								}
 							}
@@ -307,30 +307,30 @@
 
 			return $cap;
 		}
-
+			
 		function convert_output($cap)
 		{
 			// move
 			$cap = $this->move_input($cap);
-
+			
 			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
 			foreach($this->conv->move as $key_m => $val_arr)
 			{
 				end($val_arr);
 				$key = key($val_arr);
 				$val = $val_arr[$key];
-				$action = $this->move_action[$val];
+				$action = $this->move_action[$val];		
 				$cap = $this->move_output($cap, $key_m, $val, $action);
 			}
 			$this->_log.= cap_syslog('', LOG_INFO, 'CAP_Converter');
-
+			
 			// Copy paste event
 			$copy_arr = $this->copy_input($cap);
 			$cap = $this->insert_output($cap, $copy_arr);
-
+			
 			return $cap;
 		}
-
+		
 		function move_input($cap)
 		{
 			foreach($this->input_actions['move'] as $movetag => $move)
@@ -338,9 +338,9 @@
 				if(!is_array($this->input_actions['move'][$movetag]))
 				{
 					// Whenn it is not ValueName
-
+					
 					$stag = $this->get_structur($movetag);
-					if($stag == "")
+					if($stag == "") 
 					{
 						$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap[$movetag].' -> '.$this->translate_output($cap[$movetag])), LOG_INFO, 'CAP_Converter');
 						$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap[$movetag]);
@@ -349,7 +349,7 @@
 					elseif($stag == "info")
 					{
 						foreach($cap['info'] as $key => $tmp)
-						{
+						{							
 							$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key][$movetag].' -> '.$this->translate_output($cap['info'][$key][$movetag])), LOG_INFO, 'CAP_Converter');
 							$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key][$movetag]);
 							unset($cap['info'][$key][$movetag]);
@@ -373,7 +373,7 @@
 					foreach($this->input_actions['move'][$movetag] as $movetagvalkey => $movetagval)
 					{
 						$stag = $this->get_structur($movetag);
-						if($stag == "")
+						if($stag == "") 
 						{
 							foreach($cap[$movetag] as $capkey => $intag)
 							{
@@ -421,10 +421,10 @@
 					}
 				}
 			}
-
+						
 			return $cap;
 		}
-
+		
 		function move_output($cap, $tag, $action_key, $action)
 		{
 			$stag = $this->get_tag($tag);
@@ -480,18 +480,23 @@
 					{
 						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 						{
+							if(count($cap['info'][$key]['area'][$key2][$stag]) < 1)
+							{ 
+								$cap['info'][$key]['area'][$key2][$stag] = array();
+							}
 							$deeptag['valueName'] = $tag;
 							$deeptag['value'] = $action[$key2];
 							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
-							$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
+							//$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
+							$cap['info'][$key]['area'][$key2][$stag][] = $deeptag;
 						}
 					}
 				}
 			}
-
+			
 			return $cap;
 		}
-
+		
 		/*
 		ToDo: Note: fileicht sollte man doch die funktion copy_paste nennen und alles in einen machen?
 		*/
@@ -526,10 +531,10 @@
 					}
 				}
 			}
-
+			
 			return $copy_arr;
 		}
-
+		
 		function insert_output($cap, $copy_arr)
 		{
 			// Fügt eine aus der copy ablagerung stammenden eintrag ein
@@ -564,10 +569,10 @@
 					}
 				}
 			}
-
+			
 			return $cap;
 		}
-
+		
 		function get_tag($val)
 		{
 			foreach($this->conv->info['tag'] as $key => $tag)
@@ -583,14 +588,14 @@
 					return $tag;
 				}
 			}
-
+			 
 		}
-
+		
 		function get_action($val, $tag = "")
 		{
 			if(is_array($this->conv->move[$val]) || ! empty($this->conv->move[$val]))
 			{
-				end($this->conv->move[$val]);
+				end($this->conv->move[$val]); 
 				$key = key($this->conv->move[$val]);
 				if($tag)
 				{
@@ -605,7 +610,7 @@
 			}
 			elseif(is_array($this->conv->copy[$val]))
 			{
-				end($this->conv->copy[$val]);
+				end($this->conv->copy[$val]); 
 				$key = key($this->conv->copy[$val]);
 				if($tag)
 				{
@@ -620,7 +625,7 @@
 			}
 			elseif(is_array($this->conv->insert[$val]))
 			{
-				end($this->conv->insert[$val]);
+				end($this->conv->insert[$val]); 
 				$key = key($this->conv->insert[$val]);
 				if($tag)
 				{
@@ -634,11 +639,11 @@
 				return $this->conv->insert[$val][$key];
 			}
 		}
-
+	
 		function translate_input($val)
 		{
 			if(is_array($val)) return $val;
-			end($this->conv->translate[$val]);
+			end($this->conv->translate[$val]); 
 			$key = key($this->conv->translate[$val]);
 			if($this->conv->translate[$val][$key])
 			{
@@ -646,11 +651,11 @@
 			}
 			else
 			{
-				$this->_log.= cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');
+				$this->_log.= cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');			
 				return $val;
 			}
 		}
-
+	
 		function translate_output($val)
 		{
 			if(is_array($val)) return $val;
@@ -664,10 +669,10 @@
 					}
 				}
 			}
-			$this->_log.= cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('warning: ','Can\'t find translation',$val), LOG_WARNING, 'CAP_Converter');		
 			return $val; // wenn keine übersetzung
 		}
-
+		
 		function get_structur($val)
 		{
 			foreach($this->conv->structure['tag'] as $testerkey => $tester)
@@ -694,9 +699,9 @@
 			{
 				if($val == $tester) return "area";
 			}
-
+			
 		}
-
+		
 		function get_cap_structur($val, $cap)
 		{
 			foreach($this->conv->structure['tag'] as $testerkey => $tester)
@@ -734,139 +739,139 @@
 		{
 			$xml = new xml(/*ver*/'1.0',/*encoding*/'utf-8',array('standalone'=>'yes'));
 			$xml->tag_open('alert',array('xmlns' => 'urn:oasis:names:tc:emergency:cap:1.2'));
-
-
+			
+					
 				$xml->tag_simple('identifier', $cap['identifier']);
 				$xml->tag_simple('sender', $cap['sender']);
-
-
-				$xml->tag_simple('sent', $cap['sent']);
-
+				
+				
+				$xml->tag_simple('sent', $cap['sent']);				
+				
 				$xml->tag_simple('status', $cap['status']);
 				$xml->tag_simple('msgType', $cap['msgType']);
 				$xml->tag_simple('references', $cap['references']);
 				$xml->tag_simple('scope', $cap['scope']);
-
+				
 				$xml->tag_simple('source', $cap['source']);
 				$xml->tag_simple('restriction', $cap['restriction']);
 				$xml->tag_simple('addresses', $cap['addresses']);
 				$xml->tag_simple('code', $cap['code']);
 				$xml->tag_simple('note', $cap['note']);
 				$xml->tag_simple('incidents', $cap['incidents']);
-
+				
 				foreach($cap['info'] as $info)
 				{
 					$xml->tag_open('info');
-
-
-						$xml->tag_simple('language', $info['language']);
-						$xml->tag_simple('category', $info['category']);
+						
+						
+						$xml->tag_simple('language', $info['language']);							
+						$xml->tag_simple('category', $info['category']);						
 						$xml->tag_simple('event', $info['event']);
-
+						
 						$xml->tag_simple('responseType', $info['responseType']);
 						$xml->tag_simple('urgency', $info['urgency']);
 						$xml->tag_simple('severity', $info['severity']);
 						$xml->tag_simple('certainty', $info['certainty']);
 						$xml->tag_simple('audience', $info['audience']);
-
+						
 						if(! empty($info['eventCode'][0]['valueName']))
 						foreach($info['eventCode'] as $key => $eventCode)
 						{
-							$xml->tag_open('eventCode');
+							$xml->tag_open('eventCode');							
 								$xml->tag_simple('valueName', ($eventCode['valueName']));
-								$xml->tag_simple('value', ($eventCode['value']));
+								$xml->tag_simple('value', ($eventCode['value']));							
 							$xml->tag_close('eventCode');
 						}
-
+						
 						$xml->tag_simple('effective', $info['effective']);
 						$xml->tag_simple('onset', $info['onset']);
 						$xml->tag_simple('expires', $info['expires']);
-
+						
 						$xml->tag_simple('senderName', $info['senderName']);
-
+						
 						$xml->tag_simple('headline', $info['headline']);
 						$xml->tag_simple('description', $info['description']);
 						$xml->tag_simple('instruction', $info['instruction']);
-
+						
 						$xml->tag_simple('web', $info['web']);
 						$xml->tag_simple('contact', $info['contact']);
-
+						
 						if(! empty($info['parameter'][0]['valueName']))
 						foreach($info['parameter'] as $key => $parameter)
 						{
-							$xml->tag_open('parameter');
+							$xml->tag_open('parameter');						
 								$xml->tag_simple('valueName', ($parameter['valueName']));
-								$xml->tag_simple('value', ($parameter['value']));
-							$xml->tag_close('parameter');
+								$xml->tag_simple('value', ($parameter['value']));							
+							$xml->tag_close('parameter');						
 						} // foreach parameter
-
+						
 						// look if area zone is used
 						foreach($info['area'] as $key => $area)
 						{
 							$xml->tag_open('area');
-
+						
 								$xml->tag_simple('areaDesc', $area['areaDesc']);
 								$xml->tag_simple('polygon', $area['polygon']);
 								$xml->tag_simple('circle', $area['circle']);
-
+							
 								if(! empty($area['geocode'][0]['valueName']))
 								foreach($area['geocode'] as $key => $geocode)
 								{
-									$xml->tag_open('geocode');
+									$xml->tag_open('geocode');						
 										$xml->tag_simple('valueName', ($geocode['valueName']));
-										$xml->tag_simple('value', ($geocode['value']));
+										$xml->tag_simple('value', ($geocode['value']));							
 									$xml->tag_close('geocode');
 								} // foreach geocode
-
+							
 							$xml->tag_close('area');
 						}
-
-					$xml->tag_close('info');
+												
+					$xml->tag_close('info');	
 				}// Foreach info lang
-
+					
 			$xml->tag_close('alert');
 
 			$this->cap = $xml->output();
-		}
-
+		}		
+			
 		/**
      * Create File
      *
      * @return	path of the New CAP 1.2
      */
 		function createFile($cap)
-		{
+		{			
 			$capfile = fopen($this->destination.'/'.$cap['identifier'].'.conv.cap', "w") or die("Unable to open file! ".$this->destination.'/'.$cap['identifier'].'.conv.cap');
 			fwrite($capfile, $this->cap);
 			fclose($capfile);
-
+			
 			// convert in UTF-8
 			$data = file_get_contents($this->destination.'/'.$cap['identifier'].'.conv.cap');
-
+			
 			if (preg_match('!!u', $data))
 			{
 			   // this is utf-8
 			}
-			else
+			else 
 			{
 			   $data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 			}
 
 			file_put_contents($this->destination.'/'.$cap['identifier'].'.conv.cap', $data);
-
+			
 			return $this->destination.'/'.$cap['identifier'].'.conv.cap';
 		}
-
+		
 		/*********************************************************************************************************************************
 		 *********************************************************************************************************************************
      *  						  						  						  				NEW Converter ENDE
      *********************************************************************************************************************************
      *********************************************************************************************************************************/
-
+		
 		function old_convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)
 		{
 			require_once 'lib/cap.create.class.php';
-
+			
 			if(!file_exists('./convert/std_'.$std_c.'.conf.php'))
 			{
 				return 'Could not found: ./convert/std_'.$std_c.'.conf.php';
@@ -874,7 +879,7 @@
 			if(!file_exists('./convert/area_'.$area_c.'.conf.php'))
 			{
 				return 'Could not found: ./convert/std_'.$area_c.'.conf.php';
-			}
+			}			
 			if(!file_exists('./convert/conv_'.$input.'.conf.php'))
 			{
 				return 'Could not found: ./convert/std_'.$input.'.conf.php';
@@ -883,11 +888,11 @@
 			{
 				return 'Could not found: ./convert/std_'.$output.'.conf.php';
 			}
-
+			
 			/**
 			 * Write Cap in $this
 			 */
-
+			
 			$this->output 			= $cap['output'];
 			$this->identifier 	= $cap['identifier'];
 			$this->sender				= $cap['sender'];
@@ -896,14 +901,14 @@
 			$this->msgType			= $cap['msgType'];
 			$this->references		= $cap['references'];
 			$this->scope				= $cap['scope'];
-
+			
 			$this->source					= $cap['source'];
 			$this->restriction		= $cap['restriction'];
 			$this->addresses			= $cap['addresses'];
 			$this->code						= $cap['code'];
 			$this->note						= $cap['note'];
 			$this->incidents			= $cap['incidents'];
-
+			
 			$this->language			= $cap['info'][0]['language'];
 			$this->category			= $cap['info'][0]['category'];
 			$this->event				= $cap['info'][0]['event'];
@@ -928,26 +933,26 @@
 			$this->polygon			= $cap['info'][0]['area'][0]['polygon'];
 			$this->circle				= $cap['info'][0]['area'][0]['circle'];
 			$this->geocode			= $cap['info'][0]['area'][0]['geocode'];
-
+			
 			/**
 			 * Include Cap converter files
 			 */
-
+			 
 			// Get geocodes
 			include './convert/area_'.$area_c.'.conf.php';
 			$geocode = $standard;
 			unset($standard);
-
+			
 			// Get input style
 			include './convert/conv_'.$input.'.conf.php';
 			$input = $conv;
 			unset($conv);
-
+			
 			// Get standard if not included
 			include './convert/std_'.$std_c.'.conf.php';
 			$standard = $conv;
 			unset($conv);
-
+			
 			// Get output style
 			include './convert/conv_'.$output.'.conf.php';
 			$output = $conv;
@@ -955,8 +960,8 @@
 
 			/**
 			 * Input Cap -> Standard
-			 */
-
+			 */ 
+			 
 			if(!empty($input->conv->hazard->type->tag->name))
 			{
 				foreach($cap['info'][0][$input->conv->hazard->type->tag->name] as $val_arr)
@@ -965,9 +970,9 @@
 					{
 						$ConvCap['type'] =  $input->{$input->conv->hazard->type->tag->val}[$val_arr['value']];
 					}
-				}
+				}						
 			}
-
+			
 			if(!empty($input->conv->hazard->level->tag->name))
 			{
 				foreach($cap['info'][0][$input->conv->hazard->level->tag->name] as $val_arr)
@@ -975,10 +980,10 @@
 					if( $val_arr['valueName'] ==  $input->conv->hazard->level->tag->val )
 					{
 						$ConvCap['level'] =  $input->{$input->conv->hazard->level->tag->val}[$val_arr['value']];
-					}
-				}
+					}							
+				}				
 			}
-
+			
 			if(!empty($input->conv->geocode->tag->name))
 			{
 				if(is_array($input->conv->geocode->tag->val))
@@ -1022,32 +1027,32 @@
 							if( $val_arr['valueName'] ==  $input->conv->geocode->tag->val )
 							{
 								$ConvCap['geocode'][$input->{$input->conv->geocode->tag->val}[$val_arr['value']]] =  $input->{$input->conv->geocode->tag->val}[$val_arr['value']];
-							}
+							}				
 						}
 					}
 				}
 				$ConvCap['geocode'] = array_unique($ConvCap['geocode']);
 			}
-
+			
 			/**
-			 * Standard -> Output Cap
-			 */
-
+			 * Standard -> Output Cap 
+			 */ 
+	 
 			if(!empty($output->conv->hazard->type->tag->name))
 			{
 				$output_to_flip = $output->{$output->conv->hazard->type->tag->val};
 				$output_val = array_flip($output_to_flip);
-				$ToConvCap[$output->conv->hazard->type->tag->name][$output->conv->hazard->type->tag->val] =  $output_val[$ConvCap['type']];
+				$ToConvCap[$output->conv->hazard->type->tag->name][$output->conv->hazard->type->tag->val] =  $output_val[$ConvCap['type']];										
 			}
-
+			
 			if(!empty($output->conv->hazard->level->tag->name))
 			{
 				$output_to_flip = $output->{$output->conv->hazard->level->tag->val};
 				$output_val = array_flip($output_to_flip);
-				$ToConvCap[$output->conv->hazard->level->tag->name][$output->conv->hazard->level->tag->val] =  $output_val[$ConvCap['level']];
+				$ToConvCap[$output->conv->hazard->level->tag->name][$output->conv->hazard->level->tag->val] =  $output_val[$ConvCap['level']];			
 			}
-
-
+			
+			
 			if(!empty($output->conv->geocode->tag->name))
 			{
 				if(is_array($output->conv->geocode->tag->val))
@@ -1060,17 +1065,17 @@
 							{
 								if(strlen($key) == 3) // NUTS NUTS1
 								{
-									$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;
+									$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
 								}
 								elseif(strlen($key) == 4)
 								{
-									$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;
+									$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
 								}
 								elseif(strlen($key) == 5)
 								{
-									$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;
+									$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
 								}
-							}
+							}													
 						}
 					}
 				}
@@ -1080,20 +1085,20 @@
 					if($geocodeval == "NUTS" || $geocodeval == "NUTS1" || $geocodeval == "NUTS2" || $geocodeval == "NUTS3")
 					{
 						foreach($ConvCap['geocode'] as $key => $geo_code_val)
-						{
+						{									
 							if(strlen($key) == 3) // NUTS NUTS1
 							{
-								$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;
+								$ToConvCap[$output->conv->geocode->tag->name]['NUTS1'] = $key;	
 							}
 							elseif(strlen($key) == 4)
 							{
-								$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;
+								$ToConvCap[$output->conv->geocode->tag->name]['NUTS2'] = $key;	
 							}
 							elseif(strlen($key) == 5)
 							{
-								$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;
+								$ToConvCap[$output->conv->geocode->tag->name]['NUTS3'] = $key;	
 							}
-						}
+						}							
 					}
 					else
 					{
@@ -1101,17 +1106,17 @@
 						$output_val = array_flip($output_to_flip);
 						foreach($ConvCap['geocode'] as $key => $geo_code_val)
 						{
-							$ToConvCap[$output->conv->geocode->tag->name][$output->conv->geocode->tag->val] =  $output_val[$key];
+							$ToConvCap[$output->conv->geocode->tag->name][$output->conv->geocode->tag->val] =  $output_val[$key];		
 						}
 					}
 				}
 			}
-
+			
 			foreach($output->std as $tagName => $val)
 			{
 				$this->{$tagName} =	$val;
 			}
-
+			
 			unset($this->eventCode);
 			unset($this->parameter);
 			unset($this->geocode);
@@ -1142,50 +1147,50 @@
 					}
 				}
 			}
-
+			
 			foreach($output->using as $tag => $bool)
 			{
-				if($bool == 0) unset($this->{$tag});
+				if($bool == 0) unset($this->{$tag});	
 			}
-
+			
 			/**
 			 * Create Convert Cap File
 			 *
 			 */
-			$convcap = new CAP_Class($this, true);
+			$convcap = new CAP_Class($this, true);					
 			$convcap->buildCap();
 			$convcap->destination = $cap_output_path;
 			$path = $convcap->createFile();
-
-			return $convcap->cap;
+			
+			return $convcap->cap;	
 		}
-
+			
 		/*
 		 * Function to Debug cap.create.class.php
 		 *
 		 * @return array 	$this 	All content of the Class
-		 */
+		 */	
 		function Debug()
 		{
 			print '<pre>';
 				print_r($this);
-			print '</pre>';
+			print '</pre>';			
 			exit;
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
-
+	
 				// First Level -----------------------------------------------------------------------------------------------------------------------------------------------
 			foreach($cap as $tag1 => $innerCap)
 			{
@@ -1197,7 +1202,7 @@
 					}
 				}
 				else // Second Level ---------------------------------------------------------------------------------------------------------------------------------------
-				{
+				{					
 					foreach($innerCap as $tag2 => $infoCap)
 					{
 						if(!is_array($infoCap))
@@ -1208,7 +1213,7 @@
 							}
 						}
 						else // Eventcode parameter and area -------------------------------------------------------------------------------------------------------------------
-						{
+						{							
 							foreach($infoCap as $tag3 => $deepCap)
 							{
 								if(!is_array($deepCap))
@@ -1219,8 +1224,8 @@
 									}
 								}
 								else // Deepest point in the Cap -------------------------------------------------------------------------------------------------------------------
-								{
-									foreach($deepCap as $tag4 => $deepestCap)
+								{									
+									foreach($deepCap as $tag4 => $deepestCap) 
 									{
 										if(!is_array($deepestCap))
 										{
@@ -1230,7 +1235,7 @@
 											}
 										}
 										else // Deepest point in the Cap ---------------------------------------------------------------------------------------------------------------
-										{
+										{									
 											foreach($deepestCap as $tag5 => $arrayCap) // like eventcode parameter and area
 											{
 												if(!is_array($arrayCap))
@@ -1246,8 +1251,8 @@
 													}
 												}
 												else // Deepest point in the Cap -----------------------------------------------------------------------------------------------------------
-												{
-													foreach($arrayCap as $tag6 => $geocode)
+												{									
+													foreach($arrayCap as $tag6 => $geocode) 
 													{
 														if(!is_array($geocode))
 														{
@@ -1257,8 +1262,8 @@
 															}
 														}
 														else // Deepest point in the Cap -------------------------------------------------------------------------------------------------------
-														{
-															foreach($geocode as $tag7 => $geocodevalue)
+														{									
+															foreach($geocode as $tag7 => $geocodevalue) 
 															{
 																if($this->translate_output($geocodevalue))
 																{
@@ -1282,7 +1287,7 @@
 					}
 				}
 			}
-
-	*/
-
+	
+	*/	
+	
 ?>

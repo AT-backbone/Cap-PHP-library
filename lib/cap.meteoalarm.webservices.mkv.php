@@ -3,6 +3,7 @@
 	error_reporting(E_ERROR);
 	require_once 'class/translate.class.php';
 	require_once 'cap.create.class.php';
+	require_once 'class/conf.class.php';
 
 	$langs = new Translate();
 
@@ -13,7 +14,8 @@
 		$langs->setDefaultLang($configuration->conf["user"]["language"]);
 		$langs->load("main");
 	}
-
+	
+	$configuration = new Configuration("conf/conf.ini");
 	/**
 	* encrypt and decrypt function for passwords
 	*
