@@ -25,7 +25,8 @@
  *
  */
 	
-	require_once 'cap.write.class.php'; // for the XML / CAP view
+	require_once 'cap.class.php';
+
 	require_once 'log.lib.php';
 
 	class Convert_CAP_Class{
@@ -130,12 +131,12 @@
 		var $output_actions	= "";
 		var $move_action = "";
 
-		function convert($cap, $std_c, $area_c, $input, $output, $cap_output_path)
+		function convert($cap, $input, $output, $cap_output_path)
 		{
 			error_reporting(E_ERROR);
-			global $conf;
+			global $configuration;
 			if($cap_output_path) $this->destination = $cap_output_path;
-			else								 $this->destination = $conf->cap->output;
+			else								 $this->destination = $configuration->conf["cap"]["output"];
 			
 			$this->_log.= cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('Start Converting !', LOG_INFO, 'CAP_Converter'); // LOG_EMERG LOG_ALER, LOG_CRIT LOG_ERR LOG_WARNING LOG_NOTICE LOG_INFO LOG_DEBUG
@@ -166,7 +167,7 @@
 			$this->conv = $conv;
 				
 			$this->_log.= cap_syslog(array('start:','convert_input()'), LOG_INFO, 'CAP_Converter');
-					
+
 			$icap = $this->convert_input($cap);
 			
 			$this->_log.= cap_syslog(array('end:','convert_input()'), LOG_INFO, 'CAP_Converter');
@@ -190,12 +191,19 @@
 			$this->_log.= cap_syslog(array('start:','Create File'), LOG_INFO, 'CAP_Converter');
 			
 			$this->_log.= cap_syslog(array('build:','Build the Cap to xml content'), LOG_INFO, 'CAP_Converter');
-			$this->buildCap($ocap);
+
+			$CapProcessor = new CapProcessor();
+			$CapProcessor->readCap($ocap); // read cap
+			$this->cap = $CapProcessor->buildCap(); // build cap
+			$this->path = $CapProcessor->alert[0]->getIdentifier().".conv.cap.xml";
+			$CapProcessor->saveCap($this->path); // save 
+			//$this->buildCap($ocap);
+
 			$this->_log.= cap_syslog(array('create:','save Cap'), LOG_INFO, 'CAP_Converter');
-			$path = $this->createFile($ocap);
+			//$path = $this->createFile($ocap);
 			$this->_log.= cap_syslog(array('end:','Create File'), LOG_INFO, 'CAP_Converter');
 			
-			$this->_log.= cap_syslog(array('file:',$path), LOG_INFO, 'CAP_Converter');
+			$this->_log.= cap_syslog(array('file:',$this->path), LOG_INFO, 'CAP_Converter');
 			$this->_log.= cap_syslog('_______________________________________________________________________________________________________________', LOG_INFO, 'CAP_Converter');
 			
 			return $this->cap;	

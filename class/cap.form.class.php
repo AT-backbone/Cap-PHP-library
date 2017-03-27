@@ -2285,8 +2285,8 @@
 			$Pages_arr = Pages(); // PAGES
 
 			$out.= '<body>';
-			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
-				$out.= '<input type="hidden" name="action" id="action" value="create">';
+			$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
+				//$out.= '<input type="hidden" name="action" id="action" value="create">';
 						$out.= '<div data-role="page" id="'.$pagename.'">';
 
 							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';

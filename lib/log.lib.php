@@ -61,11 +61,11 @@
  */
 function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $ident = 0, $suffixinfilename='', $restricttologhandler='')
 {
-    global $conf;
+    global $configuration;
 
     // If syslog module enabled
 
-    if (! empty($level) && empty($conf->disable_log))
+    if (! empty($level) && empty($configuration->conf["disable_log"]))
     {
         // Test log level
         $logLevels = array( LOG_EMERG, LOG_ALERT, LOG_CRIT, LOG_ERR, LOG_WARNING, LOG_NOTICE, LOG_INFO, LOG_DEBUG);
@@ -78,14 +78,14 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
         //if ($level > $conf->SYSLOG_LEVEL) return;
 
         // If adding log inside HTML page is required
-        if (! empty($_REQUEST['logtohtml']) && ! empty($conf->MAIN_LOGTOHTML))
+        if (! empty($_REQUEST['logtohtml']) && ! empty($configuration->conf["MAIN_LOGTOHTML"]))
         {
-            $conf->logbuffer[] = dol_print_date(time(),"%Y-%m-%d %H:%M:%S")." ".$message;
+            $configuration->conf["logbuffer"][] = dol_print_date(time(),"%Y-%m-%d %H:%M:%S")." ".$message;
         }
 
         //TODO: Remove this. MAIN_ENABLE_LOG_HTML should be deprecated and use a log handler dedicated to HTML output
         // If enable html log tag enabled and url parameter log defined, we show output log on HTML comments
-        if (! empty($conf->MAIN_ENABLE_LOG_HTML) && ! empty($_GET["log"]))
+        if (! empty($configuration->conf["MAIN_ENABLE_LOG_HTML"]) && ! empty($_GET["log"]))
         {
             print "\n\n<!-- Log start\n";
             print $message."\n";
@@ -170,5 +170,6 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
         closelog();
 
         unset($data);
+        return $message."<br>";
     }
 }
