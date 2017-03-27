@@ -170,6 +170,6 @@ function cap_syslog($message = '', $level = LOG_INFO, $name='CAP_Creator', $iden
         closelog();
 
         unset($data);
-        return $message."<br>";
+        return $message."\r\n";
     }
 }
