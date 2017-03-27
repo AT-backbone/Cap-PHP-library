@@ -30,6 +30,7 @@
 			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
 		}
 	}
+
 	/**
 	* encrypt and decrypt function for passwords
 	*
@@ -37,7 +38,7 @@
 	*/
 	function encrypt_decrypt($action, $string, $key = "")
 	{
-		global $conf;
+		global $configuration;
 
 		$output = false;
 
@@ -142,10 +143,6 @@
 
 	$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
 	$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
-
-	//print_r($conf);
-
-	//print '<br>Start:<br>';
 
 	$utc = date('P');
 
