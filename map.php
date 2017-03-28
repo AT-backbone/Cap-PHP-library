@@ -36,7 +36,7 @@
 	require_once 'lib/CapValidatorChecker.class.php';
 
 	$langs = new Translate();
-	$CapProcessor = new CapProcessor();
+	$CapProcessor = new CapProcessor("output");
 
 	$configuration = new Configuration("conf/conf.ini");
 
