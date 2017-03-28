@@ -35,7 +35,7 @@ require_once 'lib/cap.class.php';
 require_once 'lib/CapValidatorChecker.class.php';
 
 $langs = new Translate();
-$CapProcessor = new CapProcessor();
+$CapProcessor = new CapProcessor("output");
 
 
 $configuration = new Configuration("conf/conf.ini");
@@ -279,9 +279,10 @@ elseif($_GET['conv'] == 1)
 		$CapProcessor->readCap($location);
 		$cap = $CapProcessor->getCapXmlArray();
 
+		$cap_arr = json_decode(json_encode($cap), true);
 		// Convert
 		$converter = new Convert_CAP_Class();
-		$capconvertet = $converter->convert($cap, $_POST['inputconverter'], $_POST['outputconverter'], $configuration->conf["cap"]["output"]);
+		$capconvertet = $converter->convert($cap_arr, $_POST['inputconverter'], $_POST['outputconverter'], $configuration->conf["cap"]["output"]);
 		
 		$form = new CAP_Form();
 		print $form->CapView($capconvertet, $converter->path); // Cap Preview +

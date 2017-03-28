@@ -39,7 +39,7 @@ class CapProcessor{
 	var $alert = array();
 	private $alertIndex = 0;
 
-	function __construct($output = "output", $cap_mime = "xml"){
+	function __construct($output = "", $cap_mime = "xml"){
 		$this->mime = $cap_mime;
 		$this->output_destination = $output;
 
@@ -987,26 +987,51 @@ class CapCreate{
 			$alert = $this->processor->getAlert($index);
 			if($alert->identifier != "")
 			{
-				if($name == '') $name = $alert->identifier;
-				if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
-				$capfile = fopen($this->processor->output_destination.'/'.$name.$end_type, "w");
-				if($capfile === false) return "Unable to open file! ".$this->processor->output_destination.'/'.$name.$end_type;
-				fwrite($capfile, $this->processor->output_content);
-				fclose($capfile);
+				if($this->processor->output_destination == ""){
+					try{
+						if($name == '') $name = $alert->identifier;
+						if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
+						$capfile = fopen($name.$end_type, "w");
+						if($capfile === false) return "Unable to open file! ".$name.$end_type;
+						fwrite($capfile, $name.$end_type);
+						fclose($capfile);
 
-				chmod($this->processor->output_destination.'/'.$name.$end_type, 0660);  // octal; correct value of mode
-				chgrp($this->processor->output_destination.'/'.$name.$end_type, filegroup($this->processor->output_destination));
+						// convert in UTF-8
+						$data = file_get_contents($name.$end_type);
 
-				// convert in UTF-8
-				$data = file_get_contents($this->processor->output_destination.'/'.$name.$end_type);
+						if (!preg_match('!!u', $data)){ //this is not utf-8
+							$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+						}
 
-				if (!preg_match('!!u', $data)){ //this is not utf-8
-					$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+						file_put_contents($name.$end_type, $data);
+
+						return $name.$end_type;
+					} catch (Exception $e) {
+						print "Exception raised: " . $e->getMessage() . "\n";
+						return false;
+					}
+				}else{
+					if($name == '') $name = $alert->identifier;
+					if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
+					$capfile = fopen($this->processor->output_destination.'/'.$name.$end_type, "w");
+					if($capfile === false) return "Unable to open file! ".$this->processor->output_destination.'/'.$name.$end_type;
+					fwrite($capfile, $this->processor->output_content);
+					fclose($capfile);
+
+					chmod($this->processor->output_destination.'/'.$name.$end_type, 0660);  // octal; correct value of mode
+					chgrp($this->processor->output_destination.'/'.$name.$end_type, filegroup($this->processor->output_destination));
+
+					// convert in UTF-8
+					$data = file_get_contents($this->processor->output_destination.'/'.$name.$end_type);
+
+					if (!preg_match('!!u', $data)){ //this is not utf-8
+						$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
+					}
+
+					file_put_contents($this->processor->output_destination.'/'.$name.$end_type, $data);
+
+					return $this->processor->output_destination.'/'.$name.$end_type;
 				}
-
-				file_put_contents($this->processor->output_destination.'/'.$name.$end_type, $data);
-
-				return $this->processor->output_destination.'/'.$name.$end_type;
 			}
 			else
 			{

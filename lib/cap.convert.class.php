@@ -25,6 +25,7 @@
  *
  */
 	
+	require_once 'cap.write.class.php';
 	require_once 'cap.class.php';
 
 	require_once 'log.lib.php';
@@ -179,6 +180,7 @@
 			
 			$this->conv = $conv;
 			$this->input_actions = $this->actions;
+
 			unset($this->actions);
 							
 			$this->_log.= cap_syslog(array('start:','convert_output()'), LOG_INFO, 'CAP_Converter');
@@ -192,9 +194,13 @@
 			
 			$this->_log.= cap_syslog(array('build:','Build the Cap to xml content'), LOG_INFO, 'CAP_Converter');
 
-			$CapProcessor = new CapProcessor();
-			$CapProcessor->readCap($ocap); // read cap
+			$array_ocap = json_decode(json_encode($ocap), true);
+			//die(print "<plaintext>".print_r( $array_ocap ,true)."</plaintext>");
+
+			$CapProcessor = new CapProcessor("output");
+			$CapProcessor->readCap($this->buildCap($array_ocap)); // read cap
 			$this->cap = $CapProcessor->buildCap(); // build cap
+
 			$this->path = $CapProcessor->alert[0]->getIdentifier().".conv.cap.xml";
 			$CapProcessor->saveCap($this->path); // save 
 			//$this->buildCap($ocap);
@@ -272,38 +278,97 @@
 							}
 							elseif($stag == "info") 
 							{
-								foreach($cap['info'] as $key => $tmp)
-								{
-									foreach($cap['info'][$key][$tag] as $capkey => $capsearch) // 
+								if(is_array($cap['info'][0])){
+									foreach($cap['info'] as $key => $tmp)
+									{
+										foreach($cap['info'][$key][$tag] as $capkey => $capsearch)
+										{
+											if($tagnameValueval == $capsearch['valueName'])
+											{							
+												$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+												
+												$cap['info'][$key][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
+												
+												$cap['info'][$key][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
+											}
+										}	
+									}
+								}else{
+									foreach($cap['info'][$tag] as $capkey => $capsearch)
 									{
 										if($tagnameValueval == $capsearch['valueName'])
 										{							
 											$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
 											
-											$cap['info'][$key][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
+											$cap['info'][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
 											
-											$cap['info'][$key][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
+											$cap['info'][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
 										}
-									}		
+									}	
 								}
 							}
 							elseif($stag == "area") 
 							{
-								foreach($cap['info'] as $key => $tmp)
-								{
-									foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+								if(is_array($cap['info'][0])){
+									foreach($cap['info'] as $key => $tmp)
 									{
-										foreach($cap['info'][$key]['area'][$key2][$tag] as $capkey => $capsearch) // 
+										if(is_array($cap['info'][$key]['area'][0])){
+											foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+											{
+												foreach($cap['info'][$key]['area'][$key2][$tag] as $capkey => $capsearch) // 
+												{
+													if($tagnameValueval == $capsearch['valueName'])
+													{						
+														$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+														
+														$cap['info'][$key]['area'][$key2][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
+														
+														$cap['info'][$key]['area'][$key2][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
+													}
+												}		
+											}
+										}else{
+											foreach($cap['info'][$key]['area'][$key2][$tag] as $capkey => $capsearch) // 
+											{
+												if($tagnameValueval == $capsearch['valueName'])
+												{						
+													$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+													
+													$cap['info'][$key]['area'][$key2][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
+													
+													$cap['info'][$key]['area'][$key2][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
+												}
+											}
+										}
+									}
+								}else{
+									if(is_array($cap['info']['area'][0])){
+										foreach($cap['info']['area'] as $key2 => $tmp)
+										{
+											foreach($cap['info']['area'][$key2][$tag] as $capkey => $capsearch) // 
+											{
+												if($tagnameValueval == $capsearch['valueName'])
+												{						
+													$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
+													
+													$cap['info']['area'][$key2][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
+													
+													$cap['info']['area'][$key2][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
+												}
+											}		
+										}
+									}else{
+										foreach($cap['info']['area'][$tag] as $capkey => $capsearch) // 
 										{
 											if($tagnameValueval == $capsearch['valueName'])
 											{						
 												$this->_log.= cap_syslog(array('translate:','in <info>','<'.$tag.'><'.$capsearch['valueName'].'>',$capsearch['value'].' -> '.$this->translate_input($capsearch['value'])), LOG_INFO, 'CAP_Converter');
 												
-												$cap['info'][$key]['area'][$key2][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
+												$cap['info']['area'][$tag][$capkey]['valueName'] = $this->get_action($capsearch['valueName'], $tag);
 												
-												$cap['info'][$key]['area'][$key2][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
+												$cap['info']['area'][$tag][$capkey]['value'] = $this->translate_input($capsearch['value']);
 											}
-										}		
+										}
 									}
 								}
 							}
@@ -335,7 +400,7 @@
 			// Copy paste event
 			$copy_arr = $this->copy_input($cap);
 			$cap = $this->insert_output($cap, $copy_arr);
-			
+
 			return $cap;
 		}
 		
@@ -356,22 +421,49 @@
 					}
 					elseif($stag == "info")
 					{
-						foreach($cap['info'] as $key => $tmp)
-						{							
-							$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key][$movetag].' -> '.$this->translate_output($cap['info'][$key][$movetag])), LOG_INFO, 'CAP_Converter');
-							$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key][$movetag]);
-							unset($cap['info'][$key][$movetag]);
+						if(is_array($cap['info'][0])){
+							foreach($cap['info'] as $key => $tmp)
+							{							
+								$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key][$movetag].' -> '.$this->translate_output($cap['info'][$key][$movetag])), LOG_INFO, 'CAP_Converter');
+								$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key][$movetag]);
+								unset($cap['info'][$key][$movetag]);
+							}
+						}else{
+							$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key][$movetag].' -> '.$this->translate_output($cap['info'][$movetag])), LOG_INFO, 'CAP_Converter');
+							$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$movetag]);
+							unset($cap['info'][$movetag]);
 						}
 					}
 					elseif($stag == "area")
 					{
-						foreach($cap['info'] as $key => $tmp)
-						{
-							foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+						if(is_array($cap['info'][0])){
+							foreach($cap['info'] as $key => $tmp)
 							{
-								$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key]['area'][$key2][$movetag].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag])), LOG_INFO, 'CAP_Converter');
-								$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag]);
-								unset($cap['info'][$key]['area'][$key2][$movetag]);
+								if(is_array($cap['info'][$key]['area'][0])){
+									foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+									{
+										$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key]['area'][$key2][$movetag].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag])), LOG_INFO, 'CAP_Converter');
+										$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag]);
+										unset($cap['info'][$key]['area'][$key2][$movetag]);
+									}
+								}else{
+									$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info'][$key]['area'][$movetag].' -> '.$this->translate_output($cap['info'][$key]['area'][$movetag])), LOG_INFO, 'CAP_Converter');
+									$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info'][$key]['area'][$movetag]);
+									unset($cap['info'][$key]['area'][$movetag]);
+								}
+							}
+						}else{
+							if(is_array($cap['info']['area'][0])){
+								foreach($cap['info']['area'] as $key2 => $tmp)
+								{
+									$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info']['area'][$key2][$movetag].' -> '.$this->translate_output($cap['info']['area'][$key2][$movetag])), LOG_INFO, 'CAP_Converter');
+									$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info']['area'][$key2][$movetag]);
+									unset($cap['info']['area'][$key2][$movetag]);
+								}
+							}else{
+								$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$this->input_actions['move'][$movetag],'value: '.$cap['info']['area'][$movetag].' -> '.$this->translate_output($cap['info']['area'][$movetag])), LOG_INFO, 'CAP_Converter');
+								$this->move_action[$this->input_actions['move'][$movetag]][] = $this->translate_output($cap['info']['area'][$movetag]);
+								unset($cap['info']['area'][$movetag]);
 							}
 						}
 					}
@@ -395,32 +487,83 @@
 						}
 						elseif($stag == "info")
 						{
-							foreach($cap['info'] as $key => $tmp)
-							{
-								foreach($cap['info'][$key][$movetag] as $capkey => $intag)
+							if(is_array($cap['info'][0])){
+								foreach($cap['info'] as $key => $tmp)
 								{
-									if($cap['info'][$key][$movetag][$capkey]['valueName'] == $movetagval)
+									foreach($cap['info'][$key][$movetag] as $capkey => $intag)
 									{
-										$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
-										$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key][$movetag][$capkey]['value']);
-										unset($cap['info'][$key][$movetag][$capkey]);
+										if($cap['info'][$key][$movetag][$capkey]['valueName'] == $movetagval)
+										{
+											$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+											$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key][$movetag][$capkey]['value']);
+											unset($cap['info'][$key][$movetag][$capkey]);
+										}
+									}
+								}
+							}else{
+								foreach($cap['info'][$movetag] as $capkey => $intag)
+								{
+									if($cap['info'][$movetag][$capkey]['valueName'] == $movetagval)
+									{
+										$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+										$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$movetag][$capkey]['value']);
+										unset($cap['info'][$movetag][$capkey]);
 									}
 								}
 							}
 						}
 						elseif($stag == "area")
 						{
-							foreach($cap['info'] as $key => $tmp)
-							{
-								foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+							if(is_array($cap['info'][0])){
+								foreach($cap['info'] as $key => $tmp)
 								{
-									foreach($cap['info'][$key]['area'][$key2][$movetag] as $capkey => $intag)
-									{
-										if($cap['info'][$key]['area'][$key2][$movetag][$capkey]['valueName'] == $movetagval)
+									if(is_array($cap['info'][$key]['area'][0])){
+										foreach($cap['info'][$key]['area'] as $key2 => $tmp)
 										{
-											$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
-											$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value']);
-											unset($cap['info'][$key]['area'][$key2][$movetag][$capkey]);
+											foreach($cap['info'][$key]['area'][$key2][$movetag] as $capkey => $intag)
+											{
+												if($cap['info'][$key]['area'][$key2][$movetag][$capkey]['valueName'] == $movetagval)
+												{
+													$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+													$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key]['area'][$key2][$movetag][$capkey]['value']);
+													unset($cap['info'][$key]['area'][$key2][$movetag][$capkey]);
+												}
+											}
+										}
+									}else{
+										foreach($cap['info'][$key]['area'][$movetag] as $capkey => $intag)
+										{
+											if($cap['info'][$key]['area'][$movetag][$capkey]['valueName'] == $movetagval)
+											{
+												$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info'][$key]['area'][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info'][$key]['area'][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+												$this->move_action[$movetagval][] = $this->translate_output($cap['info'][$key]['area'][$movetag][$capkey]['value']);
+												unset($cap['info'][$key]['area'][$movetag][$capkey]);
+											}
+										}
+									}
+								}
+							}else{
+								if(is_array($cap['info']['area'][0])){
+									foreach($cap['info']['area'] as $key2 => $tmp)
+									{
+										foreach($cap['info']['area'][$key2][$movetag] as $capkey => $intag)
+										{
+											if($cap['info']['area'][$key2][$movetag][$capkey]['valueName'] == $movetagval)
+											{
+												$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info']['area'][$key2][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info']['area'][$key2][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+												$this->move_action[$movetagval][] = $this->translate_output($cap['info']['area'][$key2][$movetag][$capkey]['value']);
+												unset($cap['info']['area'][$key2][$movetag][$capkey]);
+											}
+										}
+									}
+								}else{
+									foreach($cap['info']['area'][$movetag] as $capkey => $intag)
+									{
+										if($cap['info']['area'][$movetag][$capkey]['valueName'] == $movetagval)
+										{
+											$this->_log.= cap_syslog(array('move input:','tag: <'.$movetag.'>','code: '.$movetagval,'value: '.$cap['info']['area'][$movetag][$capkey]['value'].' -> '.$this->translate_output($cap['info']['area'][$movetag][$capkey]['value'])), LOG_INFO, 'CAP_Converter');
+											$this->move_action[$movetagval][] = $this->translate_output($cap['info']['area'][$movetag][$capkey]['value']);
+											unset($cap['info']['area'][$movetag][$capkey]);
 										}
 									}
 								}
@@ -445,20 +588,43 @@
 				}
 				elseif($this->get_structur($stag) == "info")
 				{
-					foreach($cap['info'] as $key => $tmp)
-					{
-						$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key]), LOG_INFO, 'CAP_Converter');
-						$cap['info'][$key][$stag] = $action[$key];
+					if(is_array($cap['info'][0])){
+						foreach($cap['info'] as $key => $tmp)
+						{
+							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key]), LOG_INFO, 'CAP_Converter');
+							$cap['info'][$key][$stag] = $action[$key];
+						}
+					}else{
+						$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[0]), LOG_INFO, 'CAP_Converter');
+						$cap['info'][$stag] = $action[0];
 					}
 				}
 				elseif($this->get_structur($stag) == "area")
 				{
-					foreach($cap['info'] as $key => $tmp)
-					{
-						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+					if(is_array($cap['info'][0])){
+						foreach($cap['info'] as $key => $tmp)
 						{
-							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
-							$cap['info'][$key]['area'][$key2][$stag] = $action[$key2];
+							if(is_array($cap['info']['area'][0])){
+								foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+								{
+									$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
+									$cap['info'][$key]['area'][$key2][$stag] = $action[$key2];
+								}
+							}else{
+								$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[0]), LOG_INFO, 'CAP_Converter');
+								$cap['info'][$key]['area'][$stag] = $action[0];
+							}
+						}
+					}else{
+						if(is_array($cap['info']['area'][0])){
+							foreach($cap['info']['area'] as $key2 => $tmp)
+							{
+								$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
+								$cap['info']['area'][$key2][$stag] = $action[$key2];
+							}
+						}else{
+							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[0]), LOG_INFO, 'CAP_Converter');
+							$cap['info']['area'][$stag] = $action[0];
 						}
 					}
 				}
@@ -474,29 +640,75 @@
 				}
 				elseif($this->get_structur($stag) == "info")
 				{
-					foreach($cap['info'] as $key => $tmp)
-					{
+					if(is_array($cap['info'][0])){
+						foreach($cap['info'] as $key => $tmp)
+						{
+							$deeptag['valueName'] = $tag;
+							$deeptag['value'] = $action[$key];
+							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key]), LOG_INFO, 'CAP_Converter');
+							$cap['info'][$key][$stag][]  = $deeptag;
+						}
+					}else{
 						$deeptag['valueName'] = $tag;
-						$deeptag['value'] = $action[$key];
-						$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key]), LOG_INFO, 'CAP_Converter');
-						$cap['info'][$key][$stag][]  = $deeptag;
+						$deeptag['value'] = $action[0];
+						$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[0]), LOG_INFO, 'CAP_Converter');
+						$cap['info'][$stag][]  = $deeptag;
 					}
 				}
 				elseif($this->get_structur($stag) == "area")
 				{
-					foreach($cap['info'] as $key => $tmp)
-					{
-						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+					if(is_array($cap['info'][0])){
+						foreach($cap['info'] as $key => $tmp)
 						{
-							if(count($cap['info'][$key]['area'][$key2][$stag]) < 1)
+							if(is_array($cap['info'][$key]['area'][0])){
+								foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+								{
+									if(count($cap['info'][$key]['area'][$key2][$stag]) < 1)
+									{ 
+										$cap['info'][$key]['area'][$key2][$stag] = array();
+									}
+									$deeptag['valueName'] = $tag;
+									$deeptag['value'] = $action[$key2];
+									$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
+									//$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
+									$cap['info'][$key]['area'][$key2][$stag][] = $deeptag;
+								}
+							}else{
+								if(count($cap['info'][$key]['area'][$stag]) < 1)
+								{ 
+									$cap['info'][$key]['area'][$stag] = array();
+								}
+								$deeptag['valueName'] = $tag;
+								$deeptag['value'] = $action[0];
+								$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[0]), LOG_INFO, 'CAP_Converter');
+								//$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
+								$cap['info'][$key]['area'][$stag][] = $deeptag;
+							}
+						}
+					}else{
+						if(is_array($cap['info']['area'][0])){
+							foreach($cap['info']['area'] as $key2 => $tmp)
+							{
+								if(count($cap['info']['area'][$key2][$stag]) < 1)
+								{ 
+									$cap['info']['area'][$key2][$stag] = array();
+								}
+								$deeptag['valueName'] = $tag;
+								$deeptag['value'] = $action[$key2];
+								$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
+								//$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
+								$cap['info']['area'][$key2][$stag][] = $deeptag;
+							}
+						}else{
+							if(count($cap['info']['area'][$stag]) < 1)
 							{ 
-								$cap['info'][$key]['area'][$key2][$stag] = array();
+								$cap['info']['area'][$stag] = array();
 							}
 							$deeptag['valueName'] = $tag;
-							$deeptag['value'] = $action[$key2];
-							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[$key2]), LOG_INFO, 'CAP_Converter');
+							$deeptag['value'] = $action[0];
+							$this->_log.= cap_syslog(array('move output:','tag: <'.$stag.'>','code: '.$action_key,'value: '.$action[0]), LOG_INFO, 'CAP_Converter');
 							//$cap['info'][$key]['area'][$key2][$stag][]  = $deeptag;
-							$cap['info'][$key]['area'][$key2][$stag][] = $deeptag;
+							$cap['info']['area'][$stag][] = $deeptag;
 						}
 					}
 				}
@@ -521,20 +733,43 @@
 				}
 				elseif($stag == "info")
 				{
-					foreach($cap['info'] as $key => $tmp)
-					{
-						$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key][$copytag]), LOG_INFO, 'CAP_Converter');
-						$copy_arr[$copy] = $cap['info'][$key][$copytag];
+					if(is_array($cap['info'][0])){
+						foreach($cap['info'] as $key => $tmp)
+						{
+							$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key][$copytag]), LOG_INFO, 'CAP_Converter');
+							$copy_arr[$copy] = $cap['info'][$key][$copytag];
+						}
+					}else{
+						$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$copytag]), LOG_INFO, 'CAP_Converter');
+						$copy_arr[$copy] = $cap['info'][$copytag];
 					}
 				}
 				elseif($stag == "area")
 				{
-					foreach($cap['info'] as $key => $tmp)
-					{
-						foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+					if(is_array($cap['info'][0])){
+						foreach($cap['info'] as $key => $tmp)
 						{
-							$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key]['area'][$key2][$copytag]), LOG_INFO, 'CAP_Converter');
-							$copy_arr[$copy] = $cap['info'][$key]['area'][$key2][$copytag];
+							if(is_array($cap['info'][$key]['area'][0])){
+								foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+								{
+									$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key]['area'][$key2][$copytag]), LOG_INFO, 'CAP_Converter');
+									$copy_arr[$copy] = $cap['info'][$key]['area'][$key2][$copytag];
+								}
+							}else{
+								$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info'][$key]['area'][$copytag]), LOG_INFO, 'CAP_Converter');
+								$copy_arr[$copy] = $cap['info'][$key]['area'][$copytag];
+							}
+						}
+					}else{
+						if(is_array($cap['info']['area'][0])){
+							foreach($cap['info']['area'] as $key2 => $tmp)
+							{
+								$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info']['area'][$key2][$copytag]), LOG_INFO, 'CAP_Converter');
+								$copy_arr[$copy] = $cap['info']['area'][$key2][$copytag];
+							}
+						}else{
+							$this->_log.= cap_syslog(array('copy:','tag: <'.$copytag.'>','value: '.$cap['info']['area'][$copytag]), LOG_INFO, 'CAP_Converter');
+							$copy_arr[$copy] = $cap['info']['area'][$copytag];
 						}
 					}
 				}
@@ -558,21 +793,36 @@
 					}
 					elseif($stag == "info")
 					{
-						foreach($cap['info'] as $key => $tmp)
-						{
+						if(is_array($cap['info'][0])){
+							foreach($cap['info'] as $key => $tmp)
+							{
+								$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+								$cap['info'][$key][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
+							}
+						}else{
 							$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
-							$cap['info'][$key][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
+							$cap['info'][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
 						}
 					}
 					elseif($stag == "area")
 					{
-						foreach($cap['info'] as $key => $tmp)
-						{
-							foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+						if(is_array($cap['info'][0])){
+							foreach($cap['info'] as $key => $tmp)
 							{
-								$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
-								$cap['info'][$key]['area'][$key2][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
+								if(is_array($cap['info'][$key]['area'][0])){
+									foreach($cap['info'][$key]['area'] as $key2 => $tmp)
+									{
+										$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+										$cap['info'][$key]['area'][$key2][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
+									}
+								}else{
+									$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+									$cap['info'][$key]['area'][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
+								}
 							}
+						}else{
+							$this->_log.= cap_syslog(array('insert:','tag: <'.$inserttag.'>','value: '.$copy_arr[$insert_code]), LOG_INFO, 'CAP_Converter');
+							$cap['info']['area'][$inserttag] = $this->translate_output($copy_arr[$insert_code]);
 						}
 					}
 				}
@@ -748,10 +998,8 @@
 			$xml = new xml(/*ver*/'1.0',/*encoding*/'utf-8',array('standalone'=>'yes'));
 			$xml->tag_open('alert',array('xmlns' => 'urn:oasis:names:tc:emergency:cap:1.2'));
 			
-					
 				$xml->tag_simple('identifier', $cap['identifier']);
 				$xml->tag_simple('sender', $cap['sender']);
-				
 				
 				$xml->tag_simple('sent', $cap['sent']);				
 				
@@ -767,53 +1015,142 @@
 				$xml->tag_simple('note', $cap['note']);
 				$xml->tag_simple('incidents', $cap['incidents']);
 				
-				foreach($cap['info'] as $info)
-				{
+				if(is_array($cap['info'][0])){
+					foreach($cap['info'] as $info)
+					{
+						$xml->tag_open('info');
+							
+							$xml->tag_simple('language', $info['language']);							
+							$xml->tag_simple('category', $info['category']);						
+							$xml->tag_simple('event', $info['event']);
+							
+							$xml->tag_simple('responseType', $info['responseType']);
+							$xml->tag_simple('urgency', $info['urgency']);
+							$xml->tag_simple('severity', $info['severity']);
+							$xml->tag_simple('certainty', $info['certainty']);
+							$xml->tag_simple('audience', $info['audience']);
+							
+							if(! empty($info['eventCode'][0]['valueName']))
+							foreach($info['eventCode'] as $key => $eventCode)
+							{
+								$xml->tag_open('eventCode');							
+									$xml->tag_simple('valueName', ($eventCode['valueName']));
+									$xml->tag_simple('value', ($eventCode['value']));							
+								$xml->tag_close('eventCode');
+							}
+							
+							$xml->tag_simple('effective', $info['effective']);
+							$xml->tag_simple('onset', $info['onset']);
+							$xml->tag_simple('expires', $info['expires']);
+							
+							$xml->tag_simple('senderName', $info['senderName']);
+							
+							$xml->tag_simple('headline', $info['headline']);
+							$xml->tag_simple('description', $info['description']);
+							$xml->tag_simple('instruction', $info['instruction']);
+							
+							$xml->tag_simple('web', $info['web']);
+							$xml->tag_simple('contact', $info['contact']);
+							
+							if(! empty($info['parameter'][0]['valueName']))
+							foreach($info['parameter'] as $key => $parameter)
+							{
+								$xml->tag_open('parameter');						
+									$xml->tag_simple('valueName', ($parameter['valueName']));
+									$xml->tag_simple('value', ($parameter['value']));							
+								$xml->tag_close('parameter');						
+							} // foreach parameter
+							
+							// look if area zone is used
+							if(is_array($info['area'][0])){
+								foreach($info['area'] as $key => $area)
+								{
+									$xml->tag_open('area');
+								
+										$xml->tag_simple('areaDesc', $area['areaDesc']);
+										$xml->tag_simple('polygon', $area['polygon']);
+										$xml->tag_simple('circle', $area['circle']);
+									
+										if(! empty($area['geocode'][0]['valueName']))
+										foreach($area['geocode'] as $key => $geocode)
+										{
+											$xml->tag_open('geocode');						
+												$xml->tag_simple('valueName', ($geocode['valueName']));
+												$xml->tag_simple('value', ($geocode['value']));							
+											$xml->tag_close('geocode');
+										} // foreach geocode
+									
+									$xml->tag_close('area');
+								}
+							}else{
+								$area = $info['area'];
+								$xml->tag_open('area');
+								
+									$xml->tag_simple('areaDesc', $area['areaDesc']);
+									$xml->tag_simple('polygon', $area['polygon']);
+									$xml->tag_simple('circle', $area['circle']);
+								
+									if(! empty($area['geocode'][0]['valueName']))
+									foreach($area['geocode'] as $key => $geocode)
+									{
+										$xml->tag_open('geocode');						
+											$xml->tag_simple('valueName', ($geocode['valueName']));
+											$xml->tag_simple('value', ($geocode['value']));							
+										$xml->tag_close('geocode');
+									} // foreach geocode
+								
+								$xml->tag_close('area');
+							}
+													
+						$xml->tag_close('info');	
+					}// Foreach info lang
+				}else{
+					$info = $cap['info'];
 					$xml->tag_open('info');
-						
-						
-						$xml->tag_simple('language', $info['language']);							
-						$xml->tag_simple('category', $info['category']);						
-						$xml->tag_simple('event', $info['event']);
-						
-						$xml->tag_simple('responseType', $info['responseType']);
-						$xml->tag_simple('urgency', $info['urgency']);
-						$xml->tag_simple('severity', $info['severity']);
-						$xml->tag_simple('certainty', $info['certainty']);
-						$xml->tag_simple('audience', $info['audience']);
-						
-						if(! empty($info['eventCode'][0]['valueName']))
-						foreach($info['eventCode'] as $key => $eventCode)
-						{
-							$xml->tag_open('eventCode');							
-								$xml->tag_simple('valueName', ($eventCode['valueName']));
-								$xml->tag_simple('value', ($eventCode['value']));							
-							$xml->tag_close('eventCode');
-						}
-						
-						$xml->tag_simple('effective', $info['effective']);
-						$xml->tag_simple('onset', $info['onset']);
-						$xml->tag_simple('expires', $info['expires']);
-						
-						$xml->tag_simple('senderName', $info['senderName']);
-						
-						$xml->tag_simple('headline', $info['headline']);
-						$xml->tag_simple('description', $info['description']);
-						$xml->tag_simple('instruction', $info['instruction']);
-						
-						$xml->tag_simple('web', $info['web']);
-						$xml->tag_simple('contact', $info['contact']);
-						
-						if(! empty($info['parameter'][0]['valueName']))
-						foreach($info['parameter'] as $key => $parameter)
-						{
-							$xml->tag_open('parameter');						
-								$xml->tag_simple('valueName', ($parameter['valueName']));
-								$xml->tag_simple('value', ($parameter['value']));							
-							$xml->tag_close('parameter');						
-						} // foreach parameter
-						
-						// look if area zone is used
+					
+					$xml->tag_simple('language', $info['language']);							
+					$xml->tag_simple('category', $info['category']);						
+					$xml->tag_simple('event', $info['event']);
+					
+					$xml->tag_simple('responseType', $info['responseType']);
+					$xml->tag_simple('urgency', $info['urgency']);
+					$xml->tag_simple('severity', $info['severity']);
+					$xml->tag_simple('certainty', $info['certainty']);
+					$xml->tag_simple('audience', $info['audience']);
+					
+					if(! empty($info['eventCode'][0]['valueName']))
+					foreach($info['eventCode'] as $key => $eventCode)
+					{
+						$xml->tag_open('eventCode');							
+							$xml->tag_simple('valueName', ($eventCode['valueName']));
+							$xml->tag_simple('value', ($eventCode['value']));							
+						$xml->tag_close('eventCode');
+					}
+					
+					$xml->tag_simple('effective', $info['effective']);
+					$xml->tag_simple('onset', $info['onset']);
+					$xml->tag_simple('expires', $info['expires']);
+					
+					$xml->tag_simple('senderName', $info['senderName']);
+					
+					$xml->tag_simple('headline', $info['headline']);
+					$xml->tag_simple('description', $info['description']);
+					$xml->tag_simple('instruction', $info['instruction']);
+					
+					$xml->tag_simple('web', $info['web']);
+					$xml->tag_simple('contact', $info['contact']);
+					
+					if(! empty($info['parameter'][0]['valueName']))
+					foreach($info['parameter'] as $key => $parameter)
+					{
+						$xml->tag_open('parameter');						
+							$xml->tag_simple('valueName', ($parameter['valueName']));
+							$xml->tag_simple('value', ($parameter['value']));							
+						$xml->tag_close('parameter');						
+					} // foreach parameter
+					
+					// look if area zone is used
+					if(is_array($info['area'][0])){
 						foreach($info['area'] as $key => $area)
 						{
 							$xml->tag_open('area');
@@ -833,13 +1170,32 @@
 							
 							$xml->tag_close('area');
 						}
-												
-					$xml->tag_close('info');	
-				}// Foreach info lang
-					
+					}else{
+						$area = $info['area'];
+						$xml->tag_open('area');
+						
+							$xml->tag_simple('areaDesc', $area['areaDesc']);
+							$xml->tag_simple('polygon', $area['polygon']);
+							$xml->tag_simple('circle', $area['circle']);
+						
+							if(! empty($area['geocode'][0]['valueName']))
+							foreach($area['geocode'] as $key => $geocode)
+							{
+								$xml->tag_open('geocode');						
+									$xml->tag_simple('valueName', ($geocode['valueName']));
+									$xml->tag_simple('value', ($geocode['value']));							
+								$xml->tag_close('geocode');
+							} // foreach geocode
+						
+						$xml->tag_close('area');
+					}			
+				$xml->tag_close('info');	
+
+			}
 			$xml->tag_close('alert');
 
 			$this->cap = $xml->output();
+			return $this->cap;			
 		}		
 			
 		/**
@@ -1185,15 +1541,19 @@
 			print '</pre>';			
 			exit;
 		}
+
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	function object_to_array($d) {
+	    if (is_object($d))
+	        $d = get_object_vars($d);
+
+	    return is_array($d) ? array_map(__FUNCTION__, $d) : $d;
+	}
+
+	function array_to_object($d) {
+	    return is_array($d) ? (object) array_map(__FUNCTION__, $d) : $d;
+	}
 	
 	
 	
