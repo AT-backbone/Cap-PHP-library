@@ -1,6 +1,7 @@
 <?php
 /*
  *  Copyright (c) 2015  Niklas Spanring   <n.spanring@backbone.co.at>
+ *  Copyright (c) 2017  Guido Schratzer   <guido.schratzer@backbone.co.at>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +24,7 @@
  *	\standards  from http://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html
  *
  */
-	
-	//require_once 'cap.write.class.php'; // for the XML / CAP view
+	// CAP view
 
 	class Read_CAP_Class{
 	
@@ -286,7 +286,6 @@
 		}
 	
 	
-	
 		class info extends Read_CAP_Class{
 			protected $required = array('category', 'event', 'urgency', 'severity', 'certainty');
 			protected $subclass = array('eventCode'=>'parameter', 'parameter'=>'parameter', 'resource'=>'resource', 'area' => 'area');
@@ -489,7 +488,6 @@
 			
 				
 		}
-	
 	
 		class area extends Read_CAP_Class{
 			protected $required = array('areaDesc');

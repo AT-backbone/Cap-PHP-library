@@ -47,7 +47,7 @@ class CapProcessor{
 		$this->capRead = new CapRead($this);
 	}
 
-	// returns the alert hendler for the given index
+	// returns the alert handler for the given index
 	function getAlert($index = 0){
 		return $this->alert[$index];
 	}
@@ -80,7 +80,7 @@ class CapProcessor{
 
 	// returns the readed cap xml array of the index
 	function getCapXmlArray($index = 0){
-		return $this->capRead->cap_xml_contend[$index];
+		return $this->capRead->cap_xml_content[$index];
 	}
 
 	// This function is only for the Cap Php Library Desgined!
@@ -987,55 +987,64 @@ class CapCreate{
 			$alert = $this->processor->getAlert($index);
 			if($alert->identifier != "")
 			{
-				if($this->processor->output_destination == ""){
+				if($this->processor->output_destination == "")
+				{
 					try{
 						if($name == '') $name = $alert->identifier;
 						if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
 						$capfile = fopen($name.$end_type, "w");
-						if($capfile === false) return "Unable to open file! ".$name.$end_type;
+						if($capfile === false) 
+						{
+							$this->processor->error = "Unable to open file! ".$name.$end_type;
+							return -1;
+						}
 						fwrite($capfile, $this->processor->output_content);
 						fclose($capfile);
-
+	
 						// convert in UTF-8
+							
 						$data = file_get_contents($name.$end_type);
 
 						if (!preg_match('!!u', $data)){ //this is not utf-8
 							$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 						}
 
-						file_put_contents($name.$end_type, $data);
-
+						file_put_contents($name.$end_type, $data, LOCK_EX);
 						return $name.$end_type;
-					} catch (Exception $e) {
-						print "Exception raised: " . $e->getMessage() . "\n";
-						return false;
+					} catch (Exception $e) 
+					{
+						$this->processor->error = "Exception raised: " . $e->getMessage();
+						return -1;
 					}
-				}else{
+				}
+				else
+				{
+					$filefullpath = $this->processor->output_destination.'/'.$name.$end_type;
+									
 					if($name == '') $name = $alert->identifier;
 					if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
-					$capfile = fopen($this->processor->output_destination.'/'.$name.$end_type, "w");
-					if($capfile === false) return "Unable to open file! ".$this->processor->output_destination.'/'.$name.$end_type;
+					$capfile = fopen($filefullpath, "w");
+					if($capfile === false) return "Unable to open file! ".$filefullpath;
 					fwrite($capfile, $this->processor->output_content);
 					fclose($capfile);
 
-					chmod($this->processor->output_destination.'/'.$name.$end_type, 0660);  // octal; correct value of mode
-					chgrp($this->processor->output_destination.'/'.$name.$end_type, filegroup($this->processor->output_destination));
+					chmod($filefullpath, 0664);  // octal; correct value of mode
+					chgrp($filefullpath, filegroup($this->processor->output_destination));
+
+					$data = file_get_contents($filefullpath);
 
 					// convert in UTF-8
-					$data = file_get_contents($this->processor->output_destination.'/'.$name.$end_type);
-
 					if (!preg_match('!!u', $data)){ //this is not utf-8
 						$data = mb_convert_encoding($data, 'UTF-8', 'OLD-ENCODING');
 					}
 
-					file_put_contents($this->processor->output_destination.'/'.$name.$end_type, $data);
-
+					file_put_contents($filefullpath, $data, LOCK_EX);
 					return $this->processor->output_destination.'/'.$name.$end_type;
 				}
 			}
 			else
 			{
-				return false;
+				return -1;
 			}
 		}
 	}
@@ -1048,8 +1057,8 @@ class CapCreate{
 
 		var $processor;
 		var $process_class = array();
-		var $cap_xml_contend = array();
-		var $cap_xml_contend_index = 0;
+		var $cap_xml_content = array();
+		var $cap_xml_content_index = 0;
 		var $is_start = true;
 		var $read_count = 0;
 
@@ -1075,7 +1084,7 @@ class CapCreate{
 			}
 			if($xml_processed){
 				// parse xml object
-				$this->cap_xml_contend[$this->cap_xml_contend_index++] = $xml_processed;
+				$this->cap_xml_content[$this->cap_xml_content_index++] = $xml_processed;
 				$this->readCapArray($xml_processed);
 			}
 		}
