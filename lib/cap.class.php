@@ -993,7 +993,7 @@ class CapCreate{
 						if(substr($name,-4,5) == '.xml') $end_type = ""; else $end_type = ".xml";
 						$capfile = fopen($name.$end_type, "w");
 						if($capfile === false) return "Unable to open file! ".$name.$end_type;
-						fwrite($capfile, $name.$end_type);
+						fwrite($capfile, $this->processor->output_content);
 						fclose($capfile);
 
 						// convert in UTF-8
