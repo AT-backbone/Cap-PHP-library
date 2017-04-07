@@ -9,15 +9,17 @@ Class MeteoalarmWebservice{
 
 	function __construct($WS_URL){
 		
-		$res = @require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
-		if(!$res) $res = @require_once '../includes/nusoap/lib/nusoap.php';		// Include SOAP
-		if(!$res) $res = @require_once '../../includes/nusoap/lib/nusoap.php';		// Include SOAP
-		if(!$res) $res = @require_once '../../../includes/nusoap/lib/nusoap.php';		// Include SOAP
-		if(!$res) $res = @require_once 'nusoap/lib/nusoap.php';		// Include SOAP
-		if(!$res) $res = @require_once 'lib/nusoap.php';		// Include SOAP
-		if(!$res) $res = @require_once 'nusoap.php';		// Include SOAP
-		
+		$res=0;
+		if (! $res && file_exists('includes/nusoap/lib/nusoap.php')) $res=require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if (! $res && file_exists('../includes/nusoap/lib/nusoap.php')) $res=require_once '../includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if (! $res && file_exists('../../includes/nusoap/lib/nusoap.php')) $res=require_once '../../includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if (! $res && file_exists('../../../includes/nusoap/lib/nusoap.php')) $res=require_once '../../../includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if (! $res && file_exists('nusoap/lib/nusoap.php')) $res=require_once 'nusoap/lib/nusoap.php';		// Include SOAP
+		if (! $res && file_exists('lib/nusoap.php')) $res=require_once 'lib/nusoap.php';		// Include SOAP
+		if (! $res && file_exists('nusoap.php')) $res=require_once 'nusoap.php';		// Include SOAP
+		if(!$res) die("Error: nusoap.php not found!");
 		// Set the WebService URL
+
 		$this->soapclient = new nusoap_client($WS_URL, '' , false, false, false, false, 0, 300); // <-- set the Timeout above 300 Sec.
 		if ($this->soapclient)
 		{
