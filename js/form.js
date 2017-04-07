@@ -750,7 +750,7 @@ $( document ).ready(function()
 								//out+= '<div class="problem awareness" style="background-color:'+levelc+';" aktive="1" onclick="area_warning_detail('+id+', '+type+', this)" '+css_selected+'>';
 								//	out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
 								//out+= '</div>';
-								if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined || data['desc'][type][0] == "")
+								if(level > 1 && (data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined || data['desc'][type][0] == ""))
 								{
 									out+= '<div class="problem awareness" style="background-color:'+levelc+'; '+css_selected+' '+not_sel_able+'" aktive="1" type="'+type+'" onclick="plugin_area_warning_detail(\''+id+'\', '+type+', this)" >';
 									out+= '<img src="'+imgsrc+'"><span class="problem_callsign">!</span>';
@@ -778,7 +778,8 @@ $( document ).ready(function()
 			{
 				keysSorted = Object.keys(data['type']).sort(function(a,b){return data['type'][b] - data['type'][a]});
 				$.each(keysSorted, function(index, type){
-					if(data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined && data['type'][type] !== undefined && data['type'][type] != 0 )
+					level = data['type'][type];
+					if(level > 1 && (data['desc'] == undefined || data['desc'][type] == undefined || data['desc'][type][0] == undefined && data['type'][type] !== undefined && data['type'][type] != 0 ))
 					{
 						area_info['problem'] = true;
 					}
