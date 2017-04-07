@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>1.2.3.4</identifier>
+	<sender>Test-Sender</sender>
+	<sent>2017-04-07T11:43:24+02:00</sent>
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<info>
+		<language>en-US</language>
+		<category>Met</category>
+		<event>Thunderstorm</event>
+		<responseType>None</responseType>
+		<urgency>Future</urgency>
+		<severity>Minor</severity>
+		<certainty>Likely</certainty>
+		<headline>the headline</headline>
+		<description>my desc</description>
+		<web>https://www.mydomain.com</web>
+		<contact>Firstname Lastname</contact>
+	</info>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>Thunderstorm</event>
+		<responseType>None</responseType>
+		<urgency>Future</urgency>
+		<severity>Minor</severity>
+		<certainty>Likely</certainty>
+		<headline>the headline</headline>
+		<description>Meine Beschreibung</description>
+		<web>https://www.mydomain.com</web>
+		<contact>Firstname Lastname</contact>
+	</info>
+</alert>
