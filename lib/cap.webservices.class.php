@@ -1,7 +1,6 @@
 <?php
 
 ini_set("default_socket_timeout", 60000);
-require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 
 Class MeteoalarmWebservice{
 
@@ -9,6 +8,15 @@ Class MeteoalarmWebservice{
 	var $parameters;
 
 	function __construct($WS_URL){
+		
+		$res = @require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if(!$res) $res = @require_once '../includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if(!$res) $res = @require_once '../../includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if(!$res) $res = @require_once '../../../includes/nusoap/lib/nusoap.php';		// Include SOAP
+		if(!$res) $res = @require_once 'nusoap/lib/nusoap.php';		// Include SOAP
+		if(!$res) $res = @require_once 'lib/nusoap.php';		// Include SOAP
+		if(!$res) $res = @require_once 'nusoap.php';		// Include SOAP
+		
 		// Set the WebService URL
 		$this->soapclient = new nusoap_client($WS_URL, '' , false, false, false, false, 0, 300); // <-- set the Timeout above 300 Sec.
 		if ($this->soapclient)
