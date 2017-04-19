@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<identifier>2.49.0.1.276.DWD.PVW.1487857490473.4</identifier>
+	<sender>CAP@dwd.de</sender>
+	<sent>2017-02-23T14:45:00+01:00</sent>
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<source>PVW</source>
+	<scope>Public</scope>
+	<info>
+		<language>de-DE</language>
+		<category>Met</category>
+		<event>WINDBÖEN</event>
+		<responseType>None</responseType>
+		<urgency>Immediate</urgency>
+		<severity>Minor</severity>
+		<certainty>Observed</certainty>
+		<effective>2017-02-23T14:45:00+01:00</effective>
+		<onset>2017-02-23T17:00:00+01:00</onset>
+		<expires>2017-02-24T12:00:00+01:00</expires>
+		<senderName>DWD / Nationales Warnzentrum Offenbach</senderName>
+		<headline>Amtliche WARNUNG vor WINDBÖEN</headline>
+		<description>Es treten Windböen mit Geschwindigkeiten zwischen 50 km/h (14m/s, 28kn, Bft 7) und 60 km/h (17m/s, 33kn, Bft 7) anfangs aus südwestlicher, später aus nördlicher Richtung auf. In Schauernähe muss mit Sturmböen bis 75 km/h (21m/s, 41kn, Bft 9) gerechnet werden.</description>
+		<web>http://www.wettergefahren.de</web>
+		<contact>Deutscher Wetterdienst</contact>
+		<parameter>
+			<valueName>Böen</valueName>
+			<value>50 bis 60 [km/h]</value>
+		</parameter>
+		<parameter>
+			<valueName>Exponierte Böen</valueName>
+			<value>&lt;75 [km/h]</value>
+		</parameter>
+		<parameter>
+			<valueName>Windrichtung</valueName>
+			<value>SW</value>
+		</parameter>
+		<parameter>
+			<valueName>Windrichtung</valueName>
+			<value>N</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_level</valueName>
+			<value>2; yellow; Moderate</value>
+		</parameter>
+		<parameter>
+			<valueName>awareness_type</valueName>
+			<value>1; Wind</value>
+		</parameter>
+		<area>
+			<areaDesc>Kreis Mecklenburgische Seenplatte - Nord</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Mecklenburgische Seenplatte - West</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Mecklenburgische Seenplatte - Südost</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Stadt Schwerin</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Rügen - Binnenland</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Greifswald - Küste Süd</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Rügen - Insel Rügen</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Rügen - Küste</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Greifswald - Binnenland Nord</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Greifswald - Küste Nord</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Vorpommern-Greifswald - Binnenland Süd</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Rostock - Binnenland Nord</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Rostock - Binnenland Süd</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Hansestadt Rostock</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Rostock - Küste</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Nordwestmecklenburg - Küste</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Nordwestmecklenburg - Binnenland</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Ludwigslust-Parchim - West</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Kreis Ludwigslust-Parchim - Ost</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+		<area>
+			<areaDesc>Müritz</areaDesc>
+			<geocode>
+				<valueName>NUTS2</valueName>
+				<value>DE8</value>
+			</geocode>
+		</area>
+	</info>
+</alert>
