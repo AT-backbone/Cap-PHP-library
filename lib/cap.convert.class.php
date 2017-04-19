@@ -127,10 +127,10 @@
      *********************************************************************************************************************************/
     var $conv = "";
     var $tmpconv = "";
-    var $actions = "";
+    var $actions = array();
     var $input_actions	= "";
 		var $output_actions	= "";
-		var $move_action = "";
+		var $move_action = array();
 
 		function convert($cap, $input, $output, $cap_output_path)
 		{
@@ -168,7 +168,7 @@
 			$this->conv = $conv;
 				
 			$this->_log.= cap_syslog(array('start:','convert_input()'), LOG_INFO, 'CAP_Converter');
-
+			//die(print_r($cap));
 			$icap = $this->convert_input($cap);
 			
 			$this->_log.= cap_syslog(array('end:','convert_input()'), LOG_INFO, 'CAP_Converter');
