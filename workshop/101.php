@@ -1,8 +1,8 @@
 ﻿<?php
 #### Workshop Example ####
 $res=0;
-if (! $res && file_exists('../lib/cap.class.php')) $res=@include '../lib/cap.class.php';					// to work if your module directory is into dolibarr root htdocs directory
-if (! $res && file_exists('../../lib/cap.class.php')) $res=@include '../../lib/cap.class.php';	
+if (! $res && file_exists('../lib/cap.class.php')) $res=@require_once '../lib/cap.class.php';					// to work if your module directory is into dolibarr root htdocs directory
+if (! $res && file_exists('../../lib/cap.class.php')) $res=@require_once '../../lib/cap.class.php';	
 if (! $res) die("Failure by include of cap.class.php");
 
 $NewCap = new CapProcessor();
