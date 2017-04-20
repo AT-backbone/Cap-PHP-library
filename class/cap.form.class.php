@@ -1899,10 +1899,16 @@
 
 								if($configuration->conf["webservice"]["login"] && $configuration->conf["webservice_aktive"]) $login_show_name = $configuration->conf["webservice"]["login"];
 								else $login_show_name = $langs->trans('Login');
-
 								$out.= '<div data-theme="b" data-role="header">';
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';
+										$out.= '<h1>';
+											$out.= $Pages_arr['#'.$pagename];
+											if(phpversion() < $configuration->conf["PHPVersion"]["min"] || phpversion() > $configuration->conf["PHPVersion"]["max"]){
+												$out.= ' <br><span style="color:yellow">'.$langs->trans('php_version_is_not_tested',phpversion()).' ';
+												$out.= $langs->trans('php_min_max_version',$configuration->conf["PHPVersion"]["min"] , $configuration->conf["PHPVersion"]["max"] );
+												$out.= '</span>';
+											}
+										$out.= '</h1>';
 									if($configuration->conf["webservice"]["service_on"] == 1)
 									{
 										if($login_to_webservice_faild == true)

@@ -7,6 +7,17 @@
 			function __construct($path){
 				$this->path = $path;
 				$this->conf = parse_ini_file($path, true); // config.ini
+
+				### Check the version of the conf file
+				if(file_exists(dirname($path)."/standard.conf.ini")){
+					$std_conf = parse_ini_file( dirname($path)."/standard.conf.ini", true); // config.ini find las
+					if(empty($this->conf["ConfVersion"]) || $this->conf["ConfVersion"]["ver"] < $std_conf["ConfVersion"]["ver"]){
+						$this->conf = array_merge($std_conf, $this->conf);
+						$this->conf["ConfVersion"]["ver"] = $std_conf["ConfVersion"]["ver"];
+						$this->write_php_ini();
+					}
+					unset($std_conf);
+				}
 			}
 
 			// key name value
