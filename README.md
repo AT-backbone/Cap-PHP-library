@@ -25,9 +25,9 @@ If you want to learn more about CAP here is a short Video:
 ## Features
 
 * Create valid CAPs Files from scratch with a form
-* Read and modify existing CAPs
+* Read and modify existing CAPs (with a form or in a textfield)
 * Send these CAPs via SOAP Webservice
-* Convert CAPs between different CAP implementations
+* Convert CAPs between different CAP profiles
 * Create CAPs with an easy to use, paint-like interface called [**Paint and Alert**](doc/PaintandAlert.md)
 
 
