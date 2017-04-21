@@ -156,3 +156,5 @@ LabelParameterDesc=(OPCIONAL) <br>Un parámetro adicional específicas asociado 
 	LabelCAPValidatorUrl=Cap Validator Url
 	LabelCAPValidatorUrlDesc=
 	Url=Url
+	php_version_is_not_tested=This PHP Version [%s] is not Tested!
+	php_min_max_version=[min:%s|max:%s]

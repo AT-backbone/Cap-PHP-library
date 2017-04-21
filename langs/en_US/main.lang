@@ -252,3 +252,5 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	perm_for_conf=Error! Could not write to folder. Please make sure your Webserver has permission to write to this folder.
 	err_cap_not_complete01=The CAP you are trying to send is not complete! Please check your entered information again.
 	error_wrong_login=Wrong User, Password, Permision or Configuration!
+	php_version_is_not_tested=This PHP Version [%s] is not Tested!
+	php_min_max_version=[ min:%s | max:%s ]

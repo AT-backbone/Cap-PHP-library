@@ -167,7 +167,7 @@
 		*
 		* @return	None
 		*/
-		function __construct($cap_array, $awt, $data, $langs)
+		function __construct($cap_array, $awt, $data, $langs = "")
 		{
 			if(!empty($cap_array)) $this->cap_array = $cap_array;
 			if(!empty($awt)) $this->awt_arr = $awt;
