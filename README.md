@@ -29,7 +29,8 @@ If you want to learn more about CAP here is a short Video:
 * Send these CAPs via SOAP Webservice
 * Convert CAPs between different CAP profiles
 * Create CAPs with an easy to use, paint-like interface called [**Paint and Alert**](doc/PaintandAlert.md)
-
+* validate cap files
+* show alert on a map (if a polygon or circle is defined)
 
 ## Install
 
