@@ -910,8 +910,8 @@ $( document ).ready(function()
 
 					var d = new Date();
 
-					$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('input');
-					$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('input');
+					$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('change');
+					$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('change');
 					//$('#left_area_name').html(tmp_area_name).trigger('input');
 					$('#AreaDetailDIV').css('background-color', '#cccccc');
 					$('#AreaDetailUL').css('pointer-events', 'none');
@@ -977,21 +977,21 @@ $( document ).ready(function()
 
 				if(area_data[id]['date_from'][type] !== undefined)
 				{
-					$('#from_date').val(area_data[id]['date_from'][type]).trigger('input');
+					$('#from_date').val(area_data[id]['date_from'][type]).trigger('change');
 				}
 				else
 				{
 					var d = new Date();
-					$('#from_date').val(d.yyyy_mm_dd()).trigger('input');
+					$('#from_date').val(d.yyyy_mm_dd()).trigger('change');
 				}
 				if(area_data[id]['date_to'][type] !== undefined)
 				{
-					$('#to_date').val(area_data[id]['date_to'][type]).trigger('input');
+					$('#to_date').val(area_data[id]['date_to'][type]).trigger('change');
 				}
 				else
 				{
 					var d = new Date();
-					$('#to_date').val(d.yyyy_mm_dd()).trigger('input');
+					$('#to_date').val(d.yyyy_mm_dd()).trigger('change');
 				}
 			}
 			if(area_info['sel_type'] != 0)
@@ -1047,8 +1047,8 @@ $( document ).ready(function()
 		$('#to_0').val('23:59').trigger('input');
 		
 		var d = new Date();
-		$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('input');
-		$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('input');
+		$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('change');
+		$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('change');
 		//$('#left_area_name').html(tmp_area_name).trigger('input');
 		$('#AreaDetailDIV').css('background-color', '#cccccc');
 		$('#AreaDetailUL').css('pointer-events', 'none');
@@ -1091,8 +1091,8 @@ $( document ).ready(function()
 			$('#to_0').val('00:00').trigger('input');
 
 			var d = new Date();
-			$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('input');
-			$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('input');
+			$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('change');
+			$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('change');
 			//$('#left_area_name').html(tmp_area_name).trigger('input');
 			$('#AreaDetailDIV').css('background-color', '#cccccc');
 			$('#AreaDetailUL').css('pointer-events', 'none');
