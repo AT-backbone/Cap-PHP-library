@@ -84,6 +84,31 @@ $( document ).ready(function()
 
 	});
 
+	$( "#from_0, #to_0" ).change(function() {
+		var fromtime = $("#from_0").val();
+		var totime = $("#to_0").val();
+		if(fromtime > totime){
+			var dtoday = new Date();
+			var d = new Date($("#to_date").val());
+			//to date is now tomorrow
+			console.log(dtoday.toDateString(),d.toDateString());
+			if(dtoday.toDateString() === d.toDateString())
+			{
+				d.setDate(d.getDate() + 1);
+				if((d.getMonth() + 1) < 10) month = "0"+(d.getMonth() + 1);
+				else month = (d.getMonth() + 1);
+				date = d.getFullYear() +'-'+ (month) +'-'+ d.getDate()
+				$("#to_date").val(date);
+				$("#to_date").trigger("change");
+			}
+		}
+	});	
+
+	$( "#from_date, #to_date" ).change(function() {
+		$('#legdatefrom').html($("#from_date").val());
+		$('#legdateto').html($("#to_date").val());
+	});	
+
 	if($('#init_map').val() == 1 && $('#plugin').val() != 1)
 	{
 		ini_meteo_map();
