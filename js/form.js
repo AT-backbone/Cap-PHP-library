@@ -95,10 +95,7 @@ $( document ).ready(function()
 			if(dtoday.toDateString() === d.toDateString())
 			{
 				d.setDate(d.getDate() + 1);
-				if((d.getMonth() + 1) < 10) month = "0"+(d.getMonth() + 1);
-				else month = (d.getMonth() + 1);
-				date = d.getFullYear() +'-'+ (month) +'-'+ d.getDate()
-				$("#to_date").val(date);
+				$("#to_date").val(d.yyyy_mm_dd());
 				$("#to_date").trigger("change");
 			}
 		}
@@ -910,6 +907,11 @@ $( document ).ready(function()
 					//$('#inst_1').val('').trigger('input');
 					$('#from_0').val('00:00').trigger('input');
 					$('#to_0').val('23:59').trigger('input');
+
+					var d = new Date();
+
+					$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('input');
+					$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('input');
 					//$('#left_area_name').html(tmp_area_name).trigger('input');
 					$('#AreaDetailDIV').css('background-color', '#cccccc');
 					$('#AreaDetailUL').css('pointer-events', 'none');
@@ -972,6 +974,25 @@ $( document ).ready(function()
 				{
 					$('#to_0').val('23:59').trigger('input');
 				}
+
+				if(area_data[id]['date_from'][type] !== undefined)
+				{
+					$('#from_date').val(area_data[id]['date_from'][type]).trigger('input');
+				}
+				else
+				{
+					var d = new Date();
+					$('#from_date').val(d.yyyy_mm_dd()).trigger('input');
+				}
+				if(area_data[id]['date_to'][type] !== undefined)
+				{
+					$('#to_date').val(area_data[id]['date_to'][type]).trigger('input');
+				}
+				else
+				{
+					var d = new Date();
+					$('#to_date').val(d.yyyy_mm_dd()).trigger('input');
+				}
 			}
 			if(area_info['sel_type'] != 0)
 			{
@@ -1006,6 +1027,10 @@ $( document ).ready(function()
 
 				area_data[id]['from'][data['sel_type']] = $('#from_0').val();
 				area_data[id]['to'][data['sel_type']] = $('#to_0').val();
+
+				area_data[id]['date_from'][data['sel_type']] = $('#from_date').val();
+				area_data[id]['date_to'][data['sel_type']] = $('#to_date').val();
+
 				area_data[id]['sel_type'] = 0;
 			}
 		});
@@ -1020,6 +1045,10 @@ $( document ).ready(function()
 		//$('#inst_1').val('').trigger('input');
 		$('#from_0').val('00:00').trigger('input');
 		$('#to_0').val('23:59').trigger('input');
+		
+		var d = new Date();
+		$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('input');
+		$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('input');
 		//$('#left_area_name').html(tmp_area_name).trigger('input');
 		$('#AreaDetailDIV').css('background-color', '#cccccc');
 		$('#AreaDetailUL').css('pointer-events', 'none');
@@ -1045,6 +1074,8 @@ $( document ).ready(function()
 					area_data[id]['inst'][area_data[id]['sel_type']] = {};
 					area_data[id]['from'][area_data[id]['sel_type']] = '00:00';
 					area_data[id]['to'][area_data[id]['sel_type']] = '00:00';
+					area_data[id]['date_from'][data['sel_type']] = "";
+					area_data[id]['date_to'][data['sel_type']] = "";
 					area_data[id]['sel_type'] = 0;
 				}
 			});
@@ -1058,6 +1089,10 @@ $( document ).ready(function()
 			//$('#inst_1').val('').trigger('input');
 			$('#from_0').val('00:00').trigger('input');
 			$('#to_0').val('00:00').trigger('input');
+
+			var d = new Date();
+			$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('input');
+			$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('input');
 			//$('#left_area_name').html(tmp_area_name).trigger('input');
 			$('#AreaDetailDIV').css('background-color', '#cccccc');
 			$('#AreaDetailUL').css('pointer-events', 'none');
