@@ -314,7 +314,7 @@
 					//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
 					$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('DESC_EditWarningNotAktive').'</span>';
 					$out.= '<div id="map_main_div" class="ui-grid-a">';
-						$out.= '<div class="ui-block-a" style="width: 30%;">';
+						$out.= '<div class="ui-block-a" id="WarnDetailDIV" style="width: 30%;min-width: 280px;">';
 							$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
 								// Info
 								$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
@@ -431,7 +431,7 @@
 								$out.= '</ul>';
 							$out.= '</div>';
 						$out.= '</div>';
-						$out.= '<div class="ui-block-b" style="width: 70%;">';
+						$out.= '<div class="ui-block-b" id="MapDiv" style="width: 70%;">';
 							$out.= '<div class="ui-bar noselect">';
 								// Map
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
@@ -1469,7 +1469,7 @@
 									$out.= '<li>'.$langs->trans("User").': '.$configuration->conf["webservice"]["login"].'</li>';
 									$out.= '<li>'.$langs->trans("LoginDate").': '.date('d.m.Y H:i:s', $_SESSION['timestamp']).'</li>';
 									$out.= '<li><input '.$status_theme.' type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b"></li>';
-									$out.= '<input type="hidden" name="login_sended" id="logout_sended" value="0">';
+									$out.= '<input type="hidden" class="login_sended" name="login_sended" id="logout_sended" value="0">';
 								$out.= '</ul>';
 							}
 							else // Login
@@ -1489,14 +1489,15 @@
 
 								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';
-								$out.= '<input type="hidden" name="login_sended" id="login_sended" value="0">';
+								$out.= '<input type="hidden" class="login_sended" name="login_sended" id="login_sended" value="0">';
 							}
 
 							if((empty($configuration->conf["webservice_aktive"]) || $configuration->conf["webservice_aktive"] == -1) && $configuration->conf["webservice"]["service_on"] == 1 && $this->login_id == 1)
 							{
 								$out.= 			'
 													<script>
-														$("#Login-alert").on("keyup",function(event){
+													$( document ).ready(function(){
+														$(".Login input").on("keyup",function(event){
 															event.preventDefault();
 															if ( event.which == 13 )
 															{
@@ -1506,14 +1507,17 @@
 
 														$( "#submit_login_button" ).on("click", function(){
 															$("#action").remove();
-															$("#login_sended").val(1);
+															$(".login_sended").val(1);
+															console.log("TEST");
 														});
+													});
 
-														$(document).on("pageshow", "#alert" ,function ()
-														{
-									  						$( "#Login-alert" ).popup();
-															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
-														});
+													$(document).on("pageshow", "#alert" ,function ()
+													{
+								  						$( "#Login-alert" ).popup();
+														setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
+													});
+													
 													</script>
 														';
 							}
@@ -2013,7 +2017,7 @@
 								{
 									$TypePopup = $Type_arr[$popupname];
 
-									$out.= '<div data-role="popup" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
+									$out.= '<div data-role="popup" class="'.$popupname.'" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
 										//$out.= '<form>';
 
 												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
