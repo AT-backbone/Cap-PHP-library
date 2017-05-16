@@ -413,6 +413,29 @@
 										$out.= '</div><!-- /grid-a -->';
 									$out.= '</li>';
 
+									$out.= '<li data-role="collapsible" data-collapsed="true" data-iconpos="right" data-inset="false" class="lang_collaps">';
+										$out.= '<legend>';
+											$out.= '<div class="ui-grid-a">';
+												$out.= '<div class="ui-block-a">';
+													$out.= '<span style="font-size: 10px;color: #8d8d8d;" id="legdatefrom">'.date("Y-m-d").'</span>';
+												$out.= '</div>';
+												$out.= '<div class="ui-block-b">';
+													$out.= '<span style="font-size: 10px;color: #8d8d8d;" id="legdateto">'.date("Y-m-d").'</span>';
+												$out.= '</div>';
+											$out.= '</div>';
+										$out.= '</legend>';
+										$out.= '<div class="ui-grid-a">';
+											$out.= '<div class="ui-block-a">';
+												$out.= '<legend>'.$langs->trans("From").' '.$langs->trans("Date").': '.$this->tooltip('From', $langs->trans("LabelEffectivePaintAndAlertDesc")).'</legend>';
+												$out.= '<input '.$status_theme.' id="from_date" type="text" name="effective[date]" step="1" value="'.date("Y-m-d").'">';
+											$out.= '</div>';
+											$out.= '<div class="ui-block-b">';
+												$out.= '<legend>'.$langs->trans("To").' '.$langs->trans("Date").': '.$this->tooltip('To', $langs->trans("LabelExpiresPaintAndAlertDesc")).'</legend>';
+												$out.= '<input '.$status_theme.' id="to_date" type="text" name="expires[date]" step="1" value="'.date("Y-m-d").'">';
+											$out.= '</div>';
+										$out.= '</div><!-- /grid-a -->';
+									$out.= '</li>';
+
 									$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px; border-right: none;">'; // solfe border problem: margin-bottom:10px;
 										$out.= '<div class="ui-grid-a">';
 											$out.= '<div class="ui-block-a">';
