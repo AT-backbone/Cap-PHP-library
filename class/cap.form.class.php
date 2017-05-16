@@ -413,7 +413,7 @@
 										$out.= '</div><!-- /grid-a -->';
 									$out.= '</li>';
 
-									$out.= '<li data-role="collapsible" data-collapsed="true" data-iconpos="right" data-inset="false" class="lang_collaps">';
+									$out.= '<li id="date_collaps" data-role="collapsible" data-collapsed="true" data-iconpos="right" data-inset="false" class="lang_collaps">';
 										$out.= '<legend>';
 											$out.= '<div class="ui-grid-a">';
 												$out.= '<div class="ui-block-a">';
