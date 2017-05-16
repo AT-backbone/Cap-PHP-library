@@ -85,16 +85,37 @@ $( document ).ready(function()
 	});
 
 	$( "#from_0, #to_0" ).change(function() {
+		var dnow = new Date();
+		var now = dnow.getHours()+':'+dnow.getMinutes();
 		var fromtime = $("#from_0").val();
 		var totime = $("#to_0").val();
-		if(fromtime > totime){
-			var dtoday = new Date();
-			var d = new Date($("#to_date").val());
-			//to date is now tomorrow
-			console.log(dtoday.toDateString(),d.toDateString());
-			if(dtoday.toDateString() === d.toDateString())
-			{
-				d.setDate(d.getDate() + 1);
+		var dfromtime = new Date(dnow.yyyy_mm_dd() +" "+ fromtime);
+		var dtotime = new Date(dnow.yyyy_mm_dd() +" "+ totime);
+		if($('#date_collaps').hasClass('ui-collapsible-collapsed')){
+			if(fromtime > totime){
+				var dtoday = new Date();
+				var d = new Date($("#to_date").val());
+				//to date is now tomorrow
+				if(dtoday.toDateString() === d.toDateString())
+				{
+					d.setDate(dnow.getDate() + 1);
+					$("#to_date").val(d.yyyy_mm_dd());
+					$("#to_date").trigger("change");
+				}
+			}
+			if(dtotime < dnow && dfromtime < dnow){
+				var d = new Date($("#from_date").val());
+				d.setDate(dnow.getDate() + 1);
+				$("#from_date").val(d.yyyy_mm_dd());
+				$("#from_date").trigger("change");
+
+				var d = new Date($("#to_date").val());
+				d.setDate(dnow.getDate() + 1);
+				$("#to_date").val(d.yyyy_mm_dd());
+				$("#to_date").trigger("change");
+			}else if(dtotime < dnow){
+				var d = new Date($("#to_date").val());
+				d.setDate(dnow.getDate() + 1);
 				$("#to_date").val(d.yyyy_mm_dd());
 				$("#to_date").trigger("change");
 			}
