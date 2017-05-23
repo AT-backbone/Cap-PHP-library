@@ -1,6 +1,6 @@
 <?php
 	chdir('../');
-	error_reporting(E_ERROR | E_PARSE);
+	error_reporting(E_ERROR);
 	require_once 'class/translate.class.php';
 	require_once 'cap.create.class.php';
 	require_once 'class/conf.class.php';
@@ -125,13 +125,13 @@
 		}
 	}
 
-	if($_COOKIE['Session_login_name'])
+	if(!empty($_COOKIE['Session_login_name']))
 	{
 		$configuration->set("webservice", "login", $_COOKIE['Session_login_name']);
 		$configuration->set("webservice", "password", $_COOKIE['Session_login_pass']);
 	}
 
-	if($_SESSION['Session_login_name'])
+	if(!empty($_SESSION['Session_login_name']))
 	{
 		$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
 		$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
@@ -152,7 +152,9 @@
 		$i = 0;
 		foreach($cap->type as $type => $level)
 		{
-			if($cap->exutc) $cap_array_2[$aid][$i]->exutc = $cap->exutc;
+			if(!empty($cap->exutc)) $cap_array_2[$aid][$i]->exutc = $cap->exutc;
+			if(!is_array($cap_array_2[$aid])) $cap_array_2[$aid] = array();
+			if(!is_array($cap_array_2[$aid][$i])) $cap_array_2[$aid][$i] = new stdClass();
 			$cap_array_2[$aid][$i]->name = $cap->name;
 
 			$cap_array_2[$aid][$i]->type = $type;
@@ -172,7 +174,7 @@
 			$i++;
 		}
 	}
-
+	//die(var_dump($cap_array_2));
 	if(!empty($_POST['no_del'])) print_r($cap_array_2);
 
 	$capupdater = new CAP_Updater($cap_array_2, $awt_arr, $data);
