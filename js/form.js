@@ -463,6 +463,9 @@ $( document ).ready(function()
 								lkey = ind_lang[lang_name];
 								if(lkey == undefined) lkey = 0;
 								area_data[val['aid']]['desc'][val['type']][lkey] = text;
+							}else{
+								lkey = 0;
+								area_data[val['aid']]['desc'][val['type']][lkey] = "no description";
 							}
 						});
 						if(! $.isArray(area_data[val['aid']]['inst'][val['type']])) area_data[val['aid']]['inst'][val['type']] = {};
