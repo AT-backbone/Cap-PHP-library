@@ -461,6 +461,7 @@ $( document ).ready(function()
 							if(text)
 							{
 								lkey = ind_lang[lang_name];
+								if(lkey == undefined) lkey = 0;
 								area_data[val['aid']]['desc'][val['type']][lkey] = text;
 							}
 						});
@@ -472,6 +473,12 @@ $( document ).ready(function()
 								area_data[val['aid']]['inst'][val['type']][ind_lang[lang_name]] = text;
 							}
 						});
+
+						//if(val['identifier'].substring(0, 4) == "xml:"){
+						//	area_data[val['aid']]['notCap'] = true;
+						//	if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
+						//	area_data[val['aid']]['desc'][val['type']]["en-GB"] = val['desc'];
+						//}
 
 						area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
 
