@@ -26,6 +26,7 @@ if($meteoalarm == 1)
 
 		// Set the WebService URL
 		$soapclient = new nusoap_client($WS_DOL_URL, '',$configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"]); // <-- set the Timeout above 300 Sec.
+
 		$soapclient->setDebugLevel(0);
 		if ($soapclient)
 		{
@@ -54,6 +55,11 @@ if($meteoalarm == 1)
 
 		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
 
+		die(print_r($soapclient));
+		if(!empty($soapclient->getError())){
+			$login_error[] = $soapclient->getError();
+		}
+		
 		if ($soapclient->fault)
 		{
 			$out.= '<h2>Fault</h2><pre>';

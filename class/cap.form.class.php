@@ -1542,6 +1542,12 @@
 							{
 								$out = '<h3>'.$langs->trans("LoginToYourWebservice").'</h3>';
 
+								if(!empty($login_error)){
+									foreach ($login_error as $key => $msg) {
+										$out.= "".$msg."<br>";
+									}
+								}
+
 								if($login_to_webservice_faild == true)
 								{
 									$out.= $langs->trans('error_wrong_login');
