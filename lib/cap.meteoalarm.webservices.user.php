@@ -6,7 +6,7 @@
 $meteoalarm = 1;
 if($meteoalarm == 1)
 {
-	global $conf;
+	global $conf, $login_error, $login_error_html;
 
 	$configuration->setValue("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 	ini_set("default_socket_timeout", 60000);
@@ -24,6 +24,7 @@ if($meteoalarm == 1)
 
 	// Set the WebService URL
 	$soapclient = new nusoap_client($WS_DOL_URL, '',$configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"]); // <-- set the Timeout above 300 Sec.
+
 	if ($soapclient)
 	{
 		$soapclient->soap_defencoding='UTF-8';
@@ -47,6 +48,14 @@ if($meteoalarm == 1)
 
 	$User = $soapclient->call('getUserInfo',$parameters,$ns,'');
 
+
+	if(empty($User)){
+		if(!empty($soapclient->fault)) $login_error[] = "NuSoap Fault: ".$soapclient->fault;
+		if(!empty($soapclient->getError())) $login_error[] = "NuSoap Error: ".$soapclient->getError();
+		if(!empty($soapclient->response )) $login_error_html[] = "NuSoap Response: ".$soapclient->response ;
+	}elseif(!empty($User["result"]["result_label"])){
+		$login_error[] = $User["result"]["result_label"];
+	}
 
 	if ($soapclient->fault)
 	{

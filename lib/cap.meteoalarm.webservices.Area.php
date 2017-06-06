@@ -7,7 +7,7 @@
 $meteoalarm = 1;
 if($meteoalarm == 1)
 {
-	global $out;
+	global $out, $login_error;
 
 	$configuration->setValue("webservice","password",encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 
@@ -55,11 +55,6 @@ if($meteoalarm == 1)
 
 		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
 
-		die(print_r($soapclient));
-		if(!empty($soapclient->getError())){
-			$login_error[] = $soapclient->getError();
-		}
-		
 		if ($soapclient->fault)
 		{
 			$out.= '<h2>Fault</h2><pre>';

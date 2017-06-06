@@ -36,7 +36,8 @@ require_once 'lib/CapValidatorChecker.class.php';
 
 $langs = new Translate();
 $CapProcessor = new CapProcessor("output");
-
+$login_error = array();
+$login_error_html = array();
 
 $configuration = new Configuration("conf/conf.ini");
 if($configuration->get("installed", "finished") != true){
@@ -175,6 +176,7 @@ if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 		unset($_POST);
 	}
 }
+session_write_close();
 
 if($_COOKIE['Session_login_name'])
 {
@@ -479,5 +481,4 @@ elseif($_GET['web_test'] == "1")
 {
 
 }
-session_write_close();
 ?>

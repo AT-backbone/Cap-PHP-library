@@ -227,7 +227,7 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $configuration, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild;
+			global $configuration, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild, $login_error, $login_error_html;
 
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
@@ -1474,7 +1474,7 @@
 									// UserPass
 									$out.= '<li id="proxyUserPassDIV" class="ui-field-contain">';
 											$out.= '<legend>'.$langs->trans("LabelProxy_password").': '.$this->tooltip($type.'UserPasstool', $langs->trans("LabelProxy_passwordDesc")).'</legend>';
-											$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyUserPass]" value="'.$configuration->conf["proxy"]["proxyUserPass"].'">';
+											$out.= '<input '.$status_theme.' type="password" name="conf[proxy][proxyUserPass]" value="'.$configuration->conf["proxy"]["proxyUserPass"].'">';
 									$out.= '</li>';
 
 								$out.= '</ul>';
@@ -1544,11 +1544,16 @@
 
 								if(!empty($login_error)){
 									foreach ($login_error as $key => $msg) {
+										$out.= "<textarea readonly>".$msg."</textarea><br>";
+									}
+								}
+								if(!empty($login_error_html)){
+									foreach ($login_error_html as $key => $msg) {
 										$out.= "".$msg."<br>";
 									}
 								}
 
-								if($login_to_webservice_faild == true)
+								if($login_to_webservice_faild == true && empty($login_error) && empty($login_error_html))
 								{
 									$out.= $langs->trans('error_wrong_login');
 								}

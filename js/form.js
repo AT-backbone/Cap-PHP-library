@@ -184,7 +184,7 @@ $( document ).ready(function()
 	function ajax_conf()
 	{
 		var url = "index.php?conf=1"; // the script where you handle the form input.
-
+		JQ_loader();
 		$.ajax({
 		      	type: "POST",
 		        url: url,
@@ -194,6 +194,7 @@ $( document ).ready(function()
 		        	if(datare != "") alert(datare);
 							//else $( "#Saved_conf" ).popup( "open" );
 							setTimeout(function(){
+		        				JQ_loader_off();
 								location.reload(true);
 							}, 1500);
 		        }
