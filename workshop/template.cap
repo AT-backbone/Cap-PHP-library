@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml-stylesheet type="text/xsl" href="cap_style.xsl" ?>
+<alert xmlns="urn:oasis:names:tc:emergency:cap:1.2">
+	<status>Actual</status>
+	<msgType>Alert</msgType>
+	<scope>Public</scope>
+	<note>State Hydrometeorological Service</note>
+	<info>
+		<language>en-GB</language>
+		<category>Met</category>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<certainty>Likely</certainty>
+		<headline></headline>
+		<description></description>
+		<web>http://www.meteo.md/en/indexen2.htm</web>
+		<contact>hidrometeo@meteo.gov.md</contact>		
+	</info>
+		<info>
+		<language>ro</language>
+		<category>Met</category>
+		<responseType>Monitor</responseType>
+		<urgency>Immediate</urgency>
+		<certainty>Likely</certainty>
+		<headline></headline>
+		<description></description>
+		<web>http://www.meteo.md/</web>
+		<contact>hidrometeo@meteo.gov.md</contact>
+	</info>
+</alert>
