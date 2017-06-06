@@ -1439,6 +1439,49 @@
 							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$configuration->conf["webservice"]["WS_DOL_URL"].'">';
 						break;
 
+					case 'proxy_conf':
+							if($configuration->conf["proxy"]["proxyOn"] == 1) $onoroff = 'checked=""';
+							else $onoroff = '';
+							
+							$out.= '<div data-role="collapsible" id="conf-proxy-detail" data-theme="b" data-content-theme="a">';
+								$out.= '<h2>'.$langs->trans("ProxyConfiguration").'</h2>';
+								$out.= '<ul data-role="listview">';
+
+									// switch On
+									$out.= '<li id="proxy_switchDIV" class="ui-field-contain">';
+										$out.= '<legend>'.$langs->trans("LabelProxy").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxyDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[proxy][proxyOn]" id="proxy_switch" '.$onoroff.' data-theme="b">';
+									$out.= '</li>';
+
+									// IP
+									$out.= '<li id="proxyIPDIV" class="ui-field-contain">';
+										$out.= '<legend>'.$langs->trans("LabelProxy_ip").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxy_ipDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyIP]" value="'.$configuration->conf["proxy"]["proxyIP"].'">';
+									$out.= '</li>';
+
+									// Port
+									$out.= '<li id="proxyPortDIV" class="ui-field-contain">';
+										$out.= '<legend>'.$langs->trans("LabelProxy_port").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxy_portDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyPort]" value="'.$configuration->conf["proxy"]["proxyPort"].'">';
+									$out.= '</li>';	
+
+									// UserName
+									$out.= '<li id="proxyUserNameDIV" class="ui-field-contain">';
+										$out.= '<legend>'.$langs->trans("LabelProxy_username").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxy_usernameDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyUserName]" value="'.$configuration->conf["proxy"]["proxyUserName"].'">';
+									$out.= '</li>';	
+
+									// UserPass
+									$out.= '<li id="proxyUserPassDIV" class="ui-field-contain">';
+											$out.= '<legend>'.$langs->trans("LabelProxy_password").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxy_passwordDesc")).'</legend>';
+											$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyUserPass]" value="'.$configuration->conf["proxy"]["proxyUserPass"].'">';
+									$out.= '</li>';
+
+								$out.= '</ul>';
+							$out.= '</div>'; // DETAILS
+							
+						break;
+
 					case 'capview':
 							$out = '<textarea id="capviewtextarea" readonly name="capeditfield"></textarea>';
 							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
@@ -2493,11 +2536,11 @@
 								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
 
 									// decryp password
-									$configuration->set("webservice", "password", $this->encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
+									$configuration->setValue("webservice", "password", $this->encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 
 									include("lib/cap.webservices.php");
 
-									$configuration->set("webservice", "password",$this->encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
+									$configuration->setValue("webservice", "password",$this->encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 
 								$out.= '</div>';
 
@@ -2688,7 +2731,7 @@
 			 */
 		 	if(!empty($post['user']['lang']))
  			{
- 				$configuration->set("user", "language", $post['user']['lang']);
+ 				$configuration->setValue("user", "language", $post['user']['lang']);
  			}
 
 			 // set langs
@@ -2736,31 +2779,31 @@
 			// specifie the automatic time set
 			if($post['identifier']['time']['on'] == "on")
 			{
-				$configuration->set("identifier", "time_on", 1);
+				$configuration->setValue("identifier", "time_on", 1);
 			}
 			else
 			{
-				$configuration->set("identifier", "time_on", 0);
+				$configuration->setValue("identifier", "time_on", 0);
 			}
 			unset($post['identifier']['time']);
 
 			if($post['cap']['save'] == "on")
 			{
-				$configuration->set("cap", "save", 1);
+				$configuration->setValue("cap", "save", 1);
 			}
 			else
 			{
-				$configuration->set("cap", "save", 0);
+				$configuration->setValue("cap", "save", 0);
 			}
 			unset($post['cap']['save']);
 
 			if($post['webservice']['on'] == "on")
 			{
-				$configuration->set("webservice", "service_on", 1);
+				$configuration->setValue("webservice", "service_on", 1);
 			}
 			else
 			{
-				$configuration->set("webservice", "service_on", 0);
+				$configuration->setValue("webservice", "service_on", 0);
 			}
 			unset($post['webservice']['on']);
 
@@ -2771,14 +2814,30 @@
 			}
 			else
 			{
-				$configuration->set("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
+				$configuration->setValue("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
 				unset($post['webservice']['password']);
 			}
 
+			if($post['proxy']['proxyOn'] == "on")
+			{
+				$configuration->setValue("proxy", "proxyOn", 1);
+			}
+			else
+			{
+				$configuration->setValue("proxy", "proxyOn", 0);
+			}
+			unset($post['proxy']['proxyOn']);
+
+			// crypt pass
+			if($configuration->conf["proxy"]["proxyUserPass"] != $post['proxy']['proxyUserPass'])
+			{
+				$configuration->setValue("proxy", "proxyUserPass", $post['proxy']['proxyUserPass']);
+				unset($post['proxy']['proxyUserPass']);
+			}
 
 			if(!empty($post['timezone']))
  			{
- 				$configuration->set("installed", "timezone", $post['timezone']);
+ 				$configuration->setValue("installed", "timezone", $post['timezone']);
  			}
 
 			/*
@@ -2798,26 +2857,26 @@
 							{
 								foreach($obj_2_val as $obj_3_name => $obj_3_val)
 								{
-									$configuration->set($obj_name, $obj_2_name."_".$obj_3_name, $obj_3_val);
+									$configuration->setValue($obj_name, $obj_2_name."_".$obj_3_name, $obj_3_val);
 								} // Level 2
 							}
 							else
 							{
-								$configuration->set($obj_name, $obj_2_name, $obj_2_val);
+								$configuration->setValue($obj_name, $obj_2_name, $obj_2_val);
 							}
 
 						} // Level 1
 					}
 					else
 					{
-						$configuration->set($obj_name, $obj_1_name, $obj_1_val);
+						$configuration->setValue($obj_name, $obj_1_name, $obj_1_val);
 					}
 
 				} // Base
 			}
 			else
 			{
-				$configuration->set($obj_name, "", $obj_val);
+				$configuration->setValue($obj_name, "", $obj_val);
 			}
 
 		}

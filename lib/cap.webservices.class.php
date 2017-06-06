@@ -20,7 +20,7 @@ Class MeteoalarmWebservice{
 		if(!$res) die("Error: nusoap.php not found!");
 		// Set the WebService URL
 
-		$this->soapclient = new nusoap_client($WS_URL, '' , false, false, false, false, 0, 300); // <-- set the Timeout above 300 Sec.
+		$this->soapclient = new nusoap_client($WS_URL, '' , $configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"], 0, 300); // <-- set the Timeout above 300 Sec.
 		if ($this->soapclient)
 		{
 			$this->soapclient->soap_defencoding='UTF-8';

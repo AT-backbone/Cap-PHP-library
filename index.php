@@ -39,11 +39,10 @@ $CapProcessor = new CapProcessor("output");
 
 
 $configuration = new Configuration("conf/conf.ini");
-
 if($configuration->get("installed", "finished") != true){
 	$standard_configuration = new Configuration("conf/standard.conf.ini");
 	$configuration->conf = $standard_configuration->conf;
-	$configuration->set("installed", "finished", true);
+	$configuration->setValue("installed", "finished", true);
 	$configuration->write_php_ini();
 	if($_GET['save'] != 1){
 		header('Location: index.php?save=1#conf');
@@ -51,7 +50,7 @@ if($configuration->get("installed", "finished") != true){
 	}
 }else{
 	// the library is installed
-	if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
+	if(! empty($_GET['lang'])) $configuration->setValue("user", "language", $_GET['lang']);
 	$langs->setDefaultLang($configuration->get("user", "language"));
 	$langs->load("main");
 	date_default_timezone_set($configuration->conf["installed"]["timezone"]);
@@ -120,7 +119,7 @@ if(!empty($_GET['decrypt']))
 	exit;
 }
 
-$configuration->set("cap", "save", 1);
+$configuration->setValue("cap", "save", 1);
 
 $configuration->conf["webservice"]["login"] = "";
 $configuration->conf["webservice"]["password"] = "";
@@ -179,14 +178,14 @@ if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 
 if($_COOKIE['Session_login_name'])
 {
-	$configuration->set("webservice", "login", $_COOKIE['Session_login_name']);
-	$configuration->set("webservice", "password", $_COOKIE['Session_login_pass']);
+	$configuration->setValue("webservice", "login", $_COOKIE['Session_login_name']);
+	$configuration->setValue("webservice", "password", $_COOKIE['Session_login_pass']);
 }
 
 if($_SESSION['Session_login_name'])
 {
-	$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
-	$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
+	$configuration->setValue("webservice", "login", $_SESSION['Session_login_name']);
+	$configuration->setValue("webservice", "password", $_SESSION['Session_login_pass']);
 }
 
 // build service url
@@ -194,8 +193,8 @@ $service_arr = explode('/', $configuration->conf["webservice"]["WS_DOL_URL"]);
 end($service_arr);
 $key = key($service_arr);
 
-$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
-$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
+$configuration->setValue("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
+$configuration->setValue("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
 
 // METEOALARM WEBSERVICE ---
 $meteoalarm = 1;
@@ -248,8 +247,8 @@ if($tryed_login == true && $configuration->conf["webservice_aktive"] == -1)
 {
 	unset($_SESSION['Session_login_name'], $_SESSION['Session_login_pass']);
 	unset($_COOKIE['Session_login_name'], $_COOKIE['Session_login_pass']);
-	$configuration->set("webservice", "login", "");
-	$configuration->set("webservice", "password", "");
+	$configuration->setValue("webservice", "login", "");
+	$configuration->setValue("webservice", "password", "");
 	if(!is_array($_POST['send-logout']))
 	{
 		unset($_POST);
@@ -401,21 +400,27 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 				if($configuration->conf["cap"]["save"] == 1) $path = $CapProcessor->saveCap();
 				if ($path < 0) die($path);
 
-				$configuration->set("identifier", "ID_ID", $configuration->conf["identifier"]["ID_ID"] + 1);
+				$configuration->setValue("identifier", "ID_ID", $configuration->conf["identifier"]["ID_ID"] + 1);
 
 				$form->WriteConf();
 				$capname = $CapProcessor->getAlert()->getIdentifier().".xml";
 				//print $form->CapView($cap_contend, $capname); // Cap Preview +
 			}else{
-				$capfile = fopen($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml', "w") or die("Unable to open file! ".$configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
+
+
+				$capname = date('Y.m.d.H.i.s').'.edited.xml';
+				//print $form->CapView($cap_contend, $capname); // Cap Preview +
+			}
+
+				$capfile = fopen($configuration->conf["cap"]["output"].'/'.$capname, "w") or die("Unable to open file! ".$configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
 				fwrite($capfile, $_POST['capeditfield']);
 				fclose($capfile);
 
-				chmod($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml', 0660);  // octal; correct value of mode
-				chgrp($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml', filegroup($configuration->conf["cap"]["output"]));
+				chmod($configuration->conf["cap"]["output"].'/'.$capname, 0660);  // octal; correct value of mode
+				chgrp($configuration->conf["cap"]["output"].'/'.$capname, filegroup($configuration->conf["cap"]["output"]));
 
 				// convert in UTF-8
-				$cap_contend = file_get_contents($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
+				$cap_contend = file_get_contents($configuration->conf["cap"]["output"].'/'.$capname);
 
 				if (preg_match('!!u', $cap_contend))
 				{
@@ -426,11 +431,7 @@ elseif($_POST['action'] == "create" && $_GET['conf'] != 1 && $_POST['login_sende
 					$cap_contend = mb_convert_encoding($cap_contend, 'UTF-8', 'OLD-ENCODING');
 				}
 
-				file_put_contents($configuration->conf["cap"]["output"].'/'.date('Y.m.d.H.i.s').'.edited.xml');
-
-				$capname = date('Y.m.d.H.i.s').'.edited.xml';
-				//print $form->CapView($cap_contend, $capname); // Cap Preview +
-			}
+				file_put_contents($configuration->conf["cap"]["output"].'/'.$capname);
 
 		$CVal = new CapChecker();
 		if($configuration->conf["webservice_aktive"] == 1) $CVal->profile = "meteoalarm";
@@ -478,5 +479,5 @@ elseif($_GET['web_test'] == "1")
 {
 
 }
-
+session_write_close();
 ?>

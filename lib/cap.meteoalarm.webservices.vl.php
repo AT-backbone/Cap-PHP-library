@@ -11,7 +11,7 @@ if($meteoalarm == 1)
 	$data = $_GET['data'];
 	if($data == "") $data = 0;
 
-	$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
+	$configuration->setValue("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 	ini_set("default_socket_timeout", 60000);
 	set_time_limit ( 240 );
 
@@ -25,7 +25,7 @@ if($meteoalarm == 1)
 	if($import == "") $import = true;
 
 	// Set the WebService URL
-	$soapclient = new nusoap_client($WS_DOL_URL); // <-- set the Timeout above 300 Sec.
+	$soapclient = new nusoap_client($WS_DOL_URL, '',$configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"]); // <-- set the Timeout above 300 Sec.
 	$soapclient->setDebugLevel(0);
 	if ($soapclient)
 	{
@@ -88,6 +88,6 @@ if($meteoalarm == 1)
 		}
 	}
 
-	$configuration->set("webservice", "password", encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
+	$configuration->setValue("webservice", "password", encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 }
 ?>

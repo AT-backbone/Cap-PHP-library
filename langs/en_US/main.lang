@@ -254,3 +254,17 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 	error_wrong_login=Wrong User, Password, Permision or Configuration!
 	php_version_is_not_tested=This PHP Version [%s] is not Tested!
 	php_min_max_version=[ min:%s | max:%s ]
+
+###Proxy Configuration###
+
+	ProxyConfiguration=Proxy Configuration
+	LabelProxy=Proxy
+	LabelProxyDesc=Proxy On/Off
+	LabelProxy_ip=Proxy Host
+	LabelProxy_ipDesc=Proxy Host Adress
+	LabelProxy_port=Proxy Port
+	LabelProxy_portDesc=Proxy Port Adress
+	LabelProxy_username=Proxy Username
+	LabelProxy_usernameDesc=Your Proxy Username
+	LabelProxy_password=Proxy Passwort
+	LabelProxy_passwordDesc=Your Proxy Passwort

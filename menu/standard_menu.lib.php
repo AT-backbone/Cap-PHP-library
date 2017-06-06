@@ -108,6 +108,9 @@
 				$type['conf']['detail']['value'][] = "webservice_WS_METHOD";
 				//$type['conf']['detail']['value'][] = "webservice_ns";
 				$type['conf']['detail']['value'][] = "webservice_WS_DOL_URL";
+
+				$type['conf']['detail']['value'][] = "proxy_conf";
+
 				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
 
 
@@ -115,10 +118,10 @@
 			$type['capview'][] 	= 'capview';
 
 			// Cap List
-			$type['read'][] 		= 'caplist';
+			$type['read'][] 	= 'caplist';
 
 			// LOGIN POPUP
-			$type['Login'][] 		= 'login_popup';
+			$type['Login'][] 	= 'login_popup';
 
 			// PAGES WOH DO NOT USE DETAIL FUNKTION
 			$type['info']['detail']['value'] 		= -1; // no detail
@@ -145,22 +148,22 @@
 			//$pages['#MAIN'] 					= $langs->trans("TitleMain");
 			//$pages['next']['name']['PAGENAME'] = 'NEXT_PGAENAME';
 
-			$pages['#alert'] 					= $langs->trans("TitleAlert");
+			$pages['#alert'] 				= $langs->trans("TitleAlert");
 
-			$pages['#info']  					= $langs->trans("TitleInfo");
+			$pages['#info']  				= $langs->trans("TitleInfo");
 
-			$pages['#area']  					= $langs->trans("TitleArea");
+			$pages['#area']  				= $langs->trans("TitleArea");
 
 			$pages['#capview'] 		 		= $langs->trans("TitleCapView");
 
 			//if($conf->webservice_aktive == 1)
-			$pages['map.php']  					= $langs->trans("TitleMap");
+			$pages['map.php']  				= $langs->trans("TitleMap");
 
 			$pages['#read'] 		 		= $langs->trans("TitleCapList");
 
-			$pages['?conv=1#capconv']	= $langs->trans("TitleCapConv");
+			$pages['?conv=1#capconv']		= $langs->trans("TitleCapConv");
 
-			$pages['#conf']  					= $langs->trans("TitleConfig");
+			$pages['#conf']  				= $langs->trans("TitleConfig");
 
 			// Links
 			$pages['next']['name']['alert'] = 'info';
@@ -170,7 +173,7 @@
 			// Input or else
 			$pages['next']['nolink']['capview'] = '<input type="submit" value="'.$langs->trans("Save").'" data-ajax="false">';
 
-			$pages['next']['nolink']['conf'] 		= '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
+			$pages['next']['nolink']['conf'] 	 = '<input class="ui-btn" type="button" value="'.$langs->trans('Save').'" onclick="ajax_conf()">';
 			$pages['next']['nolink']['conf'] 	 .= '<div data-role="popup" id="Saved_conf" style="text-align: center; vertical-align: middle; width: 200px; height: 40px; background: rgba(4, 255, 0, 0.65); color: #000; font-size: 22px; padding: 10px 0px 0px 0px; text-shadow: 0px 0px 0px #000;">';
 			$pages['next']['nolink']['conf'] 	 .= $langs->trans('Saved!');
 			$pages['next']['nolink']['conf'] 	 .= '</div>';
