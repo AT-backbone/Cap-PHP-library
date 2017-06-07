@@ -1454,25 +1454,25 @@
 									$out.= '</li>';
 
 									// IP
-									$out.= '<li id="proxyIPDIV" class="ui-field-contain">';
+									$out.= '<li id="proxyIPDIV" class="ui-field-contain ProxyInput">';
 										$out.= '<legend>'.$langs->trans("LabelProxy_ip").': '.$this->tooltip($type.'IPtool', $langs->trans("LabelProxy_ipDesc")).'</legend>';
 										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyIP]" value="'.$configuration->conf["proxy"]["proxyIP"].'">';
 									$out.= '</li>';
 
 									// Port
-									$out.= '<li id="proxyPortDIV" class="ui-field-contain">';
+									$out.= '<li id="proxyPortDIV" class="ui-field-contain ProxyInput">';
 										$out.= '<legend>'.$langs->trans("LabelProxy_port").': '.$this->tooltip($type.'Porttool', $langs->trans("LabelProxy_portDesc")).'</legend>';
 										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyPort]" value="'.$configuration->conf["proxy"]["proxyPort"].'">';
 									$out.= '</li>';	
 
 									// UserName
-									$out.= '<li id="proxyUserNameDIV" class="ui-field-contain">';
+									$out.= '<li id="proxyUserNameDIV" class="ui-field-contain ProxyInput">';
 										$out.= '<legend>'.$langs->trans("LabelProxy_username").': '.$this->tooltip($type.'UserNametool', $langs->trans("LabelProxy_usernameDesc")).'</legend>';
 										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyUserName]" value="'.$configuration->conf["proxy"]["proxyUserName"].'">';
 									$out.= '</li>';	
 
 									// UserPass
-									$out.= '<li id="proxyUserPassDIV" class="ui-field-contain">';
+									$out.= '<li id="proxyUserPassDIV" class="ui-field-contain ProxyInput">';
 											$out.= '<legend>'.$langs->trans("LabelProxy_password").': '.$this->tooltip($type.'UserPasstool', $langs->trans("LabelProxy_passwordDesc")).'</legend>';
 											$out.= '<input '.$status_theme.' type="password" name="conf[proxy][proxyUserPass]" value="'.$configuration->conf["proxy"]["proxyUserPass"].'">';
 									$out.= '</li>';

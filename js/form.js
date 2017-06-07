@@ -32,6 +32,17 @@ $( document ).ready(function()
 		}
 	});
 
+	$( "#proxy_switch" ).change(function() {
+		if($( "#proxy_switch" ).prop('checked')){
+			$('.ProxyInput').css("opacity", "1");
+			$('.ProxyInput input').prop('readonly', false);
+		}else{
+			$('.ProxyInput').css("opacity", "0.3");
+			$('.ProxyInput input').prop('readonly', true);
+		}
+	});
+	$( "#proxy_switch" ).trigger("change");
+
 	$( "#msgType" ).change(function() {
 		if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
 		{
@@ -184,7 +195,7 @@ $( document ).ready(function()
 	function ajax_conf()
 	{
 		var url = "index.php?conf=1"; // the script where you handle the form input.
-		JQ_loader();
+		JQ_loader("Saving ...", "b");
 		$.ajax({
 		      	type: "POST",
 		        url: url,
@@ -194,9 +205,8 @@ $( document ).ready(function()
 		        	if(datare != "") alert(datare);
 							//else $( "#Saved_conf" ).popup( "open" );
 							setTimeout(function(){
-		        				JQ_loader_off();
 								location.reload(true);
-							}, 1500);
+							}, 1000);
 		        }
 		       });
 		return false; // avoid to execute the actual submit of the form.
