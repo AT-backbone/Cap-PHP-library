@@ -159,7 +159,7 @@ LabelParameterDesc=(OPTIONAL)<br>A system-specific additional parameter associat
 
 	DESC_EditWarningNotAktive=This form is only available if a warning is selected!
 	PaintGreen=The following areas have not yet received warning for this day! Folgende Gebiete sind für diesen Tag noch weiß!
-	DESC_PaintGreen=Should this Areas get (de)warned green?
+	DESC_PaintGreen=Should this Areas get (de)warned green? Automatically generated green warnings are always effective from 0 to 23.59 CET!
 	WarnGetCalculated=(meteoalarm calculates your warnings shortly)
 	DelWarning=Delete Warning?
 	ChangeWithoutSave=Change Warning without Saving Changes?
