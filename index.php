@@ -346,7 +346,6 @@ elseif($_GET['read'] == 1)
 	}
 
 	$form = new CAP_Form($cap);
-
 	print $form->Form();
 }
 elseif(empty($_POST['action']) && $_GET['webservice'] != 1 && empty($_GET['web_test']))

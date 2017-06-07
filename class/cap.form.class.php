@@ -1199,6 +1199,10 @@
 						{
 							$out = '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';
 							$out.= $this->buildSelectValueName('geocode[value][]', 'geocode[valueName][]', 'geocode',$S_Area, $G_Area, $this->geocode[0]);
+							foreach($this->geocode[0] as $key => $geocode)
+							{
+								$out.= '<input type="text" name="geocode[value][]" value="'.$geocode['value'].'<|>'.$geocode['valueName'].'">';
+							}
 						}
 						else
 						{
