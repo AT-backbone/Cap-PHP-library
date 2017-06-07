@@ -613,10 +613,10 @@
 										$timezone_date_p = $timezone_date[0];
 										$timezone_date_h = substr($timezone_date, 1);
 
-										$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+										$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.date("ymdHis").'.1'.$data_arr[0]->type.$data_arr[0]->level.ord($data_arr[0]->eid);
 										if($ref == "Update")
 										{
-											$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+											$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.date("ymdHis").'.2'.$data_arr[0]->type.$data_arr[0]->level.ord($data_arr[0]->eid);
 											if($this->User['sender'] != "") $data_arr[0]->sender = $this->User['sender'];
 											if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 											$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
@@ -720,7 +720,7 @@
 										elseif($this->User['senderName'] != "")
 											$post['senderName']	= $this->User['senderName'];
 										else
-											$post['senderName'] = 'Cap-PHP-Library Version 1.3';
+											$post['senderName'] = 'Cap-PHP-Library Version 1.4.3';
 
 
 										foreach($langs_keys as $key => $lang_val)
@@ -728,7 +728,13 @@
 											if($data_arr[0]->desc->$key != "")
 											{
 												$post['language'][] = $lang_val;
-												$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
+												$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
+												foreach($data_arr as $key => $area)
+												{
+													$post['headline'][$lang_val].= $area->name.", ";
+												}
+												$post['headline'][$lang_val] = substr($post['headline'][$lang_val], 0, -2);
+
 												$post['description'][$lang_val] = $data_arr[0]->desc->$key;
 												if($data_arr[0]->inst->$key != "") $post['instruction'][$lang_val] = $data_arr[0]->inst->$key;
 											}
@@ -737,8 +743,16 @@
 												if($data_arr[0]->level == 1)
 												{
 													$post['language'][] = $lang_val;
-													$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
-													$post['description'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
+													$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
+													$post['description'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
+
+													foreach($data_arr as $key => $area)
+													{
+														$post['headline'][$lang_val].= $area->name.", ";
+														$post['description'][$lang_val].= $area->name.", ";
+													}
+													$post['headline'][$lang_val] = substr($post['headline'][$lang_val], 0, -2);
+													$post['description'][$lang_val] = substr($post['description'][$lang_val], 0, -2);
 												}
 											}
 										}
@@ -749,7 +763,12 @@
 										if($post['info'][0]['contact'] != "")
 											$post['contact'] 		= $post['info'][0]['contact'];
 
-										$post['areaDesc'] = $data_arr[0]->name;
+										$post['areaDesc'] = "";
+										foreach($data_arr as $key => $area)
+										{
+											$post['areaDesc'].= $area->name.", ";
+										}
+										$post['areaDesc'] = substr($post['areaDesc'], 0, -2);
 
 										$post['parameter']['valueName'][0] = 'awareness_level';
 										$post['parameter']['value'][0] =  $this->awareness_level[$data_arr[0]->level];
