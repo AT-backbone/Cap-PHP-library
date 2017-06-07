@@ -17,8 +17,10 @@ if($import == "") $import = true;
 
 if ($_POST[filename])
 {
-	// Set the WebService URL
-	$soapclient = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL"], '' , false, false, false, false, 0, 300); // <-- set the Timeout above 300 Sec.
+
+
+	$soapclient = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL"], '' , $configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"], 0, 300); // <-- set the Timeout above 300 Sec.
+
 	if ($soapclient)
 	{
 		$soapclient->soap_defencoding='UTF-8';

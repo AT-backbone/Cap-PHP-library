@@ -1,6 +1,6 @@
 <?php
 	chdir('../');
-	error_reporting(E_ERROR | E_PARSE);
+	error_reporting(E_ERROR);
 	require_once 'class/translate.class.php';
 	require_once 'cap.create.class.php';
 	require_once 'class/conf.class.php';
@@ -13,7 +13,7 @@
 	if($configuration->get("installed", "finished") != true){
 		$standard_configuration = new Configuration("conf/standard.conf.ini");
 		$configuration->conf = $standard_configuration->conf;
-		$configuration->set("installed", "finished", true);
+		$configuration->setValue("installed", "finished", true);
 		$configuration->write_php_ini();
 		if($_GET['save'] != 1){
 			header('Location: index.php?save=1#conf');
@@ -21,7 +21,7 @@
 		}
 	}else{
 		// the library is installed
-		if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
+		if(! empty($_GET['lang'])) $configuration->setValue("user", "language", $_GET['lang']);
 		$langs->setDefaultLang($configuration->get("user", "language"));
 		$langs->load("main");
 		date_default_timezone_set($configuration->conf["installed"]["timezone"]);
@@ -125,24 +125,24 @@
 		}
 	}
 
-	if($_COOKIE['Session_login_name'])
+	if(!empty($_COOKIE['Session_login_name']))
 	{
-		$configuration->set("webservice", "login", $_COOKIE['Session_login_name']);
-		$configuration->set("webservice", "password", $_COOKIE['Session_login_pass']);
+		$configuration->setValue("webservice", "login", $_COOKIE['Session_login_name']);
+		$configuration->setValue("webservice", "password", $_COOKIE['Session_login_pass']);
 	}
 
-	if($_SESSION['Session_login_name'])
+	if(!empty($_SESSION['Session_login_name']))
 	{
-		$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
-		$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
+		$configuration->setValue("webservice", "login", $_SESSION['Session_login_name']);
+		$configuration->setValue("webservice", "password", $_SESSION['Session_login_pass']);
 	}
 
 	$service_arr = explode('/', $configuration->conf["webservice"]["WS_DOL_URL"]);
 	end($service_arr);
 	$key = key($service_arr);
 
-	$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
-	$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
+	$configuration->setValue("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
+	$configuration->setValue("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
 
 	$utc = date('P');
 
@@ -152,7 +152,9 @@
 		$i = 0;
 		foreach($cap->type as $type => $level)
 		{
-			if($cap->exutc) $cap_array_2[$aid][$i]->exutc = $cap->exutc;
+			if(!empty($cap->exutc)) $cap_array_2[$aid][$i]->exutc = $cap->exutc;
+			if(!is_array($cap_array_2[$aid])) $cap_array_2[$aid] = array();
+			if(!is_array($cap_array_2[$aid][$i])) $cap_array_2[$aid][$i] = new stdClass();
 			$cap_array_2[$aid][$i]->name = $cap->name;
 
 			$cap_array_2[$aid][$i]->type = $type;
@@ -172,7 +174,7 @@
 			$i++;
 		}
 	}
-
+	//die(var_dump($cap_array_2));
 	if(!empty($_POST['no_del'])) print_r($cap_array_2);
 
 	$capupdater = new CAP_Updater($cap_array_2, $awt_arr, $data);

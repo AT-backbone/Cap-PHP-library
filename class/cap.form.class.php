@@ -227,7 +227,7 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $configuration, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild;
+			global $configuration, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild, $login_error, $login_error_html;
 
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
@@ -314,7 +314,7 @@
 					//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
 					$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('DESC_EditWarningNotAktive').'</span>';
 					$out.= '<div id="map_main_div" class="ui-grid-a">';
-						$out.= '<div class="ui-block-a" style="width: 30%;">';
+						$out.= '<div class="ui-block-a" id="WarnDetailDIV" style="width: 30%;min-width: 280px;">';
 							$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
 								// Info
 								$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
@@ -413,6 +413,29 @@
 										$out.= '</div><!-- /grid-a -->';
 									$out.= '</li>';
 
+									$out.= '<li id="date_collaps" data-role="collapsible" data-collapsed="true" data-iconpos="right" data-inset="false" class="lang_collaps">';
+										$out.= '<legend>';
+											$out.= '<div class="ui-grid-a">';
+												$out.= '<div class="ui-block-a">';
+													$out.= '<span style="font-size: 10px;color: #8d8d8d;" id="legdatefrom">'.date("Y-m-d").'</span>';
+												$out.= '</div>';
+												$out.= '<div class="ui-block-b">';
+													$out.= '<span style="font-size: 10px;color: #8d8d8d;" id="legdateto">'.date("Y-m-d").'</span>';
+												$out.= '</div>';
+											$out.= '</div>';
+										$out.= '</legend>';
+										$out.= '<div class="ui-grid-a">';
+											$out.= '<div class="ui-block-a">';
+												$out.= '<legend>'.$langs->trans("From").' '.$langs->trans("Date").': '.$this->tooltip('From', $langs->trans("LabelEffectivePaintAndAlertDesc")).'</legend>';
+												$out.= '<input '.$status_theme.' id="from_date" type="text" name="effective[date]" step="1" value="'.date("Y-m-d").'">';
+											$out.= '</div>';
+											$out.= '<div class="ui-block-b">';
+												$out.= '<legend>'.$langs->trans("To").' '.$langs->trans("Date").': '.$this->tooltip('To', $langs->trans("LabelExpiresPaintAndAlertDesc")).'</legend>';
+												$out.= '<input '.$status_theme.' id="to_date" type="text" name="expires[date]" step="1" value="'.date("Y-m-d").'">';
+											$out.= '</div>';
+										$out.= '</div><!-- /grid-a -->';
+									$out.= '</li>';
+
 									$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px; border-right: none;">'; // solfe border problem: margin-bottom:10px;
 										$out.= '<div class="ui-grid-a">';
 											$out.= '<div class="ui-block-a">';
@@ -431,7 +454,7 @@
 								$out.= '</ul>';
 							$out.= '</div>';
 						$out.= '</div>';
-						$out.= '<div class="ui-block-b" style="width: 70%;">';
+						$out.= '<div class="ui-block-b" id="MapDiv" style="width: 70%;">';
 							$out.= '<div class="ui-bar noselect">';
 								// Map
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
@@ -1176,6 +1199,10 @@
 						{
 							$out = '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';
 							$out.= $this->buildSelectValueName('geocode[value][]', 'geocode[valueName][]', 'geocode',$S_Area, $G_Area, $this->geocode[0]);
+							foreach($this->geocode[0] as $key => $geocode)
+							{
+								$out.= '<input type="text" name="geocode[value][]" value="'.$geocode['value'].'<|>'.$geocode['valueName'].'">';
+							}
 						}
 						else
 						{
@@ -1416,6 +1443,49 @@
 							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$configuration->conf["webservice"]["WS_DOL_URL"].'">';
 						break;
 
+					case 'proxy_conf':
+							if($configuration->conf["proxy"]["proxyOn"] == 1) $onoroff = 'checked=""';
+							else $onoroff = '';
+							
+							$out.= '<div data-role="collapsible" id="conf-proxy-detail" data-theme="b" data-content-theme="a">';
+								$out.= '<h2>'.$langs->trans("ProxyConfiguration").'</h2>';
+								$out.= '<ul data-role="listview">';
+
+									// switch On
+									$out.= '<li id="proxy_switchDIV" class="ui-field-contain">';
+										$out.= '<legend>'.$langs->trans("LabelProxy").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxyDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[proxy][proxyOn]" id="proxy_switch" '.$onoroff.' data-theme="b">';
+									$out.= '</li>';
+
+									// IP
+									$out.= '<li id="proxyIPDIV" class="ui-field-contain ProxyInput">';
+										$out.= '<legend>'.$langs->trans("LabelProxy_ip").': '.$this->tooltip($type.'IPtool', $langs->trans("LabelProxy_ipDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyIP]" value="'.$configuration->conf["proxy"]["proxyIP"].'">';
+									$out.= '</li>';
+
+									// Port
+									$out.= '<li id="proxyPortDIV" class="ui-field-contain ProxyInput">';
+										$out.= '<legend>'.$langs->trans("LabelProxy_port").': '.$this->tooltip($type.'Porttool', $langs->trans("LabelProxy_portDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyPort]" value="'.$configuration->conf["proxy"]["proxyPort"].'">';
+									$out.= '</li>';	
+
+									// UserName
+									$out.= '<li id="proxyUserNameDIV" class="ui-field-contain ProxyInput">';
+										$out.= '<legend>'.$langs->trans("LabelProxy_username").': '.$this->tooltip($type.'UserNametool', $langs->trans("LabelProxy_usernameDesc")).'</legend>';
+										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyUserName]" value="'.$configuration->conf["proxy"]["proxyUserName"].'">';
+									$out.= '</li>';	
+
+									// UserPass
+									$out.= '<li id="proxyUserPassDIV" class="ui-field-contain ProxyInput">';
+											$out.= '<legend>'.$langs->trans("LabelProxy_password").': '.$this->tooltip($type.'UserPasstool', $langs->trans("LabelProxy_passwordDesc")).'</legend>';
+											$out.= '<input '.$status_theme.' type="password" name="conf[proxy][proxyUserPass]" value="'.$configuration->conf["proxy"]["proxyUserPass"].'">';
+									$out.= '</li>';
+
+								$out.= '</ul>';
+							$out.= '</div>'; // DETAILS
+							
+						break;
+
 					case 'capview':
 							$out = '<textarea id="capviewtextarea" readonly name="capeditfield"></textarea>';
 							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
@@ -1469,14 +1539,25 @@
 									$out.= '<li>'.$langs->trans("User").': '.$configuration->conf["webservice"]["login"].'</li>';
 									$out.= '<li>'.$langs->trans("LoginDate").': '.date('d.m.Y H:i:s', $_SESSION['timestamp']).'</li>';
 									$out.= '<li><input '.$status_theme.' type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b"></li>';
-									$out.= '<input type="hidden" name="login_sended" id="logout_sended" value="0">';
+									$out.= '<input type="hidden" class="login_sended" name="login_sended" id="logout_sended" value="0">';
 								$out.= '</ul>';
 							}
 							else // Login
 							{
 								$out = '<h3>'.$langs->trans("LoginToYourWebservice").'</h3>';
 
-								if($login_to_webservice_faild == true)
+								if(!empty($login_error)){
+									foreach ($login_error as $key => $msg) {
+										$out.= "<textarea readonly>".$msg."</textarea><br>";
+									}
+								}
+								if(!empty($login_error_html)){
+									foreach ($login_error_html as $key => $msg) {
+										$out.= "".$msg."<br>";
+									}
+								}
+
+								if($login_to_webservice_faild == true && empty($login_error) && empty($login_error_html))
 								{
 									$out.= $langs->trans('error_wrong_login');
 								}
@@ -1489,14 +1570,15 @@
 
 								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
 								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';
-								$out.= '<input type="hidden" name="login_sended" id="login_sended" value="0">';
+								$out.= '<input type="hidden" class="login_sended" name="login_sended" id="login_sended" value="0">';
 							}
 
 							if((empty($configuration->conf["webservice_aktive"]) || $configuration->conf["webservice_aktive"] == -1) && $configuration->conf["webservice"]["service_on"] == 1 && $this->login_id == 1)
 							{
 								$out.= 			'
 													<script>
-														$("#Login-alert").on("keyup",function(event){
+													$( document ).ready(function(){
+														$(".Login input").on("keyup",function(event){
 															event.preventDefault();
 															if ( event.which == 13 )
 															{
@@ -1506,14 +1588,17 @@
 
 														$( "#submit_login_button" ).on("click", function(){
 															$("#action").remove();
-															$("#login_sended").val(1);
+															$(".login_sended").val(1);
+															console.log("TEST");
 														});
+													});
 
-														$(document).on("pageshow", "#alert" ,function ()
-														{
-									  						$( "#Login-alert" ).popup();
-															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
-														});
+													$(document).on("pageshow", "#alert" ,function ()
+													{
+								  						$( "#Login-alert" ).popup();
+														setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
+													});
+													
 													</script>
 														';
 							}
@@ -1899,10 +1984,16 @@
 
 								if($configuration->conf["webservice"]["login"] && $configuration->conf["webservice_aktive"]) $login_show_name = $configuration->conf["webservice"]["login"];
 								else $login_show_name = $langs->trans('Login');
-
 								$out.= '<div data-theme="b" data-role="header">';
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';
+										$out.= '<h1>';
+											$out.= $Pages_arr['#'.$pagename];
+											if(phpversion() < $configuration->conf["PHPVersion"]["min"] || phpversion() > $configuration->conf["PHPVersion"]["max"]){
+												$out.= ' <br><span style="color:yellow">'.$langs->trans('php_version_is_not_tested',phpversion()).' ';
+												$out.= $langs->trans('php_min_max_version',$configuration->conf["PHPVersion"]["min"] , $configuration->conf["PHPVersion"]["max"] );
+												$out.= '</span>';
+											}
+										$out.= '</h1>';
 									if($configuration->conf["webservice"]["service_on"] == 1)
 									{
 										if($login_to_webservice_faild == true)
@@ -2007,7 +2098,7 @@
 								{
 									$TypePopup = $Type_arr[$popupname];
 
-									$out.= '<div data-role="popup" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
+									$out.= '<div data-role="popup" class="'.$popupname.'" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
 										//$out.= '<form>';
 
 												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
@@ -2460,11 +2551,11 @@
 								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
 
 									// decryp password
-									$configuration->set("webservice", "password", $this->encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
+									$configuration->setValue("webservice", "password", $this->encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 
 									include("lib/cap.webservices.php");
 
-									$configuration->set("webservice", "password",$this->encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
+									$configuration->setValue("webservice", "password",$this->encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 
 								$out.= '</div>';
 
@@ -2655,7 +2746,7 @@
 			 */
 		 	if(!empty($post['user']['lang']))
  			{
- 				$configuration->set("user", "language", $post['user']['lang']);
+ 				$configuration->setValue("user", "language", $post['user']['lang']);
  			}
 
 			 // set langs
@@ -2703,31 +2794,31 @@
 			// specifie the automatic time set
 			if($post['identifier']['time']['on'] == "on")
 			{
-				$configuration->set("identifier", "time_on", 1);
+				$configuration->setValue("identifier", "time_on", 1);
 			}
 			else
 			{
-				$configuration->set("identifier", "time_on", 0);
+				$configuration->setValue("identifier", "time_on", 0);
 			}
 			unset($post['identifier']['time']);
 
 			if($post['cap']['save'] == "on")
 			{
-				$configuration->set("cap", "save", 1);
+				$configuration->setValue("cap", "save", 1);
 			}
 			else
 			{
-				$configuration->set("cap", "save", 0);
+				$configuration->setValue("cap", "save", 0);
 			}
 			unset($post['cap']['save']);
 
 			if($post['webservice']['on'] == "on")
 			{
-				$configuration->set("webservice", "service_on", 1);
+				$configuration->setValue("webservice", "service_on", 1);
 			}
 			else
 			{
-				$configuration->set("webservice", "service_on", 0);
+				$configuration->setValue("webservice", "service_on", 0);
 			}
 			unset($post['webservice']['on']);
 
@@ -2738,14 +2829,30 @@
 			}
 			else
 			{
-				$configuration->set("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
+				$configuration->setValue("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
 				unset($post['webservice']['password']);
 			}
 
+			if($post['proxy']['proxyOn'] == "on")
+			{
+				$configuration->setValue("proxy", "proxyOn", 1);
+			}
+			else
+			{
+				$configuration->setValue("proxy", "proxyOn", 0);
+			}
+			unset($post['proxy']['proxyOn']);
+
+			// crypt pass
+			if($configuration->conf["proxy"]["proxyUserPass"] != $post['proxy']['proxyUserPass'])
+			{
+				$configuration->setValue("proxy", "proxyUserPass", $post['proxy']['proxyUserPass']);
+				unset($post['proxy']['proxyUserPass']);
+			}
 
 			if(!empty($post['timezone']))
  			{
- 				$configuration->set("installed", "timezone", $post['timezone']);
+ 				$configuration->setValue("installed", "timezone", $post['timezone']);
  			}
 
 			/*
@@ -2765,26 +2872,26 @@
 							{
 								foreach($obj_2_val as $obj_3_name => $obj_3_val)
 								{
-									$configuration->set($obj_name, $obj_2_name."_".$obj_3_name, $obj_3_val);
+									$configuration->setValue($obj_name, $obj_2_name."_".$obj_3_name, $obj_3_val);
 								} // Level 2
 							}
 							else
 							{
-								$configuration->set($obj_name, $obj_2_name, $obj_2_val);
+								$configuration->setValue($obj_name, $obj_2_name, $obj_2_val);
 							}
 
 						} // Level 1
 					}
 					else
 					{
-						$configuration->set($obj_name, $obj_1_name, $obj_1_val);
+						$configuration->setValue($obj_name, $obj_1_name, $obj_1_val);
 					}
 
 				} // Base
 			}
 			else
 			{
-				$configuration->set($obj_name, "", $obj_val);
+				$configuration->setValue($obj_name, "", $obj_val);
 			}
 
 		}

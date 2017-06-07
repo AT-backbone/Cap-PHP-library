@@ -12,7 +12,7 @@
 		if($configuration->get("installed", "finished") != true){
 			$standard_configuration = new Configuration("conf/standard.conf.ini");
 			$configuration->conf = $standard_configuration->conf;
-			$configuration->set("installed", "finished", true);
+			$configuration->setValue("installed", "finished", true);
 			$configuration->write_php_ini();
 			if($_GET['save'] != 1){
 				header('Location: index.php?save=1#conf');
@@ -20,7 +20,7 @@
 			}
 		}else{
 			// the library is installed
-			if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
+			if(! empty($_GET['lang'])) $configuration->setValue("user", "language", $_GET['lang']);
 			$langs->setDefaultLang($configuration->get("user", "language"));
 			$langs->load("main");
 			date_default_timezone_set($configuration->conf["installed"]["timezone"]);
@@ -134,8 +134,7 @@
 		}
 
 		global $out;
-		$configuration->set("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
-
+		$configuration->setValue("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 		$files2 = scandir($configuration->conf["cap"]["output"], 1);
 		foreach($files2 as $file)
 		{
@@ -160,7 +159,7 @@
 					if ($_POST[filename])
 					{
 						// Set the WebService URL
-						$soapclient = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL"], '' , false, false, false, false, 0, 300); // <-- set the Timeout above 300 Sec.
+						$soapclient = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL"], '' , $configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"], 0, 300); // <-- set the Timeout above 300 Sec.
 						if ($soapclient)
 						{
 							$soapclient->soap_defencoding='UTF-8';
@@ -233,6 +232,6 @@
 				print '</li>';
 			}
 		}
-		$configuration->set("webservice", "password", encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
+		$configuration->setValue("webservice", "password", encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
 	}
 ?>

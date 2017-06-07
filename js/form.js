@@ -32,6 +32,17 @@ $( document ).ready(function()
 		}
 	});
 
+	$( "#proxy_switch" ).change(function() {
+		if($( "#proxy_switch" ).prop('checked')){
+			$('.ProxyInput').css("opacity", "1");
+			$('.ProxyInput input').prop('readonly', false);
+		}else{
+			$('.ProxyInput').css("opacity", "0.3");
+			$('.ProxyInput input').prop('readonly', true);
+		}
+	});
+	$( "#proxy_switch" ).trigger("change");
+
 	$( "#msgType" ).change(function() {
 		if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
 		{
@@ -83,6 +94,49 @@ $( document ).ready(function()
 		});
 
 	});
+
+	$( "#from_0, #to_0" ).change(function() {
+		var dnow = new Date();
+		var now = dnow.getHours()+':'+dnow.getMinutes();
+		var fromtime = $("#from_0").val();
+		var totime = $("#to_0").val();
+		var dfromtime = new Date(dnow.yyyy_mm_dd() +" "+ fromtime);
+		var dtotime = new Date(dnow.yyyy_mm_dd() +" "+ totime);
+		if($('#date_collaps').hasClass('ui-collapsible-collapsed')){
+			if(fromtime > totime){
+				var dtoday = new Date();
+				var d = new Date($("#to_date").val());
+				//to date is now tomorrow
+				if(dtoday.toDateString() === d.toDateString())
+				{
+					d.setDate(dnow.getDate() + 1);
+					$("#to_date").val(d.yyyy_mm_dd());
+					$("#to_date").trigger("change");
+				}
+			}
+			if(dtotime < dnow && dfromtime < dnow){
+				var d = new Date($("#from_date").val());
+				d.setDate(dnow.getDate() + 1);
+				$("#from_date").val(d.yyyy_mm_dd());
+				$("#from_date").trigger("change");
+
+				var d = new Date($("#to_date").val());
+				d.setDate(dnow.getDate() + 1);
+				$("#to_date").val(d.yyyy_mm_dd());
+				$("#to_date").trigger("change");
+			}else if(dtotime < dnow){
+				var d = new Date($("#to_date").val());
+				d.setDate(dnow.getDate() + 1);
+				$("#to_date").val(d.yyyy_mm_dd());
+				$("#to_date").trigger("change");
+			}
+		}
+	});	
+
+	$( "#from_date, #to_date" ).change(function() {
+		$('#legdatefrom').html($("#from_date").val());
+		$('#legdateto').html($("#to_date").val());
+	});	
 
 	if($('#init_map').val() == 1 && $('#plugin').val() != 1)
 	{
@@ -141,7 +195,7 @@ $( document ).ready(function()
 	function ajax_conf()
 	{
 		var url = "index.php?conf=1"; // the script where you handle the form input.
-
+		JQ_loader("Saving ...", "b");
 		$.ajax({
 		      	type: "POST",
 		        url: url,
@@ -152,7 +206,7 @@ $( document ).ready(function()
 							//else $( "#Saved_conf" ).popup( "open" );
 							setTimeout(function(){
 								location.reload(true);
-							}, 1500);
+							}, 1000);
 		        }
 		       });
 		return false; // avoid to execute the actual submit of the form.
@@ -418,7 +472,11 @@ $( document ).ready(function()
 							if(text)
 							{
 								lkey = ind_lang[lang_name];
+								if(lkey == undefined) lkey = 0;
 								area_data[val['aid']]['desc'][val['type']][lkey] = text;
+							}else{
+								lkey = 0;
+								area_data[val['aid']]['desc'][val['type']][lkey] = "no description";
 							}
 						});
 						if(! $.isArray(area_data[val['aid']]['inst'][val['type']])) area_data[val['aid']]['inst'][val['type']] = {};
@@ -429,6 +487,12 @@ $( document ).ready(function()
 								area_data[val['aid']]['inst'][val['type']][ind_lang[lang_name]] = text;
 							}
 						});
+
+						//if(val['identifier'].substring(0, 4) == "xml:"){
+						//	area_data[val['aid']]['notCap'] = true;
+						//	if(! $.isArray(area_data[val['aid']]['desc'][val['type']])) area_data[val['aid']]['desc'][val['type']] = {};
+						//	area_data[val['aid']]['desc'][val['type']]["en-GB"] = val['desc'];
+						//}
 
 						area_data[val['aid']]['identifier'][val['type']] = val['identifier'];
 
@@ -885,6 +949,11 @@ $( document ).ready(function()
 					//$('#inst_1').val('').trigger('input');
 					$('#from_0').val('00:00').trigger('input');
 					$('#to_0').val('23:59').trigger('input');
+
+					var d = new Date();
+
+					$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('change');
+					$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('change');
 					//$('#left_area_name').html(tmp_area_name).trigger('input');
 					$('#AreaDetailDIV').css('background-color', '#cccccc');
 					$('#AreaDetailUL').css('pointer-events', 'none');
@@ -947,6 +1016,25 @@ $( document ).ready(function()
 				{
 					$('#to_0').val('23:59').trigger('input');
 				}
+
+				if(area_data[id]['date_from'][type] !== undefined)
+				{
+					$('#from_date').val(area_data[id]['date_from'][type]).trigger('change');
+				}
+				else
+				{
+					var d = new Date();
+					$('#from_date').val(d.yyyy_mm_dd()).trigger('change');
+				}
+				if(area_data[id]['date_to'][type] !== undefined)
+				{
+					$('#to_date').val(area_data[id]['date_to'][type]).trigger('change');
+				}
+				else
+				{
+					var d = new Date();
+					$('#to_date').val(d.yyyy_mm_dd()).trigger('change');
+				}
 			}
 			if(area_info['sel_type'] != 0)
 			{
@@ -981,6 +1069,10 @@ $( document ).ready(function()
 
 				area_data[id]['from'][data['sel_type']] = $('#from_0').val();
 				area_data[id]['to'][data['sel_type']] = $('#to_0').val();
+
+				area_data[id]['date_from'][data['sel_type']] = $('#from_date').val();
+				area_data[id]['date_to'][data['sel_type']] = $('#to_date').val();
+
 				area_data[id]['sel_type'] = 0;
 			}
 		});
@@ -995,6 +1087,10 @@ $( document ).ready(function()
 		//$('#inst_1').val('').trigger('input');
 		$('#from_0').val('00:00').trigger('input');
 		$('#to_0').val('23:59').trigger('input');
+		
+		var d = new Date();
+		$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('change');
+		$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('change');
 		//$('#left_area_name').html(tmp_area_name).trigger('input');
 		$('#AreaDetailDIV').css('background-color', '#cccccc');
 		$('#AreaDetailUL').css('pointer-events', 'none');
@@ -1020,6 +1116,8 @@ $( document ).ready(function()
 					area_data[id]['inst'][area_data[id]['sel_type']] = {};
 					area_data[id]['from'][area_data[id]['sel_type']] = '00:00';
 					area_data[id]['to'][area_data[id]['sel_type']] = '00:00';
+					area_data[id]['date_from'][data['sel_type']] = "";
+					area_data[id]['date_to'][data['sel_type']] = "";
 					area_data[id]['sel_type'] = 0;
 				}
 			});
@@ -1033,6 +1131,10 @@ $( document ).ready(function()
 			//$('#inst_1').val('').trigger('input');
 			$('#from_0').val('00:00').trigger('input');
 			$('#to_0').val('00:00').trigger('input');
+
+			var d = new Date();
+			$('#legdatefrom, #from_date').val(d.yyyy_mm_dd()).trigger('change');
+			$('#legdateto, #to_date').val(d.yyyy_mm_dd()).trigger('change');
 			//$('#left_area_name').html(tmp_area_name).trigger('input');
 			$('#AreaDetailDIV').css('background-color', '#cccccc');
 			$('#AreaDetailUL').css('pointer-events', 'none');

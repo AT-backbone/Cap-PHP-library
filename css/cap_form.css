@@ -451,3 +451,13 @@ textarea{
 ::-webkit-scrollbar-thumb:hover {
     background-color: #aaa;
 }
+
+@media screen and (max-width: 974px) {
+	#WarnDetailDIV {
+		width: 100% !important;
+	}
+
+	#MapDiv {
+		width: 100% !important;
+	}
+}

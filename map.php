@@ -43,7 +43,7 @@
 	if($configuration->get("installed", "finished") != true){
 		$standard_configuration = new Configuration("conf/standard.conf.ini");
 		$configuration->conf = $standard_configuration->conf;
-		$configuration->set("installed", "finished", true);
+		$configuration->setValue("installed", "finished", true);
 		$configuration->write_php_ini();
 		if($_GET['save'] != 1){
 			header('Location: index.php?save=1#conf');
@@ -51,7 +51,7 @@
 		}
 	}else{
 		// the library is installed
-		if(! empty($_GET['lang'])) $configuration->set("user", "language", $_GET['lang']);
+		if(! empty($_GET['lang'])) $configuration->setValue("user", "language", $_GET['lang']);
 		$langs->setDefaultLang($configuration->get("user", "language"));
 		$langs->load("main");
 		date_default_timezone_set($configuration->conf["installed"]["timezone"]);
@@ -60,7 +60,7 @@
 			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
 		}
 	}
-
+	
 	if(! is_dir("output") || ! is_writable("output"))
 	{
 		$error_out.= '[output/] '.$langs->trans('perm_for_conf')."<p>";
@@ -120,7 +120,7 @@
 		exit;
 	}
 
-	$configuration->set("cap", "save", 1);
+	$configuration->setValue("cap", "save", 1);
 
 	$configuration->conf["webservice"]["login"] = "";
 	$configuration->conf["webservice"]["password"] = "";
@@ -179,22 +179,22 @@
 
 	if($_COOKIE['Session_login_name'])
 	{
-		$configuration->set("webservice", "login", $_COOKIE['Session_login_name']);
-		$configuration->set("webservice", "password", $_COOKIE['Session_login_pass']);
+		$configuration->setValue("webservice", "login", $_COOKIE['Session_login_name']);
+		$configuration->setValue("webservice", "password", $_COOKIE['Session_login_pass']);
 	}
 
 	if($_SESSION['Session_login_name'])
 	{
-		$configuration->set("webservice", "login", $_SESSION['Session_login_name']);
-		$configuration->set("webservice", "password", $_SESSION['Session_login_pass']);
+		$configuration->setValue("webservice", "login", $_SESSION['Session_login_name']);
+		$configuration->setValue("webservice", "password", $_SESSION['Session_login_pass']);
 	}
 	// build service url
 	$service_arr = explode('/', $configuration->conf["webservice"]["WS_DOL_URL"]);
 	end($service_arr);
 	$key = key($service_arr);
 
-	$configuration->set("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
-	$configuration->set("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
+	$configuration->setValue("webservice", "ns", str_replace($service_arr[$key],'',$configuration->conf["webservice"]["WS_DOL_URL"]));
+	$configuration->setValue("webservice", "sourceapplication", $configuration->conf["webservice"]["WS_METHOD"]);
 
 	// METEOALARM WEBSERVICE ---
 	$meteoalarm = 1;
