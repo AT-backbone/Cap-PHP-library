@@ -299,10 +299,10 @@
 			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['status'] 				= "Actual";
 			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['status'] 				= "Actual";
 
-			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['msgType'] 			= "Alert";
-			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['msgType'] 			= "Alert";
-			$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['msgType'] 			= "Alert";
-			$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['msgType'] 			= "Alert";
+			//$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['msgType'] 			= "Alert";
+			//$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['msgType'] 			= "Alert";
+			//$depends['select']	['id']	['parameter_awl-select']	['3; orange; Severe']		['select']	['name'] 	['msgType'] 			= "Alert";
+			//$depends['select']	['id']	['parameter_awl-select']	['4; red; Extreme']			['select']	['name'] 	['msgType'] 			= "Alert";
 
 			$depends['select']	['id']	['parameter_awl-select']	['1; green; Minor']			['select']	['name'] 	['scope'] 				= "Public";
 			$depends['select']	['id']	['parameter_awl-select']	['2; yellow; Moderate']	['select']	['name'] 	['scope'] 				= "Public";
