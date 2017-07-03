@@ -729,7 +729,7 @@
 											{
 												$post['language'][] = $lang_val;
 												$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
-												foreach($data_arr as $key => $area)
+												foreach($data_arr as $key2 => $area)
 												{
 													$post['headline'][$lang_val].= $area->name.", ";
 												}
@@ -746,7 +746,7 @@
 													$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
 													$post['description'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
 
-													foreach($data_arr as $key => $area)
+													foreach($data_arr as $key2 => $area)
 													{
 														$post['headline'][$lang_val].= $area->name.", ";
 														$post['description'][$lang_val].= $area->name.", ";
