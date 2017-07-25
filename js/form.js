@@ -746,8 +746,13 @@ $( document ).ready(function()
 
 					if(area_data[id]['type'][aktive_type] == "1")
 					{
-						area_data[id]['from'][aktive_type] = '00:00';
-						area_data[id]['to'][aktive_type] = '23:59';
+						area_data[id]['from'][aktive_type] = '00:00:00';
+						area_data[id]['to'][aktive_type] = '23:59:00';
+					}
+
+					if (aktive_level == 1 && (area_data[id]['from'][aktive_type] === undefined || area_data[id]['from'][aktive_type] == "")) {
+						area_data[id]['from'][aktive_type] = '00:00:00';
+						area_data[id]['to'][aktive_type] = '23:59:00';
 					}
 
 					area_data[id]['type'][aktive_type] = aktive_level;
