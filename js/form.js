@@ -750,6 +750,11 @@ $( document ).ready(function()
 						area_data[id]['to'][aktive_type] = '23:59';
 					}
 
+					if (aktive_level == 1 && (area_data[id]['from'][aktive_type] === undefined || area_data[id]['from'][aktive_type] == "")) {
+						area_data[id]['from'][aktive_type] = '00:00:00';
+						area_data[id]['to'][aktive_type] = '23:59:00';
+					}
+
 					area_data[id]['type'][aktive_type] = aktive_level;
 					area_data[id]['desc'][aktive_type] = {};
 					area_data[id]['inst'][aktive_type] = {};
