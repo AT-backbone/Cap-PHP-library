@@ -159,7 +159,7 @@ LabelExpiresPaintAndAlertDesc=The expiry time of the information of the alert me
 
 DESC_EditWarningNotAktive=This form is only available if a warning is selected!
 PaintGreen=The following areas have not yet received warning for this day! Folgende Gebiete sind für diesen Tag noch weiß!
-DESC_PaintGreen=Should this Areas get (de)warned green? Automatically generated green warnings are always effective from 0 to 23.59 CET!
+DESC_PaintGreen=Should these Areas get (de)warned green? Automatically generated green warnings are always effective from 0 to 23.59 CET! <br><p style="text-align:center;">By clicking <b>Yes</b> warnings will be automatically send to Meteoalarm</p>
 WarnGetCalculated=(meteoalarm calculates your warnings shortly)
 DelWarning=Delete Warning?
 ChangeWithoutSave=Change Warning without Saving Changes?

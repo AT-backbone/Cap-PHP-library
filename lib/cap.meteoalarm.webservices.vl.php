@@ -64,6 +64,8 @@ if($meteoalarm == 1)
 	else
 	{
 		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
+//print_r($AreaCodesArray);
+//exit;
 	}
 
 	if ($soapclient->fault)

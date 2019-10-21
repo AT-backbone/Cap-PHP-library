@@ -14,7 +14,7 @@
 		$langs->setDefaultLang($configuration->conf["user"]["language"]);
 		$langs->load("main");
 	}
-	
+
 	$configuration = new Configuration("conf/conf.ini");
 	/**
 	* encrypt and decrypt function for passwords

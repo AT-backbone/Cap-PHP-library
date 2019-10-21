@@ -1,5 +1,6 @@
 *.bak
 *.0
+*.1
 *.prj
 *.pui
 *.demosource/conf/*.0

@@ -235,6 +235,9 @@
 				{
 					$res = true;
 					$_GET['data'] = $this->data;
+
+//echo $this->data;
+
 					require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP if not alredy
 
 					if(file_exists('lib/cap.meteoalarm.webservices.Area.php')) // test if the lib exists
@@ -262,6 +265,12 @@
 						if(!empty($AreaCodesArray['document']['AreaInfo']))
 						{
 							$this->AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
+//print_r($AreaCodesArray);
+//print_r($this->AreaCodesArray);
+//echo 'AreaCodesArray contains: ' .count($this->AreaCodesArray). ' elements';
+//exit;
+
+
 						}
 						else
 						{
@@ -323,7 +332,6 @@
 				print '</pre>';
 			}
 
-			//
 			foreach($this->AreaCodesArray as $key => $vl_warn)
 			{
 				// Add to the Area ID Array the Level and Type info from the VL Warnigns
@@ -338,6 +346,8 @@
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['timestamp']	= $vl_warn['timestamp'];
 				//die(print_r($this->cap_ident));
 			}
+//print_r($this->AreaCodesArray);
+//die();
 
 			// Output Debug values
 			if($this->debug == true)
@@ -357,6 +367,9 @@
 		*/
 		function calc_cap_update()
 		{
+
+//print_r($this->cap_array);
+
 			if($this->debug == true)
 			{
 				print '<pre>';

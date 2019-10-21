@@ -60,7 +60,7 @@
 			$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
 		}
 	}
-	
+
 	if(! is_dir("output") || ! is_writable("output"))
 	{
 		$error_out.= '[output/] '.$langs->trans('perm_for_conf')."<p>";
@@ -130,7 +130,6 @@
 	$tryed_login = false;
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 	{
-
 		if(!is_array($_POST['send-logout']))
 		{
 			end($_POST['send-login']);
@@ -484,3 +483,11 @@
 	}
 
 ?>
+<style>
+a.ui-link.ui-btn-right.ui-btn.ui-shadow.ui-corner-all {
+    display: none;
+}
+div#Login-alert-popup {
+    display: none;
+}
+</style>

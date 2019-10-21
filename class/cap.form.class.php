@@ -543,6 +543,10 @@
 											$out.= substr($soap_SVG, 0, -6); // SVG from the SOAP
 											//$out.= '<svg id="notme">';
 											$out.= '<defs><filter id="css_brightness"><feComponentTransfer id="css_brightness"><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter></defs>';
+
+//$out.= '<defs><filter id="css_test"><feComponentTransfer id="css_test"><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter></defs>';
+
+
 											if(is_array($ParameterArray['AWT']))
 											foreach($ParameterArray['AWT'] as $id => $type_arr)
 											{
@@ -609,7 +613,7 @@
 
 					$out.= '<div class="ui-bar">';
 						$out.= '<ul data-role="listview" data-divider-theme="b">'; // as long as it is without Area show 50% alpha
-							$out.= '<li data-role="list-divider" data-theme="b" style="padding: 15px;">';
+							$out.= '<li data-role="list-divider" data-theme="b" style="padding: 25px;">';
 								if(empty($plugin->name))
 									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
 								else
@@ -657,9 +661,13 @@
 						$out.= '</div>';
 					$out.= '</div>';
 
+					$out.= '<div id="symbol" style="display:none;"><img src="icon.png" alt="symbol" class="symbol" style="height:30px;position:relative;margin-top:-55px;margin-left:5px;"></img></div>';
+
+					$out.= '<div id="timer" style="display:none;position:relative;top:-67px;left:41px;color:white;font-size:16px;font-family:monospace;text-decoration:none;"></div>';
+
 					$out.= '<div data-role="popup" id="CAP_Send_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
 						$out.= '<div data-role="header" id="CAP_Send_popupDialog_header" data-theme="a">';
-							$out.= '<h2>'.$langs->trans('SendCaps').'</h2>';
+							$out.= '<h2>'.$langs->trans('Send Caps').'</h2>';
 						$out.= '</div>';
 						$out.= '<div role="main" id="CAP_Send_popupDialog_main" class="ui-content">';
 							$out.= $langs->trans('Send Caps to Meteoalarm?');
@@ -679,13 +687,18 @@
 						$out.= '</div>';
 					$out.= '</div>';
 
+
+
+
+
 					$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
 						$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
 						$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
 							if(!empty($plugin->name)) $out.= '<h2>'.$langs->trans('ProducedCaps').'</h2>';
-							else $out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
+							else $out.= '<h2>'.$langs->trans('Success!').'</h2>';
 						$out.= '</div>';
 						$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
+						$out.= '<p class="success_message" style="text-align:center;border:5px solid green;padding:10px 10px 10px 10px;font-size:18px;">Your warnings were successfully sent to Meteoalarm</p>';
 							$out.= '<ul data-role="listview" data-inset="true" data-shadow="false" id="SOAPUL">';
 							$out.= '</ul>';
 						$out.= '</div>';
@@ -701,13 +714,17 @@
 						$out.= '</div>';
 					$out.= '</div>';
 
+/*
 					$out.= '<div data-role="popup" id="MeteoalarmCalc_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
 						$out.= '<div data-role="header" id="MeteoalarmCalc_popupDialog_header" data-theme="a">';
 							$out.= '<h2 style="color: yellow;">'.$langs->trans('Meteoalarm Soap').'</h2>';
 						$out.= '</div>';
+*/
+/*
 						$out.= '<div role="main" id="MeteoalarmCalc_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
 							$out.= $langs->trans('MeteoalarmCalc');
 						$out.= '</div>';
+*/
 					$out.= '</div>';
 					break;
 
@@ -1575,7 +1592,7 @@
 
 							if((empty($configuration->conf["webservice_aktive"]) || $configuration->conf["webservice_aktive"] == -1) && $configuration->conf["webservice"]["service_on"] == 1 && $this->login_id == 1)
 							{
-								$out.= 			'
+							$out.= 			'
 													<script>
 													$( document ).ready(function(){
 														$(".Login input").on("keyup",function(event){
@@ -1598,7 +1615,6 @@
 								  						$( "#Login-alert" ).popup();
 														setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
 													});
-													
 													</script>
 														';
 							}

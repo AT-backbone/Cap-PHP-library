@@ -29,7 +29,7 @@
 				$error_out.= '['.realpath('conf').'/conf.php] '.$langs->trans('perm_for_conf')."<p>";
 			}
 		}
-	
+
 	/**
 	* encrypt and decrypt function for passwords
 	*
@@ -136,6 +136,10 @@
 		global $out;
 		$configuration->setValue("webservice", "password", encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
 		$files2 = scandir($configuration->conf["cap"]["output"], 1);
+
+//$count = count($files2);
+//echo 'There are ' . $count . ' files';
+//exit;
 		foreach($files2 as $file)
 		{
 			if($file != "." && $file != ".." && $file != "ftp_prc" && $file != "skeleton_green" && $file != "COPYING")
@@ -151,6 +155,10 @@
 					require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP
 
 					$filename = $_POST[filename];
+
+//echo date ("F d Y H:i:s.", filectime($filename));
+//exit;
+
 					if($_POST['import']==1) $import = true; else $import = false;
 					// if($_POST['debug']==1) $debug = true; else $debug = false;
 					$debug = false;
@@ -176,6 +184,17 @@
 						$tmpfile = $configuration->conf["cap"]["output"].'/'.$_POST[filename];
 						$handle = fopen($tmpfile, "r");                  // Open the temp file
 						$contents = fread($handle, filesize($tmpfile));  // Read the temp file
+
+//echo $contents;
+$tmp_array = array();
+array_push($tmp_array, $contents);
+/*echo '<pre>';
+var_dump($tmp_array);
+echo '</pre>';
+
+exit;*/
+
+
 						fclose($handle);                                 // Close the temp file
 
 					   	//$contents = preg_replace('/[\x00-\x1f]/', ' ', $contents);
@@ -186,6 +205,10 @@
 						    'length'=> filesize($tmpfile),
 							'warning_import'=>$import,
 							'debug_msg'=>$debug);
+
+
+//var_dump($document);
+//exit;
 
 
 							$parameters = array('authentication'=>$authentication, 'document'=>$document);
