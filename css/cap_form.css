@@ -15,6 +15,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+.ui-flipswitch.ui-shadow-inset.ui-bar-inherit.ui-corner-all.ui-body-f {
+    background-color: #ffffff /*{f-body-background-color}*/;
+    border-color: #149fff /*{f-body-border}*/;
+    color: #000000 /*{f-body-color}*/;
+    text-shadow: 0 /*{f-body-shadow-x}*/ 0 /*{f-body-shadow-y}*/ 0 /*{f-body-shadow-radius}*/ #000000 /*{f-body-shadow-color}*/;
+}
+.ui-flipswitch.ui-shadow-inset.ui-bar-inherit.ui-corner-all.ui-body-f.ui-flipswitch-active {
+    background-color: #20ff0f /*{b-active-background-color}*/;
+    border-color: #000000 /*{b-active-border}*/;
+    color: #000000 /*{b-active-color}*/;
+    text-shadow: 0 /*{b-active-shadow-x}*/ 0 /*{b-active-shadow-y}*/ 0 /*{b-active-shadow-radius}*/ #000000 /*{b-active-shadow-color}*/;
+}
+a.ui-flipswitch-on.ui-btn.ui-shadow.ui-btn-inherit {
+    background-color: #f6f6f6 /*{f-bup-background-color}*/;
+    border-color: #149fff /*{f-bup-border}*/;
+    color: #000000 /*{f-bup-color}*/;
+    text-shadow: 0 /*{f-bup-shadow-x}*/ 0 /*{f-bup-shadow-y}*/ 0 /*{f-bup-shadow-radius}*/ #000000 /*{f-bup-shadow-color}*/;
+}
+.ui-flipswitch.ui-shadow-inset.ui-bar-inherit.ui-corner-all {
+    background-color: #ffffff /*{f-body-background-color}*/;
+    border-color: #149fff /*{f-body-border}*/;
+    color: #000000 /*{f-body-color}*/;
+    text-shadow: 0 /*{f-body-shadow-x}*/ 0 /*{f-body-shadow-y}*/ 0 /*{f-body-shadow-radius}*/ #000000 /*{f-body-shadow-color}*/;
+}
+
+span.webservice-meteoalarm-interface {
+    font-size: 21px;
+	margin-bottom: 20px;
+}
+
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */

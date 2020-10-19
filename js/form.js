@@ -29,7 +29,18 @@ $( document ).ready(function()
 		{
 			$("#conf-detail").hide();
 		}
-	});				
+	});
+
+	$( "#webservice_2_switch" ).change(function() {
+		if($( "#webservice_2_switch" ).prop('checked'))
+		{
+			$("#conf-detail-2").show();
+		}
+		else
+		{
+			$("#conf-detail-2").hide();
+		}
+	});
 
 	$( "#msgType" ).change(function() {
 		if($( "#msgType" ).val() == "Update" || $( "#msgType" ).val() == "Cancel")
@@ -112,7 +123,7 @@ $( document ).ready(function()
 		        	$("#capviewtextarea").textinput( "refresh" );
 		        },
 				error: function(errorThrown){
-					console.log( errorThrown);
+					console.log(errorThrown);
 				}
 		       });
 		
@@ -981,7 +992,7 @@ $( document ).ready(function()
 		$('#info_text').css('display', 'inherit');
 
 		plugin_show_type(false);
-		plugin_calc_map()
+		plugin_calc_map();
 	}
 
 	function plugin_delete_warning_detail()
