@@ -30,36 +30,36 @@
 	require_once 'lib/cap.create.class.php';
 
 	class CAP_Updater{
-
+		
 		/**
-			functions of the class CAP_Updater:
+			functions of the class CAP_Updater: 
 			// Set values to begin calculate
 			__construct($cap_array, $awt, $langs)
 
 			// get all langs used in your caps
 			getlang($config = false)
-
+	
 			// delete all caps in the export folder
 			del_caps_in_output()
-
+	
 			// get visio level warnings and area data from Meteoalarm webservice
 			webservice_meteoalarm()
-
+			
 			// set identifier sorted in area
 			get_area_identifier()
-
+	
 			// calculate cap which should be Updated or Alerted
 			calc_cap_update()
-
+			
 			// calculate cap which should be Cancelled (Updated as green)
 			calc_cap_cancel()
-
+	
 			// calculate white areas
 			get_white_warnings()
-
+				
 			// produce and save all caps in the export folder
 			produce_all_caps()
-
+			
 			// return white type from the areas
 			fetch_white_areas()
 		 */
@@ -138,7 +138,7 @@
 		var $User;
 
 		// Contains the identifiers of the akitve warnings
-		// struc: array(awt_type => array( EMMA_ID  => array( identifier, level, from, to, sender, timestamp) ) )
+		// struc: array(awt_type => array( EMMA_ID  => array( identifier, level, from, to, sender, timestamp) ) ) 
 		var $cap_ident;
 
 		// Contains
@@ -167,7 +167,7 @@
 		*
 		* @return	None
 		*/
-		function __construct($cap_array, $awt, $data, $langs = "")
+		function __construct($cap_array, $awt, $data, $langs)
 		{
 			if(!empty($cap_array)) $this->cap_array = $cap_array;
 			if(!empty($awt)) $this->awt_arr = $awt;
@@ -177,13 +177,14 @@
 		}
 
 		/**
-	 * Output RFC 3066 Array
-	 *
-	 * @return	string						Array with RFC 3066 Array
-	 */
-		function getlang($config = false){
-			global $configuration;
-
+		 * Output RFC 3066 Array
+		 *     
+		 * @return	string						Array with RFC 3066 Array
+		 */
+		function getlang($config = false)
+		{
+			global $conf;
+			
 			if(is_array($this->language))
 			{
 				foreach($this->language as $key => $lang_name)
@@ -192,13 +193,14 @@
 				}
 			}
 
-			$out_tmp = $configuration->conf["language"];
-
+			$out_tmp = $conf->lang;
+			//conf->lang['en-GB']			= 'english'; // Key and name of lang
+			//conf->select->lang['en-GB']	= 1; // key and bool if lang is aktive
 			foreach($out_tmp as $key => $lang_name)
 			{
-				if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
+				if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
 			}
-
+			
 			return $out;
 		}
 
@@ -209,12 +211,12 @@
 		*/
 		function del_caps_in_output()
 		{
-			global $configuration;
-
-			// the dir of the caps
-			$files = glob($configuration->conf["cap"]["output"].'/*'); // get all file names
+			global $conf;
+			
+			// $conf->cap->output the dir of the caps
+			$files = glob($conf->cap->output.'/*'); // get all file names
 			foreach($files as $file){ // iterate files
-				if(is_file($file) && $file != $configuration->conf["cap"]["output"].'/COPYING') unlink($file); // delete file
+				if(is_file($file) && $file != $conf->cap->output.'/COPYING') unlink($file); // delete file
 			}
 
 			return true;
@@ -227,17 +229,14 @@
 		*/
 		function webservice_meteoalarm()
 		{
-			global $configuration;
-			$meteoalarm = 1; // set meteoalarm on (debug value)
-			if($meteoalarm == 1) // is meteoalarm service on ?
-			{
-				if($configuration->conf["webservice"]["service_on"] > 0) // is webservice on ?
+			global $conf;
+			$conf->meteoalarm = 1; // set meteoalarm on (debug value)
+			if($conf->meteoalarm == 1) // is meteoalarm service on ?
+			{			
+				if($conf->webservice->on > 0) // is webservice on ?
 				{
 					$res = true;
 					$_GET['data'] = $this->data;
-
-//echo $this->data;
-
 					require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP if not alredy
 
 					if(file_exists('lib/cap.meteoalarm.webservices.Area.php')) // test if the lib exists
@@ -265,12 +264,6 @@
 						if(!empty($AreaCodesArray['document']['AreaInfo']))
 						{
 							$this->AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
-//print_r($AreaCodesArray);
-//print_r($this->AreaCodesArray);
-//echo 'AreaCodesArray contains: ' .count($this->AreaCodesArray). ' elements';
-//exit;
-
-
 						}
 						else
 						{
@@ -332,12 +325,13 @@
 				print '</pre>';
 			}
 
+			// 
 			foreach($this->AreaCodesArray as $key => $vl_warn)
 			{
 				// Add to the Area ID Array the Level and Type info from the VL Warnigns
 				$this->AreaIDArray[$vl_warn['aid']][$vl_warn['type']] = $vl_warn['level'];
 
-				// Add identifier information to the cap_ident variable ()
+				// Add identifier information to the cap_ident variable () 
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['id']			= $vl_warn['identifier'];
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['level']		= intval($vl_warn['level']);
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['from']			= date('Y-m-d H:i:s', $this->add_timezone(str_replace('&nbsp;', ' ', $vl_warn['from'])));
@@ -346,9 +340,7 @@
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['timestamp']	= $vl_warn['timestamp'];
 				//die(print_r($this->cap_ident));
 			}
-//print_r($this->AreaCodesArray);
-//die();
-
+			
 			// Output Debug values
 			if($this->debug == true)
 			{
@@ -359,7 +351,7 @@
 
 			return true;
 		}
-
+	
 	   /**
 		* calculate Updates or Alerts for CAP export
 		*
@@ -367,10 +359,7 @@
 		*/
 		function calc_cap_update()
 		{
-
-//print_r($this->cap_array);
-
-			if($this->debug == true)
+			if($this->debug == true) 
 			{
 				print '<pre>';
 					print_r($this->cap_array);
@@ -379,7 +368,7 @@
 			foreach($this->cap_array as $aid => $warr)
 			{
 				if($this->debug == true) print '<p>'.$warr->name.'<br>'; // Output Debug values
-
+				
 				foreach($warr as $key => $warning)
 				{
 					if($warning->level > 0) // is level bigger than 0
@@ -388,7 +377,7 @@
 						$ident_level = $this->cap_ident[$warning->type][$warning->eid]['level'];
 						$ident = $this->cap_ident[$warning->type][$warning->eid]['id'];
 						// set 'aid' also in the $warning string Array()
-						$warning->aid = $aid;
+						$warning->aid = $aid; 
 						//$this->debug = true;
 						if($this->debug == true)
 						{
@@ -404,24 +393,24 @@
 						// or if the level the from and the to value is the same: (we dont need a update or alert)
 						if  (
 							 (
-								$ident != ""
-								 &&
+								$ident != "" 
+								 && 
 								$ident == $warning->ident
-								 &&
+								 && 
 								$this->cap_ident[$warning->type][$warning->eid]['level'] == $warning->level
-								 &&
-								$this->cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from)
-								 &&
+								 && 
+								$this->cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from) 
+								 && 
 								$this->cap_ident[$warning->type][$warning->eid]['to'] == str_replace('&nbsp;', ' ', $warning->to)
 							 )
-							  ||
+							  || 
 							 (
 							 	$ident == $warning->identifier
 							 	 &&
-								$this->cap_ident[$warning->type][$warning->eid]['level'] == $warning->level
-								 &&
-								$this->cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from)
-								 &&
+								$this->cap_ident[$warning->type][$warning->eid]['level'] == $warning->level 
+								 && 
+								$this->cap_ident[$warning->type][$warning->eid]['from'] == str_replace('&nbsp;', ' ', $warning->from) 
+								 && 
 								$this->cap_ident[$warning->type][$warning->eid]['to'] == str_replace('&nbsp;', ' ', $warning->to)
 							 )
 							)
@@ -482,8 +471,8 @@
 				$timezone_date_h = $timezone_date;
 
 				if  (
-						! isset($this->cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']])
-						 &&
+						! isset($this->cancel_check[$vl_warning['EMMA_ID']][$vl_warning['type']]) 
+						 && 
 						date('Y-m-d', strtotime(str_replace('&nbsp;', ' ',$vl_warning['from']).' '.$timezone_date_p.' '.$timezone_date_h[1].$timezone_date_h[2].' hours')) == date('Y-m-d', strtotime('now + '.$_POST['data'].' days'))
 				    )
 				{
@@ -509,7 +498,7 @@
 						$warning->to = date('Y-m-d').' 23:59:59';
 
 						$this->cap_data['Update'][$vl_warning['type']][1][addslashes(str_replace('&nbsp;', ' ',$vl_warning['from']))][addslashes(str_replace('&nbsp;', ' ',$vl_warning['to']))]['no warning'][] = $warning;
-
+						
 						// Output Debug values
 						if($this->debug == true)
 						{
@@ -571,15 +560,15 @@
 		*/
 		function produce_all_caps()
 		{
-			global $configuration;
+			global $conf;
 
-			$langs_arr = $this->getlang();
-
+			$langs_arr = $this->getlang();	
+									
 			foreach($langs_arr as $key_l => $val_l)
 			{
 				if(in_array($key,$this->language)) unset($langs_arr[$key]);
 			}
-			foreach ($langs_arr as $key_l => $val_l)
+			foreach ($langs_arr as $key_l => $val_l) 
 			{
 				$langs_keys[] = $key_l;
 			}
@@ -626,10 +615,10 @@
 										$timezone_date_p = $timezone_date[0];
 										$timezone_date_h = substr($timezone_date, 1);
 
-										$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.date("ymdHis").'.1'.$data_arr[0]->type.$data_arr[0]->level.ord($data_arr[0]->eid);
-										if($ref == "Update")
+										$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.1'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
+										if($ref == "Update") 
 										{
-											$post['identifier']				= $configuration->conf["identifier"]["WMO_OID"].'.'.$configuration->conf["identifier"]["ISO"].'.'.date("ymdHis").'.2'.$data_arr[0]->type.$data_arr[0]->level.ord($data_arr[0]->eid);
+											$post['identifier']				= $conf->identifier->WMO_OID.'.'.$conf->identifier->ISO.'.'.strtotime('now').'.2'.$data_arr[0]->type.$data_arr[0]->level.$data_arr[0]->eid;
 											if($this->User['sender'] != "") $data_arr[0]->sender = $this->User['sender'];
 											if($data_arr[0]->sender == "") $data_arr[0]->sender = "CapMapImport@meteoalarm.eu";
 											$post['references'] 			= $data_arr[0]->sender.','.$data_arr[0]->references.','.date('Y-m-d\TH:i:s\\'.$timezone_date, strtotime(str_replace('&nbsp;', ' ',$data_arr[0]->timestamp)));
@@ -639,7 +628,7 @@
 										if($this->User['sender'] != "")
 										$post['sender']					= $this->User['sender'];
 
-										if($post['sender'] == "")
+										if($post['sender'] == "") 
 										$post['sender']					= 'admin@meteoalarm.eu';
 
 										$post['sent'] 					= array();
@@ -649,7 +638,7 @@
 										$post['sent']['UTC']  			= $timezone_date_h;
 
 										// Template
-										if($post['status'] != "")
+										if($post['status'] != "") 
 											$post['status'] 			= $post['status'];
 										else
 											$post['status'] 			= 'Actual';
@@ -664,7 +653,7 @@
 										}
 
 										// Template
-										if($post['scope'] != "")
+										if($post['scope'] != "") 
 											$post['scope'] 				= $post['scope'];
 										else
 											$post['scope'] 				= 'Public';
@@ -675,37 +664,37 @@
 										}
 
 										// Template
-										if($post['info'][0]['category'] != "")
+										if($post['info'][0]['category'] != "") 
 											$post['category'] 			= $post['info'][0]['category'];
 										else
-											$post['category'] 			= 'Met';
+											$post['category'] 			= 'Met';		
 
 										// Template
-										if($post['info'][0]['responseType'] != "")
+										if($post['info'][0]['responseType'] != "") 
 											$post['responseType'] 		= $post['info'][0]['responseType'][0];
 										else
 											$post['responseType']		= 'Monitor';
 
 										// Template
-										if($post['info'][0]['urgency'] != "")
+										if($post['info'][0]['urgency'] != "") 
 											$post['urgency'] 			= $post['info'][0]['urgency'];
 										else
 											$post['urgency'] 			= 'Immediate';
 
 										$post['severity'] 				= $this->severity[$data_arr[0]->level];
-
+										
 										// Template
-										if($post['info'][0]['certainty'] != "")
+										if($post['info'][0]['certainty'] != "") 
 											$post['certainty'] 			= $post['info'][0]['certainty'];
 										else
 											$post['certainty'] 			= 'Likely';
 
-										if($post['info'][0]['audience'] != "")
+										if($post['info'][0]['audience'] != "") 
 											$post['audience'] = $post['info'][0]['audience'];
 
 										if(!empty($data_arr[0]->data) && $_POST['data'] > 1) $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + 1 days'))));
 										else $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
-
+										
 										$post['effective']['date'] = $eff_date;
 										$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
 										$post['effective']['plus'] = $timezone_date_p;
@@ -718,36 +707,30 @@
 
 										if(strtotime($data_arr[0]->to) < strtotime($data_arr[0]->from)) $Pdata = $_POST['data'] + 1;
 										else $Pdata = $_POST['data'];
-
+										
 										if(!empty($data_arr[0]->data) && $Pdata > 1) $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + 1 days'))));
 										else $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$Pdata.' days'))));
-
+										
 										$post['expires']['date'] = $exp_date;
 										$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
 										$post['expires']['plus'] = $timezone_date_p;
 										$post['expires']['UTC'] = $timezone_date_h;
 
 										// Template
-										if($post['info'][0]['senderName'] != "")
+										if($post['info'][0]['senderName'] != "") 
 											$post['senderName'] = $post['info'][0]['senderName'];
 										elseif($this->User['senderName'] != "")
 											$post['senderName']	= $this->User['senderName'];
 										else
-											$post['senderName'] = 'Cap-PHP-Library Version 1.4.3';
+											$post['senderName'] = 'Cap-PHP-Library Version 1.3';
 
 
 										foreach($langs_keys as $key => $lang_val)
 										{
-											if($data_arr[0]->desc->$key != "")
+											if($data_arr[0]->desc->$key != "")	
 											{
 												$post['language'][] = $lang_val;
-												$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
-												foreach($data_arr as $key2 => $area)
-												{
-													$post['headline'][$lang_val].= $area->name.", ";
-												}
-												$post['headline'][$lang_val] = substr($post['headline'][$lang_val], 0, -2);
-
+												$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
 												$post['description'][$lang_val] = $data_arr[0]->desc->$key;
 												if($data_arr[0]->inst->$key != "") $post['instruction'][$lang_val] = $data_arr[0]->inst->$key;
 											}
@@ -756,32 +739,14 @@
 												if($data_arr[0]->level == 1)
 												{
 													$post['language'][] = $lang_val;
-													$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
-													$post['description'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for ';
-
-													foreach($data_arr as $key2 => $area)
-													{
-														$post['headline'][$lang_val].= $area->name.", ";
-														$post['description'][$lang_val].= $area->name.", ";
-													}
-													$post['headline'][$lang_val] = substr($post['headline'][$lang_val], 0, -2);
-													$post['description'][$lang_val] = substr($post['description'][$lang_val], 0, -2);
+													$post['headline'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
+													$post['description'][$lang_val] = $this->headline_level[$data_arr[0]->level].' '.$this->event_type[$data_arr[0]->type].' for '.$data_arr[0]->name;
 												}
 											}
 										}
 
-										if($post['info'][0]['web'] != "")
-											$post['web'] 		= $post['info'][0]['web'];
 
-										if($post['info'][0]['contact'] != "")
-											$post['contact'] 		= $post['info'][0]['contact'];
-
-										$post['areaDesc'] = "";
-										foreach($data_arr as $key => $area)
-										{
-											$post['areaDesc'].= $area->name.", ";
-										}
-										$post['areaDesc'] = substr($post['areaDesc'], 0, -2);
+										$post['areaDesc'] = $data_arr[0]->name;
 
 										$post['parameter']['valueName'][0] = 'awareness_level';
 										$post['parameter']['value'][0] =  $this->awareness_level[$data_arr[0]->level];
@@ -793,10 +758,10 @@
 										{
 											$post['geocode']['value'][] = $data->eid.'<|>emma_id';
 										}
-
+										
 										$cap = new CAP_Class($post);
 										$cap->buildCap();
-										$cap->destination = $configuration->conf["cap"]["output"];
+										$cap->destination = $conf->cap->output;
 										$path = $cap->createFile();
 										//print '<pre>';
 										//	print_r($post);
@@ -820,7 +785,7 @@
 		function fetch_white_areas()
 		{
 			foreach($this->white_data as $aid => $data)
-			{
+			{	
 				foreach ($data as $type => $wh_arr) {
 					if($wh_arr['aid'] > 0)
 					{

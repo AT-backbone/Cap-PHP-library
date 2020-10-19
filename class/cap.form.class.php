@@ -32,8 +32,8 @@
 	require_once 'class/plugin.install.class.php';
 
 	class CAP_Form{
-
-		var $version = '1.4';
+		
+		var $version = '1.3';
 		var $login_id = 0;
 		/**
 	 * initialize Class with Data
@@ -53,7 +53,7 @@
 				$this->msgType[]				= $post['msgType'];
 				$this->references[]				= $post['references'];
 				$this->scope[]					= $post['scope'];
-
+				
 				$this->source[]					= $post['source'];
 				$this->restriction[]			= $post['restriction'];
 				$this->addresses[]				= $post['addresses'];
@@ -63,7 +63,7 @@
 
 				foreach($post['info'] as $key => $info)
 				{
-
+					
 					$this->language[]			= $info['language'];
 					$this->category[]			= $info['category'];
 					$this->event[]				= $info['event'];
@@ -83,110 +83,33 @@
 					$this->web[]				= $info['web'];
 					$this->contact[]			= $info['contact'];
 					$this->parameter[]			= $info['parameter'];
-
+					
 					foreach($info['area'] as $key2 => $area)
-					{
+					{					
 						$this->areaDesc[]			= $area['areaDesc'];
 						$this->polygon[]			= $area['polygon'];
 						$this->circle[]				= $area['circle'];
 						$this->geocode[]			= $area['geocode'];
 					}
 				}
-				$this->cap = $post;
-			}else if(is_object($post)){
-				$this->identifier[] 			= (string) $post->identifier;
-				$this->sender[]						= (string) $post->sender;
-				$this->sent[]							= (string) $post->sent;
-				$this->status[]						= (string) $post->status;
-				$this->msgType[]					= (string) $post->msgType;
-				$this->references[]				= (string) $post->references;
-				$this->scope[]						= (string) $post->scope;
-
-				$this->source[]						= (string) $post->source;
-				$this->restriction[]			= (string) $post->restriction;
-				$this->addresses[]				= (string) $post->addresses;
-				$this->code[]							= (string) $post->code;
-				$this->note[]							= (string) $post->note;
-				$this->incidents[]				= (string) $post->incidents;
-
-				$i=0;
-				foreach($post->info as $key => $info)
-				{
-					$this->language[]				= (string) $info->language;
-					$this->category[]				= (string) $info->category;
-					$this->event[]					= (string) $info->event;
-					foreach($info->responseType as $key => $responseType)
-					{
-						$this->responseType[]	= (array) $responseType;
-					}
-					foreach($info->urgency as $key => $urgency)
-					{
-						$this->urgency[]			= (string) $urgency;
-					}
-					$this->severity[]				= (string) $info->severity;
-					$this->certainty[]			= (string) $info->certainty;
-					$this->audience[]				= (string) $info->audience;
-
-					$e=0;
-					foreach($info->eventCode as $key => $eventCarr)
-					{
-						$this->eventCode[$i][$e]['value']			= (string) $eventCarr->value;
-						$this->eventCode[$i][$e++]['valueName']			= (string) $eventCarr->valueName;
-					}
-
-					$this->effective[]			= (string) $info->effective;
-					$this->onset[]					= (string) $info->onset;
-					$this->expires[]				= (string) $info->expires;
-					$this->senderName[]			= (string) $info->senderName;
-					$this->headline[]				= (string) $info->headline;
-					$this->description[]		= (string) $info->description;
-					$this->instruction[]		= (string) $info->instruction;
-					$this->web[]						= (string) $info->web;
-					$this->contact[]				= (string) $info->contact;
-
-					$p=0;
-					foreach($info->parameter as $key => $paramarr)
-					{
-						$this->parameter[$i][$p]['value']			= (string) $paramarr->value;
-						$this->parameter[$i][$p++]['valueName']			= (string) $paramarr->valueName;
-					}
-
-					$a=0;
-					foreach($info->area as $key2 => $area)
-					{
-						$this->areaDesc[]			= (string) $area->areaDesc;
-						$this->polygon[$a][]			= (string) $area->polygon;
-						$this->circle[$a][]				= (string) $area->circle;
-
-						$g=0;
-						foreach($area->geocode as $key => $geoarr)
-						{
-							$this->geocode[$i][$g]['value']			= (string) $geoarr->value;
-							$this->geocode[$i][$g++]['valueName']			= (string) $geoarr->valueName;
-						}
-						$a++;
-					}
-					$i++;
-				}
-				$this->cap = $post;
-
-				//$this->Debug();
+				
+				$this->cap 					= $post;
 			}
 		}
-
+		
 		/*
 		 * Function to Debug cap.create.class.php
 		 *
 		 * @return array 	$this 	All content of the Class
-		 */
+		 */	
 		function Debug()
 		{
 			print '<pre>';
 				print_r($this);
-			print '</pre>';
+			print '</pre>';			
 			exit;
 		}
-
+		
 		function GetTypeStatusFromArray($status_theme, $getreq = 0)
 		{
 			$required = "";
@@ -195,29 +118,29 @@
 				case 'O':
 					$status_theme = 'data-theme="a"';
 					break;
-
+					
 				case 'OD':
 					$status_theme = 'data-theme="b"';
 					break;
-
+					
 				case 'C':
 					$status_theme = 'data-theme="e"';
 					break;
-
+					
 				case 'R':
 					$status_theme = 'data-theme="c"';
 					$required = '';
 					break;
-
+					
 				default:
 					$status_theme = "";
 					break;
 			}
-
+			
 			if($getreq == 1) return $required;
 			return $status_theme;
 		}
-
+		
 	/**
 	 * Output input field for CAP 1.1 value's
 	 *
@@ -227,27 +150,27 @@
 	 */
 		function InputStandard($type, $status_arr = "")
 		{
-			global $configuration, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild, $login_error, $login_error_html;
-
+			global $conf, $langs, $AreaCodesArray, $ParameterArray, $soap_SVG, $SVLdetail, $AreaVLArray, $plugin, $login_to_webservice_faild;
+			
 			$st['date'] = date('Y-m-d');
 			$st['time'] = date('H:i');
 			$st['zone'] = substr(date('P'), 1);
 			$timezone_name =  date('P').' '.date('T').' '.date_default_timezone_get();
-
+			
 			/*
 			Requirenes level
 			key : theme : desc
 			O   : A     : optional
-			OD  : B     : optional (Dark)
+			OD  : B     : optional (Dark)			
 			C   : E     : conditional
 			R   : C     : required
 			*/
-
+			
 			if(is_array($status_arr))
 			{
 				$status_theme = $this->GetTypeStatusFromArray($status_arr[$type]);
 			}
-
+			
 			switch($type)
 			{
 				case 'meteo_map':
@@ -278,13 +201,13 @@
 					}
 
 					if(!isset($_GET['data'])) $_GET['data'] = 0;
-					$langs_arr = $this->getlang();
-
+					$langs_arr = $this->getlang();	
+						
 					foreach($langs_arr as $key_l => $val_l)
 					{
 						if(in_array($key,$this->language)) unset($langs_arr[$key]);
 					}
-					foreach ($langs_arr as $key_l => $val_l)
+					foreach ($langs_arr as $key_l => $val_l) 
 					{
 						$langs_keys[] = $key_l;
 					}
@@ -302,10 +225,10 @@
 					else $out.= '<input type="hidden" value="'.date('Y-m-d').'" id="today">';
 					$out.= '<input type="hidden" value="'.date('H:00:00', strtotime('23:00 '.$utc[0].' '.$utc[1].$utc[2].' hours')).'" id="st_from">';
 					$out.= '<input type="hidden" value="'.date('H:59:59', strtotime('22:59 '.$utc[0].' '.$utc[1].$utc[2].' hours')).'" id="st_to">';
-
+					
 					$timezone_h =  date('P');
 					$out.= '<input type="hidden" value="'.$timezone_h.'" id="timezone_h">';
-
+					
 					foreach($langs_keys as $key => $lang_val)
 					{
 						$out.= '<input name="langs" type="hidden" value="'.$lang_val.'" id="lang_'.$key.'">';
@@ -314,7 +237,7 @@
 					//$out.= '<input type="hidden" value="'.$langs_keys[1].'" id="lang_1">';
 					$out.= '<span id="info_text" class="area_deaktive">'.$langs->trans('DESC_EditWarningNotAktive').'</span>';
 					$out.= '<div id="map_main_div" class="ui-grid-a">';
-						$out.= '<div class="ui-block-a" id="WarnDetailDIV" style="width: 30%;min-width: 280px;">';
+						$out.= '<div class="ui-block-a" style="width: 30%;">';
 							$out.= '<div class="ui-bar" id="AreaDetailDIV" style="background-color: #cccccc;">';
 								// Info
 								$out.= '<ul data-role="listview" data-divider-theme="b" style="opacity: 0.5; pointer-events: none;" id="AreaDetailUL">'; // as long as it is without Area show 50% alpha
@@ -327,7 +250,7 @@
 											{
 												$S_Area[$area_arr['aid']] = $area_arr['AreaCaption'];
 											}
-
+											
 											if(is_array($S_Area))
 											{
 												$out.= '<select name="emmaid" id="emmaid_select" data-native-menu="false" multiple="multiple" class="" tabindex="-1" data-mini="true">';
@@ -382,7 +305,7 @@
 										$out.= '<legend>'.$langs->trans($langs_arr[$langs_keys[1]]).': '.$this->tooltip($langs_keys[0], $langs->trans("LabelLanguage")).'</legend>';
 									$out.= '</li>';
 									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none;">';
-
+										
 										$out.= '<div class="lang_input" id="'.$langs_keys[1].'">';
 												$out.= '<textarea id="desc_1" placeholder="description" name="description['.$langs_keys[1].']">'.$this->description[$i].'</textarea>';
 												$out.= '<textarea id="inst_1" placeholder="instruction" name="instruction['.$langs_keys[1].']">'.$this->instruction[$i].'</textarea>';
@@ -413,29 +336,6 @@
 										$out.= '</div><!-- /grid-a -->';
 									$out.= '</li>';
 
-									$out.= '<li id="date_collaps" data-role="collapsible" data-collapsed="true" data-iconpos="right" data-inset="false" class="lang_collaps">';
-										$out.= '<legend>';
-											$out.= '<div class="ui-grid-a">';
-												$out.= '<div class="ui-block-a">';
-													$out.= '<span style="font-size: 10px;color: #8d8d8d;" id="legdatefrom">'.date("Y-m-d").'</span>';
-												$out.= '</div>';
-												$out.= '<div class="ui-block-b">';
-													$out.= '<span style="font-size: 10px;color: #8d8d8d;" id="legdateto">'.date("Y-m-d").'</span>';
-												$out.= '</div>';
-											$out.= '</div>';
-										$out.= '</legend>';
-										$out.= '<div class="ui-grid-a">';
-											$out.= '<div class="ui-block-a">';
-												$out.= '<legend>'.$langs->trans("From").' '.$langs->trans("Date").': '.$this->tooltip('From', $langs->trans("LabelEffectivePaintAndAlertDesc")).'</legend>';
-												$out.= '<input '.$status_theme.' id="from_date" type="text" name="effective[date]" step="1" value="'.date("Y-m-d").'">';
-											$out.= '</div>';
-											$out.= '<div class="ui-block-b">';
-												$out.= '<legend>'.$langs->trans("To").' '.$langs->trans("Date").': '.$this->tooltip('To', $langs->trans("LabelExpiresPaintAndAlertDesc")).'</legend>';
-												$out.= '<input '.$status_theme.' id="to_date" type="text" name="expires[date]" step="1" value="'.date("Y-m-d").'">';
-											$out.= '</div>';
-										$out.= '</div><!-- /grid-a -->';
-									$out.= '</li>';
-
 									$out.= '<li style="border: 1px solid #dddddd;margin-bottom:10px; border-right: none;">'; // solfe border problem: margin-bottom:10px;
 										$out.= '<div class="ui-grid-a">';
 											$out.= '<div class="ui-block-a">';
@@ -454,7 +354,7 @@
 								$out.= '</ul>';
 							$out.= '</div>';
 						$out.= '</div>';
-						$out.= '<div class="ui-block-b" id="MapDiv" style="width: 70%;">';
+						$out.= '<div class="ui-block-b" style="width: 70%;">';
 							$out.= '<div class="ui-bar noselect">';
 								// Map
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
@@ -462,7 +362,7 @@
 										if(empty($plugin->name)) $countryName = '';
 										$out.= '<h1 style="font-size:22px;float:left;"><span id="CountryInfo">'.$countryName.'</span> '.date('Y-m-d', strtotime('now + '.$_GET['data'].' days')).' <span id="mk_process_info" style="color: #ffff00;"></span></h1>';
 									$out.= '</li>';
-
+									
 									$out.= '<li style="border: 1px solid #dddddd; border-bottom: none; padding: 0px;" id="map-container">';
 										if(!empty($soap_SVG))
 										{
@@ -470,7 +370,7 @@
 											$out.= '<div id="awareness_toolbox" class="awareness_div">';
 												if(is_array($ParameterArray['AWT']))
 												foreach($ParameterArray['AWT'] as $id => $type_arr)
-												{
+												{ 
 													if(!empty($type_arr['img_src']))
 													{
 														$out.= '<div class="awareness" id="left_box_type_'.$id.'" aktive="1" type="'.$id.'"><img src="'.$type_arr['img_src'].'"></div>';
@@ -496,13 +396,15 @@
 												}
 
 											$out.= '</div>';
-
+											
 											$exstyle = '';
 											if(!empty($plugin->name)) $exstyle = 'style="padding-right: 15px;"';
 											$out.= '<div id="meteo_toolbox" class="meteo_toolbox_div_1" '.$exstyle.'>';
 												$day_text[0] = date('d.m.Y', strtotime('now'));
 												$day_text[1] = date('d.m.Y', strtotime('now + 1 day'));
 												$day_text[2] = date('d.m.Y', strtotime('now + 2 day'));
+												$day_text[3] = date('d.m.Y', strtotime('now + 3 day'));
+												$day_text[4] = date('d.m.Y', strtotime('now + 4 day'));
 												$out.= $this->buildSelect("day", $day_text, "data-native-menu=\"false\" id=\"day\"", $langs->trans("Day"), $_GET['data']);
 											$out.= '</div>';
 
@@ -543,10 +445,6 @@
 											$out.= substr($soap_SVG, 0, -6); // SVG from the SOAP
 											//$out.= '<svg id="notme">';
 											$out.= '<defs><filter id="css_brightness"><feComponentTransfer id="css_brightness"><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter></defs>';
-
-//$out.= '<defs><filter id="css_test"><feComponentTransfer id="css_test"><feFuncR type="linear" slope="0.5"/><feFuncG type="linear" slope="0.5"/><feFuncB type="linear" slope="0.5"/></feComponentTransfer></filter></defs>';
-
-
 											if(is_array($ParameterArray['AWT']))
 											foreach($ParameterArray['AWT'] as $id => $type_arr)
 											{
@@ -563,7 +461,7 @@
 															if(!empty($type_arr['img_src'])) $standard_map = getimagesize($type_arr['img_src']);
 															else if(file_exists('includes/meteoalarm/warn-typs_'.$tmpID.'.png')) $standard_map = getimagesize('includes/meteoalarm/warn-typs_'.$tmpID.'.png');
 
-															if($standard_map[0] == 0)
+															if($standard_map[0] == 0) 
 															{
 																$standard_map[0] = "20";
 																$standard_map[1] = "20";
@@ -613,13 +511,13 @@
 
 					$out.= '<div class="ui-bar">';
 						$out.= '<ul data-role="listview" data-divider-theme="b">'; // as long as it is without Area show 50% alpha
-							$out.= '<li data-role="list-divider" data-theme="b" style="padding: 25px;">';
-								if(empty($plugin->name))
+							$out.= '<li data-role="list-divider" data-theme="b" style="padding: 15px;">';
+								if(empty($plugin->name)) 
 									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: #065c00;color: white;text-shadow: none;border: 1px solid black;">';
-								else
+								else 
 									$out.= '<a id="submit_cap" href="" data-role="button" class="ui-btn ui-shadow ui-corner-all ui-btn-a" style="float: right; background-color: lightgray;color: black;text-shadow: none;border: 1px solid black;">';
 
-									if(empty($plugin->name))
+									if(empty($plugin->name)) 
 										$out.= $langs->trans("Submit");
 									else
 										$out.= $langs->trans("Produce CAPs");
@@ -629,7 +527,7 @@
 						$out.= '</ul>';
 					$out.= '</div>';
 
-
+					
 					$out.= '<div data-role="popup" id="CAPpopupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
 						$out.= '<div data-role="header" id="CAPpopupDialog_header" data-theme="a">';
 							$out.= '<h2>'.$langs->trans('PaintGreen').'</h2>';
@@ -661,13 +559,9 @@
 						$out.= '</div>';
 					$out.= '</div>';
 
-					$out.= '<div id="symbol" style="display:none;"><img src="icon.png" alt="symbol" class="symbol" style="height:30px;position:relative;margin-top:-55px;margin-left:5px;"></img></div>';
-
-					$out.= '<div id="timer" style="display:none;position:relative;top:-67px;left:41px;color:white;font-size:16px;font-family:monospace;text-decoration:none;"></div>';
-
 					$out.= '<div data-role="popup" id="CAP_Send_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
 						$out.= '<div data-role="header" id="CAP_Send_popupDialog_header" data-theme="a">';
-							$out.= '<h2>'.$langs->trans('Send Caps').'</h2>';
+							$out.= '<h2>'.$langs->trans('SendCaps').'</h2>';
 						$out.= '</div>';
 						$out.= '<div role="main" id="CAP_Send_popupDialog_main" class="ui-content">';
 							$out.= $langs->trans('Send Caps to Meteoalarm?');
@@ -687,18 +581,13 @@
 						$out.= '</div>';
 					$out.= '</div>';
 
-
-
-
-
 					$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
 						$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
 						$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
 							if(!empty($plugin->name)) $out.= '<h2>'.$langs->trans('ProducedCaps').'</h2>';
-							else $out.= '<h2>'.$langs->trans('Success!').'</h2>';
+							else $out.= '<h2>'.$langs->trans('SOAPCaps').'</h2>';
 						$out.= '</div>';
 						$out.= '<div role="main" id="CAP_SOAP_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
-						$out.= '<p class="success_message" style="text-align:center;border:5px solid green;padding:10px 10px 10px 10px;font-size:18px;">Your warnings were successfully sent to Meteoalarm</p>';
 							$out.= '<ul data-role="listview" data-inset="true" data-shadow="false" id="SOAPUL">';
 							$out.= '</ul>';
 						$out.= '</div>';
@@ -714,17 +603,13 @@
 						$out.= '</div>';
 					$out.= '</div>';
 
-/*
 					$out.= '<div data-role="popup" id="MeteoalarmCalc_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false" style="max-width:400px;">';
 						$out.= '<div data-role="header" id="MeteoalarmCalc_popupDialog_header" data-theme="a">';
 							$out.= '<h2 style="color: yellow;">'.$langs->trans('Meteoalarm Soap').'</h2>';
 						$out.= '</div>';
-*/
-/*
 						$out.= '<div role="main" id="MeteoalarmCalc_popupDialog_main" class="ui-content" style="max-height: 500px; overflow: auto;">';
 							$out.= $langs->trans('MeteoalarmCalc');
 						$out.= '</div>';
-*/
 					$out.= '</div>';
 					break;
 
@@ -733,7 +618,7 @@
 					$out = '</li></ul></div>'; // exit li
 					$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
 					$out.= '<div data-role="listview" class="ui-grid-a" style="height: 200px;margin: 0px 0px 0px 0px;">';
-						$out.= '<div class="ui-block-a" style="padding-right: 7.5px;">';
+						$out.= '<div class="ui-block-a" style="padding-right: 7.5px;">';							
 							$out.= '<a href="#alert" style="text-decoration: none;"><div class="ui-btn ui-input-btn ui-btn-b ui-corner-all ui-shadow" style="height: 85px;padding-top: 85px;">';
 								$out.=  $langs->trans("NewCap");
 							$out.= '</div></a>';
@@ -748,46 +633,46 @@
 						$out.= '<a href="#conf" >'.$langs->trans("TitleConfig").'</a>';
 					$out.= '</li><li>';
 					break;
-
+					
 				case 'identifier':
-
+					
 					if(!empty($this->identifier[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-
+				
 					$out = '<div id="Identapend">';
 						$out.= '<label>'.$langs->trans("LabelIdentifier").': '.$this->tooltip($type, $langs->trans("LabelIdentifierDesc")).'</label>';
-						if($this->identifier[0] == "" | !is_array($this->identifier))
+						if(!is_array($this->identifier))
 						{
 							$status_theme_wm = $status_theme;
 							$status_theme_is = $status_theme;
 							$status_theme_ti = $status_theme;
 							$status_theme_id = $status_theme;
-
-							if(!empty($configuration->conf["identifier"]["WMO_OID"])) 	$status_theme_wm = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							if(!empty($configuration->conf["identifier"]["ISO"])) 			$status_theme_is = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							if(!empty($configuration->conf["identifier"]["ID_ID"])) 		$status_theme_ti = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-							if($configuration->conf["identifier"]["time_on"] == true) $status_theme_id = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-
+							
+							if(!empty($conf->identifier->WMO_OID)) 	$status_theme_wm = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->identifier->ISO)) 			$status_theme_is = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->identifier->ID_ID)) 		$status_theme_ti = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if($conf->identifier->time->on == true) $status_theme_id = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							
 							$out.= '<div class="ui-grid-c">';
-								if(!empty($configuration->conf["identifier"]["WMO_OID"]))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" '.$status_theme_wm.' type="text" maxlength="22" name="identifier[WMO]"  value="'.$configuration->conf["identifier"]["WMO_OID"].'"></div>';
-								if(!empty($configuration->conf["identifier"]["ISO"]))			$out.= '<div class="ui-block-b" style="width: 45px;"><input '.$status_theme_is.' placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$configuration->conf["identifier"]["ISO"].'"></div>';
-								if($configuration->conf["identifier"]["time_on"] == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input '.$status_theme_ti.' placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
-								if(!empty($configuration->conf["identifier"]["ID_ID"]))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input '.$status_theme_id.' placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$configuration->conf["identifier"]["ID_ID"].'"></div>';
-								if(empty($configuration->conf["identifier"]["ID_ID"])) 		$out.= '<div class="ui-block-d"><input '.$status_theme.' placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
+								if(!empty($conf->identifier->WMO_OID))	$out.= '<div class="ui-block-a" style="width: 200px;"><input placeholder="WMO OID" '.$status_theme_wm.' type="text" maxlength="22" name="identifier[WMO]"  value="'.$conf->identifier->WMO_OID.'"></div>';
+								if(!empty($conf->identifier->ISO))			$out.= '<div class="ui-block-b" style="width: 45px;"><input '.$status_theme_is.' placeholder="ISO" type="text" maxlength="4" name="identifier[ISO]"  value="'.$conf->identifier->ISO.'"></div>';
+								if($conf->identifier->time->on == true) $out.= '<div class="ui-block-c" style="width: 160px;"><input '.$status_theme_ti.' placeholder="YYMMDDHHMMSS" type="text" maxlength="14" name="identifier[time]" value="'.date('ymdHis').'"></div>'; // YYMMDDHHMMSS
+								if(!empty($conf->identifier->ID_ID))	 	$out.= '<div class="ui-block-d" style="width: 200px;"><input '.$status_theme_id.' placeholder="Warning ID" type="text" maxlength="22" name="identifier[ID]" value="'.$conf->identifier->ID_ID.'"></div>';
+								if(empty($conf->identifier->ID_ID)) 		$out.= '<div class="ui-block-d"><input '.$status_theme.' placeholder="Warning ID" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'"></div>';
 							$out.= '</div>';
 						}
 						else
 						{
 							$out.= '<input '.$status_theme.' placeholder="" type="text" name="identifier[ID]"  value="'.$this->identifier[0].'">';
 						}
-					$out.= '</div>';
+					$out.= '</div>';					
 					break;
-
+					
 				case 'sender':
 					if(!empty($this->sender[0])) $status_theme = 'data-theme="f"';
-					$out = '<legend>'.$langs->trans("Labelsender").': '.$this->tooltip($type, $langs->trans("LabelsenderDesc")).'</legend>';
+					$out = '<legend>'.$langs->trans("Labelsender").': '.$this->tooltip($type, $langs->trans("LabelsenderDesc")).'</legend>';	
 					$out.= '<input '.$status_theme.' placeholder="sender" type="text" name="sender" value="'.$this->sender[0].'">';
 					break;
-
+					
 				case 'sent':
 					if(!empty($this->sent[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					if($this->sent[0]) $st = $this->make_cap_time($this->sent[0]);
@@ -815,14 +700,14 @@
 						$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 					$out.= '</div>';
 					break;
-
-				case 'references':
+				
+				case 'references': 
 					if(!empty($this->references[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-					$out = '<legend>'.$langs->trans("Labelreferences").': '.$this->tooltip($type, $langs->trans("LabelreferencesDesc")).'</legend>';
-					$out.= '<input '.$status_theme.'  placeholder="references" type="text" name="references" value="'.$this->references[0].'">'; // web / identifier / sent
+					$out = '<legend>'.$langs->trans("Labelreferences").': '.$this->tooltip($type, $langs->trans("LabelreferencesDesc")).'</legend>';	
+					$out.= '<input '.$status_theme.'  placeholder="references" type="text" name="references" value="'.$this->references[0].'">'; // web / identifier / sent 
 					break;
-
-				case 'status':
+				
+				case 'status': 
 					$status_theme_st = $status_theme;
 					$status_theme_ms = $this->GetTypeStatusFromArray($status_arr['msgType']);
 					$status_theme_sc = $this->GetTypeStatusFromArray($status_arr['scope']);
@@ -831,18 +716,18 @@
 					if(!empty($this->msgType[0])) $status_theme_ms = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['msgType'], 1);
 					if(!empty($this->scope[0])) $status_theme_sc = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['scope'], 1);
 					// Actual / Test / Exercise / System / Test / Draft
-					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), " ".$status_theme_st." data-native-menu=\"false\"", "Status", $this->status[0]);
+					$status = $this->buildSelect("status", array( "Actual" => "Actual", "Test" => "Test", "Exercise" => "Exercise", "System" => "System", "Test" => "Test", "Draft" => "Draft" ), " ".$status_theme_st." data-native-menu=\"false\"", "Status", $this->status[0]); 
 
 					// Alert / Update / Cancel / Ack / Error
-					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), " ".$status_theme_ms." data-native-menu=\"false\" id=\"msgType\"", "MsgType", $this->msgType[0]);
+					$msgType = $this->buildSelect("msgType", array( "Alert" => "Alert", "Update" => "Update", "Cancel" => "Cancel", "Ack" => "Ack", "Error" => "Error" ), " ".$status_theme_ms." data-native-menu=\"false\" id=\"msgType\"", "MsgType", $this->msgType[0]); 
 
 					// Public / Restricted / Private
-					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), " ".$status_theme_sc." data-native-menu=\"false\"", "Scope", $this->scope[0]);
+					$scope = $this->buildSelect("scope", array( "Public" => "Public", "Restricted" => "Restricted", "Private" => "Private" ), " ".$status_theme_sc." data-native-menu=\"false\"", "Scope", $this->scope[0]);  
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="TypeMessage">';
-							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetTheTypesOfTheMessageDesc")).'</legend>';
-								$out.= $status;
-								$out.= $msgType;
+							$out.= '<legend>'.$langs->trans("LabelSetTheTypesOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetTheTypesOfTheMessageDesc")).'</legend>';							
+								$out.= $status;					
+								$out.= $msgType;							
 								$out.= $scope;
 						$out.= '</fieldset>';
 
@@ -855,8 +740,8 @@
 						$out.= '</li>';
 					}
 				break;
-
-				case 'category':
+				
+				case 'category': 
 					$status_theme_ca = $status_theme;
 					$status_theme_re = $this->GetTypeStatusFromArray($status_arr['responseType']);
 					if(!empty($this->category[0])) $status_theme_ca = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['category'], 1);
@@ -867,14 +752,14 @@
 					$responseType = $this->buildSelect("responseType", array( "Shelter" => $langs->trans("Shelter"), "Evacuate" => $langs->trans("Evacuate"), "Prepare" => $langs->trans("Prepare"), "Execute" => $langs->trans("Execute"), "Avoid" => $langs->trans("Avoid"), "Monitor" => $langs->trans("Monitor"), "Assess" => $langs->trans("Assess"), "AllClear" => $langs->trans("AllClear"), "None" => $langs->trans("None") ), " ".$status_theme_re." data-native-menu=\"false\"", "Response Type", ($this->responseType[0][0]));
 
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").': '.$this->tooltip($type, $langs->trans("LabelSetTheHazardTypeDesc")).'</legend>';
-								$out.= $category;
-								$out.= $responseType;
+							$out.= '<legend>'.$langs->trans("LabelSetTheHazardType").': '.$this->tooltip($type, $langs->trans("LabelSetTheHazardTypeDesc")).'</legend>';							
+								$out.= $category;					
+								$out.= $responseType;	
 						$out.= '</fieldset>';
-
+				
 				break;
 
-				case 'urgency':
+				case 'urgency': 
 					$status_theme_ur = $status_theme;
 					$status_theme_se = $this->GetTypeStatusFromArray($status_arr['severity']);
 					$status_theme_ce = $this->GetTypeStatusFromArray($status_arr['certainty']);
@@ -884,29 +769,29 @@
 					if(!empty($this->certainty[0])) $status_theme_ce = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['certainty'], 1);
 					// Immediate / Expected / Future / Past
 					$urgency = $this->buildSelect("urgency", array( "Immediate" => "Immediate", "Expected" => "Expected", "Future" => "Future", "Past" => "Past" ), " ".$status_theme_ur." data-native-menu=\"false\"", "Urgency", $this->urgency[0]);
-
-					// Extreme / Severe / Moderate / Minor / Unknown
+					
+					// Extreme / Severe / Moderate / Minor / Unknown 
 					$severity = $this->buildSelect("severity", array( "Minor" => "Minor", "Moderate" => "Moderate", "Severe" => "Severe", "Extreme" => "Extreme", "Unknown" => "Unknown" ), " ".$status_theme_se." data-native-menu=\"false\"", "Severity", $this->severity[0]);
 
 					// Observed / Likely / Possible/ Unlikely / Unknown
 					$certainty = $this->buildSelect("certainty", array( "Unlikely" => "Unlikely", "Possible" => "Possible", "Likely" => "Likely", "Observed" => "Observed", "Unknown" => "Unknown" ), " ".$status_theme_ce." data-native-menu=\"false\"", "Certainty", $this->certainty[0]);
-
+				
 						$out = '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">';
-							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetThePriorityOfTheMessageDesc")).'</legend>';
-								$out.= $urgency;
-								$out.= $severity;
+							$out.= '<legend>'.$langs->trans("LabelSetThePriorityOfTheMessage").': '.$this->tooltip($type, $langs->trans("LabelSetThePriorityOfTheMessageDesc")).'</legend>';							
+								$out.= $urgency;					
+								$out.= $severity;							
 								$out.= $certainty;
 						$out.= '</fieldset>';
+				
+				break;		
 
-				break;
-
-				case 'audience':
+				case 'audience': 
 					if(!empty($this->audience[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-					$out = '<legend>'.$langs->trans("Labelaudience").': '.$this->tooltip($type, $langs->trans("LabelaudienceDesc")).'</legend>';
+					$out = '<legend>'.$langs->trans("Labelaudience").': '.$this->tooltip($type, $langs->trans("LabelaudienceDesc")).'</legend>';	
 					$out.= '<input '.$status_theme.'  placeholder="audience" type="text" name="audience" value="'.$this->audience[0].'">';
 					break;
-
-				case 'eventCode':
+					
+				case 'eventCode': 
 					if(!empty($this->eventCode[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$out = '<div id="Eventappend">';
 						$out.= '<legend>'.$langs->trans("LabelEventCode").': '.$this->tooltip($type, $langs->trans("LabelEventCodeDesc")).'</legend>';
@@ -919,7 +804,7 @@
 									$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="eventCode[valueName][]" value="'.$eventCode['valueName'].'"></div>';
 									$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value Value" type="text" name="eventCode[value][]" value="'.$eventCode['value'].'"></div>';
 								$out.= '</div>';
-							}
+							}	
 						}
 						$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="eventCode[valueName][]"></div>';
 						$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value" type="text" name="eventCode[value][]"></div>';
@@ -927,7 +812,7 @@
 						$out.= '</div>';
 					$out.= '</div>';
 					break;
-
+				
 				case 'effective-Clock':
 						$out.= '<div class="input-group clockpicker" data-autoclose="true">';
 							$out.= '<input type="text" class="form-control" value="09:30" step="2">';
@@ -936,7 +821,7 @@
 							$out.= '</span>';
 						$out.= '</div>';
 					break;
-
+				
 				case 'effective':
 					if(!empty($this->effective[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					if($this->effective[0]) $st = $this->make_cap_time($this->effective[0]);
@@ -992,9 +877,9 @@
 						$out.= '<span style="font-size: 10px;color: #8d8d8d;">'.$timezone_name.'</span>';
 					$out.= '</div>';
 					break;
-
-				case 'expires':
-					if(!empty($this->expires[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+					
+				case 'expires': 		
+					if(!empty($this->expires[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);		
 					if($this->expires[0]) $st = $this->make_cap_time($this->expires[0]);
 					$out = '<div id="Expieresapend">';
 						$out.= '<legend>'.$langs->trans("LabelExpires").': '.$this->tooltip($type, $langs->trans("LabelExpiresDesc")).'</legend>';
@@ -1021,33 +906,33 @@
 					$out.= '</div>';
 					break;
 
-				case 'senderName':
-					if(!empty($this->senderName[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-					$out = '<legend>'.$langs->trans("LabelsenderName").': '.$this->tooltip($type, $langs->trans("LabelsenderNameDesc")).'</legend>';
-					$out.= '<input '.$status_theme.'  placeholder="senderName" type="text" name="senderName" value="'.$this->senderName[0].'">';
+				case 'senderName': 
+					if(!empty($this->senderName[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);			
+					$out = '<legend>'.$langs->trans("LabelsenderName").': '.$this->tooltip($type, $langs->trans("LabelsenderNameDesc")).'</legend>';	
+					$out.= '<input '.$status_theme.'  placeholder="senderName" type="text" name="senderName" value="'.$this->senderName[0].'">'; 
 					break;
-
+					
 				case 'info':
 					$out = 'TEST';
 					break;
-
+					
 				case 'lang':
-					if(!empty($this->language[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-					$langs_arr = $this->getlang();
-
+					if(!empty($this->language[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);			
+					$langs_arr = $this->getlang();	
+						
 					foreach($langs_arr as $key_l => $val_l)
 					{
 						if(in_array($key,$this->language)) unset($langs_arr[$key]);
 					}
-
+					
 					$lang_S = $this->buildSelect("language_select", $langs_arr, "data-native-menu=\"false\" id=\"language\"", $langs->trans("LabelLanguage"));
-
+					
 					$extralang = '<div data-role="controlgroup" data-type="horizontal">';
-
+					
 					$styleD[true] = "";
 					$styleD[false] = "display:none;";
 					//if(is_array($this->language)) die(print_r($this->language)); // Array ( [0] => en-GB [1] => de-DE ) 1
-
+					
 					foreach($langs_arr as $key => $langs_val)
 					{
 						if(in_array($key,$this->language)) $display = true; else $display = false;
@@ -1055,12 +940,12 @@
 						if($display == true) $extralang.= '<input '.$status_theme.'  type="hidden" value="'.$key.'" name="language[]">';
 					}
 					$extralang.= '</div>';
-
-					$out = $lang_S;
-					$out.= $extralang;
+					
+					$out = $lang_S;			
+					$out.= $extralang;		
 					break;
-
-				case 'event':
+					
+				case 'event': 
 					$status_theme_ev = $status_theme;
 					$status_theme_he = $this->GetTypeStatusFromArray($status_arr['headline']);
 					$status_theme_de = $this->GetTypeStatusFromArray($status_arr['description']);
@@ -1070,19 +955,19 @@
 					if(!empty($this->headline[0])) $status_theme_he = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['headline'], 1);
 					if(!empty($this->description[0])) $status_theme_de = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['description'], 1);
 					if(!empty($this->instruction[0])) $status_theme_in = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr['instruction'], 1);
-					$langs_arr = $this->getlang();
+					$langs_arr = $this->getlang();	
 					$extralang = "";
 					$styleD[true] = "";
 					$styleD[false] = "display:none;";
 					$i = 0;
-
+					
 					foreach($langs_arr as $key => $langs_val)
 					{
-
+						
 						if(in_array($key,$this->language) && $i < 1) $display = true; else $display = false;
-
+						
 						$extralang.= '<div class="lang_input" id="'.$key.'" style="'.$styleD[$display].'">';
-
+						
 								$extralang.= '<input '.$status_theme_ev.'  placeholder="event" type="text" name="event['.$key.']" value="'.$this->event[$i].'">';
 
 								$extralang.= '<input '.$status_theme_he.'  placeholder="headline" type="text" name="headline['.$key.']" value="'.$this->headline[$i].'">';
@@ -1092,36 +977,36 @@
 								$extralang.= '<input '.$status_theme_in.'  placeholder="instruction" type="text" name="instruction['.$key.']" value="'.$this->instruction[$i].'">';
 
 						$extralang.= '</div>';
-
+						
 						$i++;
 					}
-
+					
 					$out = $extralang;
 					break;
-
-				case 'web':
+					
+				case 'web': 
 					if(!empty($this->web[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-					$out = '<legend>'.$langs->trans("Labelweb").': '.$this->tooltip($type, $langs->trans("LabelwebDesc")).'</legend>';
-					$out.= '<input '.$status_theme.'  placeholder="web" type="text" name="web" value="'.$this->web[0].'">';
+					$out = '<legend>'.$langs->trans("Labelweb").': '.$this->tooltip($type, $langs->trans("LabelwebDesc")).'</legend>';	
+					$out.= '<input '.$status_theme.'  placeholder="web" type="text" name="web" value="'.$this->web[0].'">'; 
 					break;
-
-				case 'contact':
+					
+				case 'contact': 
 					if(!empty($this->contact[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-					$out = '<legend>'.$langs->trans("Labelcontact").': '.$this->tooltip($type, $langs->trans("LabelcontactDesc")).'</legend>';
-					$out.= '<input '.$status_theme.'  placeholder="contact" type="text" name="contact" value="'.$this->contact[0].'">';
+					$out = '<legend>'.$langs->trans("Labelcontact").': '.$this->tooltip($type, $langs->trans("LabelcontactDesc")).'</legend>';	
+					$out.= '<input '.$status_theme.'  placeholder="contact" type="text" name="contact" value="'.$this->contact[0].'">'; 
 					break;
 
-				case 'parameter':
+				case 'parameter': 
 					if(!empty($this->parameter[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 					$l_level = array( "Unknown", "Minor", "Moderate", "Severe", "Extreme"  );
-
+					
 					if(is_array($ParameterArray['AWT']))
 					foreach($ParameterArray['AWT'] as $key => $area_arr)
 					{
 						$S_Param_AWT[$area_arr['id'].'&#59; '.$area_arr['hazard_type']] = $area_arr['hazard_type_DESC'];
 						$G_Param_AWT[$area_arr['id'].'&#59; '.$area_arr['hazard_type']] = 'awareness_type'; //awareness_type awareness_level
 					}
-
+					
 					if(is_array($ParameterArray['AWL']))
 					foreach($ParameterArray['AWL'] as $key => $area_arr)
 					{
@@ -1132,16 +1017,16 @@
 					//die(print_r($S_Param_AWL));
 					if(is_array($S_Param_AWT) && is_array($S_Param_AWT))
 					{
-						$out.= '<legend>'.$langs->trans("LabelAwarenessTypeWebservice").': '.$this->tooltip($type, $langs->trans("LabelAwarenessTypeWebserviceDesc")).'</legend>';
+						$out.= '<legend>'.$langs->trans("LabelAwarenessTypeWebservice").': '.$this->tooltip($type, $langs->trans("LabelAwarenessTypeWebserviceDesc")).'</legend>';							
 						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awt',$S_Param_AWT, $G_Param_AWT, $this->parameter[0]);
 
-						$out.= '<legend>'.$langs->trans("LabelAwarenessLevelWebservice").': '.$this->tooltip($type, $langs->trans("LabelAwarenessLevelWebserviceDesc")).'</legend>';
+						$out.= '<legend>'.$langs->trans("LabelAwarenessLevelWebservice").': '.$this->tooltip($type, $langs->trans("LabelAwarenessLevelWebserviceDesc")).'</legend>';							
 						$out.= $this->buildSelectValueName('parameter[value][]', 'parameter[valueName][]', 'parameter_awl',$S_Param_AWL, $G_Param_AWL, $this->parameter[0]);
 					}
 					else
 					{
 						$out = '<div id="Parameterappend">';
-							$out.= '<legend>'.$langs->trans("LabelParameter").': '.$this->tooltip($type, $langs->trans("LabelParameterDesc")).'</legend>';
+							$out.= '<legend>'.$langs->trans("LabelParameter").': '.$this->tooltip($type, $langs->trans("LabelParameterDesc")).'</legend>';	
 							$out.= '<div class="ui-grid-b">';
 								foreach($this->parameter[0] as $key => $parameter)
 								{
@@ -1149,7 +1034,7 @@
 										$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="parameter[valueName][]" value="'.$parameter['valueName'].'"></div>';
 										$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value Value" type="text" name="parameter[value][]" value="'.$parameter['value'].'"></div>';
 									$out.= '</div>';
-								}
+								}	
 								$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="parameter[valueName][]"></div>';
 								$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="Value" type="text" name="parameter[value][]"></div>';
 								$out.= '<div class="ui-block-c"><input '.$status_theme.'  type="button" onclick="plusParameterInput()" value="+"></div>';
@@ -1157,138 +1042,120 @@
 						$out.= '</div>';
 					}
 					break;
-
+					
 				/*
 				 * Area
-				 */
-					case 'areaDesc':
+				 */					
+					case 'areaDesc': 
 						if(!empty($this->areaDesc[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						$out = '<legend>'.$langs->trans("LabelareaDesc").': '.$this->tooltip($type.'tool', $langs->trans("LabelareaDescDesc")).'</legend>';
 						$out.= '<input '.$status_theme.'  placeholder="areaDesc" type="text" name="areaDesc" id="areaDesc" value="'.$this->areaDesc[0].'">';
 						break;
-
-					case 'polygon':
+	
+					case 'polygon': 
 						if(!empty($this->polygon[0][0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						$out = '<legend>'.$langs->trans("Labelpolygon").': '.$this->tooltip($type.'tool', $langs->trans("LabelpolygonDesc")).'</legend>';
+						$out = '<legend>'.$langs->trans("Labelpolygon").': '.$this->tooltip($type.'tool', $langs->trans("LabelpolygonDesc")).'</legend>';	
 						$out.= '<input '.$status_theme.'  placeholder="polygon" type="text" name="polygon" id="polygon" value="'.$this->polygon[0][0].'">';
 						break;
-
-					case 'circle':
+	
+					case 'circle': 
 						if(!empty($this->circle[0][0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						$out = '<legend>'.$langs->trans("Labelcircle").': '.$this->tooltip($type.'tool', $langs->trans("LabelcircleDesc")).'</legend>';
+						$out = '<legend>'.$langs->trans("Labelcircle").': '.$this->tooltip($type.'tool', $langs->trans("LabelcircleDesc")).'</legend>';	
 						$out.= '<input '.$status_theme.'  placeholder="circle" type="text" name="circle" id="circle" value="'.$this->circle[0][0].'">';
 						break;
-
+						
 					case 'map':
-						// GOOGLE MAP
-							if(!empty($configuration->conf["GoogleMap"]["APIkey"]))
-								$out = '<div id="map" style="height: 480px;" class="map"></div>';
-							//$out.= '<div id="mapinfo" class="mapinfo">';
-							//	$out.='<ul data-role="listview">';
-							//		$out.='<li>';
-							//			$out.='<label for="dragCircle">'.$langs->trans("Labelpolygon").':</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
-							//		$out.='</li>';
-							//		$out.='<li>';
-							//			$out.='<label for="dragCircle">'.$langs->trans("Labelcircle").':</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
-							//		$out.='</li>';
-							//	$out.='</ul>';
-							//$out.= '</div>';
+							$out = '<div id="map" style="height: 480px;" class="map"></div>';
+							$out.= '<div id="mapinfo" class="mapinfo">';								
+								$out.='<ul data-role="listview">';
+									$out.='<li>';
+										$out.='<label for="dragCircle">'.$langs->trans("Labelpolygon").':</label><select name="drawPolygon" id="drawPolygon" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
+									$out.='</li>';
+									$out.='<li>';
+										$out.='<label for="dragCircle">'.$langs->trans("Labelcircle").':</label><select name="dragCircle" id="dragCircle" data-role="slider" data-theme="b" data-mini="true"><option value="0">Off</option><option value="1">On</option></select>';
+									$out.='</li>';
+								$out.='</ul>';
+							$out.= '</div>';
 						break;
-
+						
 					case 'geocode':
 						if(!empty($this->geocode[0])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						// $out.= $AreaCodesArray;
 						foreach($AreaCodesArray as $key => $area_arr)
 						{
-							if(!empty($area_arr['geotype']) && $area_arr['geotype'] == $this->geocod[0]['valueName'])
+							if(!empty($area_arr['geotype']))
 							{
 								$S_Area[$area_arr['geocode']] = $area_arr['AreaCaption'];
 								$G_Area[$area_arr['geocode']] = $area_arr['geotype'];
 							}
-							else
+							else 
 							{
 								$S_Area[$area_arr['EMMA_ID']] = $area_arr['AreaCaption'];
 								$G_Area[$area_arr['EMMA_ID']] = "EMMA_ID";
 							}
 						}
-
+						
 						if(is_array($S_Area))
 						{
-							$out = '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';
+							$out = '<legend>'.$langs->trans("LabelGeocodeWebservice").': '.$this->tooltip($type, $langs->trans("LabelGeocodeWebserviceDesc")).'</legend>';							
 							$out.= $this->buildSelectValueName('geocode[value][]', 'geocode[valueName][]', 'geocode',$S_Area, $G_Area, $this->geocode[0]);
-							foreach($this->geocode[0] as $key => $geocode)
-							{
-								$out.= '<input type="text" name="geocode[value][]" value="'.$geocode['value'].'<|>'.$geocode['valueName'].'">';
-							}
 						}
 						else
 						{
 							$out = '<div id="Geocodeappend">';
-								$out.= '<legend>'.$langs->trans("LabelGeocode").': '.$this->tooltip($type, $langs->trans("LabelGeocodeDesc")).'</legend>';
+								$out.= '<legend>'.$langs->trans("LabelGeocode").': '.$this->tooltip($type, $langs->trans("LabelGeocodeDesc")).'</legend>';	
 								foreach($this->geocode[0] as $key => $geocode)
 								{
 									$out.= '<div class="ui-grid-b">';
 										$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="geocode[valueName][]" value="'.$geocode['valueName'].'"></div>';
 										$out.= '<div class="ui-block-b"><input '.$status_theme.'  placeholder="geocode Value" type="text" name="geocode[value][]" value="'.$geocode['value'].'"></div>';
 									$out.= '</div>';
-								}
+								}	
 								$out.= '<div class="ui-grid-b">';
 									$out.= '<div class="ui-block-a"><input '.$status_theme.'  placeholder="Valuename" type="text" name="geocode[valueName][]"></div>';
 									$out.= '<div class="ui-block-b"><input '.$status_theme.' placeholder="Value" type="text" name="geocode[value][]"></div>';
 									$out.= '<div class="ui-block-c"><input '.$status_theme.' type="button" onclick="plusGeocodeInput()" value="+"></div>';
-								$out.= '</div>';
+								$out.= '</div>';							
 							$out.= '</div>';
 						}
-						break;
+						break;															
 
 					/*
 					 * Conf input => [conf]
-					 */
-
+					 */					 
+					 
 					case 'cap_save':
-						if(!empty($configuration->conf["cap"]["save"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						if($configuration->conf["cap"]["save"] == 1) $onoroff = 'checked=""';
+						if(!empty($conf->cap->save)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+						if($conf->cap->save == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
 						//$out = '<label for="identifier_time">'.$langs->trans("LabelSaveCapsInOutputFolder").':</label>';
 						$out = '<legend>'.$langs->trans("LabelSaveCapsInOutputFolder").': '.$this->tooltip($type.'tool', $langs->trans("LabelSaveCapsInOutputFolderDesc")).'</legend>';
 						$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[cap][save]" id="cap_save" '.$onoroff.' data-theme="b">';
 						break;
-
+					
 					case 'cap_output':
-							if(!empty($configuration->conf["cap"]["output"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->cap->output)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("Labelcap_output").': '.$this->tooltip($type.'tool', $langs->trans("Labelcap_outputDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$configuration->conf["cap"]["output"].'">';
-						break;
+							$out.= '<input '.$status_theme.' type="text" placeholder="Cap Output" name="conf[cap][output]" value="'.$conf->cap->output.'">';
+						break;						
 
 					case 'ID_ID':
-							if(!empty($configuration->conf["identifier"]["ID_ID"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->identifier->ID_ID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("LabelIdentifierNumber").': '.$this->tooltip($type.'tool', $langs->trans("LabelIdentifierNumberDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$configuration->conf["identifier"]["ID_ID"].'">';
+							$out.= '<input '.$status_theme.' type="number" placeholder="Identifier Number" name="conf[identifier][ID_ID]" value="'.$conf->identifier->ID_ID.'">';
 						break;
-
+						
 					case 'WMO_OID':
-							if(!empty($configuration->conf["identifier"]["WMO_OID"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->identifier->WMO_OID)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							$out = '<legend>'.$langs->trans("LabelWMO_OID").': '.$this->tooltip($type.'tool', $langs->trans("LabelWMO_OIDDesc")).'</legend>';
-							$out.= '<input '.$status_theme.'  type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$configuration->conf["identifier"]["WMO_OID"].'">';
+							$out.= '<input '.$status_theme.'  type="text" placeholder="WMO OID" name="conf[identifier][WMO_OID]" value="'.$conf->identifier->WMO_OID.'">';
 						break;
-
+						
 					case 'ISO':
-						if(!empty($configuration->conf["identifier"]["ISO"])) $status_theme = 'data-theme="f"';
+						if(!empty($conf->identifier->ISO)) $status_theme = 'data-theme="f"';
 						$out = '<legend>'.$langs->trans("LabelISO").': '.$this->tooltip($type.'tool', $langs->trans("LabelISODesc")).'</legend>';
-						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$configuration->conf["identifier"]["ISO"].'">';
+						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="ISO" name="conf[identifier][ISO]" value="'.$conf->identifier->ISO.'">'; 
 						break;
-
-					case 'GoogleMapAPIkey':
-						if(!empty($configuration->conf["GoogleMap"]["APIkey"])) $status_theme = 'data-theme="f"';
-						$out = '<legend>Google Maps API key: '.$this->tooltip($type.'tool', $langs->trans("LabelGoogleMapsAPIkeyDesc")).'</legend>';
-						$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="Google Map API key" name="conf[GoogleMap][APIkey]" value="'.$configuration->conf["GoogleMap"]["APIkey"].'">';
-						break;
-
-					case 'CAPValidatorUrl':
-							if(!empty($configuration->conf["Validator"]["url"])) $status_theme = 'data-theme="f"';
-							$out = '<legend>'.$langs->trans("LabelCAPValidatorUrl").': '.$this->tooltip($type.'tool', $langs->trans("LabelCAPValidatorUrlDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" maxsize="2" placeholder="'.$langs->trans("Url").'" name="conf[Validator][url]" value="'.$configuration->conf["Validator"]["url"].'">';
-							break;
 
 					case 'timezone':
 							$timezone = $this->timezone_list();
@@ -1298,59 +1165,58 @@
 						break;
 
 					case 'identifier_time':
-						if(!empty($configuration->conf["identifier"]["time_on"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
-						if($configuration->conf["identifier"]["time_on"] == 1) $onoroff = 'checked=""';
+						if(!empty($conf->identifier->time->on)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+						if($conf->identifier->time->on == 1) $onoroff = 'checked=""';
 						else $onoroff = '';
 						$out = '<legend>'.$langs->trans("LabelAutomaticIdentifierTime").': '.$this->tooltip($type.'tool', $langs->trans("LabelAutomaticIdentifierTimeDesc")).'</legend>';
 						//$out = '<label for="identifier_time">'.$langs->trans("LabelAutomaticIdentifierTime").':</label>';
 						$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[identifier][time][on]" id="identifier_time" '.$onoroff.' data-theme="b">';
-						break;
-
+						break;	
+						
 					case 'template':
 						if(file_exists('conf/template.cap')) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 
-						foreach(scandir($configuration->conf["cap"]["output"]) as $num => $capfilename)
+						foreach(scandir($conf->cap->output) as $num => $capfilename)
 						{
 							if($capfilename != '.' && $capfilename != '..' && $capfilename != '.cap' && $capfilename != '.conv.cap')
 							{
 								$files[$capfilename] = $capfilename;
 							}
 						}
-
+						
 						$out = '<legend>'.$langs->trans("LabelTemplate").': '.$this->tooltip($type.'tool', $langs->trans("LabelTemplateDesc")).'</legend>';
 						if(file_exists('conf/template.cap')) $onoroff = 'checked=""'; else $onoroff = '';
-
-
+							
+							
 							if(file_exists('conf/template.cap'))
 							{
 								require_once 'lib/cap.read.class.php';
 								$alert = new alert('conf/template.cap');
 								$template = $alert->output();
-
-								$files['template.cap'] = 'template.cap';
+								
+								$files[$template['identifier']] = $template['identifier']; 
 							}
-
+							
 							if(count($files) < 1) $cssdisable = 'disabled="disabled"';
 							else $cssdisable = '';
 
 							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="template_on" id="template_on" '.$onoroff.' data-theme="b" '.$cssdisable.'>';
-							if(count($files) > 0) $out.=  $this->buildSelect("Template", $files, "data-native-menu=\"false\"", "Template", 'template.cap' );
-
+							if(count($files) > 0) $out.=  $this->buildSelect("Template", $files, "data-native-menu=\"false\"", "Template", $template['identifier'] );
+					
 						break;
-
+						
 					case 'lang_conf':
-						if(!empty($configuration->conf["selected_language"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+						if(!empty($conf->select->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 						//$out = '<label for="lang_conf">'.$langs->trans("LabelUsableLanguages").':</label>';
 						$out = '<legend>'.$langs->trans("LabelUsableLanguages").': '.$this->tooltip($type.'tool', $langs->trans("LabelUsableLanguagesDesc")).'</legend>';
 						$out.= '<select name="conf[select][lang][]" id="lang_conf" data-native-menu="false" multiple="multiple" data-iconpos="left">';
-
-						foreach($configuration->conf["language"] as $key => $lang_name)
+						foreach($conf->lang as $key => $lang_name)
 						{
-							if($configuration->conf["selected_language"][$key] == false)
+							if($conf->select->lang[$key] == false)
 							{
 								$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
 							}
-							else
+							else 
 							{
 								$out.= '<option value="'.$key.'" selected="selected">'.$lang_name.'</option>';
 							}
@@ -1358,27 +1224,27 @@
 
 						$out.= '</select>';
 						break;
-
+						
 					case 'lang_conf_use':
-							if(!empty($configuration->conf["translation"])) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
+							if(!empty($conf->user->lang)) $status_theme = 'data-theme="f" '.$this->GetTypeStatusFromArray($status_arr[$type], 1);
 							//$out = '<label for="lang_conf_use">'.$langs->trans("Labellang_conf_use").':</label>';
 							$out = '<legend>'.$langs->trans("Labellang_conf_use").': '.$this->tooltip($type.'tool', $langs->trans("Labellang_conf_useDesc")).'</legend>';
 							$out.= '<select name="conf[user][lang]" id="lang_conf_use" data-native-menu="false" data-iconpos="left">';
-							foreach($configuration->conf["translation"] as $key => $lang_name)
+							foreach($conf->trans as $key => $lang_name)
 							{
-								if($configuration->conf["user"]["language"] != $key)
+								if($conf->user->lang != $key)
 								{
 									$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
 								}
-								else
+								else 
 								{
 									$out.= '<option value="'.$key.'" selected="selected">'.$lang_name.'</option>';
 								}
 							}
-
+	
 							$out.= '</select>';
 						break;
-
+						
 					case 'lang_conf_plus':
 							$out = '<div id="LangAappend">';
 								//$out.='<label for="sent[date]">'.$langs->trans("LabelAddLanguage").': </label>';
@@ -1390,7 +1256,7 @@
 									$out.= '</div>';
 							$out.= '</div>';
 						break;
-
+						
 					case 'lang_conf_remove':
 							$out = '<div id="LangRappend">';
 								//$out.='<label for="sent[date]">'.$langs->trans("LabelRemoveLanguage").': </label>';
@@ -1398,10 +1264,10 @@
 								$out.= '<div class="ui-grid-a">';
 									$out.= '<div class="ui-block-a">';
 										$out.= '<select id="lang_remove" data-native-menu="false" data-iconpos="left">';
-										foreach($configuration->conf["language"] as $key => $lang_name)
+										foreach($conf->lang as $key => $lang_name)
 										{
 											$out.= '<option value="'.$key.'">'.$lang_name.'</option>';
-										}
+										}		
 										$out.= '</select>';
 									$out.= '</div>';
 									$out.= '<div class="ui-block-b" style="width: 54px;">';
@@ -1411,126 +1277,83 @@
 								$out.= '</div>';
 							$out.= '</div>';
 						break;
-
+						
 					case 'webservice_on':
-							if($configuration->conf["webservice"]["service_on"] == 1) $onoroff = 'checked=""';
+							if($conf->webservice->on == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
 							//$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
 							$out = '<legend>'.$langs->trans("LabelWebservice").': '.$this->tooltip($type.'tool', $langs->trans("LabelWebserviceDesc")).'</legend>';
 							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_switch" '.$onoroff.' data-theme="b">';
 						break;
-
+								
 					case 'webservice_password':
 							$out = '<legend>'.$langs->trans("Labelwebservice_password").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_passwordDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$configuration->conf["webservice"]["password"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][password]" value="'.$conf->webservice->password.'">';
 						break;
-
+						
 					case 'webservice_securitykey':
 							$out = '<legend>'.$langs->trans("Labelwebservice_securitykey").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_securitykeyDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$configuration->conf["webservice"]["securitykey"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][securitykey]" value="'.$conf->webservice->securitykey.'">';
 						break;
-
+						
 					case 'webservice_sourceapplication':
 							$out = '<legend>'.$langs->trans("Labelwebservice_sourceapplication").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_sourceapplicationDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$configuration->conf["webservice"]["sourceapplication"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][sourceapplication]" value="'.$conf->webservice->sourceapplication.'">';
 						break;
-
+						
 					case 'webservice_login':
 							$out = '<legend>'.$langs->trans("Labelwebservice_login").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_loginDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$configuration->conf["webservice"]["login"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][login]" value="'.$conf->webservice->login.'">';
 						break;
-
+						
 					case 'webservice_entity':
 							$out = '<legend>'.$langs->trans("Labelwebservice_entity").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_entityDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$configuration->conf["webservice"]["entity"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][entity]" value="'.$conf->webservice->entity.'">';
 						break;
-
+						
+					//case 'webservice_destination':
+					//		$out.= '<legend>'.$langs->trans("Labelwebservice_destination").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_destinationDesc")).'</legend>';
+					//		$out.= '<input type="text" name="conf[webservice][destination]" value="'.$conf->webservice->destination.'">';
+					//	break;
+						
 					case 'webservice_WS_METHOD':
 							$out = '<legend>'.$langs->trans("webservice_WS_METHOD").': '.$this->tooltip($type.'tool', $langs->trans("webservice_WS_METHODDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$configuration->conf["webservice"]["WS_METHOD"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_METHOD]" value="'.$conf->webservice->WS_METHOD.'">';
 						break;
-
+						
 					case 'webservice_ns':
 							$out = '<legend>'.$langs->trans("Labelwebservice_ns").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_nsDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][ns]" value="'.$configuration->conf["webservice"]["ns"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][ns]" value="'.$conf->webservice->ns.'">';
 						break;
-
+						
 					case 'webservice_WS_DOL_URL':
 							$out = '<legend>'.$langs->trans("Labelwebservice_WS_DOL_URL").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_WS_DOL_URLDesc")).'</legend>';
-							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$configuration->conf["webservice"]["WS_DOL_URL"].'">';
+							$out.= '<input '.$status_theme.' type="text" name="conf[webservice][WS_DOL_URL]" value="'.$conf->webservice->WS_DOL_URL.'">';
 						break;
-
-					case 'proxy_conf':
-							if($configuration->conf["proxy"]["proxyOn"] == 1) $onoroff = 'checked=""';
-							else $onoroff = '';
-							
-							$out.= '<div data-role="collapsible" id="conf-proxy-detail" data-theme="b" data-content-theme="a">';
-								$out.= '<h2>'.$langs->trans("ProxyConfiguration").'</h2>';
-								$out.= '<ul data-role="listview">';
-
-									// switch On
-									$out.= '<li id="proxy_switchDIV" class="ui-field-contain">';
-										$out.= '<legend>'.$langs->trans("LabelProxy").': '.$this->tooltip($type.'tool', $langs->trans("LabelProxyDesc")).'</legend>';
-										$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[proxy][proxyOn]" id="proxy_switch" '.$onoroff.' data-theme="b">';
-									$out.= '</li>';
-
-									// IP
-									$out.= '<li id="proxyIPDIV" class="ui-field-contain ProxyInput">';
-										$out.= '<legend>'.$langs->trans("LabelProxy_ip").': '.$this->tooltip($type.'IPtool', $langs->trans("LabelProxy_ipDesc")).'</legend>';
-										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyIP]" value="'.$configuration->conf["proxy"]["proxyIP"].'">';
-									$out.= '</li>';
-
-									// Port
-									$out.= '<li id="proxyPortDIV" class="ui-field-contain ProxyInput">';
-										$out.= '<legend>'.$langs->trans("LabelProxy_port").': '.$this->tooltip($type.'Porttool', $langs->trans("LabelProxy_portDesc")).'</legend>';
-										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyPort]" value="'.$configuration->conf["proxy"]["proxyPort"].'">';
-									$out.= '</li>';	
-
-									// UserName
-									$out.= '<li id="proxyUserNameDIV" class="ui-field-contain ProxyInput">';
-										$out.= '<legend>'.$langs->trans("LabelProxy_username").': '.$this->tooltip($type.'UserNametool', $langs->trans("LabelProxy_usernameDesc")).'</legend>';
-										$out.= '<input '.$status_theme.' type="text" name="conf[proxy][proxyUserName]" value="'.$configuration->conf["proxy"]["proxyUserName"].'">';
-									$out.= '</li>';	
-
-									// UserPass
-									$out.= '<li id="proxyUserPassDIV" class="ui-field-contain ProxyInput">';
-											$out.= '<legend>'.$langs->trans("LabelProxy_password").': '.$this->tooltip($type.'UserPasstool', $langs->trans("LabelProxy_passwordDesc")).'</legend>';
-											$out.= '<input '.$status_theme.' type="password" name="conf[proxy][proxyUserPass]" value="'.$configuration->conf["proxy"]["proxyUserPass"].'">';
-									$out.= '</li>';
-
-								$out.= '</ul>';
-							$out.= '</div>'; // DETAILS
-							
-						break;
-
+						
 					case 'capview':
-							$out = '<textarea id="capviewtextarea" readonly name="capeditfield"></textarea>';
-							$out.= '<input type="button" value="edit" onclick="$(\'#capviewtextarea\').prop(\'readonly\', \'\'); $(\'#capedit\').val(true)">';
-							$out.= '<input type="hidden" name="capedit" id="capedit" value="false">';
-							$out.= '<input type="button" value="validate" onclick="validateCap()">';
-							$out.= '</li><li id="resultValidate" style="text-shadow: none;"></li>';
-							if($configuration->conf["webservice_aktive"] == 1) $out.= '<input type="hidden" name="webservice_aktive" id="webservice_aktive" value="1">';
+							$out = '<textarea id="capviewtextarea" readonly></textarea>';
 						break;
-
+						
 					case 'caplist':
 						$out = '</form><form method="POST" id="capform2" name="capform2" action="index.php?read=1" enctype="multipart/form-data" data-ajax="false">';
 						$out.= '<input type="file" name="uploadfile" id="uploadfile"><input type="submit" value="'.$langs->trans('LabelUpload').'" name="upload" data-ajax="false">';
 
-						$out.= '<fieldset data-role="controlgroup">';
-								foreach(scandir($configuration->conf["cap"]["output"]) as $num => $capfilename)
+						$out.= '<fieldset data-role="controlgroup">';						
+								foreach(scandir($conf->cap->output) as $num => $capfilename)
 								{
 									if($num > 1)
 									{
 										$out.= '<div class="ui-grid-a">';
 											$out.= '<div class="ui-block-a" style="width:90%">';
 												$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
-												$out.= '<label for="cap_file_'.$num.'">'.$capfilename.' <span style="font-size: 12px;color: #5A5A5A;">('.filesize($configuration->conf["cap"]["output"].'/'.$capfilename).'b | '.date('d.m.Y H:i:s',filectime($configuration->conf["cap"]["output"].'/'.$capfilename)).')</span> </label>';
+												$out.= '<label for="cap_file_'.$num.'">'.$capfilename.' <span style="font-size: 12px;color: #5A5A5A;">('.filesize($conf->cap->output.'/'.$capfilename).'b | '.date('d.m.Y H:i:s',filectime($conf->cap->output.'/'.$capfilename)).')</span> </label>';
 											$out.= '</div>';
 											$out.= '<div class="ui-block-b" style="width:10%">';
 												$out.= '<a href="#cap_file_'.$num.'_delete" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini"><span style="color:#ff0000">X</span></a>';
 											$out.= '</div>';
 										$out.= '</div>';
-
+										
 										$out.= '<div data-role="popup" id="cap_file_'.$num.'_delete" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">';
 											$out.= '<h3>Delete File?</h3>';
 											$out.= '<a href="index.php?delete='.urlencode($capfilename).'" data-ajax="false" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Delete</a>';
@@ -1543,61 +1366,49 @@
 						$out.= '<input type="submit" value="<h1>'.$langs->trans("Read").'</h1>" data-ajax="false">';
 						$out.= '</form><form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 						break;
-
+					
 					case 'login_popup':
-						if($configuration->conf["webservice"]["service_on"] == 1)
+						if($conf->webservice->on == 1)
 						{
 							$this->login_id++;
-
-							if($configuration->conf["webservice_aktive"] == 1) // Logout
+							
+							if($conf->webservice_aktive == 1) // Logout
 							{
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
 									$out.= '<li>'.$langs->trans("Service").': '.$_SESSION['ServiceHost'].'</li>';
-									$out.= '<li>'.$langs->trans("User").': '.$configuration->conf["webservice"]["login"].'</li>';
+									$out.= '<li>'.$langs->trans("User").': '.$conf->webservice->login.'</li>';
 									$out.= '<li>'.$langs->trans("LoginDate").': '.date('d.m.Y H:i:s', $_SESSION['timestamp']).'</li>';
 									$out.= '<li><input '.$status_theme.' type="submit" name="send-logout['.$this->login_id.']" value="'.$langs->trans('Logout').'" data-theme="b"></li>';
-									$out.= '<input type="hidden" class="login_sended" name="login_sended" id="logout_sended" value="0">';
+									$out.= '<input type="hidden" name="login_sended" id="logout_sended" value="0">';
 								$out.= '</ul>';
 							}
 							else // Login
 							{
 								$out = '<h3>'.$langs->trans("LoginToYourWebservice").'</h3>';
-
-								if(!empty($login_error)){
-									foreach ($login_error as $key => $msg) {
-										$out.= "<textarea readonly>".$msg."</textarea><br>";
-									}
-								}
-								if(!empty($login_error_html)){
-									foreach ($login_error_html as $key => $msg) {
-										$out.= "".$msg."<br>";
-									}
-								}
-
-								if($login_to_webservice_faild == true && empty($login_error) && empty($login_error_html))
+								
+								if($login_to_webservice_faild == true)
 								{
 									$out.= $langs->trans('error_wrong_login');
-								}
+								}			
 
 								$out.= '<label for="un" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_login").':</label>';
-									$out.= '<input '.$status_theme.' type="text" name="Session_login_name['.$this->login_id.']" value="'.$configuration->conf["webservice"]["login"].'">';
-
+									$out.= '<input '.$status_theme.' type="text" name="Session_login_name['.$this->login_id.']" value="'.$conf->webservice->login.'">';
+		
 								$out.= '<label for="pw" class="ui-hidden-accessible">'.$langs->trans("Labelwebservice_password").':</label>';
-									$out.= '<input '.$status_theme.' type="password" name="Session_login_pass['.$this->login_id.']" value="'.$configuration->conf["webservice"]["password"].'">';
-
+									$out.= '<input '.$status_theme.' type="password" name="Session_login_pass['.$this->login_id.']" value="'.$conf->webservice->password.'">';
+		
 								$out.= '<label><input '.$status_theme.' type="checkbox" name="savepass[]">'.$langs->trans("SaveWebservicePass").'</label>';
-								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';
-								$out.= '<input type="hidden" class="login_sended" name="login_sended" id="login_sended" value="0">';
+								$out.= '<input id="submit_login_button" '.$status_theme.' type="submit" name="send-login['.$this->login_id.']" value="'.$langs->trans('Login').'" data-theme="b">';	
+								$out.= '<input type="hidden" name="login_sended" id="login_sended" value="0">';	
 							}
-
-							if((empty($configuration->conf["webservice_aktive"]) || $configuration->conf["webservice_aktive"] == -1) && $configuration->conf["webservice"]["service_on"] == 1 && $this->login_id == 1)
+							
+							if((empty($conf->webservice_aktive) || $conf->webservice_aktive == -1) && $conf->webservice->on == 1 && $this->login_id == 1)
 							{
-							$out.= 			'
+								$out.= 			'
 													<script>
-													$( document ).ready(function(){
-														$(".Login input").on("keyup",function(event){
+														$("#Login-alert").on("keyup",function(event){
 															event.preventDefault();
-															if ( event.which == 13 )
+															if ( event.which == 13 ) 
 															{
 																$( "#submit_login_button" ).trigger( "click" );
 															}
@@ -1605,16 +1416,14 @@
 
 														$( "#submit_login_button" ).on("click", function(){
 															$("#action").remove();
-															$(".login_sended").val(1);
-															console.log("TEST");
+															$("#login_sended").val(1);
 														});
-													});
-
-													$(document).on("pageshow", "#alert" ,function ()
-													{
-								  						$( "#Login-alert" ).popup();
-														setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
-													});
+														
+														$(document).on("pageshow", "#alert" ,function ()
+														{
+									  						$( "#Login-alert" ).popup();
+															setTimeout( function(){ $( "#Login-alert" ).popup("open"); }, 500 );
+														});
 													</script>
 														';
 							}
@@ -1624,16 +1433,10 @@
 					 * Default
 					 */
 					default:
-
+							
 							$out = '<div>';
 								$out.= '<label for="'.$type.'">'.$langs->trans("Label".$type).': '.$this->tooltip($type, $langs->trans("Info".$type)).'</label>';
-								if(!is_array($this->{$type}[0])){
-									$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'" value="'.$this->{$type}[0].'">';
-								}else{
-									foreach($this->{$type}[0] as $key => $val){
-										$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'['.$key.']" value="'.$val.'">';
-									}
-								}
+								$out.= '<input '.$status_theme.' type="text" placeholder="'.$type.'" name="'.$type.'" value="'.$this->{$type}[0].'">';
 								//$out.= print_r($this, true);
 							$out.= '</div>';
 						break;
@@ -1641,7 +1444,7 @@
 			//$out.= $this->InputStandard('sent');
 			return $out;
 		}
-
+		
 		/**
 		 * Output HTML Info field
 		 *
@@ -1649,17 +1452,17 @@
 		 * @param string $info 						The info in the info field
 		 * @return string 								HTML select field
 		 */
-
+		 
 		 function tooltip($name, $info, $alttext='ToolboxInfo')
 		 {
 				$out = '<a href="#'.$name.'" data-rel="popup" data-transition="pop" class="my-tooltip-btn ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext" title="'.$alttext.'">'.$name.'</a>';
 				$out.= '<div data-role="popup" id="'.$name.'" class="ui-content" data-theme="a" style="max-width:100%;">';
 				$out.= $info;
 				$out.= '</div>';
-
+			
 			return $out;
 		 }
-
+		
 		var $script = "";
 		/**
 	 * Output Html select
@@ -1667,8 +1470,8 @@
 	 * @param   string	$name					The POST/GET name of the select
 	 * @param   array		$data					the content of the select array("option value" => "option Name")
 	 * @param   string  $option
-	 * @param   string  $placeholder
-	 * @param 	int 		$empty 				if 1 then make a empty value
+	 * @param   string  $placeholder 
+	 * @param 	int 		$empty 				if 1 then make a empty value 
 	 * @return	string								HTML select field
 	 */
 		function buildSelectValueName($name, $name2, $name3, $S_Area, $G_Area, $select = array(), $extclass = "")
@@ -1681,10 +1484,10 @@
 				{
 					$sel = false;
 
-					foreach($select as $key => $select_code)
+					foreach($select as $key => $select_code) 
 					{
 						$select_code['value'] = str_replace(';', '&#59;', $select_code['value']);
-
+						
 						if( $data_val == $select_code['value'] )
 						{
 							$sel = true;
@@ -1692,7 +1495,7 @@
 							if($name3 == "parameter_awt" || $name3 == "parameter_awl") $check = 'checked="checked"';
 						}
 					}
-
+					
 					if($name3 == "geocode")
 					{
 						if($sel == true)
@@ -1718,13 +1521,13 @@
 
 					$out.= $data_name;
 					$out.= '</option>';
-				}
+				}							
 			$out.= '</select>';
 
 			if($name3 == "parameter_awt" || $name3 == "parameter_awl")
 			{
 				$out.= '<input type="checkbox" class="'.$name3.'" name="'.$name2.'" value="'.$G_Area[$data_val].'" id="'.$data_name.'" style="display: none;" '.$sel_tmp.' '.$check.'>';
-
+				
 				$this->script.= 	'
 									$( "#'.$name3.'-select" ).change(function() {
 										var res = $( "#'.$name3.'-select" ).val();
@@ -1736,38 +1539,38 @@
 										{
 											$(".'.$name3.'").prop("checked", false);
 										}
-									});
+									});											
 								';
 			}
-
-
+			
+			
 			return $out;
 		}
-
+		
 		/**
 	 * Output Html select
 	 *
 	 * @param   string	$name					The POST/GET name of the select
 	 * @param   array		$data					the content of the select array("option value" => "option Name")
 	 * @param   string  $option
-	 * @param   string  $placeholder
-	 * @param 	int 		$empty 				if 1 then make a empty value
+	 * @param   string  $placeholder 
+	 * @param 	int 		$empty 				if 1 then make a empty value 
 	 * @return	string								HTML select field
 	 */
 		function buildSelect($name= "", $data = array(), $option = "", $placeholder = "", $selected="", $empty=0)
 		{
 			$out = '<select name="'.$name.'" '.$option.'>';
-
+			
 				if($empty == 1)
 				{
 					$out.='<option></option>';
 				}
-
+				
 				if($placeholder)
 				{
 					$out.= '<option value="#" data-placeholder="true">'.$placeholder.'</option>';
 				}
-
+			
 				foreach($data as $data_val => $data_name)
 				{
 					if($selected == $data_val)
@@ -1781,11 +1584,11 @@
 					$out.= $data_name;
 					$out.= '</option>';
 				}
-
+			
 			$out.= '</select>';
 			return $out;
 		}
-
+		
 		function make_cap_time($time)
 		{
 			$time_arr = explode("T", $time);
@@ -1793,33 +1596,31 @@
 			$time_arr_time = explode("+", $time_arr[1]);
 			$ctime['time'] = $time_arr_time[0];
 			$ctime['zone'] = $time_arr_time[1];
-
+			
 			return $ctime;
 		}
-
-
+	
 		/**
-		* encrypt and decrypt function for passwords
-		*
-		* @return	string
-		*/
-		function encrypt_decrypt($action, $string, $key = "")
+	 * encrypt and decrypt function for passwords
+	 *     
+	 * @return	string
+	 */
+		function encrypt_decrypt($action, $string, $key) 
 		{
-			global $configuration;
-
+			global $conf;
+			
 			$output = false;
-
+		
 			$encrypt_method = "AES-256-CBC";
 			$secret_key = ($key?$key:'NjZvdDZtQ3ZSdVVUMXFMdnBnWGt2Zz09');
-
-			$secret_iv = ($configuration->conf["webservice"]["securitykey"] ? $configuration->conf["webservice"]["securitykey"] : 'WebTagServices#hash');
-
+			$secret_iv = ($conf->webservice->securitykey ? $conf->webservice->securitykey : 'WebTagServices#hash');
+		
 			// hash
 			$key = hash('sha256', $secret_key);
-
+			
 			// iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
 			$iv = substr(hash('sha256', $secret_iv), 0, 16);
-
+		
 			if( $action == 1 ) {
 				$output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
 				$output = base64_encode($output);
@@ -1827,18 +1628,18 @@
 			else if( $action == 2 ){
 				$output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
 			}
-
+		
 			return $output;
 		}
-
+		
 		/**
 	 * Output RFC 3066 Array
-	 *
+	 *     
 	 * @return	string						Array with RFC 3066 Array
 	 */
 		function getlang($config = false){
-			global $configuration;
-
+			global $conf;
+			
 			if(is_array($this->language))
 			{
 				foreach($this->language as $key => $lang_name)
@@ -1847,13 +1648,13 @@
 				}
 			}
 
-			$out_tmp = $configuration->conf["language"];
+			$out_tmp = $conf->lang;
 
 			foreach($out_tmp as $key => $lang_name)
 			{
-				if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
+				if($conf->select->lang[$key] == true) $out[$key] = $out_tmp[$key];
 			}
-
+			
 			return $out;
 		}
 
@@ -1863,32 +1664,31 @@
 	 * @return	string						HTML Head
 	 */
 		function Header_llx()
-		{
-			global $configuration, $SVLdetail;
-
+		{			
+			global $conf, $SVLdetail;
+			
 			$out = '<head>';
-				$out.= '<meta charset="UTF-8">';
 				$out.= '<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">';
 				//$out.= '<script type="text/javascript" src="includes/jquery/jquery-3.0.0.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery.min.js"></script>';
 				//$out.= '<script src="https://code.jquery.com/jquery-2.2.4.js"   integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="crossorigin="anonymous"></script>';
 				$out.= '<script type="text/javascript" src="includes/jquery/jquery-ui.min.js"></script>';
 				$out.= '<script type="text/javascript" src="includes/d3/d3.v3.min.js"></script>';
-
+				
 
 				$out.= '<link rel="stylesheet" type="text/css" href="css/cap_form.css">';
-
+				
 				$out.= '<link rel="icon" type="image/png" href="conf/logo.jpg">';
 
 				if(!empty($SVLdetail)) $out.= $SVLdetail;
-
+				
 				$out.= '<script type="text/javascript" src="js/form.js"></script>';
 				$out.= '<script type="text/javascript" src="js/map.js"></script>';
-
+			
 				$out.= '<link rel="stylesheet" href="includes/jquery.mobile/jquery.mobile-1.4.5.min.css" />';
 				$out.= '<script src="includes/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>';
-
-				if( $configuration->conf["webservice_aktive"] == 1 )
+			
+				if( $conf->webservice_aktive == 1 )
 				{
 					$out.= '<link rel="stylesheet" href="css/MeteoalarmMobile.css" />';
 				}
@@ -1901,26 +1701,23 @@
 				{
 					$out.= '<script type="text/javascript" src="js/svg-pan-zoom.js"></script>';
 				}
-
+				
 				$out.= '<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />';
 				// OpenStreetMap
 				$out.= '<script src="includes/jquery/jquery.geo.min.js"></script>';
-
+				
 				// Clockpicker Addon
 				$out.= '<link rel="stylesheet" type="text/css" href="includes/plugin/jquery-clockpicker.min.css">';
 				$out.= '<script type="text/javascript" src="includes/plugin/jquery-clockpicker.min.js"></script>';
-
-				$out.= '<!--[if lt IE 9]>
-    							<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-								<![endif]-->';
+				
 				$out.= '<title>Cap Creator</title>';
 
 			$out.= '</head>';
-
+			
 			return $out;
 		}
-
-
+		
+				
 		/**
 	 * Output Html Form
 	 *
@@ -1928,33 +1725,33 @@
 	 */
 		function Form()
 		{
-			global $configuration, $langs, $login_to_webservice_faild, $nogooglemap;
-
-
-			if(file_exists('menu/standard_menu.lib.php') && empty($configuration->conf["optional_menu"]))
+			global $conf, $langs, $login_to_webservice_faild;
+			
+			
+			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
 			{
 				include 'menu/standard_menu.lib.php';
 			}
-			elseif(!empty($configuration->conf["optional_menu"]))
+			elseif(!empty($conf->optional_menu))
 			{
-				include addslashes($configuration->conf["optional_menu"]);
+				include addslashes($conf->optional_menu);
 			}
 			else
 			{
 				die($langs->trans("standard_menuLibPhpIsCurupt"));
 				//die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
 			}
-
+			
 			$Type_arr = Types(); // TYPES FOR PAGES
 			$Pages_arr = Pages(); // PAGES
 			$Type_Status_arr = TypeStatus(); // Type Status (Like Required)
-
+			
 			$out = $this->Header_llx();
-
+			
 			$out.= '<body>';
 			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
 				$out.= '<input type="hidden" name="action" id="action" value="create">';
-
+					
 					foreach($Type_arr as $pagename => $TypePage)
 					{
 						if(!in_array($pagename, $Pages_arr['popup']))
@@ -1965,7 +1762,7 @@
 								$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
 								$out.= '<!-- panel content goes here -->';
 								$out.= '<ul data-role="listview">';
-
+									
 									$out.= '<li style="height: 91px;">';
 										$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
 										$out.= '<h1>';
@@ -1975,8 +1772,8 @@
 										$out.= '<span style="font-size: 10px;">';
 											$out.= 'v'.$this->version;
 										$out.= '</span>';
-									$out.= '</li>';
-
+									$out.= '</li>';    							
+									
 										foreach($Pages_arr as $link => $Page_Name)
 										{
 											if($link != 'popup' && $link != 'next' && $link != 'notitle' && $link != 'header')
@@ -1994,25 +1791,19 @@
 												}
 											}
 										}
-
+										
 									$out.= '</ul>';
 								$out.= '</div>'; // PANEL
-
-								if($configuration->conf["webservice"]["login"] && $configuration->conf["webservice_aktive"]) $login_show_name = $configuration->conf["webservice"]["login"];
-								else $login_show_name = $langs->trans('Login');
-								$out.= '<div data-theme="b" data-role="header">';
+							
+								if($conf->webservice->login && $conf->webservice_aktive) $login_show_name = $conf->webservice->login;
+								else $login_show_name = $langs->trans('Login');								
+						
+								$out.= '<div data-theme="b" data-role="header">';								
 									$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-										$out.= '<h1>';
-											$out.= $Pages_arr['#'.$pagename];
-											if(phpversion() < $configuration->conf["PHPVersion"]["min"] || phpversion() > $configuration->conf["PHPVersion"]["max"]){
-												$out.= ' <br><span style="color:yellow">'.$langs->trans('php_version_is_not_tested',phpversion()).' ';
-												$out.= $langs->trans('php_min_max_version',$configuration->conf["PHPVersion"]["min"] , $configuration->conf["PHPVersion"]["max"] );
-												$out.= '</span>';
-											}
-										$out.= '</h1>';
-									if($configuration->conf["webservice"]["service_on"] == 1)
+										$out.= '<h1>'.$Pages_arr['#'.$pagename].'</h1>';	
+									if($conf->webservice->on == 1)
 									{
-										if($login_to_webservice_faild == true)
+										if($login_to_webservice_faild == true) 
 										{
 											$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop" style="background-color: red;color: black;text-shadow: none;">'.$login_show_name.'</a>';
 										}
@@ -2021,16 +1812,16 @@
 											$out.= '<a href="#Login-'.$pagename.'" data-rel="popup" data-position-to="window" data-transition="pop">'.$login_show_name.'</a>';
 										}
 									}
-								$out.= '</div>'; // HEADER
-
+								$out.= '</div>'; // HEADER					
+								
 								// Main
 								$out.= '<div id="main-div" class="ui-content ui-page-theme-a" data-form="ui-page-theme-a" data-theme="a" role="main">';
-
+									
 									/* TODO: 1.4 HEADERS
 									if(basename($_SERVER['PHP_SELF']) == "map.php")  $css_paint_top = 'style="background-color:#065c00;"';
 									elseif($pagename == "alert") $css_alert_top = 'style="background-color:#065c00;"';
 									elseif($pagename == "conf") $css_conf_top = 'style="background-color:#065c00;"';
-									// HEADER
+									// HEADER	
 									$out.= '<div class="top_menu">';
 										$out.= '<a href="index.php#alert" data-ajax="false" '.$css_alert_top.'><img width"20px" src="css/images/form_edit_w.png"><span>'.$langs->trans('Alert').'</span></a>';
 										$out.= '<a href="map.php" data-ajax="false" '.$css_paint_top.'><img width"20px" src="css/images/paint_edit_w.png"><span>'.$langs->trans('Paint').'</span></a>';
@@ -2039,17 +1830,17 @@
 									*/
 
 									if(!isset($Pages_arr['notitle']['#'.$pagename]))
-									$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
+									$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 										if(!isset($Pages_arr['notitle']['#'.$pagename]))
 										$out.= '<ul data-role="listview" data-divider-theme="b">';
-
+										
 										if(!isset($Pages_arr['notitle']['#'.$pagename]))
 										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$Pages_arr['#'.$pagename].'</h1></li>';
-
+										
 											foreach($TypePage as $key => $type)
-											{
+											{							
 												if(is_numeric($key))
-												{
+												{	
 													if(!isset($Pages_arr['notitle']['#'.$pagename])) $out.= '<li>';
 														$out.= $this->InputStandard($type, $Type_Status_arr);
 													if(!isset($Pages_arr['notitle']['#'.$pagename])) $out.= '</li>';
@@ -2060,34 +1851,34 @@
 										$out.= '</ul>';
 									if(!isset($Pages_arr['notitle']['#'.$pagename]))
 									$out.= '</div>';	 // UI_BODY_A
-
+									
 									// DETAILS
 									if(count ($TypePage['detail']['value']) >= 1 && $TypePage['detail']['value'] != -1)
 									{
 										$visibl = "";
-										if($configuration->conf["webservice"]["service_on"] == 0 && $pagename == "conf") $visibl = 'style="display:none;"';
+										if($conf->webservice->on == 0 && $pagename == "conf") $visibl = 'style="display:none;"'; 
 										$out.= '<div data-role="collapsible" id="'.$pagename.'-detail" data-theme="b" data-content-theme="a" '.$visibl.'>';
 											$out.= '<h2>'.$TypePage['detail']['name'].'</h2>';
 											$out.= '<ul data-role="listview">';
-
+												
 												if(is_array($TypePage['detail']['value']))
 												{
 													foreach($TypePage['detail']['value'] as $key_ex => $type_ex)
-													{
+													{		
 														if($key_ex != 'name')
 														{
 															$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex, $Type_Status_arr).'</li>';
 														}
 													}
 												}
-
+														
 											$out.= '</ul>';
-										$out.= '</div>'; // DETAILS
+										$out.= '</div>'; // DETAILS		
 									}
-
+									
 								$out.= '</div>'; // MAIN CONTENT
-
-								$out.= '<div data-role="footer" data-theme="b">';
+								
+								$out.= '<div data-role="footer" data-theme="b">';						
 									//if($Pages_arr[$pagename]['next'] == true) $out.= '<ul data-role="listview" data-inset="true"><li><a href="#info"><h1>Next</h1></a></li></ul>';
 									if(!empty($Pages_arr['next']['name'][$pagename]) || !empty($Pages_arr['next']['nolink'][$pagename]))
 									{
@@ -2097,29 +1888,23 @@
 										}
 										else
 										{
-											$out.= '<ul data-role="listview" data-inset="true">';
-												$out.= '<li>';
-													$out.= '<a href="#'.$Pages_arr['next']['name'][$pagename].'">';
-														$out.= '<h1>'.$langs->trans('Next').'</h1>';
-													$out.= '</a>';
-												$out.= '</li>';
-											$out.= '</ul>';
+											$out.= '<ul data-role="listview" data-inset="true"><li><a href="#'.$Pages_arr['next']['name'][$pagename].'"><h1>'.$langs->trans('Next').'</h1></a></li></ul>';
 										}
 									}
-
+									
 								$out.= '</div>'; // FOOTER
-
+								
 								// POPUP
 								foreach($Pages_arr['popup'] as $key => $popupname)
 								{
 									$TypePopup = $Type_arr[$popupname];
-
-									$out.= '<div data-role="popup" class="'.$popupname.'" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
+									
+									$out.= '<div data-role="popup" id="'.$popupname.'-'.$pagename.'" data-theme="a" class="ui-corner-all" style="width: 100%;">';
 										//$out.= '<form>';
-
-												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
+																			
+												//$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 													$out.= '<ul data-role="listview" data-divider-theme="b">';
-
+													
 													if($popupname == 'Login' && $login_to_webservice_faild == true)
 													{
 														$out.= '<li data-role="list-divider" data-theme="b" style="background-color: red;border-top: none;"><h1 style="font-size:22px;">'.$langs->trans('Title'.$popupname).'</h1></li>';
@@ -2128,64 +1913,60 @@
 													{
 														$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans('Title'.$popupname).'</h1></li>';
 													}
-
+													
 														foreach($TypePopup as $key => $type)
-														{
+														{							
 															if(is_numeric($key))
-															{
+															{	
 																$out.= '<li>';
 																	$out.= $this->InputStandard($type, $Type_Status_arr);
 																$out.= '</li>';
 															}
 														}
-
+													
 													$out.= '</ul>';
-												//$out.= '</div>';	 // UI_BODY_A
-
+												//$out.= '</div>';	 // UI_BODY_A												
+											
 										//$out.= '</form>';
 									$out.= '</div>';
 								}
-
+								
 							$out.= '</div>'; // PAGE END
 						}
-					}
-
+					}					
+		
 			$out.= '</form>'; // FORM
-
+			
 			$out.= '<script>
 							'.$this->script.'
 							</script>';
-			// GOOGLE MAP
-			//$out.= '<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJNLZq13zNbYh6yx4C6dQXoxZVGTnCFKE&callback=initMap" async defer></script>';
-			if(!empty($configuration->conf["GoogleMap"]["APIkey"]) && $nogooglemap != 1){
-				$out.= '<script src="https://maps.googleapis.com/maps/api/js?key='.$configuration->conf["GoogleMap"]["APIkey"].'&signed_in=true&libraries=drawing&callback=initMap" async defer></script>';
-			}
+			
 			$out.= '</body>';
-			$out.=
+			$out.= 
 			'
-			<script>
+			<script>					
 				';
-
+					
 					$depends = dependencies(); // from menu php
-
+					
 					$out.= '
 									function dependencies_js()
 									{';
-
+									
 						foreach($depends as $is_object => $depends_array)
-						{
+						{							
 							foreach($depends_array as $name_or_id => $depends_array_next)
 							{
 								foreach($depends_array_next as $object_name => $obj_arr)
-								{
+								{										
 									foreach($obj_arr as $condition => $condition_arr)
-									{
+									{										
 										foreach($condition_arr as $change_is => $change_to_arr)
-										{
+										{											
 											foreach($change_to_arr as $change_name_or_id => $change_to_array)
-											{
+											{												
 												foreach($change_to_array as $change_name => $change_to_val)
-												{
+												{													
 													if($name_or_id == "name")
 													{
 														$out.= 	'
@@ -2203,8 +1984,8 @@
 													if($change_name_or_id == "name")
 													{
 														$out.= 	'
-																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).val( "'.$change_to_val.'" );
-																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).selectmenu().selectmenu("refresh");
+																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).val( "'.$change_to_val.'" );	
+																			 $( "'.$change_is.'[name=\''.$change_name.'\']" ).selectmenu().selectmenu("refresh");				
 																			 if($( "'.$change_is.'[name=\''.$change_name.'\']" ).is("select"))
 																			 {
 																				$( "'.$change_is.'[name=\''.$change_name.'\']" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
@@ -2213,14 +1994,14 @@
 																			 {
 																				 $( "'.$change_is.'[name=\''.$change_name.'\']" ).parent( ).addClass( "ui-body-f" ); // its a input
 																			 }
-																	   }
+																	   }																
 																	';
 													}
 													else
 													{
 														$out.= 	'
-																			 $( "#'.$change_name.'" ).val( "'.$change_to_val.'" );
-																			 $( "#'.$change_name.'" ).selectmenu().selectmenu("refresh");
+																			 $( "#'.$change_name.'" ).val( "'.$change_to_val.'" );	
+																			 $( "#'.$change_name.'" ).selectmenu().selectmenu("refresh");					
 																			 if($( "#'.$change_name.'" ).is("select"))
 																			 {
 																				$( "#'.$change_name.'" ).parent( ).find("a").addClass( "ui-btn-f" ); // its a select
@@ -2229,9 +2010,9 @@
 																			 {
 																				 $( "#'.$change_name.'" ).parent( ).addClass( "ui-body-f" ); // its a input
 																			 }
-																	   }
+																	   }															
 																	';
-													}
+													}				
 												}
 											}
 										}
@@ -2240,15 +2021,15 @@
 							}
 						}
 					$out.= '}';
-
-					$langs_arr = $this->getlang();
-
+					
+					$langs_arr = $this->getlang();	
+					
 					foreach($langs_arr as $key => $langs_val)
 					{
-
+						
 						$out.= '
 										$( "#'.$key.'_Remove_Button" ).click(function() {
-											$(this).parent("a").hide();
+											$(this).parent("a").hide();			
 											$(\'input[name="event['.$key.']"]\').val("");
 											$(\'input[name="headline['.$key.']"]\').val("");
 											$(\'input[name="description['.$key.']"]\').val("");
@@ -2257,10 +2038,10 @@
 										});
 									 ';
 					}
-
+					
 					foreach($langs_arr as $key => $langs_val)
 					{
-
+						
 						$out.= '$( "#'.$key.'_Button" ).click(function() {';
 							$out.= '
 											if($( "#'.$key.'_language_input" ).val() != "delete")
@@ -2271,7 +2052,7 @@
 											{
 												$( "#'.$key.'_language_input" ).val("");
 											}
-
+											
 											$( ".Lang_Button" ).each(function( index )
 											{
 												if( "'.$key.'_Button" == $(this).attr("id"))
@@ -2283,7 +2064,7 @@
 													$(this).css("box-shadow", "");
 												}
 											});
-
+											
 											$( ".lang_input" ).each(function( index )
 											{
 												if( "'.$key.'" == $(this).attr("id"))
@@ -2293,113 +2074,106 @@
 												else
 												{
 													$(this).hide();
-												}
-											});
-							';
+												}					
+											});				
+							';			
 						$out.= '});';
 					}
-
+					
 				$out.= '
-
+				
 			</script>';
-
+			
 			return $out;
 		}
-
+		
 		/**
 		 * Function to install the interface of the Cap PHP library
 		 *
 		 * @return	string 	$out
 		 */
-		function CapView($content, $ID, $extrahtml = "")
+		function CapView($content, $ID)
 		{
-			global $configuration, $langs;
-
+			global $conf, $langs;
+			
 			$out = $this->Header_llx();
-
-			$out.= '<body>';
+			
+			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?webservice=1" enctype="multipart/form-data" data-ajax="false">';
 					$out.= '<input type="hidden" name="filename" value="'.$ID.'">';
 					$out.= '<div data-role="page" id="capview">';
-
-						$out.= '<div data-theme="b" data-role="header">';
+					
+						$out.= '<div data-theme="b" data-role="header">';								
 							//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 							$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
-							$out.= '<h1>'.$ID.'</h1>';
+							$out.= '<h1>'.$ID.'.cap</h1>';						
 						$out.= '</div>';
-
-						$out.= '<div role="main" class="ui-content">';
-
-							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
-
-									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'</h1></li>';
-
-									if($configuration->conf["cap"]["save"] == 1) $out.= '<li><a href="'.$configuration->conf["cap"]["output"].'/'.$ID.'" download data-ajax="false">Download '.$ID.'</a></li>';
-
-									if($configuration->conf["webservice"]["service_on"] == 1) $out.= '<li><input type="submit" value="<h1>'.$langs->trans("sendviaSoap").'</h1>" data-ajax="false"></li>';
-
+									
+									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">'.$langs->trans("LabelCapViewOf").': '.$ID.'.cap</h1></li>';	
+									
+									if($conf->cap->save == 1) $out.= '<li><a href="'.$conf->cap->output.'/'.$ID.'.cap" download data-ajax="false">Download '.$ID.'.cap</a></li>';
+									
+									if($conf->webservice->on == 1) $out.= '<li><input type="submit" value="<h1>'.$langs->trans("sendviaSoap").'</h1>" data-ajax="false"></li>';
+									
 									$out.= '<li>';
-										$out.= '<textarea readonly>';
+										$out.= '<textarea readonly>';						
 											$out.= $content;
 										$out.= '</textarea>';
 									$out.= '</li>';
-
-									if(!empty($extrahtml)) {
-										$out.= '<li>';
-											$out.= $extrahtml;
-										$out.= '</li>';
-									}
-
 								$out.= '</ul>';
 							$out.= '</div>';
 
 						$out.= '</div><!-- /content -->';
-
+					
 						$out.= '<div data-role="footer" data-theme="b">';
 
 						$out.= '</div><!-- /footer -->';
-
+						
 					$out.= '</div><!-- /page -->';
-
-				$out.= '</form>';
+			
+				$out.= '</form>';			
 			$out.= '</body>';
-
+			
 			return $out;
 		}
-
+		
 		function ListCap()
 		{
-			global $configuration, $langs;
-
-			if(file_exists('menu/standard_menu.lib.php') && empty($configuration->conf["optional_menu"]))
+			global $conf, $langs;
+			
+			if(file_exists('menu/standard_menu.lib.php') && empty($conf->optional_menu))
 			{
 				include 'menu/standard_menu.lib.php';
 			}
-			elseif(!empty($configuration->conf["optional_menu"]))
+			elseif(!empty($conf->optional_menu))
 			{
-				include addslashes($configuration->conf["optional_menu"]);
+				include addslashes($conf->optional_menu);
 			}
 			else
 			{
 				die($langs->trans("standard_menuLibPhpIsCurupt"));
 				//die('Can\'t load standard_menu.lib.php please download menu/standard_menu.lib.php from https://github.com/AT-backbone/Cap-PHP-library');
 			}
-
+			
 			$out = $this->Header_llx();
-
+			
 			$Type_arr = Types(); // TYPES FOR PAGES
 			$Pages_arr = Pages(); // PAGES
 
 			$out.= '<body>';
-			$out.= '<form method="POST" id="capform" name="capform" action="index.php?conv=1" enctype="multipart/form-data" data-ajax="false">';
-				//$out.= '<input type="hidden" name="action" id="action" value="create">';
+			$out.= '<form method="POST" id="capform" name="capform" action="index.php" enctype="multipart/form-data" data-ajax="false">';
+				$out.= '<input type="hidden" name="action" id="action" value="create">';
 						$out.= '<div data-role="page" id="'.$pagename.'">';
 
 							$out.= '<div data-role="panel" data-display="push" id="'.$pagename.'_panel">';
 							$out.= '<!-- panel content goes here -->';
 							$out.= '<ul data-role="listview">';
-
+								
 								$out.= '<li style="height: 91px;">';
 									$out.= '<img src="conf/logo.jpg" style="border: 1px solid black;border-radius: 45px;width: 20%;margin: 10px 0px 0px 10px;">';
 									$out.= '<h1>';
@@ -2410,7 +2184,7 @@
 										$out.= 'v'.$this->version;
 									$out.= '</span>';
 								$out.= '</li>';
-
+								
 									foreach($Pages_arr as $link => $Page_Name)
 									{
 										if($link != 'popup' && $link != 'next' && $link != 'notitle' && $link != 'header')
@@ -2429,24 +2203,24 @@
 											}
 										}
 									}
-
+								
 								$out.= '</ul>';
 							$out.= '</div>'; // PANEL
-
-							$out.= '<div data-theme="b" data-role="header">';
+							
+							$out.= '<div data-theme="b" data-role="header">';								
 								$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
-								$out.= '<h1>Cap Converter</h1>';
+								$out.= '<h1>Cap Converter</h1>';							
 							$out.= '</div>';
-
-						$out.= '<div role="main" class="ui-content">';
-
-							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
-								/*
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
+								/*								
 								// get all convert files
-								$std_tmp = scandir('convert/');
+								$std_tmp = scandir('convert/');								
 								foreach($std_tmp as $num => $filename)
 								{
-									if(substr($filename, 0, 4) != "std_")
+									if(substr($filename, 0, 4) != "std_") 
 									{
 										unset($std_tmp[$num]);
 									}
@@ -2455,11 +2229,11 @@
 										$std_converter[substr($filename, 4, -9)] = substr($filename, 4, -9);
 									}
 								}
-
-								$area_tmp = scandir('convert/');
+								
+								$area_tmp = scandir('convert/');								
 								foreach($area_tmp as $num => $filename)
 								{
-									if(substr($filename, 0, 5) != "area_")
+									if(substr($filename, 0, 5) != "area_") 
 									{
 										unset($area_tmp[$num]);
 									}
@@ -2469,22 +2243,22 @@
 									}
 								}
 
-
+								
 								$std = $this->buildSelect("stdconverter", $std_converter, "data-native-menu=\"false\"", "", "standard");
-								$area = $this->buildSelect("areaconverter", $area_converter, "data-native-menu=\"false\"", "", "standard");
-
+								$area = $this->buildSelect("areaconverter", $area_converter, "data-native-menu=\"false\"", "", "standard"); 
+								
 									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
-										$out.= '<legend>'.$langs->trans("SelectStdAreaCap").': '.$this->tooltip('SelectStdAreaCaptool', $langs->trans("InfoSelectStdAreaCap")).'</legend>';
-											$out.= $std;
-											$out.= $area;
+										$out.= '<legend>'.$langs->trans("SelectStdAreaCap").': '.$this->tooltip('SelectStdAreaCaptool', $langs->trans("InfoSelectStdAreaCap")).'</legend>';							
+											$out.= $std;					
+											$out.= $area;							
 									$out.= '</fieldset>';
 								*/
-
+								
 								// get all convert files
-								$converter_tmp = scandir('convert/');
+								$converter_tmp = scandir('convert/');								
 								foreach($converter_tmp as $num => $filename)
 								{
-									if(substr($filename, 0, 5) != "conv_")
+									if(substr($filename, 0, 5) != "conv_") 
 									{
 										unset($converter_tmp[$num]);
 									}
@@ -2493,95 +2267,95 @@
 										$converter[substr($filename, 5, -9)] = substr($filename, 5, -9);
 									}
 								}
-
+								
 								$input = $this->buildSelect("inputconverter", $converter, "data-native-menu=\"false\"", "", "standard");
-								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard");
-
+								$output = $this->buildSelect("outputconverter", $converter, "data-native-menu=\"false\"", "", "standard"); 
+								
 									$out.= '<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" id="converter">';
-										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip('SelectInputandOutputCaptool', $langs->trans("InfoSelectInputandOutputCap")).'</legend>';
-											$out.= $input;
-											$out.= $output;
+										$out.= '<legend>'.$langs->trans("SelectInputandOutputCap").': '.$this->tooltip('SelectInputandOutputCaptool', $langs->trans("InfoSelectInputandOutputCap")).'</legend>';							
+											$out.= $input;					
+											$out.= $output;							
 									$out.= '</fieldset>';
-
-
+									
+									
 									$out.= '<input type="file" name="uploadfile" id="uploadfile">';
-									// or
+									// or								
 									$out.= '<fieldset data-role="controlgroup">';
 										$out.= '<legend>'.$langs->trans("SelectCaps").':</legend>';
-											foreach(scandir($configuration->conf["cap"]["output"]) as $num => $capfilename)
+											foreach(scandir($conf->cap->output) as $num => $capfilename)
 											{
 												if($num > 1)
 												{
 													$out.= '<input type="radio" name="location" id="cap_file_'.$num.'" value="'.urlencode($capfilename).'">';
 													$out.= '<label for="cap_file_'.$num.'">'.$capfilename.'</label>';
 												}
-											}
+											}			
 									$out.= '</fieldset>';
-
+									
 									$out.= '<input type="submit" value="<h1>'.$langs->trans("Convert").'</h1>" data-ajax="false">';
-
+									
 							$out.= '</div>';
 
 						$out.= '</div><!-- /content -->';
-
+					
 						$out.= '<div data-role="footer" data-theme="b">';
 
 						$out.= '</div><!-- /footer -->';
-
+						
 					$out.= '</div><!-- /page -->';
-
-				$out.= '</form>';
+			
+				$out.= '</form>';			
 			$out.= '</body>';
-
+			
 			return $out;
 		}
-
+		
 		function Webservice($ID)
 		{
-			global $configuration, $langs, $out;
-
+			global $conf, $langs, $out;
+			
 			$out = $this->Header_llx();
-
-			$out.= '<body>';
+			
+			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
 					/**
 					 *
 					 *  WEBSERVICE
 					 *
 					 */
-					 if($configuration->conf["webservice"]["service_on"] == 1)
+					 if($conf->webservice->on == 1)
 					 {
-
+						
 						$out.= '<div data-role="page" id="capview">';
-
+							
 							// HEADER
-							$out.= '<div data-theme="b" data-role="header">';
+							$out.= '<div data-theme="b" data-role="header">';								
 								//$out.= '<a href="#'.$pagename.'_panel" class="ui-btn ui-icon-bars ui-btn-icon-notext" style="border: none;"></a>';
 								$out.= '<a href="index.php" data-ajax="false" data-theme="b" class="ui-btn ui-icon-delete ui-btn-icon-notext" style="border: none;">'.$langs->trans("Cancel").'</a>';
-								$out.= '<h1>'.$ID.'</h1>';
+								$out.= '<h1>'.$ID.'.cap</h1>';						
 							$out.= '</div>';
-
+						
 							// MAIN
-							$out.= '<div role="main" class="ui-content">';
-
-								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
-
+							$out.= '<div role="main" class="ui-content">';							
+											
+								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';	
+									
 									// decryp password
-									$configuration->setValue("webservice", "password", $this->encrypt_decrypt(2, $configuration->conf["webservice"]["password"]));
-
+									$conf->webservice->password = $this->encrypt_decrypt(2, $conf->webservice->password);
+									
 									include("lib/cap.webservices.php");
-
-									$configuration->setValue("webservice", "password",$this->encrypt_decrypt(1, $configuration->conf["webservice"]["password"]));
-
+									
+									$conf->webservice->password = $this->encrypt_decrypt(1, $conf->webservice->password);
+									
 								$out.= '</div>';
-
+	
 							$out.= '</div><!-- /content -->';
-
+						
 							// FOOTER
 							$out.= '<div data-role="footer" data-theme="b">';
-
+	
 							$out.= '</div><!-- /footer -->';
-
+							
 						 $out.= '</div><!-- /page -->';
 					 }
 					/**
@@ -2589,12 +2363,12 @@
 					 *  WEBSERVICE
 					 *
 					 */
-					$out.= '</form>';
+					$out.= '</form>';			
 				$out.= '</body>';
-
+			
 			return $out;
 		}
-
+		
 		/**
 		 * Function to conect the identifier to one string
 		 *
@@ -2602,7 +2376,7 @@
 		 */
 		function MakeIdentifier($post)
 		{
-			if(!empty($post[identifier][WMO]) || ! empty($post[identifier][ISO]) || ! empty($post[identifier][time]))
+			if(!empty($post[identifier][WMO]) || ! empty($post[identifier][ISO]) || ! empty($post[identifier][time])) 
 			{
 				$temp = "";
 				$i = 0;
@@ -2614,11 +2388,11 @@
 					}
 					else
 					{
-						$temp.= ".".$id_val;
+						$temp.= ".".$id_val;					
 					}
 					if(!empty($id_val)) $i++;
 				}
-
+				
 				unset($post[identifier]);
 				$post[identifier] = $temp;
 			}
@@ -2630,47 +2404,47 @@
 			}
 			return $post;
 		}
-
+		
 		/*
 		function login_page()
 		{
-			global $configuration, $langs;
-
+			global $conf, $langs;
+	
 				//$out.= '<form method="POST" id="login_form" name="login_form" action="index.php?login=1" enctype="multipart/form-data" >';
-
+			
 					$out.= '<div data-role="page" id="login">';
 
 						$out.= '<div data-role="header">';
 							$out.= '<h1>Login to an Webservice</h1>';
 						$out.= '</div><!-- /header -->';
-
-							$out.= '<div role="main" class="ui-content">';
-
-								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
+					
+							$out.= '<div role="main" class="ui-content">';							
+											
+								$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 									$out.= '<ul data-role="listview" data-divider-theme="b">';
-
+										
 										$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Configuration</h1></li>';
-
-
-
-									$out.= '</ul>';
-								$out.= '</div>';
-
+	
+										
+									
+									$out.= '</ul>';								
+								$out.= '</div>';	
+	
 								$out.= '<input type="submit" value="Submit" data-theme="a">';
-
+	
 							$out.= '</div><!-- /content -->';
-
+					
 						$out.= '<div data-role="footer">';
 						$out.= '</div><!-- /footer -->';
-
+						
 					$out.= '</div><!-- /page -->';
-
+					
 				//$out.= '</form>';
-
+			
 			return $out;
 		}
 		*/
-
+		
 		/**
 		 * Function to install the interface of the Cap PHP library
 		 *
@@ -2679,266 +2453,320 @@
 		function install()
 		{
 			include 'menu/standard_menu.lib.php';
-
+			
 			$out = $this->Header_llx();
-
-			$out.= '<body>';
+			
+			$out.= '<body>';			
 				$out.= '<form method="POST" id="capform" name="capform" action="index.php?conf=1" enctype="multipart/form-data" >';
-
+			
 					$out.= '<div data-role="page">';
 
 						$out.= '<div data-role="header">';
 							$out.= '<h1>Install Cap PHP Library Interface</h1>';
 						$out.= '</div><!-- /header -->';
-
-						$out.= '<div role="main" class="ui-content">';
-
-							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';
+					
+						$out.= '<div role="main" class="ui-content">';							
+										
+							$out.= '<div data-theme="a" data-form="ui-body-a" class="ui-body ui-body-a ui-corner-all">';									
 								$out.= '<ul data-role="listview" data-divider-theme="b">';
-
+									
 									$out.= '<li data-role="list-divider" data-theme="b"><h1 style="font-size:22px;">Configuration</h1></li>';
 
 									$Type_arr = $this->Types();
 									foreach($Type_arr['conf'] as $key => $type)
-									{
+									{							
 										if(is_numeric($key))
-										{
+										{	
 											$out.= '<li>';
 												$out.= $this->InputStandard($type);
 											$out.= '</li>';
 										}
-									}
-
-								$out.= '</ul>';
-							$out.= '</div>';
-
+									}	
+								
+								$out.= '</ul>';								
+							$out.= '</div>';	
+							
 								if(count ($Type_arr['conf']['detail']) >= 1)
 								{
 									$out.= '<div data-role="collapsible" data-theme="b" data-content-theme="a">';
 										$out.= '<h2>Webservice</h2>';
 										$out.= '<ul data-role="listview">';
-
+	
 											foreach($Type_arr['conf']['detail'] as $key_ex => $type_ex)
-											{
+											{		
 												$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex).'</li>';
-											}
-
+											}						
+															
 										$out.= '</ul>';
-									$out.= '</div>';
+									$out.= '</div>';		
 								}
-
+							
 							$out.= '<input type="submit" value="Submit" data-theme="a">';
 
 						$out.= '</div><!-- /content -->';
-
+					
 						$out.= '<div data-role="footer">';
 							$out.= '<h4>office@backbone.co.at</h4>';
 						$out.= '</div><!-- /footer -->';
-
+						
 					$out.= '</div><!-- /page -->';
-
-				$out.= '</form>';
+			
+				$out.= '</form>';			
 			$out.= '</body>';
-
+			
 			return $out;
 		}
-
+		
 		/**
 		 * Function to save the conf post information to the conf
 		 *
 		 * @return	null
-		 */
+		 */	
 		function PostToConf($post)
-		{
-			global $configuration, $langs;
-
-			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "")
+		{	
+			global $conf, $langs;
+			
+			if(! is_dir($post['cap']['output']) && $post['cap']['output'] != "") 
 			{
-				//mkdir($post['cap']['output'], 0775); // check security!
+				mkdir($post['cap']['output'], 0775);
 			}
-
+			
 			/*
 			 * Special
 			 */
-		 	if(!empty($post['user']['lang']))
- 			{
- 				$configuration->setValue("user", "language", $post['user']['lang']);
- 			}
-
+			
 			 // set langs
 			$lang_arr = $post['lang'];
 			unset($post['lang']);
 			foreach($lang_arr as $lang_key => $lang_name)
-			{
+			{			 	 
 				if($lang_key != "key" && $lang_name != "name" && $lang_key != "remove")
 				{
-					$configuration->conf["language"][$lang_key] = $lang_name;
+					$conf->lang[$lang_key] = $lang_name;
 				}
 			}
-
+	
 				// conf[lang][remove][en-GB]:remove -> conf[lang][remove][remove]:en-GB
 			$rmv_lang_arr = array_flip($lang_arr['remove']);
 			unset($post['lang']['remove']);
-			foreach($configuration->conf["language"] as $lang_key => $lang_name)
-			{
+			foreach($conf->lang as $lang_key => $lang_name)
+			{			 	 
 				if(in_array($lang_key, $rmv_lang_arr))
 				{
-					unset($configuration->conf["language"][$lang_key]);
+					unset($conf->lang[$lang_key]);
 				}
 			}
-
+			 
 			// set visible langs
 			$lang_arr = $post['select']['lang'];
 			unset($post['select']);
-			foreach($configuration->conf["language"] as $lang_name => $lang_boolen)
-			{
+			foreach($conf->select->lang as $lang_name => $lang_boolen)
+			{			 	 
 				if(in_array($lang_name, $lang_arr))
 				{
-					$configuration->conf["selected_language"][$lang_name] = 1;
+					$conf->select->lang[$lang_name] = 1;
 				}
 				else
 				{
-					$configuration->conf["selected_language"][$lang_name] = 0;
+					$conf->select->lang[$lang_name] = 0;
 				}
 			}
 			// specifie the automatic time set
 			if($post['timezone'] != "")
 			{
-				$configuration->conf["timezone"] = $post['timezone'];
+				$conf->timezone = $post['timezone'];
 			}
 			unset($post['timezone']);
 			// specifie the automatic time set
 			if($post['identifier']['time']['on'] == "on")
 			{
-				$configuration->setValue("identifier", "time_on", 1);
-			}
+				$conf->identifier->time->on = 1;
+			}	
 			else
 			{
-				$configuration->setValue("identifier", "time_on", 0);
-			}
+				$conf->identifier->time->on = 0;
+			}		
 			unset($post['identifier']['time']);
-
+				
 			if($post['cap']['save'] == "on")
 			{
-				$configuration->setValue("cap", "save", 1);
-			}
+				$conf->cap->save = 1;
+			}	
 			else
 			{
-				$configuration->setValue("cap", "save", 0);
-			}
+				$conf->cap->save = 0;
+			}		
 			unset($post['cap']['save']);
-
+			
 			if($post['webservice']['on'] == "on")
 			{
-				$configuration->setValue("webservice", "service_on", 1);
-			}
+				$conf->webservice->on = 1;
+			}	
 			else
 			{
-				$configuration->setValue("webservice", "service_on", 0);
-			}
+				$conf->webservice->on = 0;
+			}		
 			unset($post['webservice']['on']);
-
+			
 			// crypt pass
-			if($configuration->conf["webservice"]["password"] == $post['webservice']['password'])
+			if($conf->webservice->password == $post['webservice']['password']) 
 			{
-
+				
 			}
 			else
 			{
-				$configuration->setValue("webservice", "password", $this->encrypt_decrypt(1, $post['webservice']['password']));
+				$conf->webservice->password = $this->encrypt_decrypt(1, $post['webservice']['password']);
 				unset($post['webservice']['password']);
 			}
-
-			if($post['proxy']['proxyOn'] == "on")
-			{
-				$configuration->setValue("proxy", "proxyOn", 1);
-			}
-			else
-			{
-				$configuration->setValue("proxy", "proxyOn", 0);
-			}
-			unset($post['proxy']['proxyOn']);
-
-			// crypt pass
-			if($configuration->conf["proxy"]["proxyUserPass"] != $post['proxy']['proxyUserPass'])
-			{
-				$configuration->setValue("proxy", "proxyUserPass", $post['proxy']['proxyUserPass']);
-				unset($post['proxy']['proxyUserPass']);
-			}
-
-			if(!empty($post['timezone']))
- 			{
- 				$configuration->setValue("installed", "timezone", $post['timezone']);
- 			}
-
-			/*
+			
+			/* 
 			 * Reguler
 			 */
 			if(is_array($post))
 			{
 				foreach($post as $obj_name => $obj_val)
 				{
-
+					
 					if(is_array($obj_val))
 					{
 						foreach($obj_val as $obj_2_name => $obj_2_val)
 						{
-
+						
 							if(is_array($obj_2_val))
 							{
 								foreach($obj_2_val as $obj_3_name => $obj_3_val)
 								{
-									$configuration->setValue($obj_name, $obj_2_name."_".$obj_3_name, $obj_3_val);
+									$conf->{$obj_name}->{$obj_2_name}->{$obj_3_name} = $obj_3_val;
 								} // Level 2
 							}
 							else
 							{
-								$configuration->setValue($obj_name, $obj_2_name, $obj_2_val);
+								$conf->{$obj_name}->{$obj_2_name} = $obj_2_val;
 							}
-
+							
 						} // Level 1
 					}
 					else
 					{
-						$configuration->setValue($obj_name, $obj_1_name, $obj_1_val);
+						$conf->{$obj_name}->{$obj_1_name} = $obj_1_val;
 					}
-
+					
 				} // Base
 			}
 			else
 			{
-				$configuration->setValue($obj_name, "", $obj_val);
+				$conf->{$obj_name} = $obj_val;
 			}
 
 		}
-
+	
 		/**
 		 * Function to chnge Configuration in the conf.php file
 		 *
 		 * @return	null
-		 */
+		 */	
 		function WriteConf($write = true)
-		{
-			global $configuration;
-
+		{			
+			global $conf;
+			
+			$out = "<?php"."\n";
+			$out.= "date_default_timezone_set('".$conf->timezone."');"."\n";
+			// CONF BASE
+			if(is_object($conf) || is_array($conf_arr))
+			{
+				foreach($conf as $conf_name => $conf_arr)
+				{
+					
+					// LEVEL 1
+					if(is_object($conf_arr) || is_array($conf_arr))
+					{
+						foreach($conf_arr as $conf_name_var => $conf_val)
+						{
+							
+							// LEVEL 2
+							if(is_object($conf_val) || is_array($conf_val))
+							{
+								foreach($conf_val as $conf_name_level_2_var => $conf_level_2_val)
+								{								
+									if(is_array($conf_val))
+									{
+										$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var."['".$conf_name_level_2_var."']");
+										if(!is_numeric($conf_level_2_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+										$out.= "$"."conf->".$conf_name."->".$conf_name_var."['".$conf_name_level_2_var."']".$space."= ".$string_or_number.$conf_level_2_val.$string_or_number.";"."\n";
+									}
+									elseif(is_object($conf_val))
+									{ 
+										$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var."->".$conf_name_level_2_var);
+										if(!is_numeric($conf_level_2_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+										$out.= "$"."conf->".$conf_name."->".$conf_name_var."->".$conf_name_level_2_var.$space."= ".$string_or_number.$conf_level_2_val.$string_or_number.";"."\n";
+									}
+								} // foreach conf_val								
+							} // is_array conf_val
+							else
+							{				
+								if(is_array($conf_arr))
+								{
+									$space = $this->ConfSpaces("$"."conf->".$conf_name."['".$conf_name_var."']");
+									if(!is_numeric($conf_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+									$out.= "$"."conf->".$conf_name."['".$conf_name_var."']".$space."= ".$string_or_number.$conf_val.$string_or_number.";"."\n";
+								}
+								elseif(is_object($conf_arr))
+								{
+									$space = $this->ConfSpaces("$"."conf->".$conf_name."->".$conf_name_var);
+									if(!is_numeric($conf_val)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+									$out.= "$"."conf->".$conf_name."->".$conf_name_var.$space."= ".$string_or_number.$conf_val.$string_or_number.";"."\n";
+								}
+							} // else is_array conf_val
+							
+						} // foreach conf_arr
+					} // is_array conf_arr
+					else
+					{
+						if(is_array($conf_arr))
+						{
+							$space = $this->ConfSpaces("$"."conf['".$conf_name."']");
+							if(!is_numeric($conf_arr)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+							$out.= "$"."conf['".$conf_name."']".$space."= ".$string_or_number.$conf_arr.$string_or_number.";"."\n";
+						}
+						elseif(is_object($conf_arr))
+						{
+							$space = $this->ConfSpaces("$"."conf->".$conf_name);
+							if(!is_numeric($conf_arr)){ $string_or_number = "'"; }else{ $string_or_number = ""; }
+							$out.= "$"."conf->".$conf_name.$space."= ".$string_or_number.$conf_arr.$string_or_number.";"."\n";
+						}
+					} // else is_object conf_arr					
+					$out.= "\n";
+					
+				} // foreach conf
+			} // is_array conf
+			else
+			{
+				$write = false;
+				print 'FAIL TO READ CONF';	
+			} // else is_object conf
+					
+			$out.= "?>";
+			
 			if($write == true)
 			{
-				$configuration->write_php_ini();
+				$conf_file = fopen("conf/conf.php", "w") or print("Unable to open conf!");
+				fwrite($conf_file, $out);
+				fclose($conf_file);
 			}
 			else
 			{
-				print ($configuration->conf);
+				print ($out);
 			}
-		}
-
+		}		
+		
 		function ConfSpaces($string)
 		{
 			//$space = '                                                     '; // 55 spaces Standard
 			$space = '';
 			$i = (55 - strlen($string));
 			while( $i > 0 )
-			{
-				$space.= ' ';
+			{ 
+				$space.= ' '; 
 				$i--;
 			}
 			return $space;
@@ -2977,5 +2805,5 @@
 			return $name;
 		}
 	}
-
+	
 ?>
