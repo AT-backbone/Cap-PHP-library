@@ -15,16 +15,20 @@ if($_POST['import']==1) $import = true; else $import = false;
 $debug = true;
 if($import == "") $import = true;
 
-if ($_POST[filename])
-{
-
-
+if ($_POST[filename]) {
 	$soapclient = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL"], '' , $configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"], 0, 300); // <-- set the Timeout above 300 Sec.
 
-	if ($soapclient)
-	{
+	if ($soapclient) {
 		$soapclient->soap_defencoding='UTF-8';
 		$soapclient->decodeUTF8(false);
+	}
+
+	if($configuration->conf["webservice"]["WS_DOL_URL_2"]) {
+		$soapclient_2 = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL_2"], '' , $configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"], 0, 300); // <-- set the Timeout above 300 Sec.
+		if ($soapclient_2) {
+			$soapclient_2->soap_defencoding='UTF-8';
+			$soapclient_2->decodeUTF8(false);
+		}
 	}
 
 	// Call the WebService method and store its result in $result.
@@ -32,9 +36,9 @@ if ($_POST[filename])
 	    'dolibarrkey'=> $configuration->conf["webservice"]["securitykey"],
 	    'sourceapplication'=> $configuration->conf["webservice"]["WS_METHOD"],
 	  	'login'=> $configuration->conf["webservice"]["login"],
-  	  'password'=> $configuration->conf["webservice"]["password"]);
+  	 	'password'=> $configuration->conf["webservice"]["password"]);
 
-  $tmpfile = $configuration->conf["cap"]["output"].'/'.$_POST[filename];
+  	$tmpfile = $configuration->conf["cap"]["output"].'/'.$_POST[filename];
 	$handle = fopen($tmpfile, "r");                  // Open the temp file
 	$contents = fread($handle, filesize($tmpfile));  // Read the temp file
 	fclose($handle);                                 // Close the temp file
@@ -48,11 +52,10 @@ if ($_POST[filename])
 		'warning_import'=>$import,
 		'debug_msg'=>$debug);
 
+	$parameters = array('authentication'=>$authentication, 'document'=>$document);
 
-		$parameters = array('authentication'=>$authentication, 'document'=>$document);
-
-		$result = $soapclient->call($configuration->conf["webservice"]["WS_METHOD"],$parameters,$configuration->conf["webservice"]["ns"],'');
-		if ($soapclient->fault) {
+	$result = $soapclient->call($configuration->conf["webservice"]["WS_METHOD"],$parameters,$configuration->conf["webservice"]["ns"],'');
+	if ($soapclient->fault) {
 	    $out.= '<h2>Fault</h2><pre>';
 	    $out.=var_dump($result);
 	    $out.= '</pre>';
@@ -88,8 +91,7 @@ if ($_POST[filename])
 	$out.= '<pre>' . htmlspecialchars($soapclient->debug_str, ENT_QUOTES) . '</pre>';
 
 }
-else
-{
+else {
 	$out.= '<form action="'.$_SERVER["PHP_SELF"].'" method="post" enctype="multipart/form-data" id="formcontent">';
 
 	$out.= '<input type="text" name="url" value="" placeholder="WebService URL">';
@@ -105,5 +107,4 @@ else
 
 	$out.= '</form>';
 }
-
 ?>

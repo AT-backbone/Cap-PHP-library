@@ -68,7 +68,7 @@
 			$type['conf']['detail']['value'][] = "webservice_WS_METHOD";
 			$type['conf']['detail']['value'][] = "webservice_ns";
 			$type['conf']['detail']['value'][] = "webservice_WS_DOL_URL";
-			$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
+			$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration1");
 
 
 			// CAP View
