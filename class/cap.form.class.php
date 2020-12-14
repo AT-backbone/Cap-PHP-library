@@ -33,7 +33,7 @@
 
 	class CAP_Form{
 
-		var $version = '1.5.5';
+		var $version = '2.0.0';
 		var $login_id = 0;
 		/**
 	 * initialize Class with Data
