@@ -11,7 +11,11 @@
 
 				### Check the version of the conf file
 				if(file_exists(dirname($path)."/standard.conf.ini")){
-					$std_conf = parse_ini_file( dirname($path)."/standard.conf.ini", true); // config.ini find las
+					$std_conf = parse_ini_file(dirname($path)."/standard.conf.ini", true); // config.ini find las
+					// echo '<pre>';
+					// print_r($std_conf);
+					// echo '</pre>';
+					// exit;
 					if(empty($this->conf["ConfVersion"]) || $this->conf["ConfVersion"]["ver"] < $std_conf["ConfVersion"]["ver"]){
 						$this->conf = array_merge($std_conf, $this->conf);
 						$this->conf["ConfVersion"]["ver"] = $std_conf["ConfVersion"]["ver"];
@@ -60,23 +64,25 @@
 
 			function safefilerewrite($fileName, $dataToSave)
 			{
-					if ($fp = fopen($fileName, 'w'))
+				if ($fp = fopen($fileName, 'w'))
 			    {
 			        $startTime = microtime(TRUE);
 			        do
-			        {            $canWrite = flock($fp, LOCK_EX);
-			           // If lock not obtained sleep for 0 - 100 milliseconds, to avoid collision and CPU load
-			           if(!$canWrite) usleep(round(rand(0, 100)*1000));
-			        } while ((!$canWrite)and((microtime(TRUE)-$startTime) < 5));
+			        {  
+						$canWrite = flock($fp, LOCK_EX);
+			           	// If lock not obtained sleep for 0 - 100 milliseconds, to avoid collision and CPU load
+			           	if(!$canWrite) usleep(round(rand(0, 100)*1000));
+					} 	
+					while ((!$canWrite)and((microtime(TRUE)-$startTime) < 5));
 
 			        //file was locked so now we can store information
 			        if ($canWrite)
-			        {            fwrite($fp, $dataToSave);
+			        {   
+						fwrite($fp, $dataToSave);
 			            flock($fp, LOCK_UN);
 			        }
 			        fclose($fp);
 			    }
-
 			}
 
 			function setExtra(){

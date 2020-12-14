@@ -25,7 +25,7 @@
  *
  */
 	// CAP view
-
+	
 	class Read_CAP_Class{
 	
 		function output(){

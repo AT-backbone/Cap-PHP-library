@@ -73,16 +73,9 @@
 	if(!empty($_GET['data'])) $data = $_GET['data'];
 	$cap_array = json_decode($cap_array_tmp);
 	$awt_arr = json_decode($awt_arr_tmp);
-/*
-?>
-<script>
-var arr = "<?php print_r($cap_array); ?>";
-console.log('AWT Array: ' + arr);
-</script>
-<?php
-*/
-		$configuration->conf["webservice"]["login"] = "";
-		$configuration->conf["webservice"]["password"] = "";
+
+	$configuration->conf["webservice"]["login"] = "";
+	$configuration->conf["webservice"]["password"] = "";
 	session_name(encrypt_decrypt(1, getcwd()));
 	session_start();
 	if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))

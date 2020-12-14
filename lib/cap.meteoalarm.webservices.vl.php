@@ -33,6 +33,14 @@ if($meteoalarm == 1)
 		$soapclient->decodeUTF8(false);
 	}
 
+	if($configuration->conf["webservice"]["WS_DOL_URL_2"]) {
+		$soapclient_2 = new nusoap_client($configuration->conf["webservice"]["WS_DOL_URL_2"], '' , $configuration->conf["proxy"]["proxyIP"], $configuration->conf["proxy"]["proxyPort"], $configuration->conf["proxy"]["proxyUserName"], $configuration->conf["proxy"]["proxyUserPass"], 0, 300); // <-- set the Timeout above 300 Sec.
+		if ($soapclient_2) {
+			$soapclient_2->soap_defencoding='UTF-8';
+			$soapclient_2->decodeUTF8(false);
+		}
+	}
+
 	// Call the WebService method and store its result in $result.
 	$authentication=array(
 		'dolibarrkey'=>$configuration->conf["webservice"]["securitykey"],
@@ -64,8 +72,6 @@ if($meteoalarm == 1)
 	else
 	{
 		$AreaCodesArray = $soapclient->call('getAreaInfo',$parameters,$ns,'');
-//print_r($AreaCodesArray);
-//exit;
 	}
 
 	if ($soapclient->fault)

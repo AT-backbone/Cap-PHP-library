@@ -206,13 +206,15 @@ LabelUsableLanguagesDesc=Here you can specify the languages you want to use in y
 LabelGoogleMapsAPIkey=Google Maps API Key
 LabelGoogleMapsAPIkeyDesc=To get the Google Maps API Key go to (https://console.developers.google.com) and search for the (Google Maps JavaScript API)
 
-LabelWebservice=<b>Webservice</b>
+LabelWebservice1=<b>Webservice 1</b>
+LabelWebservice2=<b>Webservice 2</b>
 LabelWebserviceDesc=If you want to use a SOAP Webservice enable it here and additional options will become available.
 
 LabelTemplate=Cap-Template
 LabelTemplateDesc=In a template values can be stored, which can be used for new CAP files if no input by the creation was made.
 
-WebserviceConfiguration=Webservice Configuration
+WebserviceConfiguration1=Webservice Configuration 1
+WebserviceConfiguration2=Webservice Configuration 2
 
 LabelTemplate=Cap-Template
 LabelTemplateDesc=In a template values can be stored, which can be used for new CAP files if no input by the creation was made.
@@ -231,6 +233,9 @@ Labelwebservice_loginDesc=The username used to login to the webservice. Normally
 Labelwebservice_password=<b>Webservice Password</b> (displayed crypted)
 Labelwebservice_passwordDesc=The password used to login to the webservice. Normally the webservice administrator will provide this information.
 
+Labelwebservice_login2=<b>Webservice Login</b>
+Labelwebservice_password2=<b>Webservice Password</b> (displayed crypted)
+
 Labelwebservice_entity=<b>Webservice Entity</b>
 Labelwebservice_entityDesc=Parameter used for the webservice. Normally the webservice administrator will provide this information.
 
@@ -242,6 +247,8 @@ Labelwebservice_nsDesc=Path of the webservice without filename. Normally the web
 
 Labelwebservice_WS_DOL_URL=<b>Webservice URL</b>
 Labelwebservice_WS_DOL_URLDesc=Path of the webservice including filename. Normally the webservice administrator will provide this information.
+
+UserInfoLoginPassword = Note! For the Webservice 1 the login and password are used from your authentication and for the Webservice 2 it is necessary to introduce them.
 
 ###Error Messages###
 

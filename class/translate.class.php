@@ -65,7 +65,6 @@ class Translate
 	function setDefaultLang($srclang='en_US')
 	{
 		global $conf;
-
 		
 		// If a module ask to force a priority on langs directories (to use its own lang files)
 		if (! empty($conf->global->MAIN_FORCELANGDIR))
@@ -455,7 +454,7 @@ class Translate
 	function convToOutputCharset($str,$pagecodefrom='UTF-8')
 	{
 		if ($pagecodefrom == 'ISO-8859-1' && $this->charset_output == 'UTF-8')  $str=utf8_encode($str);
-		if ($pagecodefrom == 'UTF-8' && $this->charset_output == 'ISO-8859-1')	$str=utf8_decode(str_replace('€',chr(128),$str));
+		if ($pagecodefrom == 'UTF-8' && $this->charset_output == 'ISO-8859-1')	$str=utf8_decode(str_replace('ï¿½',chr(128),$str));
 		return $str;
 	}
 

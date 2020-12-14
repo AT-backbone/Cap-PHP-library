@@ -41,8 +41,7 @@ if($meteoalarm == 1)
 	if(!empty($configuration->conf["identifier"]["ISO"])) $iso = $configuration->conf["identifier"]["ISO"];
 	if(!empty($_GET['iso'])) $iso = $_GET['iso'];
 
-	$GenInsInput=array(
-	);
+	$GenInsInput=array();
 
 	$parameters = array('authentication'=>$authentication, 'getUserInfo'=>$GenInsInput);
 
@@ -50,6 +49,8 @@ if($meteoalarm == 1)
 
 
 	if(empty($User)){
+		print_r($soapclient);
+		exit;
 		if(!empty($soapclient->fault)) $login_error[] = "NuSoap Fault: ".$soapclient->fault;
 		if(!empty($soapclient->getError())) $login_error[] = "NuSoap Error: ".$soapclient->getError();
 		if(!empty($soapclient->response )) $login_error_html[] = "NuSoap Response: ".$soapclient->response ;
@@ -65,7 +66,7 @@ if($meteoalarm == 1)
 	}
 	else
 	{
-		    // Check for errors
+		// Check for errors
 		$err = $soapclient->getError();
 
 		if ($err)

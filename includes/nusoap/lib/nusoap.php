@@ -3159,7 +3159,7 @@ class soap_transport_http extends nusoap_base {
 		// separate content from HTTP headers
 		if ($pos = strpos($data,"\r\n\r\n")) {
 			$lb = "\r\n";
-		} elseif( $pos = strpos($data,"\n\n")) {
+		} elseif($pos = strpos($data,"\n\n")) {
 			$lb = "\n";
 		} else {
 			$this->debug('no proper separation of headers and document');

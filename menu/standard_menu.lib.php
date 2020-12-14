@@ -111,7 +111,7 @@
 
 				$type['conf']['detail']['value'][] = "proxy_conf";
 
-				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration");
+				$type['conf']['detail']['name'] = $langs->trans("WebserviceConfiguration1");
 
 
 			// CAP View

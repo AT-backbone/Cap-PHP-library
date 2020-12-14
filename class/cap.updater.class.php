@@ -167,8 +167,7 @@
 		*
 		* @return	None
 		*/
-		function __construct($cap_array, $awt, $data, $langs = "")
-		{
+		function __construct($cap_array, $awt, $data, $langs = "") {
 			if(!empty($cap_array)) $this->cap_array = $cap_array;
 			if(!empty($awt)) $this->awt_arr = $awt;
 			if(!empty($data)) $this->data = $data;
@@ -184,18 +183,15 @@
 		function getlang($config = false){
 			global $configuration;
 
-			if(is_array($this->language))
-			{
-				foreach($this->language as $key => $lang_name)
-				{
+			if(is_array($this->language)) {
+				foreach($this->language as $key => $lang_name) {
 					$out[$lang_name] = $lang_name;
 				}
 			}
 
 			$out_tmp = $configuration->conf["language"];
 
-			foreach($out_tmp as $key => $lang_name)
-			{
+			foreach($out_tmp as $key => $lang_name) {
 				if($configuration->conf["selected_language"][$key] == true) $out[$configuration->conf["language_RFC3066"][$key]] = $out_tmp[$key];
 			}
 
@@ -207,8 +203,7 @@
 		*
 		* @return None
 		*/
-		function del_caps_in_output()
-		{
+		function del_caps_in_output() {
 			global $configuration;
 
 			// the dir of the caps
@@ -225,80 +220,56 @@
 		*
 		* @return res true = OK, false = no webserice, -2 = can't fetch Area data, -3 = can't fetch VL data
 		*/
-		function webservice_meteoalarm()
-		{
+		function webservice_meteoalarm() {
 			global $configuration;
 			$meteoalarm = 1; // set meteoalarm on (debug value)
-			if($meteoalarm == 1) // is meteoalarm service on ?
-			{
-				if($configuration->conf["webservice"]["service_on"] > 0) // is webservice on ?
-				{
+			if($meteoalarm == 1) { // is meteoalarm service on ?
+				if($configuration->conf["webservice"]["service_on"] > 0) { // is webservice on ?
 					$res = true;
 					$_GET['data'] = $this->data;
 
-//echo $this->data;
-
 					require_once 'includes/nusoap/lib/nusoap.php';		// Include SOAP if not alredy
 
-					if(file_exists('lib/cap.meteoalarm.webservices.Area.php')) // test if the lib exists
-					{
+					if(file_exists('lib/cap.meteoalarm.webservices.Area.php')) { // test if the lib exists
 						// Contains the areas of the country you choose
 						include 'lib/cap.meteoalarm.webservices.Area.php';  // get data through the meteoalarm lib (Area)
-						if(!empty($AreaCodesArray['document']['AreaInfo']))
-						{
+						if(!empty($AreaCodesArray['document']['AreaInfo'])) {
 							$this->AreaArray = $AreaCodesArray['document']['AreaInfo'];
 						}
-						else
-						{
+						else {
 							$res = -2; // Can't fetch Area Data
 						}
 					}
-					else
-					{
+					else {
 						print 'file do not exists: lib/cap.meteoalarm.webservices.Area.php';
 					}
 					//print_r($AreaCodesArray);
-					if(file_exists('lib/cap.meteoalarm.webservices.vl.php'))  // test if the lib exists
-					{
+					if(file_exists('lib/cap.meteoalarm.webservices.vl.php')) { // test if the lib exists
 						// Contains the warnings sorted to areas
 						include 'lib/cap.meteoalarm.webservices.vl.php'; // get data through the meteoalarm lib (vl - Visio Level)
-						if(!empty($AreaCodesArray['document']['AreaInfo']))
-						{
+						if(!empty($AreaCodesArray['document']['AreaInfo'])) {
 							$this->AreaCodesArray = $AreaCodesArray['document']['AreaInfo'];
-//print_r($AreaCodesArray);
-//print_r($this->AreaCodesArray);
-//echo 'AreaCodesArray contains: ' .count($this->AreaCodesArray). ' elements';
-//exit;
-
-
 						}
-						else
-						{
+						else {
 							$res = -3;  // Can't fetch VL Data
 						}
 					}
-					else
-					{
+					else {
 						print 'file do not exists: lib/cap.meteoalarm.webservices.vl.php';
 					}
-					//print_r($AreaCodesArray);
-					if(file_exists('lib/cap.meteoalarm.webservices.user.php'))  // test if the lib exists
-					{
+					if(file_exists('lib/cap.meteoalarm.webservices.user.php')) { // test if the lib exists
 						// Contains the warnings sorted to areas
 						include 'lib/cap.meteoalarm.webservices.user.php'; // get data through the meteoalarm lib (vl - Visio Level)
-						if(!empty($User['document']['AreaInfo']))
-						{
+						if(!empty($User['document']['AreaInfo'])) {
 							$this->User = $User['document']['AreaInfo'];
 							// $this->User['sender'] = email
 							// $this->User['senderName'] = meteo Name
 						}
-						else
-						{
+						else {
 							$res = -3;  // Can't fetch VL Data
 						}
 					}
-					else
-					{
+					else {
 						print 'file do not exists: lib/cap.meteoalarm.webservices.vl.php';
 					}
 					//if($this->debug == true) print_r($AreaCodesArray);
@@ -314,26 +285,22 @@
 		*
 		* @return true
 		*/
-		function get_area_identifier()
-		{
+		function get_area_identifier() {
 			// Change AreaArray to Area -> ID <- Array
-			foreach($this->AreaArray as $key => $area)
-			{
+			foreach($this->AreaArray as $key => $area) {
 				$this->AreaIDArray[$area['aid']] = $area;
 			}
 			unset($this->AreaArray);
 
 			// Output Debug values
 			//print "d:".$this->debug;
-			if($this->debug == true)
-			{
+			if($this->debug == true) {
 				print '<pre>AreaCodesArray(VL): ';
 					print_r($this->AreaCodesArray);
 				print '</pre>';
 			}
 
-			foreach($this->AreaCodesArray as $key => $vl_warn)
-			{
+			foreach($this->AreaCodesArray as $key => $vl_warn) {
 				// Add to the Area ID Array the Level and Type info from the VL Warnigns
 				$this->AreaIDArray[$vl_warn['aid']][$vl_warn['type']] = $vl_warn['level'];
 
@@ -346,12 +313,9 @@
 				$this->cap_ident[$vl_warn['type']][$vl_warn['EMMA_ID']]['timestamp']	= $vl_warn['timestamp'];
 				//die(print_r($this->cap_ident));
 			}
-//print_r($this->AreaCodesArray);
-//die();
 
 			// Output Debug values
-			if($this->debug == true)
-			{
+			if($this->debug == true) {
 				print '<pre>cap_ident(identifier): ';
 					print_r($this->cap_ident);
 				print '</pre>';
@@ -365,33 +329,24 @@
 		*
 		* @return true
 		*/
-		function calc_cap_update()
-		{
-
-//print_r($this->cap_array);
-
-			if($this->debug == true)
-			{
+		function calc_cap_update() {
+			if($this->debug == true) {
 				print '<pre>';
 					print_r($this->cap_array);
 				print '</pre>';
 			}
-			foreach($this->cap_array as $aid => $warr)
-			{
+			foreach($this->cap_array as $aid => $warr) {
 				if($this->debug == true) print '<p>'.$warr->name.'<br>'; // Output Debug values
 
-				foreach($warr as $key => $warning)
-				{
-					if($warning->level > 0) // is level bigger than 0
-					{
+				foreach($warr as $key => $warning) {
+					if($warning->level > 0) { // is level bigger than 0
 						// get identifier
 						$ident_level = $this->cap_ident[$warning->type][$warning->eid]['level'];
 						$ident = $this->cap_ident[$warning->type][$warning->eid]['id'];
 						// set 'aid' also in the $warning string Array()
 						$warning->aid = $aid;
 						//$this->debug = true;
-						if($this->debug == true)
-						{
+						if($this->debug == true) {
 							print '<br>if: '.$ident.'!= ""';
 							print '<br>if: '.$ident.' == '.$warning->ident;
 							print '<br>if: '.$this->cap_ident[$warning->type][$warning->eid]['level'].' == '.$warning->level;
@@ -611,12 +566,8 @@
 										require_once 'lib/cap.read.template.class.php';
 										$alert = new alert_template('conf/template.cap');
 										$post = $alert->output_template();
-										//print '<pre>';
-										//	print_r($post);
-										//print '</pre>';
 										unset($alert);
 									}
-
 
 									if($data_arr[0]->type > 0 && $data_arr[0]->level > 0 && $data_arr[0]->eid != "")
 									{
@@ -703,8 +654,19 @@
 										if($post['info'][0]['audience'] != "")
 											$post['audience'] = $post['info'][0]['audience'];
 
-										if(!empty($data_arr[0]->data) && $_POST['data'] > 1) $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + 1 days'))));
-										else $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
+										if(!empty($data_arr[0]->data) && $_POST['data'] > 1) {											
+											$eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + 1 days'))));
+											// echo 'first';
+											// echo $eff_date;
+										}
+										else {
+											$eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
+											// echo 'second';
+											// echo $eff_date;
+										}
+
+										$eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from))));
+										// $eff_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->from.' + '.$_POST['data'].' days'))));
 
 										$post['effective']['date'] = $eff_date;
 										$post['effective']['time'] = date('H:i:s', strtotime($data_arr[0]->from));
@@ -719,8 +681,15 @@
 										if(strtotime($data_arr[0]->to) < strtotime($data_arr[0]->from)) $Pdata = $_POST['data'] + 1;
 										else $Pdata = $_POST['data'];
 
-										if(!empty($data_arr[0]->data) && $Pdata > 1) $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + 1 days'))));
-										else $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$Pdata.' days'))));
+										if(!empty($data_arr[0]->data) && $Pdata > 1) {
+											$exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + 1 days'))));
+										}
+										else {
+											$exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$Pdata.' days'))));
+										}
+
+										$exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to))));
+										// $exp_date = date("Y-m-d", strtotime(date("Y-m-d H:i:s", strtotime($data_arr[0]->to.' + '.$Pdata.' days'))));
 
 										$post['expires']['date'] = $exp_date;
 										$post['expires']['time'] = date('H:i:s', strtotime($data_arr[0]->to));
@@ -791,17 +760,13 @@
 
 										foreach($data_arr as $key => $data)
 										{
-											$post['geocode']['value'][] = $data->eid.'<|>emma_id';
+											$post['geocode']['value'][] = $data->eid.'<|>EMMA_ID';
 										}
 
 										$cap = new CAP_Class($post);
 										$cap->buildCap();
 										$cap->destination = $configuration->conf["cap"]["output"];
 										$path = $cap->createFile();
-										//print '<pre>';
-										//	print_r($post);
-										//print '</pre>';
-										unset($post);
 									}
 								}
 							}

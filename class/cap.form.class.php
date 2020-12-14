@@ -33,7 +33,7 @@
 
 	class CAP_Form{
 
-		var $version = '1.4';
+		var $version = '1.5.5';
 		var $login_id = 0;
 		/**
 	 * initialize Class with Data
@@ -691,7 +691,7 @@
 
 
 
-					$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:400px;">';
+					$out.= '<div data-role="popup" id="CAP_SOAP_popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true" style="max-width:560px;">';
 						$out.= '<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>';
 						$out.= '<div data-role="header" id="CAP_SOAP_popupDialog_header" data-theme="a">';
 							if(!empty($plugin->name)) $out.= '<h2>'.$langs->trans('ProducedCaps').'</h2>';
@@ -1207,8 +1207,8 @@
 							}
 							else
 							{
-								$S_Area[$area_arr['EMMA_ID']] = $area_arr['AreaCaption'];
-								$G_Area[$area_arr['EMMA_ID']] = "EMMA_ID";
+								// $S_Area[$area_arr['EMMA_ID']] = $area_arr['AreaCaption'];
+								// $G_Area[$area_arr['EMMA_ID']] = "EMMA_ID";
 							}
 						}
 
@@ -1415,10 +1415,15 @@
 					case 'webservice_on':
 							if($configuration->conf["webservice"]["service_on"] == 1) $onoroff = 'checked=""';
 							else $onoroff = '';
-							//$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';
-							$out = '<legend>'.$langs->trans("LabelWebservice").': '.$this->tooltip($type.'tool', $langs->trans("LabelWebserviceDesc")).'</legend>';
+							//$out = '<label for="webservice_switch">'.$langs->trans("Webservice").':</label>';							
+							$out = '<legend>'.$langs->trans("LabelWebservice1").': '.$this->tooltip($type.'tool', $langs->trans("LabelWebserviceDesc")).'</legend>';
 							$out.= '<input '.$status_theme.' type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_switch" '.$onoroff.' data-theme="b">';
-						break;
+							$out.= '<br>';
+							$out.= '<legend>'.$langs->trans("LabelWebservice2").': '.$this->tooltip($type.'tool', $langs->trans("LabelWebserviceDesc")).'</legend>';
+							$out.= '<input type="checkbox" data-role="flipswitch" name="conf[webservice][on]" id="webservice_2_switch">';
+							$out.= '<br>';
+							$out.= '<p style="font-size:16px;">'.$langs->trans("UserInfoLoginPassword").'</p>';
+							break;
 
 					case 'webservice_password':
 							$out = '<legend>'.$langs->trans("Labelwebservice_password").': '.$this->tooltip($type.'tool', $langs->trans("Labelwebservice_passwordDesc")).'</legend>';
@@ -1756,7 +1761,7 @@
 	 */
 		function buildSelect($name= "", $data = array(), $option = "", $placeholder = "", $selected="", $empty=0)
 		{
-			$out = '<select name="'.$name.'" '.$option.'>';
+			$out = '<select onchange="get_date();" name="'.$name.'" '.$option.'>';
 
 				if($empty == 1)
 				{
@@ -2062,27 +2067,77 @@
 									$out.= '</div>';	 // UI_BODY_A
 
 									// DETAILS
-									if(count ($TypePage['detail']['value']) >= 1 && $TypePage['detail']['value'] != -1)
-									{
+									if(count ($TypePage['detail']['value']) >= 1 && $TypePage['detail']['value'] != -1) {
 										$visibl = "";
 										if($configuration->conf["webservice"]["service_on"] == 0 && $pagename == "conf") $visibl = 'style="display:none;"';
 										$out.= '<div data-role="collapsible" id="'.$pagename.'-detail" data-theme="b" data-content-theme="a" '.$visibl.'>';
 											$out.= '<h2>'.$TypePage['detail']['name'].'</h2>';
-											$out.= '<ul data-role="listview">';
+											$out.= '<ul data-role="listview" id="first_interface">';
 
-												if(is_array($TypePage['detail']['value']))
-												{
-													foreach($TypePage['detail']['value'] as $key_ex => $type_ex)
-													{
-														if($key_ex != 'name')
-														{
+												if(is_array($TypePage['detail']['value'])) {
+													foreach($TypePage['detail']['value'] as $key_ex => $type_ex) {
+														if($key_ex != 'name') {
 															$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex, $Type_Status_arr).'</li>';
 														}
 													}
-												}
+												}									
 
+											$out.= '</ul>';					
+										$out.= '</div>';
+										$out.= '<div style="display:none;" data-role="collapsible" id="'.$pagename.'-detail-2" data-theme="b" data-content-theme="a" '.$visibl.'>';
+											$out.= '<h2 class="ui-collapsible-heading ui-collapsible-heading-collapsed">';
+												// $out.= '<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-icon-plus ui-btn-icon-left ui-btn-b">';
+													$out.= $langs->trans("WebserviceConfiguration2");
+													$out.= '<span class="ui-collapsible-heading-status">';
+														$out.= 'click to expand contents';
+													$out.= '</span>';
+												// $out.= '</a>';
+											$out.= '</h2>';
+											$out.= '<ul data-role="listview" id="second_interface">';
+												$out.= '<li class="ui-field-contain ui-li-static ui-body-inherit ui-first-child">';
+													$out.= '<legend>'.$langs->trans("Labelwebservice_login2").':</legend>';
+													$out.= '<div class="ui-body-inherit ui-corner-all ui-shadow-inset">';
+														$out.= '<input type="text" name="conf[webservice][login_2]" value="'.$configuration->conf['webservice']['login_2'].'">';
+													$out.= '</div>';
+												$out.= '</li>';
+												$out.= '<li class="ui-field-contain ui-li-static ui-body-inherit ui-first-child">';
+													$out.= '<legend>'.$langs->trans("Labelwebservice_password2").':</legend>';
+													$out.= '<div class="ui-body-inherit ui-corner-all ui-shadow-inset">';
+														// $out.= '<input type="password" name="conf[webservice][password_2]" value="'.encrypt_decrypt(1, $configuration->conf['webservice']['password_2']).'">';
+														$out.= '<input type="password" name="conf[webservice][password_2]" value="'.$configuration->conf['webservice']['password_2'].'">';
+													$out.= '</div>';
+												$out.= '</li>';
+												// $out.= encrypt_decrypt(2, $configuration->conf['webservice']['password_2']);
+												$out.= '<li class="ui-field-contain ui-li-static ui-body-inherit ui-first-child">';
+													$out.= '<legend>'.$langs->trans("Labelwebservice_securitykey").':</legend>';
+													$out.= '<div class="ui-body-inherit ui-corner-all ui-shadow-inset">';
+														$out.= '<input type="text" name="conf[webservice][securitykey_2]" value="'.$configuration->conf['webservice']['securitykey_2'].'">';
+													$out.= '</div>';
+												$out.= '</li>';
+												$out.= '<li class="ui-field-contain ui-li-static ui-body-inherit">';
+													$out.= '<legend>'.$langs->trans("webservice_WS_METHOD").':</legend>';
+													$out.= '<div class="ui-body-inherit ui-corner-all ui-shadow-inset">';
+														$out.= '<input type="text" name="conf[webservice][WS_METHOD_2]" value="'.$configuration->conf['webservice']['WS_METHOD_2'].'">';
+													$out.= '</div>';
+												$out.= '</li>';
+												$out.= '<li class="ui-field-contain ui-li-static ui-body-inherit">';
+													$out.= '<legend>'.$langs->trans("Labelwebservice_WS_DOL_URL").':</legend>';
+													$out.= '<div class="ui-body-inherit ui-corner-all ui-shadow-inset">';
+														$out.= '<input type="text" name="conf[webservice][WS_DOL_URL_2]" value="'.$configuration->conf['webservice']['WS_DOL_URL_2'].'">';
+														$out.= '<input type="hidden" name="conf[webservice][ns_2]" value="'.$configuration->conf['webservice']['WS_DOL_URL_2'].'">';
+													$out.= '</div>';
+												$out.= '</li>';	
+												if(is_array($TypePage['detail']['value'])) {
+													foreach($TypePage['detail']['value'] as $key_ex => $type_ex) {
+														if($key_ex != 'name') {
+															if($type_ex == 'proxy_conf') {
+																$out.= '<li id="'.$type_ex.'DIV" class="ui-field-contain">'.$this->InputStandard($type_ex, $Type_Status_arr).'</li>';
+															}
+														}
+													}
+												}											
 											$out.= '</ul>';
-										$out.= '</div>'; // DETAILS
+										$out.= '</div>';
 									}
 
 								$out.= '</div>'; // MAIN CONTENT
@@ -2878,12 +2933,10 @@
 			{
 				foreach($post as $obj_name => $obj_val)
 				{
-
 					if(is_array($obj_val))
 					{
 						foreach($obj_val as $obj_2_name => $obj_2_val)
 						{
-
 							if(is_array($obj_2_val))
 							{
 								foreach($obj_2_val as $obj_3_name => $obj_3_val)
@@ -2913,7 +2966,7 @@
 		}
 
 		/**
-		 * Function to chnge Configuration in the conf.php file
+		 * Function to change Configuration in the conf.php file
 		 *
 		 * @return	null
 		 */
