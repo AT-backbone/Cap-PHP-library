@@ -130,7 +130,6 @@ session_start();
 $tryed_login = false;
 if(!empty($_POST['send-login']) || !empty($_POST['send-logout']))
 {
-
 	if(!is_array($_POST['send-logout']))
 	{
 		end($_POST['send-login']);
@@ -243,7 +242,6 @@ if($meteoalarm == 1)
 		}
 	}
 }
-
 $login_to_webservice_faild = false;
 if($tryed_login == true && $configuration->conf["webservice_aktive"] == -1)
 {
